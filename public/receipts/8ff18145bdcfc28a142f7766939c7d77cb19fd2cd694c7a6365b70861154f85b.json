@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "catalog_sha256": "5c71e108fb12dcc630df2ed2d8abf819448062138663418de50a42555e372101",
+  "revision": 1,
+  "system": "x86_64-linux",
+  "build": {
+    "backend": "autotools",
+    "url": "https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.gz",
+    "sha256": "3d3a1b973af218114f4f889bbaa2f4c037deaae0c8e815eec381c3d546b974a0",
+    "archive": "tar.gz",
+    "strip_prefix": "xz-5.8.3",
+    "configure": [
+      "--disable-shared",
+      "--enable-static",
+      "--disable-nls",
+      "--disable-scripts",
+      "--disable-doc"
+    ],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "5c71e108fb12dcc630df2ed2d8abf819448062138663418de50a42555e372101"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "/usr/bin/uname": "Linux runnervmlun5p 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+    "make": "GNU Make 4.3\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law."
+  },
+  "package": {
+    "name": "xz",
+    "version": "5.8.3",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpTyXQ5K/.tmpkRwSOk/build/package.tar.gz",
+        "sha256": "015c30ab8d10854b5970cd1ef75b383fd1268255b4a46887bfba6069b8f3ad72"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "lzmadec": "bin/lzmadec",
+        "lzmainfo": "bin/lzmainfo",
+        "xz": "bin/xz",
+        "xzdec": "bin/xzdec"
+      }
+    },
+    "output_sha256": "63e7f6e72933851033e8fed353d274875e9add3e43b72affea26d652c04cd8f6"
+  }
+}

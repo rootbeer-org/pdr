@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "catalog_sha256": "5c71e108fb12dcc630df2ed2d8abf819448062138663418de50a42555e372101",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "autotools",
+    "url": "https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.gz",
+    "sha256": "3d3a1b973af218114f4f889bbaa2f4c037deaae0c8e815eec381c3d546b974a0",
+    "archive": "tar.gz",
+    "strip_prefix": "xz-5.8.3",
+    "configure": [
+      "--disable-shared",
+      "--enable-static",
+      "--disable-nls",
+      "--disable-scripts",
+      "--disable-doc"
+    ],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "5c71e108fb12dcc630df2ed2d8abf819448062138663418de50a42555e372101"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "/usr/bin/uname": "Darwin iad20-eo1205-507da8d5-db5b-4a6f-840f-4ce2e98773c3-66D6D1669DF9.local 24.6.0 Darwin Kernel Version 24.6.0: Tue Jul 21 20:51:34 PDT 2026; root:xnu-11417.140.69.711.44~1/RELEASE_ARM64_VMAPPLE arm64",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0"
+  },
+  "package": {
+    "name": "xz",
+    "version": "5.8.3",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpejl7yt/.tmph3VoRa/build/package.tar.gz",
+        "sha256": "fc08002aafa816d1e5be95331aee6c06a320940027092599054611c1390348c6"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "lzmadec": "bin/lzmadec",
+        "lzmainfo": "bin/lzmainfo",
+        "xz": "bin/xz",
+        "xzdec": "bin/xzdec"
+      }
+    },
+    "output_sha256": "26bc14f3f087945f50ebf724a8493292766643ac26b6164f7e95baf9bcb19475"
+  }
+}
