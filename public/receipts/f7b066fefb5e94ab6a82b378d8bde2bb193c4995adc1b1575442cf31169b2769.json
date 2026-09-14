@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "catalog_sha256": "948325f9f91ebdec9430c744f8adc6ad4bdba96958021ff458d8fb05980cd276",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "commands",
+    "url": "https://github.com/openssl/openssl/releases/download/openssl-4.0.2/openssl-4.0.2.tar.gz",
+    "sha256": "736b467530f916737b7031310ccb21d8218c6229e61e8e160cd1d3458cd543a8",
+    "archive": "tar.gz",
+    "strip_prefix": "openssl-4.0.2",
+    "configure": [],
+    "dependencies": [],
+    "libraries": [
+      "lib/libssl.a",
+      "lib/libcrypto.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "perl",
+          "./Configure",
+          "--prefix=/",
+          "--libdir=lib",
+          "--openssldir=/etc/ssl",
+          "no-shared",
+          "no-module"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "/usr/bin/env",
+          "HARNESS_JOBS={jobs}",
+          "make",
+          "test"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "DESTDIR={prefix}",
+          "install_sw"
+        ]
+      ]
+    }
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "948325f9f91ebdec9430c744f8adc6ad4bdba96958021ff458d8fb05980cd276"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "/usr/bin/uname": "Linux runnervmec22z 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:12:01 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law."
+  },
+  "package": {
+    "name": "openssl",
+    "version": "4.0.2",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpLHwZHz/.tmpU08DzZ/build/package.tar.gz",
+        "sha256": "35da35e5f5fc52da5ad2036a547c25d31b711f0cd51b4d4183cd816799be17f3"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "openssl": "bin/openssl"
+      }
+    },
+    "output_sha256": "8adbeb8c24f8fc9d9c56dea510ee330898c31edc408e92754feb8defd6718eb9"
+  }
+}
