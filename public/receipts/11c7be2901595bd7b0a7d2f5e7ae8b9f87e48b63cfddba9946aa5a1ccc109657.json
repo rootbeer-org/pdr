@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "catalog_sha256": "215bb9cae65a12c3a72b26c53421d41ed1e1b22580433e1edb3604f28deb4d30",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "commands",
+    "url": "https://distfiles.ariadne.space/pkgconf/pkgconf-3.0.7.tar.xz",
+    "sha256": "c926ff491cbd9a331a589160811bd97ab1749b4d5198a519338f2cdfabe6940a",
+    "archive": "tar.xz",
+    "strip_prefix": "pkgconf-3.0.7",
+    "configure": [],
+    "dependencies": [],
+    "steps": {
+      "configure": [
+        [
+          "/bin/sh",
+          "./configure",
+          "--prefix=/",
+          "--disable-shared",
+          "--enable-static",
+          "--with-pkg-config-dir=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "/usr/bin/env",
+          "-u",
+          "PKG_CONFIG_SYSROOT_DIR",
+          "-u",
+          "PKG_CONFIG_PATH",
+          "PKG_CONFIG_LIBDIR=.",
+          "/bin/sh",
+          "-c",
+          "exec make check"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "DESTDIR={prefix}",
+          "install"
+        ],
+        [
+          "/bin/ln",
+          "-s",
+          "pkgconf",
+          "{prefix}/bin/pkg-config"
+        ]
+      ]
+    }
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "8d4ea15846fc6ab76243edf5790f20a15e78d726"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "215bb9cae65a12c3a72b26c53421d41ed1e1b22580433e1edb3604f28deb4d30"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "/usr/bin/uname": "Darwin sjc22-bm212-822c87b6-6960-436a-8a01-bb5b20347910-B6CFB7E9A757.local 24.6.0 Darwin Kernel Version 24.6.0: Tue Jul 21 20:51:34 PDT 2026; root:xnu-11417.140.69.711.44~1/RELEASE_ARM64_VMAPPLE arm64",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0"
+  },
+  "package": {
+    "name": "pkgconf",
+    "version": "3.0.7",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpB4o5z6/.tmp7NXjkH/build/package.tar.gz",
+        "sha256": "ce9dcf4f761396d53d4004540a0d57fc4f531d159beb0757025615773490f106"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "pkg-config": "bin/pkg-config",
+        "pkgconf": "bin/pkgconf"
+      }
+    },
+    "output_sha256": "89dddb7027d1cc2e82b15609a6cd6b16a970835847652ac578672b4f4a8ff7c0"
+  }
+}

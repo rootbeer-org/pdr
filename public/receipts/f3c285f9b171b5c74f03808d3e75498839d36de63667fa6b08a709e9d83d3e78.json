@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "catalog_sha256": "215bb9cae65a12c3a72b26c53421d41ed1e1b22580433e1edb3604f28deb4d30",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "autotools",
+    "url": "https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz",
+    "sha256": "dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3",
+    "archive": "tar.gz",
+    "strip_prefix": "make-4.4.1",
+    "configure": [
+      "--disable-nls",
+      "--without-guile"
+    ],
+    "patches": [
+      "--- a/tests/scripts/features/archives\n+++ b/tests/scripts/features/archives\n@@ -29,13 +29,24 @@\n \n # Fallback if configure did not find AR\n my $ar = get_config('AR') || 'ar';\n+if ($osname eq 'darwin') {\n+  # Keep the SDK lookup cache outside the test's temporary-file assertions.\n+  local $ENV{TMPDIR} = $origENV{TMPDIR} || '/tmp';\n+  $ar = `xcrun --find ar`;\n+  $? == 0 or die \"Cannot locate ar\";\n+  chomp $ar;\n+}\n \n my $redir = '2>&1';\n $redir = '' if $osname eq 'VMS';\n \n # This is the value from src/default.c\n my $arflags = $osname eq 'aix' ? '-Xany -rv' : '-rv';\n-my $arvar = \"AR=\\\"$ar\\\"\";\n+if ($osname eq 'darwin') {\n+  # Apple's ranlib drops the non-object members used by these tests.\n+  $arflags .= 'S';\n+}\n+my $arvar = \"AR=\\\"$ar\\\" ARFLAGS=\\\"$arflags\\\"\";\n \n # Newer versions of binutils can be built with --enable-deterministic-archives\n # which forces all timestamps (among other things) to always be 0, defeating\n@@ -255,6 +266,12 @@\n utouch(-20, 'a.c', 'b.c');\n \n my $cc = get_config('CC') || 'cc';\n+if ($osname eq 'darwin' && ($cc eq 'cc' || $cc eq '/usr/bin/cc')) {\n+  local $ENV{TMPDIR} = $origENV{TMPDIR} || '/tmp';\n+  $cc = `xcrun --find cc`;\n+  $? == 0 or die \"Cannot locate cc\";\n+  chomp $cc;\n+}\n my $vars = \"CC=\\\"$cc\\\" $arvar\";\n \n run_make_test(q!\n"
+    ],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "8d4ea15846fc6ab76243edf5790f20a15e78d726"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "215bb9cae65a12c3a72b26c53421d41ed1e1b22580433e1edb3604f28deb4d30"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "/usr/bin/uname": "Linux runnervmec22z 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:12:01 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law."
+  },
+  "package": {
+    "name": "make",
+    "version": "4.4.1",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmppVSmyk/.tmpDGbCpt/build/package.tar.gz",
+        "sha256": "191227e13236a3cde73017edb290a65692c49106bff4a1416e126ebafd8580de"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "make": "bin/make"
+      }
+    },
+    "output_sha256": "82defd179e1427b7eccd608ffe84c16a60c59aaf4d6750b2f71811c527c459e1"
+  }
+}
