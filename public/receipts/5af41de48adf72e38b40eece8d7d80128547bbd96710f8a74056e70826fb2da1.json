@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "catalog_sha256": "dfffe60dfb6e19b3cef1c4ec5720975cbb768479b67b23acf2f9ffe0638e9790",
+  "revision": 2,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "autotools",
+    "url": "https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.gz",
+    "sha256": "3d3a1b973af218114f4f889bbaa2f4c037deaae0c8e815eec381c3d546b974a0",
+    "archive": "tar.gz",
+    "strip_prefix": "xz-5.8.3",
+    "configure": [
+      "--disable-shared",
+      "--enable-static",
+      "--disable-nls",
+      "--disable-scripts",
+      "--disable-doc"
+    ],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "72137197b00d0844405f35a64ca440340274cd4c"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "dfffe60dfb6e19b3cef1c4ec5720975cbb768479b67b23acf2f9ffe0638e9790"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "/usr/bin/uname": "Darwin sat12-dp148-3f015537-87e1-4c5b-b2b8-5ddfa4201a19-CA2E36E03B5C.local 24.6.0 Darwin Kernel Version 24.6.0: Tue Jul 21 20:51:34 PDT 2026; root:xnu-11417.140.69.711.44~1/RELEASE_ARM64_VMAPPLE arm64",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0"
+  },
+  "package": {
+    "name": "xz",
+    "version": "5.8.3",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpapnkgE/.tmpOptY5E/build/package.tar.gz",
+        "sha256": "a11e85219a85422930806f5be3aa7ec7dbb36c44f918f8cc6484db3150a2e275"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "lzmadec": "bin/lzmadec",
+        "lzmainfo": "bin/lzmainfo",
+        "xz": "bin/xz",
+        "xzdec": "bin/xzdec"
+      }
+    },
+    "output_sha256": "9c2de3eeb370ef84a290ffad9ba1fa3231cdf94f003fdad843c76b2bb8303076"
+  }
+}
