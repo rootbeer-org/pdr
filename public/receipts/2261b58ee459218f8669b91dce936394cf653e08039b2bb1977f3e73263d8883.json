@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "catalog_sha256": "46b20bdf1d60268327a0f51a17e7bf6e1848f43e367eef7ccd1d72ec646fe039",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "commands",
+    "url": "https://github.com/google/brotli/archive/refs/tags/v1.2.0.tar.gz",
+    "sha256": "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec",
+    "archive": "tar.gz",
+    "strip_prefix": "brotli-1.2.0",
+    "configure": [],
+    "dependencies": [
+      "cmake@4.4.3"
+    ],
+    "libraries": [
+      "lib/libbrotlicommon.a",
+      "lib/libbrotlidec.a",
+      "lib/libbrotlienc.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "curl",
+          "--fail",
+          "--location",
+          "--retry",
+          "3",
+          "--output",
+          "testdata.txz",
+          "https://github.com/google/brotli/releases/download/v1.2.0/testdata.txz"
+        ],
+        [
+          "/bin/sh",
+          "-ec",
+          "printf '%s  %s\\n' e8624d888f13067e7635353397cf42956bf4ca1382da67f9cec8d43e800deecb testdata.txz | shasum -a 256 -c -"
+        ],
+        [
+          "tar",
+          "-xJf",
+          "testdata.txz"
+        ],
+        [
+          "cmake",
+          "-S",
+          ".",
+          "-B",
+          "build",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DBROTLI_DISABLE_TESTS=OFF",
+          "-DCMAKE_INSTALL_PREFIX=/",
+          "-DCMAKE_INSTALL_BINDIR=/bin",
+          "-DCMAKE_INSTALL_LIBDIR=/lib",
+          "-DCMAKE_INSTALL_INCLUDEDIR=/include"
+        ]
+      ],
+      "build": [
+        [
+          "cmake",
+          "--build",
+          "build",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "ctest",
+          "--test-dir",
+          "build",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "install": [
+        [
+          "/usr/bin/env",
+          "DESTDIR={prefix}",
+          "cmake",
+          "--install",
+          "build"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "Url": {
+          "url": "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3-macos-universal.tar.gz",
+          "sha256": "0c5d65251c14cc884bfa16bdbed3c263ce5bffe2e21c0d0d00962cb0610464fa"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "cmake-4.4.3-macos-universal/CMake.app/Contents/bin/cmake",
+          "cpack": "cmake-4.4.3-macos-universal/CMake.app/Contents/bin/cpack",
+          "ctest": "cmake-4.4.3-macos-universal/CMake.app/Contents/bin/ctest"
+        }
+      },
+      "output_sha256": "e27bcb916b6c0fa9d33404c64df8f7af716f429d50d3c5ec3117e60ef2673b87"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "46b20bdf1d60268327a0f51a17e7bf6e1848f43e367eef7ccd1d72ec646fe039"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "/usr/bin/uname": "Darwin sjc22-bm205-e3cc6710-f53a-4361-8c51-5456057fffde-EE0495C5738F.local 24.6.0 Darwin Kernel Version 24.6.0: Tue Jul 21 20:51:34 PDT 2026; root:xnu-11417.140.69.711.44~1/RELEASE_ARM64_VMAPPLE arm64",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0"
+  },
+  "package": {
+    "name": "brotli",
+    "version": "1.2.0",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpggp5tk/.tmp9Pquzo/build/package.tar.gz",
+        "sha256": "84a3716b532af9d45a15167d751d250ec35be892c2fd14237662fdf55a979304"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "brotli": "bin/brotli"
+      }
+    },
+    "output_sha256": "c8f7dbbadb202885529a8c793c641b7f41fcf9fe07de959315835e6021d0c0ea"
+  }
+}

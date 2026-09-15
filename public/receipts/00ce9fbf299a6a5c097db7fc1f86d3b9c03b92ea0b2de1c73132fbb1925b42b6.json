@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "catalog_sha256": "46b20bdf1d60268327a0f51a17e7bf6e1848f43e367eef7ccd1d72ec646fe039",
+  "revision": 1,
+  "system": "x86_64-linux",
+  "build": {
+    "backend": "commands",
+    "url": "https://github.com/google/brotli/archive/refs/tags/v1.2.0.tar.gz",
+    "sha256": "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec",
+    "archive": "tar.gz",
+    "strip_prefix": "brotli-1.2.0",
+    "configure": [],
+    "dependencies": [
+      "cmake@4.4.3"
+    ],
+    "libraries": [
+      "lib/libbrotlicommon.a",
+      "lib/libbrotlidec.a",
+      "lib/libbrotlienc.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "curl",
+          "--fail",
+          "--location",
+          "--retry",
+          "3",
+          "--output",
+          "testdata.txz",
+          "https://github.com/google/brotli/releases/download/v1.2.0/testdata.txz"
+        ],
+        [
+          "/bin/sh",
+          "-ec",
+          "printf '%s  %s\\n' e8624d888f13067e7635353397cf42956bf4ca1382da67f9cec8d43e800deecb testdata.txz | shasum -a 256 -c -"
+        ],
+        [
+          "tar",
+          "-xJf",
+          "testdata.txz"
+        ],
+        [
+          "cmake",
+          "-S",
+          ".",
+          "-B",
+          "build",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DBROTLI_DISABLE_TESTS=OFF",
+          "-DCMAKE_INSTALL_PREFIX=/",
+          "-DCMAKE_INSTALL_BINDIR=/bin",
+          "-DCMAKE_INSTALL_LIBDIR=/lib",
+          "-DCMAKE_INSTALL_INCLUDEDIR=/include"
+        ]
+      ],
+      "build": [
+        [
+          "cmake",
+          "--build",
+          "build",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "ctest",
+          "--test-dir",
+          "build",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "install": [
+        [
+          "/usr/bin/env",
+          "DESTDIR={prefix}",
+          "cmake",
+          "--install",
+          "build"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "Url": {
+          "url": "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3-linux-x86_64.tar.gz",
+          "sha256": "d6c83076c575bc00b823522ac974bda66d0af05d6ddc30e739c12385cf32c6cc"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "cmake-4.4.3-linux-x86_64/bin/cmake",
+          "cpack": "cmake-4.4.3-linux-x86_64/bin/cpack",
+          "ctest": "cmake-4.4.3-linux-x86_64/bin/ctest"
+        }
+      },
+      "output_sha256": "7d4612dae79a5bb929eeda94283d18750a0215e257d6f51598ff38a0ed52129e"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "46b20bdf1d60268327a0f51a17e7bf6e1848f43e367eef7ccd1d72ec646fe039"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "/usr/bin/uname": "Linux runnervmlun5p 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+    "make": "GNU Make 4.3\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law."
+  },
+  "package": {
+    "name": "brotli",
+    "version": "1.2.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpjejaQR/.tmppHftmk/build/package.tar.gz",
+        "sha256": "892f510c38e6eaf0fc81faa6b752142f1ffd707655f4b7127918e74871a3d67e"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "brotli": "bin/brotli"
+      }
+    },
+    "output_sha256": "cc14a270aa8c3e022896f9a8512afeca02bd075ecf72e46cebc39482cc8b2435"
+  }
+}
