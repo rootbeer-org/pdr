@@ -10,7 +10,44 @@ return {
         repository_id = 537699,
         tag_prefix = "v",
     },
+    build = {
+        backend = "custom",
+        dependencies = { "openssl@4.0.2" },
+        steps = {
+            configure = {
+                {
+                    "/bin/sh",
+                    "./bootstrap",
+                    "--prefix=/",
+                    "--parallel={jobs}",
+                    "--",
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    "-DBUILD_TESTING=ON",
+                    "-DOPENSSL_ROOT_DIR={dependencies}",
+                    "-DOPENSSL_USE_STATIC_LIBS=ON",
+                },
+            },
+            build = { { "make", "-j{jobs}" } },
+            check = {
+                {
+                    "./bin/ctest",
+                    "--output-on-failure",
+                    "--no-tests=error",
+                    "--parallel",
+                    "{jobs}",
+                    "-R",
+                    "^CMakeLib[.]",
+                },
+            },
+            install = { { "make", "DESTDIR={prefix}", "install" } },
+        },
+    },
     inputs = {
+        source = {
+            url = "https://github.com/Kitware/CMake/releases/download/v{version}/cmake-{version}.tar.gz",
+            archive = "tar.gz",
+            strip_prefix = "cmake-{version}",
+        },
         prebuilt = {
             github = "Kitware/CMake",
             tag = "v{version}",
@@ -33,7 +70,12 @@ return {
     },
     versions = {
         ["4.4.3"] = {
-            revision = 1,
+            revision = 2,
+            inputs = {
+                source = {
+                    sha256 = "c46400618b4f1f2b43507f24fb22f3ae830c3416cf23b776e16e1d413aa892f0",
+                },
+            },
         },
     },
 }
