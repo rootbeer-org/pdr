@@ -1,0 +1,219 @@
+{
+  "schema": 1,
+  "catalog_sha256": "55be1df7b5079b0a655b7799c06d18e227ab82db6755b362d72f5f9af060b80e",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "commands",
+    "url": "https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz",
+    "sha256": "eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3",
+    "archive": "tar.gz",
+    "strip_prefix": "zstd-1.5.7",
+    "configure": [],
+    "dependencies": [
+      "cmake@4.4.3",
+      "lz4@1.10.0",
+      "xz@5.8.3",
+      "zlib@1.3.2"
+    ],
+    "libraries": [
+      "lib/libzstd.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "cmake",
+          "-S",
+          "build/cmake",
+          "-B",
+          "output",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DZSTD_BUILD_SHARED=OFF",
+          "-DZSTD_BUILD_STATIC=ON",
+          "-DZSTD_BUILD_TESTS=ON",
+          "-DZSTD_MULTITHREAD_SUPPORT=ON",
+          "-DZSTD_LEGACY_SUPPORT=ON",
+          "-DZSTD_ZLIB_SUPPORT=ON",
+          "-DZSTD_LZMA_SUPPORT=ON",
+          "-DZSTD_LZ4_SUPPORT=ON",
+          "-DZSTD_FUZZER_FLAGS=-T60s",
+          "-DZSTD_ZSTREAM_FLAGS=-T60s",
+          "-DZSTD_FULLBENCH_FLAGS=-i1",
+          "-DZLIB_INCLUDE_DIR={dependencies}/include",
+          "-DZLIB_LIBRARY={dependencies}/lib/libz.a",
+          "-DLIBLZMA_INCLUDE_DIR={dependencies}/include",
+          "-DLIBLZMA_LIBRARY={dependencies}/lib/liblzma.a",
+          "-DLIBLZ4_INCLUDE_DIR={dependencies}/include",
+          "-DLIBLZ4_LIBRARY={dependencies}/lib/liblz4.a",
+          "-DCMAKE_INSTALL_PREFIX=/",
+          "-DCMAKE_INSTALL_BINDIR=/bin",
+          "-DCMAKE_INSTALL_LIBDIR=/lib",
+          "-DCMAKE_INSTALL_INCLUDEDIR=/include"
+        ]
+      ],
+      "build": [
+        [
+          "cmake",
+          "--build",
+          "output",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "ctest",
+          "--test-dir",
+          "output",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "install": [
+        [
+          "/usr/bin/env",
+          "DESTDIR={prefix}",
+          "cmake",
+          "--install",
+          "output"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "Url": {
+          "url": "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3-macos-universal.tar.gz",
+          "sha256": "0c5d65251c14cc884bfa16bdbed3c263ce5bffe2e21c0d0d00962cb0610464fa"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "cmake-4.4.3-macos-universal/CMake.app/Contents/bin/cmake",
+          "cpack": "cmake-4.4.3-macos-universal/CMake.app/Contents/bin/cpack",
+          "ctest": "cmake-4.4.3-macos-universal/CMake.app/Contents/bin/ctest"
+        }
+      },
+      "output_sha256": "e27bcb916b6c0fa9d33404c64df8f7af716f429d50d3c5ec3117e60ef2673b87"
+    },
+    "lz4@1.10.0": {
+      "name": "lz4",
+      "version": "1.10.0",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpTYUxKZ/.tmpqSHruV/build/dependency-lz4@1.10.0/package.tar.gz",
+          "sha256": "7ccf2f9a86c71c3dafff1fe8e6c33440e6f1645581c507162a11618f725b7a25"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lz4": "bin/lz4",
+          "lz4c": "bin/lz4c",
+          "lz4cat": "bin/lz4cat",
+          "unlz4": "bin/unlz4"
+        }
+      },
+      "output_sha256": "3979e7a3d881a73a25f52a27768f12e62c9b486a34636f2b546611d12fd28ed8"
+    },
+    "xz@5.8.3": {
+      "name": "xz",
+      "version": "5.8.3",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpTYUxKZ/.tmpqSHruV/build/dependency-xz@5.8.3/package.tar.gz",
+          "sha256": "930a388ff18f919129fb946a6102dd359c0e9112d1d6da3c46d0aca487b2f236"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lzmadec": "bin/lzmadec",
+          "lzmainfo": "bin/lzmainfo",
+          "xz": "bin/xz",
+          "xzdec": "bin/xzdec"
+        }
+      },
+      "output_sha256": "f540956395adfb549652a8eeb58057a6d230df9d2071f7a1368cac06e00304a8"
+    },
+    "zlib@1.3.2": {
+      "name": "zlib",
+      "version": "1.3.2",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpTYUxKZ/.tmpqSHruV/build/dependency-zlib@1.3.2/package.tar.gz",
+          "sha256": "b7ef9b59e3aad4586e9e81ade5e5ad765f672672834d2435b2796b2761c59ae5"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "a7b088b0e2461370cf7562c12ac6743bcab4be7f6549d04de76d157d9175f223"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "55be1df7b5079b0a655b7799c06d18e227ab82db6755b362d72f5f9af060b80e"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "/usr/bin/uname": "Darwin sjc22-bt150-613b2d97-b97c-4895-b3d7-e2b404a64a1a-3EC54A7F861E.local 24.6.0 Darwin Kernel Version 24.6.0: Tue Jul 21 20:51:34 PDT 2026; root:xnu-11417.140.69.711.44~1/RELEASE_ARM64_VMAPPLE arm64",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0"
+  },
+  "package": {
+    "name": "zstd",
+    "version": "1.5.7",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpTYUxKZ/.tmpqSHruV/build/package.tar.gz",
+        "sha256": "d7fd7c7c099a532257fcc5cbd90c236e21cfb7c32b02d8c64cc61a4439b8b960"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "unzstd": "bin/unzstd",
+        "zstd": "bin/zstd",
+        "zstdcat": "bin/zstdcat",
+        "zstdmt": "bin/zstdmt"
+      }
+    },
+    "output_sha256": "0e036c19980040317c32b85c490417241f515546a86e8ecb2e286abc90108d4e"
+  }
+}

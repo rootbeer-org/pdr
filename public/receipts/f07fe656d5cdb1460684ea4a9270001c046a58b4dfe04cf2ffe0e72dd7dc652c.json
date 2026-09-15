@@ -1,0 +1,219 @@
+{
+  "schema": 1,
+  "catalog_sha256": "55be1df7b5079b0a655b7799c06d18e227ab82db6755b362d72f5f9af060b80e",
+  "revision": 1,
+  "system": "x86_64-linux",
+  "build": {
+    "backend": "commands",
+    "url": "https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz",
+    "sha256": "eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3",
+    "archive": "tar.gz",
+    "strip_prefix": "zstd-1.5.7",
+    "configure": [],
+    "dependencies": [
+      "cmake@4.4.3",
+      "lz4@1.10.0",
+      "xz@5.8.3",
+      "zlib@1.3.2"
+    ],
+    "libraries": [
+      "lib/libzstd.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "cmake",
+          "-S",
+          "build/cmake",
+          "-B",
+          "output",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DZSTD_BUILD_SHARED=OFF",
+          "-DZSTD_BUILD_STATIC=ON",
+          "-DZSTD_BUILD_TESTS=ON",
+          "-DZSTD_MULTITHREAD_SUPPORT=ON",
+          "-DZSTD_LEGACY_SUPPORT=ON",
+          "-DZSTD_ZLIB_SUPPORT=ON",
+          "-DZSTD_LZMA_SUPPORT=ON",
+          "-DZSTD_LZ4_SUPPORT=ON",
+          "-DZSTD_FUZZER_FLAGS=-T60s",
+          "-DZSTD_ZSTREAM_FLAGS=-T60s",
+          "-DZSTD_FULLBENCH_FLAGS=-i1",
+          "-DZLIB_INCLUDE_DIR={dependencies}/include",
+          "-DZLIB_LIBRARY={dependencies}/lib/libz.a",
+          "-DLIBLZMA_INCLUDE_DIR={dependencies}/include",
+          "-DLIBLZMA_LIBRARY={dependencies}/lib/liblzma.a",
+          "-DLIBLZ4_INCLUDE_DIR={dependencies}/include",
+          "-DLIBLZ4_LIBRARY={dependencies}/lib/liblz4.a",
+          "-DCMAKE_INSTALL_PREFIX=/",
+          "-DCMAKE_INSTALL_BINDIR=/bin",
+          "-DCMAKE_INSTALL_LIBDIR=/lib",
+          "-DCMAKE_INSTALL_INCLUDEDIR=/include"
+        ]
+      ],
+      "build": [
+        [
+          "cmake",
+          "--build",
+          "output",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "ctest",
+          "--test-dir",
+          "output",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "install": [
+        [
+          "/usr/bin/env",
+          "DESTDIR={prefix}",
+          "cmake",
+          "--install",
+          "output"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "Url": {
+          "url": "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3-linux-x86_64.tar.gz",
+          "sha256": "d6c83076c575bc00b823522ac974bda66d0af05d6ddc30e739c12385cf32c6cc"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "cmake-4.4.3-linux-x86_64/bin/cmake",
+          "cpack": "cmake-4.4.3-linux-x86_64/bin/cpack",
+          "ctest": "cmake-4.4.3-linux-x86_64/bin/ctest"
+        }
+      },
+      "output_sha256": "7d4612dae79a5bb929eeda94283d18750a0215e257d6f51598ff38a0ed52129e"
+    },
+    "lz4@1.10.0": {
+      "name": "lz4",
+      "version": "1.10.0",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpDCJwcq/.tmpmKfMQA/build/dependency-lz4@1.10.0/package.tar.gz",
+          "sha256": "665792a6db1d21a590ce56531736f63866deb19ba8709d7749e0f6adfee8df9e"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lz4": "bin/lz4",
+          "lz4c": "bin/lz4c",
+          "lz4cat": "bin/lz4cat",
+          "unlz4": "bin/unlz4"
+        }
+      },
+      "output_sha256": "0414ca4a79bcbc6353ae19589836e14490dad062f5fb79b61a9f1acef3305f04"
+    },
+    "xz@5.8.3": {
+      "name": "xz",
+      "version": "5.8.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpDCJwcq/.tmpmKfMQA/build/dependency-xz@5.8.3/package.tar.gz",
+          "sha256": "60126049a6ff31cd64f978fac89bf066da85f19fafc47d314c74e0b26380af82"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lzmadec": "bin/lzmadec",
+          "lzmainfo": "bin/lzmainfo",
+          "xz": "bin/xz",
+          "xzdec": "bin/xzdec"
+        }
+      },
+      "output_sha256": "66685d292f373d9154600ac9dd9e56a5e9e1015baa53b36fbdb6fb4484241ade"
+    },
+    "zlib@1.3.2": {
+      "name": "zlib",
+      "version": "1.3.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpDCJwcq/.tmpmKfMQA/build/dependency-zlib@1.3.2/package.tar.gz",
+          "sha256": "89d075fb35982c9e518f05e3462344e11e6e9cd017e3f5b859769159b627664e"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "333bcc79a31464e4abf1ada4c00bf81074e1d9db3015dfd6f7730a41a40a0935"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "55be1df7b5079b0a655b7799c06d18e227ab82db6755b362d72f5f9af060b80e"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "/usr/bin/uname": "Linux runnervmlun5p 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+    "make": "GNU Make 4.3\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law."
+  },
+  "package": {
+    "name": "zstd",
+    "version": "1.5.7",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpDCJwcq/.tmpmKfMQA/build/package.tar.gz",
+        "sha256": "15a142c5df43105e7f427b7dd1c789f002aaab6aa63620f5912a96c142ff16b4"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "unzstd": "bin/unzstd",
+        "zstd": "bin/zstd",
+        "zstdcat": "bin/zstdcat",
+        "zstdmt": "bin/zstdmt"
+      }
+    },
+    "output_sha256": "b7da673eccea1abada29dee0dc7998f1420e92685dae452cb3952a98273fa8c6"
+  }
+}

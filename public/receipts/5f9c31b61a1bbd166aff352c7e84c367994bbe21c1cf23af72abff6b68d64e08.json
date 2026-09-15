@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "catalog_sha256": "55be1df7b5079b0a655b7799c06d18e227ab82db6755b362d72f5f9af060b80e",
+  "revision": 2,
+  "system": "x86_64-linux",
+  "build": {
+    "backend": "commands",
+    "url": "https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz",
+    "sha256": "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
+    "archive": "tar.gz",
+    "strip_prefix": "lz4-1.10.0",
+    "configure": [],
+    "dependencies": [],
+    "libraries": [
+      "lib/liblz4.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "sed",
+          "-i.bak",
+          "-e",
+          "s/ffm = self.cvinfo.file_frame_map\\[i\\]/ffm = os.path.basename(self.cvinfo.file_frame_map[i])/",
+          "-e",
+          "s/if start != 0 and end != 0:/if end != 0:/",
+          "tests/test-lz4-list.py"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}",
+          "BUILD_SHARED=no",
+          "PREFIX=/"
+        ]
+      ],
+      "check": [
+        [
+          "make",
+          "BUILD_SHARED=no",
+          "PREFIX=/",
+          "test"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "BUILD_SHARED=no",
+          "PREFIX=/",
+          "DESTDIR={prefix}",
+          "install"
+        ]
+      ]
+    }
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "55be1df7b5079b0a655b7799c06d18e227ab82db6755b362d72f5f9af060b80e"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "/usr/bin/uname": "Linux runnervmlun5p 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+    "make": "GNU Make 4.3\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law."
+  },
+  "package": {
+    "name": "lz4",
+    "version": "1.10.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpDCJwcq/.tmp6Ok8vz/build/package.tar.gz",
+        "sha256": "665792a6db1d21a590ce56531736f63866deb19ba8709d7749e0f6adfee8df9e"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "lz4": "bin/lz4",
+        "lz4c": "bin/lz4c",
+        "lz4cat": "bin/lz4cat",
+        "unlz4": "bin/unlz4"
+      }
+    },
+    "output_sha256": "0414ca4a79bcbc6353ae19589836e14490dad062f5fb79b61a9f1acef3305f04"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "catalog_sha256": "55be1df7b5079b0a655b7799c06d18e227ab82db6755b362d72f5f9af060b80e",
+  "revision": 2,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "commands",
+    "url": "https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz",
+    "sha256": "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
+    "archive": "tar.gz",
+    "strip_prefix": "lz4-1.10.0",
+    "configure": [],
+    "dependencies": [],
+    "libraries": [
+      "lib/liblz4.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "sed",
+          "-i.bak",
+          "-e",
+          "s/ffm = self.cvinfo.file_frame_map\\[i\\]/ffm = os.path.basename(self.cvinfo.file_frame_map[i])/",
+          "-e",
+          "s/if start != 0 and end != 0:/if end != 0:/",
+          "tests/test-lz4-list.py"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}",
+          "BUILD_SHARED=no",
+          "PREFIX=/"
+        ]
+      ],
+      "check": [
+        [
+          "make",
+          "BUILD_SHARED=no",
+          "PREFIX=/",
+          "test"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "BUILD_SHARED=no",
+          "PREFIX=/",
+          "DESTDIR={prefix}",
+          "install"
+        ]
+      ]
+    }
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "55be1df7b5079b0a655b7799c06d18e227ab82db6755b362d72f5f9af060b80e"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "/usr/bin/uname": "Darwin sjc22-bt150-613b2d97-b97c-4895-b3d7-e2b404a64a1a-3EC54A7F861E.local 24.6.0 Darwin Kernel Version 24.6.0: Tue Jul 21 20:51:34 PDT 2026; root:xnu-11417.140.69.711.44~1/RELEASE_ARM64_VMAPPLE arm64",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0"
+  },
+  "package": {
+    "name": "lz4",
+    "version": "1.10.0",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpTYUxKZ/.tmpQk2Lrb/build/package.tar.gz",
+        "sha256": "db49355c3aaa77fad3a079c0be845463b95e62e3246404c361a9785d3af3fddb"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "lz4": "bin/lz4",
+        "lz4c": "bin/lz4c",
+        "lz4cat": "bin/lz4cat",
+        "unlz4": "bin/unlz4"
+      }
+    },
+    "output_sha256": "11609e189e654d724e9481cbe460ff8bfa0b2fcfd250b539e45ef71780705dbc"
+  }
+}
