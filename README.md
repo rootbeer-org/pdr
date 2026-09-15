@@ -25,7 +25,8 @@ jq --version
 
 Add `@version` to request an exact release, such as `jq@1.8.2`. You can also manage
 packages alongside your dotfiles with `rb.package("jq")` in your Lua configuration.
-Rootbeer installs prebuilt packages; installation does not compile them locally.
+Rootbeer normally installs published binaries. Source-capable packages are built by
+our index CI; binary-only packages use upstream releases.
 
 Packages can also export macOS apps: `rb use bobrwm` links `Bobrwm.app` into
 `~/Applications`. Existing apps are never overwritten. `rb unuse bobrwm` removes
@@ -93,7 +94,8 @@ still depend on them.
 
 ## Source alternatives
 
-Source-capable packages prefer published binaries and can also be built locally:
+Source-capable packages prefer binaries compiled from our recipes by index CI
+and can also be built locally:
 
 ```sh
 rb use jq --source

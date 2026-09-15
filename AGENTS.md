@@ -38,8 +38,9 @@ each affected recipe revision. Compare expanded `rootbeer-forge --catalog packag
 index` output when editing. Schema migrations are coordinated with the engine pin;
 legacy authoring formats do not need compatibility adapters.
 
-Source-capable recipes may also declare `inputs.prebuilt` as an optional fast path.
-Qualify both paths against the shared output contract. `inputs.prebuilt.systems`
+Source-capable recipes publish our compiled outputs, reusing verified build caches.
+Upstream `inputs.prebuilt` is used for binary-only recipes; it does not replace
+a declared source build during export or dependency builds. `inputs.prebuilt.systems`
 can limit binary coverage; version overrides may disable inherited prebuilts with
 `enabled = false`. Declare `inputs.source.git` only after verifying the build steps
 against repository archives. HEAD, tags, and branches are resolved to commit SHAs
