@@ -1,0 +1,291 @@
+{
+  "schema": 1,
+  "build_key": "52e87b85e044d805eda3dc7b91f3fc814b62ebfd6f29262759604483e10e90fb",
+  "build_environment": "48b3aebbfe861dcbf0f3d43f3331e4bac253ad32b0d3d60089cd8e863ac3f17e",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "883b48c311c0ba99c0d611804fec28ca2100befb37a888619bcfd3b21136bee7",
+  "catalog_sha256": "1efe9215d25333264d6c670631430657699403e0320aeaad72ed526464a256ee",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "custom",
+    "url": "https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz",
+    "sha256": "eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3",
+    "archive": "tar.gz",
+    "strip_prefix": "zstd-1.5.7",
+    "configure": [],
+    "dependencies": [
+      "cmake@4.4.3",
+      "lz4@1.10.0",
+      "xz@5.8.3",
+      "zlib@1.3.2"
+    ],
+    "libraries": [
+      "lib/libzstd.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "cmake",
+          "-S",
+          "build/cmake",
+          "-B",
+          "output",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DZSTD_BUILD_SHARED=OFF",
+          "-DZSTD_BUILD_STATIC=ON",
+          "-DZSTD_BUILD_TESTS=ON",
+          "-DZSTD_MULTITHREAD_SUPPORT=ON",
+          "-DZSTD_LEGACY_SUPPORT=ON",
+          "-DZSTD_ZLIB_SUPPORT=ON",
+          "-DZSTD_LZMA_SUPPORT=ON",
+          "-DZSTD_LZ4_SUPPORT=ON",
+          "-DZSTD_FUZZER_FLAGS=-T60s",
+          "-DZSTD_ZSTREAM_FLAGS=-T60s",
+          "-DZSTD_FULLBENCH_FLAGS=-i1",
+          "-DZLIB_INCLUDE_DIR={dependencies}/include",
+          "-DZLIB_LIBRARY={dependencies}/lib/libz.a",
+          "-DLIBLZMA_INCLUDE_DIR={dependencies}/include",
+          "-DLIBLZMA_LIBRARY={dependencies}/lib/liblzma.a",
+          "-DLIBLZ4_INCLUDE_DIR={dependencies}/include",
+          "-DLIBLZ4_LIBRARY={dependencies}/lib/liblz4.a",
+          "-DCMAKE_INSTALL_PREFIX=/",
+          "-DCMAKE_INSTALL_BINDIR=/bin",
+          "-DCMAKE_INSTALL_LIBDIR=/lib",
+          "-DCMAKE_INSTALL_INCLUDEDIR=/include"
+        ]
+      ],
+      "build": [
+        [
+          "cmake",
+          "--build",
+          "output",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "ctest",
+          "--test-dir",
+          "output",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "install": [
+        [
+          "/usr/bin/env",
+          "DESTDIR={prefix}",
+          "cmake",
+          "--install",
+          "output"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpEi4Caf/.tmpizItMV/build/dependency-cmake@4.4.3/package.tar.gz",
+          "sha256": "6fbf27e64838bab183d0f547013931e0409dc423409f9e328b74c2941b2de25c"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "bin/cmake",
+          "cpack": "bin/cpack",
+          "ctest": "bin/ctest"
+        }
+      },
+      "output_sha256": "b521223602e95a2832d947f127a81b80fee4a2805f156c8d213fb64ab89b868b"
+    },
+    "lz4@1.10.0": {
+      "name": "lz4",
+      "version": "1.10.0",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpEi4Caf/.tmpizItMV/build/dependency-lz4@1.10.0/package.tar.gz",
+          "sha256": "244b959997a3a0caff666fc47d80b37d2fd16a5bf8851fc2ebd03445cc2b1919"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lz4": "bin/lz4",
+          "lz4c": "bin/lz4c",
+          "lz4cat": "bin/lz4cat",
+          "unlz4": "bin/unlz4"
+        }
+      },
+      "output_sha256": "ca09e2581f4dc1cf2730e693c2f5065aae4c0017566dd03536742eed7bde917a"
+    },
+    "openssl@4.0.2": {
+      "name": "openssl",
+      "version": "4.0.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpEi4Caf/.tmpizItMV/build/dependency-openssl@4.0.2/package.tar.gz",
+          "sha256": "35da35e5f5fc52da5ad2036a547c25d31b711f0cd51b4d4183cd816799be17f3"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "openssl": "bin/openssl"
+        }
+      },
+      "output_sha256": "8adbeb8c24f8fc9d9c56dea510ee330898c31edc408e92754feb8defd6718eb9"
+    },
+    "xz@5.8.3": {
+      "name": "xz",
+      "version": "5.8.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpEi4Caf/.tmpizItMV/build/dependency-xz@5.8.3/package.tar.gz",
+          "sha256": "70b534115b2d1af81589604a490269a431bf845a2e691408dbce8b235cf822c6"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lzmadec": "bin/lzmadec",
+          "lzmainfo": "bin/lzmainfo",
+          "xz": "bin/xz",
+          "xzdec": "bin/xzdec"
+        }
+      },
+      "output_sha256": "83d818a87566306e33350e4d020c22f6f73ff933e2cc051d3a45abe5390a8827"
+    },
+    "zlib@1.3.2": {
+      "name": "zlib",
+      "version": "1.3.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpEi4Caf/.tmpizItMV/build/dependency-zlib@1.3.2/package.tar.gz",
+          "sha256": "5deb9b620f11a6e903a16d2f3858b9b4a2c406eeb3da9197dc06b047e6dca105"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "2e3831e32d81b2b2d9ad4a028a987c4ce9a51ef282e80932bc4d2cfc626ca04b"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "326bed719febd8b03f9c8553661c83b2015a92af"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "1efe9215d25333264d6c670631430657699403e0320aeaad72ed526464a256ee"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "zstd",
+    "version": "1.5.7",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpEi4Caf/.tmpizItMV/build/package.tar.gz",
+        "sha256": "0c75628a4a1d1e6edb68074366c820b94adf09dbef83ecb93481e751e533f57e"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "unzstd": "bin/unzstd",
+        "zstd": "bin/zstd",
+        "zstdcat": "bin/zstdcat",
+        "zstdmt": "bin/zstdmt"
+      }
+    },
+    "output_sha256": "0cf5b22b94add93dfef433f7cb74dc07e2bbefd63e2977c06fec5cfb8a765ee7"
+  }
+}
