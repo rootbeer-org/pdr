@@ -1,0 +1,158 @@
+{
+  "schema": 1,
+  "build_key": "7fe12f4197ee2a88fc86a89981cf30b98f3abce221b59abfbd4caf4950061cd6",
+  "build_environment": "281f18ab6cfc799bc02b754dc8d93a50e3ad9d5cc99d2fd9754a263dc33e754a",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "ca8d4e9190d1410d3e953fbafdc09c4724cf69a9caeca1d51aaaf82d45fa55f6",
+  "catalog_sha256": "0e33085ff88a0ea979ecad25f7269189e65b69fbb4bd63e1cfef8bce6899a6f7",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "autotools",
+    "url": "https://ftp.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz",
+    "sha256": "f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a",
+    "archive": "tar.gz",
+    "strip_prefix": "libidn2-2.3.8",
+    "configure": [
+      "--disable-shared",
+      "--enable-static",
+      "--disable-nls",
+      "--disable-doc",
+      "--disable-rpath",
+      "--without-libiconv-prefix",
+      "--without-libunistring-prefix"
+    ],
+    "dependencies": [
+      "libiconv@1.19",
+      "libunistring@1.4.2"
+    ],
+    "libraries": [
+      "lib/libidn2.a"
+    ]
+  },
+  "dependencies": {
+    "libiconv@1.19": {
+      "name": "libiconv",
+      "version": "1.19",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmp7uJizr/.tmprJ9AK1/build/dependency-libiconv@1.19/package.tar.gz",
+          "sha256": "4b497bc63970332bcaabb50f343fd5fe1900a3bfecf96c346064283c2f18f0a7"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "iconv": "bin/iconv"
+        }
+      },
+      "output_sha256": "f3cb1e501a5a14accadf99684309214bf86963243377d8f3698998823c053349"
+    },
+    "libunistring@1.4.2": {
+      "name": "libunistring",
+      "version": "1.4.2",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmp7uJizr/.tmprJ9AK1/build/dependency-libunistring@1.4.2/package.tar.gz",
+          "sha256": "3428e9732a744f044b16a77246e00f719111a74d26c9941e28d4e9d79b523524"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "a2abc2b7708ffd369b663297cd9e5877b857c73a0b7a613d5232e8dbbe7321ac"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "eefa25ec8ce66d506a08ee36a0d402be3554f084"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "0e33085ff88a0ea979ecad25f7269189e65b69fbb4bd63e1cfef8bce6899a6f7"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "libidn2",
+    "version": "2.3.8",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmp7uJizr/.tmprJ9AK1/build/package.tar.gz",
+        "sha256": "ae99c1b54ea80fffe8390b22e6f3dc6ed1f9125f9102556fd1fe619b13236281"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "idn2": "bin/idn2"
+      }
+    },
+    "output_sha256": "46402d1e74e1cf30d3b5e946bcae56b5264e20b363c42c339db875f5316a240f"
+  }
+}

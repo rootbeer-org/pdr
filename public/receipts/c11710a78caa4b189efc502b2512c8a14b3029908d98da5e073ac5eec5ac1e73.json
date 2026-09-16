@@ -1,0 +1,222 @@
+{
+  "schema": 1,
+  "build_key": "d9e9076cfc071de44793e235019941726018155024d57578131616d4414fb6eb",
+  "build_environment": "48b3aebbfe861dcbf0f3d43f3331e4bac253ad32b0d3d60089cd8e863ac3f17e",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "d68c9a10ec9ebf40271b645e5817e6e4b58dbf0e9eb8b837f7599a0d71f660cd",
+  "catalog_sha256": "0e33085ff88a0ea979ecad25f7269189e65b69fbb4bd63e1cfef8bce6899a6f7",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "custom",
+    "url": "https://github.com/google/brotli/archive/refs/tags/v1.2.0.tar.gz",
+    "sha256": "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec",
+    "archive": "tar.gz",
+    "strip_prefix": "brotli-1.2.0",
+    "configure": [],
+    "dependencies": [
+      "cmake@4.4.3"
+    ],
+    "libraries": [
+      "lib/libbrotlicommon.a",
+      "lib/libbrotlidec.a",
+      "lib/libbrotlienc.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "curl",
+          "--fail",
+          "--location",
+          "--retry",
+          "3",
+          "--output",
+          "testdata.txz",
+          "https://github.com/google/brotli/releases/download/v1.2.0/testdata.txz"
+        ],
+        [
+          "/bin/sh",
+          "-ec",
+          "printf '%s  %s\\n' e8624d888f13067e7635353397cf42956bf4ca1382da67f9cec8d43e800deecb testdata.txz | shasum -a 256 -c -"
+        ],
+        [
+          "tar",
+          "-xJf",
+          "testdata.txz"
+        ],
+        [
+          "cmake",
+          "-S",
+          ".",
+          "-B",
+          "build",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DBROTLI_DISABLE_TESTS=OFF",
+          "-DCMAKE_INSTALL_PREFIX=/",
+          "-DCMAKE_INSTALL_BINDIR=/bin",
+          "-DCMAKE_INSTALL_LIBDIR=/lib",
+          "-DCMAKE_INSTALL_INCLUDEDIR=/include"
+        ]
+      ],
+      "build": [
+        [
+          "cmake",
+          "--build",
+          "build",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "ctest",
+          "--test-dir",
+          "build",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "install": [
+        [
+          "/usr/bin/env",
+          "DESTDIR={prefix}",
+          "cmake",
+          "--install",
+          "build"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpNPbrwW/.tmp94yDAp/build/dependency-cmake@4.4.3/package.tar.gz",
+          "sha256": "2b299dc71f75aecf9e62050890b40fe15f9577594f6fc11c01bf0b6316d8cb52"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "bin/cmake",
+          "cpack": "bin/cpack",
+          "ctest": "bin/ctest"
+        }
+      },
+      "output_sha256": "d81b51575874b4265efa35bbb5939444650e47dfb7d2c7f5e7e78802b0c4d44b"
+    },
+    "openssl@4.0.2": {
+      "name": "openssl",
+      "version": "4.0.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpNPbrwW/.tmp94yDAp/build/dependency-openssl@4.0.2/package.tar.gz",
+          "sha256": "35da35e5f5fc52da5ad2036a547c25d31b711f0cd51b4d4183cd816799be17f3"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "openssl": "bin/openssl"
+        }
+      },
+      "output_sha256": "8adbeb8c24f8fc9d9c56dea510ee330898c31edc408e92754feb8defd6718eb9"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "eefa25ec8ce66d506a08ee36a0d402be3554f084"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "0e33085ff88a0ea979ecad25f7269189e65b69fbb4bd63e1cfef8bce6899a6f7"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "brotli",
+    "version": "1.2.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpNPbrwW/.tmp94yDAp/build/package.tar.gz",
+        "sha256": "38150e9a93117b4480553b69eac801c0302a4aca32d25316e132200030ebb8a6"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "brotli": "bin/brotli"
+      }
+    },
+    "output_sha256": "e4210b9ae52e648880d842a6fc26676166894b01980c4baa6e5cb87eed2d9f19"
+  }
+}

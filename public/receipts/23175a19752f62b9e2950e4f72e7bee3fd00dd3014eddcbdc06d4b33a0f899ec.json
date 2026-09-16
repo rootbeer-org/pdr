@@ -1,0 +1,508 @@
+{
+  "schema": 1,
+  "build_key": "09926a3f88dfa41d8107dea389614157a286d4b099c424f1591789ad19e9b65b",
+  "build_environment": "48b0f753b50e5a4dd0bdf899ff489f06b9b4884c2a21419c430c565e5790c94a",
+  "environment": {
+    "schema": 1,
+    "system": "x86_64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "6452af2eea333b8c65e1adb92964fc8f97863ab003fa13f9d12bff5345cd7dbe"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "a7ae8b838a75711c06f86a2a8293dcad85a20b564670a120717e704c436e6f3a"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "60254978b8ee2c1b21b41d16a18a621dbbcc72e43eb2fa9f916818256c77e9ee"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "86d31f6fb799e91fa21bad341484564510ca287703a16e9e46c53338776f4f42"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "c6e023b172383fae5318c600e6f2f3a153513df62bf06ad6c9269296d2a78e89"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "cba90d3f0fbba744f3b88cf0b0663b0b16245bd393ea42c43a929e0bc916ef1b",
+  "catalog_sha256": "0e33085ff88a0ea979ecad25f7269189e65b69fbb4bd63e1cfef8bce6899a6f7",
+  "revision": 1,
+  "system": "x86_64-linux",
+  "build": {
+    "backend": "custom",
+    "url": "https://github.com/curl/curl/releases/download/curl-8_22_0/curl-8.22.0.tar.gz",
+    "sha256": "d54dd598bf05927a726deb38df31c6a255ba83ff1de57c5d1464dac3ed8f44a1",
+    "archive": "tar.gz",
+    "strip_prefix": "curl-8.22.0",
+    "configure": [],
+    "patches": [
+      "--- a/CMake/curl-config.in.cmake\n+++ b/CMake/curl-config.in.cmake\n@@ -169 +169 @@\n-set(CURL_LIBRARIES_PRIVATE \"@LIBCURL_PC_LIBS_PRIVATE_LIST@\")\n+set(CURL_LIBRARIES_PRIVATE \"@CURL_LIBS@\")\n"
+    ],
+    "dependencies": [
+      "cmake@4.4.3",
+      "pkgconf@3.0.7",
+      "openssl@4.0.2",
+      "zlib@1.3.2",
+      "brotli@1.2.0",
+      "zstd@1.5.7",
+      "nghttp2@1.70.0",
+      "libidn2@2.3.8",
+      "libpsl@0.23.3",
+      "libssh2@1.11.1"
+    ],
+    "libraries": [
+      "lib/libcurl.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "cmake",
+          "-S",
+          ".",
+          "-B",
+          "build",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_INSTALL_PREFIX=/",
+          "-DCMAKE_POLICY_DEFAULT_CMP0193=NEW",
+          "-DCMAKE_INSTALL_LIBDIR=lib",
+          "-DCMAKE_INSTALL_INCLUDEDIR=include",
+          "-DCMAKE_INSTALL_BINDIR=bin",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DBUILD_STATIC_LIBS=ON",
+          "-DBUILD_TESTING=ON",
+          "-DBUILD_STATIC_CURL=ON",
+          "-DCURL_USE_OPENSSL=ON",
+          "-DOPENSSL_ROOT_DIR={dependencies}",
+          "-DOPENSSL_USE_STATIC_LIBS=ON",
+          "-DCURL_USE_CMAKECONFIG=OFF",
+          "-DCURL_USE_PKGCONFIG=ON",
+          "-DPKG_CONFIG_ARGN=--static",
+          "-DCMAKE_PREFIX_PATH={dependencies}",
+          "-DCURL_ZLIB=ON",
+          "-DCURL_BROTLI=ON",
+          "-DCURL_ZSTD=ON",
+          "-DUSE_NGHTTP2=ON",
+          "-DUSE_LIBIDN2=ON",
+          "-DCURL_USE_LIBPSL=ON",
+          "-DCURL_USE_LIBSSH2=ON",
+          "-DCURL_DISABLE_LDAP=ON",
+          "-DCURL_DISABLE_LDAPS=ON",
+          "-DUSE_APPLE_SECTRUST=ON",
+          "-DCURL_CA_FALLBACK=ON",
+          "-DCURL_BUILD_EVERYTHING=ON"
+        ]
+      ],
+      "build": [
+        [
+          "cmake",
+          "--build",
+          "build",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "/usr/bin/env",
+          "TFLAGS=-j{jobs}",
+          "cmake",
+          "--build",
+          "build",
+          "--target",
+          "test-nonflaky",
+          "--parallel",
+          "{jobs}"
+        ],
+        [
+          "/bin/sh",
+          "-ec",
+          "features=$(build/src/curl --version); for feature in HTTP2 SSL brotli zstd IDN PSL sftp https; do case \"$features\" in *\"$feature\"*) ;; *) echo \"missing curl feature: $feature\" >&2; exit 1;; esac; done"
+        ]
+      ],
+      "install": [
+        [
+          "/usr/bin/env",
+          "DESTDIR={prefix}",
+          "cmake",
+          "--install",
+          "build"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "brotli@1.2.0": {
+      "name": "brotli",
+      "version": "1.2.0",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-brotli@1.2.0/package.tar.gz",
+          "sha256": "892f510c38e6eaf0fc81faa6b752142f1ffd707655f4b7127918e74871a3d67e"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "brotli": "bin/brotli"
+        }
+      },
+      "output_sha256": "cc14a270aa8c3e022896f9a8512afeca02bd075ecf72e46cebc39482cc8b2435"
+    },
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-cmake@4.4.3/package.tar.gz",
+          "sha256": "da832b88cdd6543b9a87b8aa66a7ea275b3d289a6f45dc8ebc7c6c2ed314fd85"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "bin/cmake",
+          "cpack": "bin/cpack",
+          "ctest": "bin/ctest"
+        }
+      },
+      "output_sha256": "bab357be328359f6aa7fdeb1919ca5f492a04d7b42d5276a3f4bba4c401b0963"
+    },
+    "libiconv@1.19": {
+      "name": "libiconv",
+      "version": "1.19",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-libiconv@1.19/package.tar.gz",
+          "sha256": "b84a84cfe4120a3c5cdaa0e1ac2c6025f487de3d0905249f57147d42d7823094"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "iconv": "bin/iconv"
+        }
+      },
+      "output_sha256": "b63b4810264785b7b062eece070145015adba6e0eccecd57fb45d11688c5e8b0"
+    },
+    "libidn2@2.3.8": {
+      "name": "libidn2",
+      "version": "2.3.8",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-libidn2@2.3.8/package.tar.gz",
+          "sha256": "1b7d1ae84050dfc7d37cd64cbf01c788fb3ca839997ca541118f67ee73f333da"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "idn2": "bin/idn2"
+        }
+      },
+      "output_sha256": "8f8b81e7901db486b4a0704cb0741583cab0e8afc7f6441626df7e6adc3199be"
+    },
+    "libpsl@0.23.3": {
+      "name": "libpsl",
+      "version": "0.23.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-libpsl@0.23.3/package.tar.gz",
+          "sha256": "89a72060d4e9c6c58609bbbcaa0b53f5cfd3e757d91a2ff161efc4b7e10f529e"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "psl": "bin/psl"
+        }
+      },
+      "output_sha256": "fbe296d1dcff27997cd54696fe4829bb9226138fc35c5f322e52b5e44350cb47"
+    },
+    "libssh2@1.11.1": {
+      "name": "libssh2",
+      "version": "1.11.1",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-libssh2@1.11.1/package.tar.gz",
+          "sha256": "00a7332b704af761c450e4cfd08148fed876e1ffc6234d7755cb257858f8f1fd"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "7a71d71d63027efc5a462421e26a8c4af6726fc855b653896b791977088a5acb"
+    },
+    "libunistring@1.4.2": {
+      "name": "libunistring",
+      "version": "1.4.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-libunistring@1.4.2/package.tar.gz",
+          "sha256": "b0d142d567f17bc5ec71fa501ff7a9b6917c12cfb252466f66e66c08b207f840"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "49c34d99e37844d01638556141637d4f3267215405725bf79a94737053cfe351"
+    },
+    "lz4@1.10.0": {
+      "name": "lz4",
+      "version": "1.10.0",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-lz4@1.10.0/package.tar.gz",
+          "sha256": "665792a6db1d21a590ce56531736f63866deb19ba8709d7749e0f6adfee8df9e"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lz4": "bin/lz4",
+          "lz4c": "bin/lz4c",
+          "lz4cat": "bin/lz4cat",
+          "unlz4": "bin/unlz4"
+        }
+      },
+      "output_sha256": "0414ca4a79bcbc6353ae19589836e14490dad062f5fb79b61a9f1acef3305f04"
+    },
+    "nghttp2@1.70.0": {
+      "name": "nghttp2",
+      "version": "1.70.0",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-nghttp2@1.70.0/package.tar.gz",
+          "sha256": "d1df8d818863b547031c3c83760f3e0ca540911ac43abd46a0a0276efa4c3ed7"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "5d74ee72c58be3510b408243fa0f6a6ce1bba2c89b47c3265f8583c81d3c6d57"
+    },
+    "openssl@4.0.2": {
+      "name": "openssl",
+      "version": "4.0.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-openssl@4.0.2/package.tar.gz",
+          "sha256": "4e6699e82411fa389260320b871ee52e833352ce6e7a13cd752f511f4ca1b5c6"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "openssl": "bin/openssl"
+        }
+      },
+      "output_sha256": "90314d8dc09615ad032a06a313c981a2c45747d6079f848d8c7e8b8d563143cd"
+    },
+    "pkgconf@3.0.7": {
+      "name": "pkgconf",
+      "version": "3.0.7",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-pkgconf@3.0.7/package.tar.gz",
+          "sha256": "65269d7d6025bd2e68765c1a152f1b2de2d00c31a7c5f27cbef529a6bef829c8"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "pkg-config": "bin/pkg-config",
+          "pkgconf": "bin/pkgconf"
+        }
+      },
+      "output_sha256": "87ce093afc04f2a3cb34e2483731c2b878a7145f58a644242709bc8d3a7cb098"
+    },
+    "xz@5.8.3": {
+      "name": "xz",
+      "version": "5.8.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-xz@5.8.3/package.tar.gz",
+          "sha256": "0045acb3f5cb03ef9e03a4d246af09ce032fc8ced5a2e21acc7bbc739e016b80"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lzmadec": "bin/lzmadec",
+          "lzmainfo": "bin/lzmainfo",
+          "xz": "bin/xz",
+          "xzdec": "bin/xzdec"
+        }
+      },
+      "output_sha256": "c8f61ed67ee47eadd6b0439faed9c55454875dfbca8d53ebf5c683ab64822c23"
+    },
+    "zlib@1.3.2": {
+      "name": "zlib",
+      "version": "1.3.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-zlib@1.3.2/package.tar.gz",
+          "sha256": "89d075fb35982c9e518f05e3462344e11e6e9cd017e3f5b859769159b627664e"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "333bcc79a31464e4abf1ada4c00bf81074e1d9db3015dfd6f7730a41a40a0935"
+    },
+    "zstd@1.5.7": {
+      "name": "zstd",
+      "version": "1.5.7",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/dependency-zstd@1.5.7/package.tar.gz",
+          "sha256": "a8ab7b614d61ef7cbfc1413e7144661aa904403fddddfdc6aecbb902db715374"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "unzstd": "bin/unzstd",
+          "zstd": "bin/zstd",
+          "zstdcat": "bin/zstdcat",
+          "zstdmt": "bin/zstdmt"
+        }
+      },
+      "output_sha256": "23683370bcf26801c74a78386ddb8ed9c10e881f8d6a339aea8318fc3980b87e"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "eefa25ec8ce66d506a08ee36a0d402be3554f084"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "0e33085ff88a0ea979ecad25f7269189e65b69fbb4bd63e1cfef8bce6899a6f7"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "curl",
+    "version": "8.22.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpVSSkHr/.tmphQMpib/build/package.tar.gz",
+        "sha256": "c167da29cf9ce26191aa4a03e6ee4df8aac2c6822ab54b878796d87b134b145a"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "curl": "bin/curl",
+        "curl-config": "bin/curl-config"
+      }
+    },
+    "output_sha256": "2b8953f48685573537ebb0d8e8bea946801660b786f8c793d8ea880adeb9edd1"
+  }
+}

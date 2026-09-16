@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "build_key": "43eb026613ef6dec86f9dd2623da6c8efb762e1bf1af331996ebd364c17ebfb8",
+  "build_environment": "281f18ab6cfc799bc02b754dc8d93a50e3ad9d5cc99d2fd9754a263dc33e754a",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "5e997f4b4f476b6cfacf76e32779263605230891e9200ca7b213a5f26eb61486",
+  "catalog_sha256": "0e33085ff88a0ea979ecad25f7269189e65b69fbb4bd63e1cfef8bce6899a6f7",
+  "revision": 2,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "zig",
+    "url": "https://codeload.github.com/rockorager/rush/tar.gz/294212ebd35f5b755062186a66bcfd6436d3627a",
+    "sha256": "b7eb240c58b7de30a80f1a2f27d1273effa1a1785d670ea6917995e5803422b6",
+    "archive": "tar.gz",
+    "strip_prefix": "rush-294212ebd35f5b755062186a66bcfd6436d3627a",
+    "configure": [],
+    "args": [
+      "-Doptimize=ReleaseSafe",
+      "-Dregister-shell=false",
+      "-Dsysconfdir=/etc",
+      "-Ddatadir=/usr/share",
+      "-Dversion=0.1.0-dev.20260909+g294212ebd35f5b755062186a66bcfd6436d3627a"
+    ],
+    "patches": [
+      "--- a/build.zig\n+++ b/build.zig\n@@ -23,7 +23,7 @@\n         \"lto\",\n         \"Link-time optimization (none, thin, full; default: none)\",\n     ) orelse .none;\n-    const version = versionString(b);\n+    const version = b.option([]const u8, \"version\", \"Exact version for source snapshot builds\") orelse versionString(b);\n     const build_config = b.addOptions();\n     build_config.addOption([]const u8, \"version\", version);\n \n--- a/src/file_util.zig\n+++ b/src/file_util.zig\n@@ -22,3 +22,16 @@\n     }\n     return bytes.toOwnedSlice(allocator);\n }\n+\n+/// Returns an owned executable-relative data directory when available.\n+pub fn executableDataDir(allocator: std.mem.Allocator) !?[]u8 {\n+    if (comptime @import(\"builtin\").cpu.arch.isWasm()) return null;\n+\n+    const io = std.Io.Threaded.global_single_threaded.io();\n+    var executable_buffer: [std.fs.max_path_bytes]u8 = undefined;\n+    const executable_len = std.process.executablePath(io, &executable_buffer) catch return null;\n+    var real_buffer: [std.fs.max_path_bytes]u8 = undefined;\n+    const real_len = std.Io.Dir.cwd().realPathFile(io, executable_buffer[0..executable_len], &real_buffer) catch return null;\n+    const bin_dir = std.fs.path.dirname(real_buffer[0..real_len]) orelse return null;\n+    return try std.fs.path.resolve(allocator, &.{ bin_dir, \"..\", \"share\" });\n+}\n--- a/src/function_autoload.zig\n+++ b/src/function_autoload.zig\n@@ -4,6 +4,7 @@\n const build_config = @import(\"build_config\");\n \n const host = @import(\"host.zig\");\n+const file_util = @import(\"file_util.zig\");\n const shell = @import(\"shell.zig\");\n \n const max_function_source_bytes = 1024 * 1024;\n@@ -87,6 +88,10 @@\n     try appendUserDataDir(allocator, sh, &data_dirs);\n     try appendXdgDataDirs(allocator, sh, &data_dirs);\n     try appendPath(allocator, &data_dirs, &.{ build_config.datadir, \"rush\", \"functions\" });\n+    if (try file_util.executableDataDir(allocator)) |data_dir| {\n+        defer allocator.free(data_dir);\n+        try appendPath(allocator, &data_dirs, &.{ data_dir, \"rush\", \"functions\" });\n+    }\n \n     var paths: std.ArrayList([]const u8) = .empty;\n     errdefer freePathList(allocator, &paths);\n--- a/src/completion.zig\n+++ b/src/completion.zig\n@@ -9,6 +9,7 @@\n const extensions = @import(\"extensions.zig\");\n const history = @import(\"history.zig\");\n const host = @import(\"host.zig\");\n+const file_util = @import(\"file_util.zig\");\n const shell = @import(\"shell.zig\");\n \n pub const Application = editor_completion.Application;\n@@ -1114,6 +1115,10 @@\n         if (try findCompletionFileUnder(allocator, sh, part, file_name)) |path| return path;\n     }\n     if (try findCompletionFileUnder(allocator, sh, build_config.datadir, file_name)) |path| return path;\n+    if (try file_util.executableDataDir(allocator)) |data_dir| {\n+        defer allocator.free(data_dir);\n+        if (try findCompletionFileUnder(allocator, sh, data_dir, file_name)) |path| return path;\n+    }\n     return null;\n }\n \n"
+    ],
+    "dependencies": [
+      "zig@0.16.0"
+    ]
+  },
+  "dependencies": {
+    "zig@0.16.0": {
+      "name": "zig",
+      "version": "0.16.0",
+      "source": {
+        "Url": {
+          "url": "https://ziglang.org/download/0.16.0/zig-aarch64-macos-0.16.0.tar.xz",
+          "sha256": "b23d70deaa879b5c2d486ed3316f7eaa53e84acf6fc9cc747de152450d401489"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarXz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "zig": "zig-aarch64-macos-0.16.0/zig"
+        }
+      },
+      "output_sha256": "ca053d5ee06a96bebfb8dd6612f5e62eec72ea9beee334d478a6460f05f912d6"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "eefa25ec8ce66d506a08ee36a0d402be3554f084"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "0e33085ff88a0ea979ecad25f7269189e65b69fbb4bd63e1cfef8bce6899a6f7"
+      }
+    }
+  },
+  "toolchain": {
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin",
+    "zig": "0.16.0"
+  },
+  "package": {
+    "name": "rush",
+    "version": "0.1.0-dev.20260909+g294212ebd35f5b755062186a66bcfd6436d3627a",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmp7uJizr/.tmphoDCkp/build/package.tar.gz",
+        "sha256": "cde3a09a2257403a2f78d443692776792a7b8b855d974d59ee6a4c8d4fca8f82"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "rush": "bin/rush"
+      }
+    },
+    "output_sha256": "583ce3af6f921807cd6b39f24f91edd391c136c040cee826c9326422d62a49b9"
+  }
+}
