@@ -24,6 +24,40 @@ return {
             url = "https://github.com/rockdaboot/libpsl/releases/download/{version}/libpsl-{version}.tar.gz",
             archive = "tar.gz",
             strip_prefix = "libpsl-{version}",
+            -- Static libunistring probes must link libiconv after libunistring.
+            patches = {
+                [[
+--- a/configure
++++ b/configure
+@@ -17475,7 +17475,7 @@
+   e)
+     acl_saved_LIBS="$LIBS"
+                                 case " $LIBUNISTRING" in
+-      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;
++      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;
+       *)       LIBS="$LIBUNISTRING $LIBS" ;;
+     esac
+     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+@@ -18063,7 +18063,7 @@
+   e)
+     acl_saved_LIBS="$LIBS"
+                                 case " $LIBUNISTRING" in
+-      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;
++      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;
+       *)       LIBS="$LIBUNISTRING $LIBS" ;;
+     esac
+     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+@@ -18654,7 +18654,7 @@
+   e)
+     acl_saved_LIBS="$LIBS"
+                                 case " $LIBUNISTRING" in
+-      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;
++      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;
+       *)       LIBS="$LIBUNISTRING $LIBS" ;;
+     esac
+     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+]],
+            },
         },
     },
     outputs = {
