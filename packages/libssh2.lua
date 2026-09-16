@@ -26,6 +26,7 @@ return {
                     "-DBUILD_TESTING=ON",
                     "-DCRYPTO_BACKEND=OpenSSL",
                     "-DOPENSSL_ROOT_DIR={dependencies}",
+                    "-DCMAKE_SYSTEM_PREFIX_PATH={dependencies}",
                     "-DOPENSSL_USE_STATIC_LIBS=ON",
                     "-DBUILD_EXAMPLES=OFF",
                     "-DENABLE_ZLIB_COMPRESSION=ON",
