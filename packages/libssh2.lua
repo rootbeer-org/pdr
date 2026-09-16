@@ -18,9 +18,10 @@ return {
                     "build",
                     "-DCMAKE_BUILD_TYPE=Release",
                     "-DCMAKE_INSTALL_PREFIX=/",
-                    "-DCMAKE_INSTALL_LIBDIR=/lib",
-                    "-DCMAKE_INSTALL_INCLUDEDIR=/include",
-                    "-DCMAKE_INSTALL_BINDIR=/bin",
+                    "-DCMAKE_POLICY_DEFAULT_CMP0193=NEW",
+                    "-DCMAKE_INSTALL_LIBDIR=lib",
+                    "-DCMAKE_INSTALL_INCLUDEDIR=include",
+                    "-DCMAKE_INSTALL_BINDIR=bin",
                     "-DBUILD_SHARED_LIBS=OFF",
                     "-DBUILD_STATIC_LIBS=ON",
                     "-DBUILD_TESTING=ON",
@@ -60,6 +61,24 @@ return {
             url = "https://github.com/libssh2/libssh2/releases/download/libssh2-{version}/libssh2-{version}.tar.gz",
             archive = "tar.gz",
             strip_prefix = "libssh2-{version}",
+            -- Export dependency targets so CMake consumers can relocate the package.
+            patches = {
+                [[
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -339 +339 @@
+-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})
++      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)
+@@ -368 +368 @@
+-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})
++      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -66 +66 @@
+-  list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})
++  list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)
+]],
+            },
         },
     },
     outputs = {

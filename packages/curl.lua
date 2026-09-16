@@ -29,9 +29,10 @@ return {
                     "build",
                     "-DCMAKE_BUILD_TYPE=Release",
                     "-DCMAKE_INSTALL_PREFIX=/",
-                    "-DCMAKE_INSTALL_LIBDIR=/lib",
-                    "-DCMAKE_INSTALL_INCLUDEDIR=/include",
-                    "-DCMAKE_INSTALL_BINDIR=/bin",
+                    "-DCMAKE_POLICY_DEFAULT_CMP0193=NEW",
+                    "-DCMAKE_INSTALL_LIBDIR=lib",
+                    "-DCMAKE_INSTALL_INCLUDEDIR=include",
+                    "-DCMAKE_INSTALL_BINDIR=bin",
                     "-DBUILD_SHARED_LIBS=OFF",
                     "-DBUILD_STATIC_LIBS=ON",
                     "-DBUILD_TESTING=ON",
@@ -88,6 +89,16 @@ return {
             url = "https://github.com/curl/curl/releases/download/curl-8_22_0/curl-{version}.tar.gz",
             archive = "tar.gz",
             strip_prefix = "curl-{version}",
+            -- Export dependency targets so CMake consumers can relocate the package.
+            patches = {
+                [[
+--- a/CMake/curl-config.in.cmake
++++ b/CMake/curl-config.in.cmake
+@@ -169 +169 @@
+-set(CURL_LIBRARIES_PRIVATE "@LIBCURL_PC_LIBS_PRIVATE_LIST@")
++set(CURL_LIBRARIES_PRIVATE "@CURL_LIBS@")
+]],
+            },
         },
     },
     outputs = {

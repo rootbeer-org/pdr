@@ -23,9 +23,10 @@ return {
                     "build",
                     "-DCMAKE_BUILD_TYPE=Release",
                     "-DCMAKE_INSTALL_PREFIX=/",
-                    "-DCMAKE_INSTALL_LIBDIR=/lib",
-                    "-DCMAKE_INSTALL_INCLUDEDIR=/include",
-                    "-DCMAKE_INSTALL_BINDIR=/bin",
+                    "-DCMAKE_POLICY_DEFAULT_CMP0193=NEW",
+                    "-DCMAKE_INSTALL_LIBDIR=lib",
+                    "-DCMAKE_INSTALL_INCLUDEDIR=include",
+                    "-DCMAKE_INSTALL_BINDIR=bin",
                     "-DBUILD_SHARED_LIBS=OFF",
                     "-DBUILD_STATIC_LIBS=ON",
                     "-DBUILD_TESTING=ON",
@@ -67,6 +68,24 @@ return {
             url = "https://github.com/nghttp2/nghttp2/releases/download/v{version}/nghttp2-{version}.tar.gz",
             archive = "tar.gz",
             strip_prefix = "nghttp2-{version}",
+            -- Keep pkg-config paths aligned with the relative install directories.
+            patches = {
+                [[
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -445,8 +445,8 @@
+ # libnghttp2.pc (pkg-config file)
+ set(prefix          "${CMAKE_INSTALL_PREFIX}")
+ set(exec_prefix     "${CMAKE_INSTALL_PREFIX}")
+-set(libdir          "${CMAKE_INSTALL_FULL_LIBDIR}")
+-set(includedir      "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
++set(libdir          "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
++set(includedir      "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+ set(VERSION         "${PACKAGE_VERSION}")
+ # For init scripts and systemd service file (in contrib/)
+ set(bindir          "${CMAKE_INSTALL_FULL_BINDIR}")
+]],
+            },
         },
     },
     outputs = {
