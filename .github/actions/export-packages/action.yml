@@ -62,7 +62,7 @@ runs:
           --registry tale/rootbeer-index --output result --workers 2 --jobs "$jobs" \
           --cache .package-results --cache-context "$CACHE_CONTEXT" "${options[@]}"
     - name: Save verified package results
-      if: ${{ !cancelled() && (github.ref == 'refs/heads/main' || github.event_name == 'pull_request') && steps.cache.outputs.cache-primary-key != '' && hashFiles('.package-results/**/record.json', '.package-results/builds/results/**/receipt.json') != '' }}
+      if: ${{ always() && (github.ref == 'refs/heads/main' || github.event_name == 'pull_request') && steps.cache.outputs.cache-primary-key != '' && hashFiles('.package-results/**/record.json', '.package-results/builds/results/**/receipt.json') != '' }}
       uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: .package-results
