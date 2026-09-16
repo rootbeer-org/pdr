@@ -23,7 +23,9 @@ return {
                     "build",
                     "-DCMAKE_BUILD_TYPE=Release",
                     "-DCMAKE_INSTALL_PREFIX=/",
-                    "-DCMAKE_INSTALL_LIBDIR=lib",
+                    "-DCMAKE_INSTALL_LIBDIR=/lib",
+                    "-DCMAKE_INSTALL_INCLUDEDIR=/include",
+                    "-DCMAKE_INSTALL_BINDIR=/bin",
                     "-DBUILD_SHARED_LIBS=OFF",
                     "-DBUILD_STATIC_LIBS=ON",
                     "-DBUILD_TESTING=ON",
@@ -35,6 +37,16 @@ return {
                 { "cmake", "--build", "build", "--parallel", "{jobs}" },
             },
             check = {
+                {
+                    "cmake",
+                    "--build",
+                    "build",
+                    "--target",
+                    "main",
+                    "failmalloc",
+                    "--parallel",
+                    "{jobs}",
+                },
                 {
                     "ctest",
                     "--test-dir",

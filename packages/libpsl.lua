@@ -7,15 +7,16 @@ return {
     systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
     build = {
         backend = "autotools",
-        dependencies = { "libidn2@2.3.8", "pkgconf@3.0.7" },
+        dependencies = { "libiconv@1.19", "libidn2@2.3.8", "libunistring@1.4.2", "pkgconf@3.0.7" },
         configure = {
             "--disable-shared",
             "--enable-static",
             "--disable-nls",
             "--disable-rpath",
+            "--without-libiconv-prefix",
             "--enable-runtime=libidn2",
             "--enable-builtin",
-            "--with-libunistring-prefix={dependencies}",
+            "--without-libunistring-prefix",
         },
     },
     inputs = {

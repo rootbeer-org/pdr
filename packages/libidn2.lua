@@ -7,14 +7,15 @@ return {
     systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
     build = {
         backend = "autotools",
-        dependencies = { "libunistring@1.4.2" },
+        dependencies = { "libiconv@1.19", "libunistring@1.4.2" },
         configure = {
             "--disable-shared",
             "--enable-static",
             "--disable-nls",
             "--disable-doc",
             "--disable-rpath",
-            "--with-libunistring-prefix={dependencies}",
+            "--without-libiconv-prefix",
+            "--without-libunistring-prefix",
         },
     },
     inputs = {
@@ -29,7 +30,7 @@ return {
         bins = { "idn2" },
         checks = {
             { "idn2", "--version" },
-            { "idn2", "bücher.de" },
+            { "idn2", "example.com" },
         },
     },
     versions = {

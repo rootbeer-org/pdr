@@ -7,7 +7,13 @@ return {
     systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
     build = {
         backend = "autotools",
-        configure = { "--disable-shared", "--enable-static", "--disable-rpath" },
+        dependencies = { "libiconv@1.19" },
+        configure = {
+            "--disable-shared",
+            "--enable-static",
+            "--disable-rpath",
+            "--without-libiconv-prefix",
+        },
     },
     inputs = {
         source = {

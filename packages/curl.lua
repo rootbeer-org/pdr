@@ -15,6 +15,7 @@ return {
             "brotli@1.2.0",
             "zstd@1.5.7",
             "nghttp2@1.70.0",
+            "libidn2@2.3.8",
             "libpsl@0.23.3",
             "libssh2@1.11.1",
         },
@@ -28,7 +29,9 @@ return {
                     "build",
                     "-DCMAKE_BUILD_TYPE=Release",
                     "-DCMAKE_INSTALL_PREFIX=/",
-                    "-DCMAKE_INSTALL_LIBDIR=lib",
+                    "-DCMAKE_INSTALL_LIBDIR=/lib",
+                    "-DCMAKE_INSTALL_INCLUDEDIR=/include",
+                    "-DCMAKE_INSTALL_BINDIR=/bin",
                     "-DBUILD_SHARED_LIBS=OFF",
                     "-DBUILD_STATIC_LIBS=ON",
                     "-DBUILD_TESTING=ON",
@@ -72,7 +75,7 @@ return {
                 {
                     "/bin/sh",
                     "-ec",
-                    'features=$(build/src/curl --version); for feature in HTTP2 SSL brotli zstd IDN PSL; do case "$features" in *"$feature"*) ;; *) echo "missing curl feature: $feature" >&2; exit 1;; esac; done',
+                    'features=$(build/src/curl --version); for feature in HTTP2 SSL brotli zstd IDN PSL sftp https; do case "$features" in *"$feature"*) ;; *) echo "missing curl feature: $feature" >&2; exit 1;; esac; done',
                 },
             },
             install = {
