@@ -15,6 +15,8 @@ return {
             "brotli@1.2.0",
             "zstd@1.5.7",
             "nghttp2@1.70.0",
+            "nghttp3@1.18.0",
+            "ngtcp2@1.25.0",
             "libidn2@2.3.8",
             "libpsl@0.23.3",
             "libssh2@1.11.1",
@@ -48,6 +50,7 @@ return {
                     "-DCURL_BROTLI=ON",
                     "-DCURL_ZSTD=ON",
                     "-DUSE_NGHTTP2=ON",
+                    "-DUSE_NGTCP2=ON",
                     "-DUSE_LIBIDN2=ON",
                     "-DCURL_USE_LIBPSL=ON",
                     "-DCURL_USE_LIBSSH2=ON",
@@ -76,7 +79,7 @@ return {
                 {
                     "/bin/sh",
                     "-ec",
-                    'features=$(build/src/curl --version); for feature in HTTP2 SSL brotli zstd IDN PSL sftp https; do case "$features" in *"$feature"*) ;; *) echo "missing curl feature: $feature" >&2; exit 1;; esac; done',
+                    'features=$(build/src/curl --version); for feature in HTTP2 HTTP3 SSL brotli zstd IDN PSL sftp https; do case "$features" in *"$feature"*) ;; *) echo "missing curl feature: $feature" >&2; exit 1;; esac; done',
                 },
             },
             install = {
@@ -113,6 +116,7 @@ return {
     },
     versions = {
         ["8.22.0"] = {
+            revision = 2,
             inputs = {
                 source = {
                     sha256 = "d54dd598bf05927a726deb38df31c6a255ba83ff1de57c5d1464dac3ed8f44a1",
