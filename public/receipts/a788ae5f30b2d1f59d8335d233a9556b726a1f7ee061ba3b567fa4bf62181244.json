@@ -1,0 +1,235 @@
+{
+  "schema": 1,
+  "build_key": "db7dcb26c13f3cfbb928d743c368f8be4c4deeb4b9f91d74a6454f79b923a8b7",
+  "build_environment": "281f18ab6cfc799bc02b754dc8d93a50e3ad9d5cc99d2fd9754a263dc33e754a",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "80a6f9426f17e7f1d9914a7e55d6cb91e9b2334de554566317b96cb508a36dc7",
+  "catalog_sha256": "11a9452a456b782f51f96dcb36c4c9755f605098f8a0ec9f5d9118f2319c0f91",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "custom",
+    "url": "https://github.com/libssh2/libssh2/releases/download/libssh2-1.11.1/libssh2-1.11.1.tar.gz",
+    "sha256": "d9ec76cbe34db98eec3539fe2c899d26b0c837cb3eb466a56b0f109cabf658f7",
+    "archive": "tar.gz",
+    "strip_prefix": "libssh2-1.11.1",
+    "configure": [],
+    "patches": [
+      "--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -339 +339 @@\n-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\n+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\n@@ -368 +368 @@\n-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\n+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\n--- a/src/CMakeLists.txt\n+++ b/src/CMakeLists.txt\n@@ -66 +66 @@\n-  list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\n+  list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\n"
+    ],
+    "dependencies": [
+      "cmake@4.4.3",
+      "openssl@4.0.2",
+      "zlib@1.3.2"
+    ],
+    "libraries": [
+      "lib/libssh2.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "cmake",
+          "-S",
+          ".",
+          "-B",
+          "build",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_INSTALL_PREFIX=/",
+          "-DCMAKE_POLICY_DEFAULT_CMP0193=NEW",
+          "-DCMAKE_INSTALL_LIBDIR=lib",
+          "-DCMAKE_INSTALL_INCLUDEDIR=include",
+          "-DCMAKE_INSTALL_BINDIR=bin",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DBUILD_STATIC_LIBS=ON",
+          "-DBUILD_TESTING=ON",
+          "-DCRYPTO_BACKEND=OpenSSL",
+          "-DOPENSSL_ROOT_DIR={dependencies}",
+          "-DCMAKE_SYSTEM_PREFIX_PATH={dependencies}",
+          "-DOPENSSL_USE_STATIC_LIBS=ON",
+          "-DBUILD_EXAMPLES=OFF",
+          "-DENABLE_ZLIB_COMPRESSION=ON",
+          "-DZLIB_INCLUDE_DIR={dependencies}/include",
+          "-DZLIB_LIBRARY={dependencies}/lib/libz.a",
+          "-DRUN_DOCKER_TESTS=OFF",
+          "-DRUN_SSHD_TESTS=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "cmake",
+          "--build",
+          "build",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "ctest",
+          "--test-dir",
+          "build",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--parallel",
+          "{jobs}"
+        ]
+      ],
+      "install": [
+        [
+          "/usr/bin/env",
+          "DESTDIR={prefix}",
+          "cmake",
+          "--install",
+          "build"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpsUZnfR/.tmpbZCQdw/build/dependency-cmake@4.4.3/package.tar.gz",
+          "sha256": "0870aa8720c99a25218c3318f0dee146670b1e5a39286a901d24c90e6127a8a4"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "bin/cmake",
+          "cpack": "bin/cpack",
+          "ctest": "bin/ctest"
+        }
+      },
+      "output_sha256": "6ad40c9a8d669e923b6dc966e7f37b1a4d10180c24bc8a8bb409a56f9e625bb0"
+    },
+    "openssl@4.0.2": {
+      "name": "openssl",
+      "version": "4.0.2",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpsUZnfR/.tmpbZCQdw/build/dependency-openssl@4.0.2/package.tar.gz",
+          "sha256": "5e9135b3f529a7b4d8a51e1359375b79cd37c2d3615055cf9f7bbfec868b837a"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "openssl": "bin/openssl"
+        }
+      },
+      "output_sha256": "44e3773f061f59b00d96ed0b2a566f249404a28aa4c4eff3726a8bfca96dce6c"
+    },
+    "zlib@1.3.2": {
+      "name": "zlib",
+      "version": "1.3.2",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpsUZnfR/.tmpbZCQdw/build/dependency-zlib@1.3.2/package.tar.gz",
+          "sha256": "0e3afe043cc5be5d14721c50a4648a96341c8bf4c37874f6d370d7e5d90969b8"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "e41bfab54392617bf490401b7b288466435ac0f3bd6be23eb55b8ca85bc64413"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "20840318e54171e9013ba86203dff903e7573c6a"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "11a9452a456b782f51f96dcb36c4c9755f605098f8a0ec9f5d9118f2319c0f91"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "libssh2",
+    "version": "1.11.1",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpsUZnfR/.tmpbZCQdw/build/package.tar.gz",
+        "sha256": "69ed2b13d8649a0e11240db27066e537574c40715c95a79abe165d3356833497"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {}
+    },
+    "output_sha256": "5441b0653671b3c5b6f8b81757c52ae87fd5e67bbcbd8bc57dcbb1a62d9bf2eb"
+  }
+}

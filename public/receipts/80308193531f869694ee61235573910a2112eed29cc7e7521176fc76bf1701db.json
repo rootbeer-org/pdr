@@ -1,0 +1,168 @@
+{
+  "schema": 1,
+  "build_key": "6fe1247187a5b5a9ce261185543ac18a35705e24ae09bf29bd327570880130ec",
+  "build_environment": "281f18ab6cfc799bc02b754dc8d93a50e3ad9d5cc99d2fd9754a263dc33e754a",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "0d9286ac413815a71b1e9b437f32de467e96807d2fc1f2868795a82dc1a00ddc",
+  "catalog_sha256": "11a9452a456b782f51f96dcb36c4c9755f605098f8a0ec9f5d9118f2319c0f91",
+  "revision": 3,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "custom",
+    "url": "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3.tar.gz",
+    "sha256": "c46400618b4f1f2b43507f24fb22f3ae830c3416cf23b776e16e1d413aa892f0",
+    "archive": "tar.gz",
+    "strip_prefix": "cmake-4.4.3",
+    "configure": [],
+    "dependencies": [
+      "openssl@4.0.2"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "/bin/sh",
+          "./bootstrap",
+          "--prefix=/",
+          "--parallel={jobs}",
+          "--",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DBUILD_TESTING=ON",
+          "-DBUILD_CursesDialog=OFF",
+          "-DOPENSSL_ROOT_DIR={dependencies}",
+          "-DOPENSSL_USE_STATIC_LIBS=ON"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "./bin/ctest",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--parallel",
+          "{jobs}",
+          "-R",
+          "^CMakeLib[.]"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "DESTDIR={prefix}",
+          "install"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "openssl@4.0.2": {
+      "name": "openssl",
+      "version": "4.0.2",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpsUZnfR/.tmp1G3WhI/build/dependency-openssl@4.0.2/package.tar.gz",
+          "sha256": "5e9135b3f529a7b4d8a51e1359375b79cd37c2d3615055cf9f7bbfec868b837a"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "openssl": "bin/openssl"
+        }
+      },
+      "output_sha256": "44e3773f061f59b00d96ed0b2a566f249404a28aa4c4eff3726a8bfca96dce6c"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "20840318e54171e9013ba86203dff903e7573c6a"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "11a9452a456b782f51f96dcb36c4c9755f605098f8a0ec9f5d9118f2319c0f91"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "cmake",
+    "version": "4.4.3",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpsUZnfR/.tmp1G3WhI/build/package.tar.gz",
+        "sha256": "0870aa8720c99a25218c3318f0dee146670b1e5a39286a901d24c90e6127a8a4"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "cmake": "bin/cmake",
+        "cpack": "bin/cpack",
+        "ctest": "bin/ctest"
+      }
+    },
+    "output_sha256": "6ad40c9a8d669e923b6dc966e7f37b1a4d10180c24bc8a8bb409a56f9e625bb0"
+  }
+}
