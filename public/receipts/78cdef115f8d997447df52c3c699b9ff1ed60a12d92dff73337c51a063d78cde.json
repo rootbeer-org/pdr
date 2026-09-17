@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "build_key": "2483515234b338e9ed7a365695301599265f9ec229a1ec57066b601955d3118e",
+  "build_environment": "281f18ab6cfc799bc02b754dc8d93a50e3ad9d5cc99d2fd9754a263dc33e754a",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "70a7e68fad52a6f9932df452d04e8871309de44b9c9b2c920cea7564d628ea07",
+  "catalog_sha256": "00dd8f15b96f5a1aa53545159d2bc27de328dd0d34cf08fe825214f2eb0baf0e",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "custom",
+    "url": "https://distfiles.ariadne.space/pkgconf/pkgconf-3.0.7.tar.xz",
+    "sha256": "c926ff491cbd9a331a589160811bd97ab1749b4d5198a519338f2cdfabe6940a",
+    "archive": "tar.xz",
+    "strip_prefix": "pkgconf-3.0.7",
+    "configure": [],
+    "dependencies": [],
+    "steps": {
+      "configure": [
+        [
+          "/bin/sh",
+          "./configure",
+          "--prefix=/",
+          "--disable-shared",
+          "--enable-static",
+          "--with-pkg-config-dir=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "/usr/bin/env",
+          "-u",
+          "PKG_CONFIG_SYSROOT_DIR",
+          "-u",
+          "PKG_CONFIG_PATH",
+          "PKG_CONFIG_LIBDIR=.",
+          "/bin/sh",
+          "-c",
+          "exec make check"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "DESTDIR={prefix}",
+          "install"
+        ],
+        [
+          "/bin/ln",
+          "-s",
+          "pkgconf",
+          "{prefix}/bin/pkg-config"
+        ]
+      ]
+    }
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "f9475846a1d0bd29851de3eef230fe39c22f5682"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "00dd8f15b96f5a1aa53545159d2bc27de328dd0d34cf08fe825214f2eb0baf0e"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "pkgconf",
+    "version": "3.0.7",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/rootbeer-index/rootbeer-index/.tmpihCLgQ/.tmpqxwddC/build/package.tar.gz",
+        "sha256": "a4975e555d880b24e0c1cc183cd7205de3cc8f3a4308b2c3b8986afb7a6d1e5b"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "pkg-config": "bin/pkg-config",
+        "pkgconf": "bin/pkgconf"
+      }
+    },
+    "output_sha256": "5e1813dc9603f912d8b52fcf98e7e453ab136fe9368bae71c0cfa84d2f0e3c2c"
+  }
+}

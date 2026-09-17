@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "build_key": "025c73f0a2078c2c41e982b5d8f9334cf58097c1fe0ae7e080f0c12a281e94a4",
+  "build_environment": "48b3aebbfe861dcbf0f3d43f3331e4bac253ad32b0d3d60089cd8e863ac3f17e",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "354e0b0e263ff3b1f3e575c257541138f1d1b3b9b54929be273cb9ea2d85b934",
+  "catalog_sha256": "00dd8f15b96f5a1aa53545159d2bc27de328dd0d34cf08fe825214f2eb0baf0e",
+  "revision": 3,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "autotools",
+    "url": "https://github.com/jqlang/jq/releases/download/jq-1.8.2/jq-1.8.2.tar.gz",
+    "sha256": "71b8d6e8f5fe81f6c6d0d110e3892251f6ce76ed095abd315e26e6e1193af3af",
+    "archive": "tar.gz",
+    "strip_prefix": "jq-1.8.2",
+    "configure": [
+      "--disable-maintainer-mode",
+      "--with-oniguruma=builtin",
+      "--disable-shared"
+    ],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "f9475846a1d0bd29851de3eef230fe39c22f5682"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "00dd8f15b96f5a1aa53545159d2bc27de328dd0d34cf08fe825214f2eb0baf0e"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "jq",
+    "version": "1.8.2",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/rootbeer-index/rootbeer-index/.tmpqwADaF/.tmp0V0VBE/build/package.tar.gz",
+        "sha256": "1f074425be237681d7f83d5af21820558f155cec32e36e6dd0cc6ab1f280aedb"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "jq": "bin/jq"
+      }
+    },
+    "output_sha256": "b886ba09befc4a86d9502c36b9af93a94eddf4b20157a6de8c3f1d4b1a729682"
+  }
+}
