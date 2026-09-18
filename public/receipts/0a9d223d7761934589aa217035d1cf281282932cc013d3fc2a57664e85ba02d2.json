@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "build_key": "89fc10ebbd3609780a03606ed5e4085edccbd1d9c000734e394390b68cfd0638",
+  "build_environment": "48b0f753b50e5a4dd0bdf899ff489f06b9b4884c2a21419c430c565e5790c94a",
+  "environment": {
+    "schema": 1,
+    "system": "x86_64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "6452af2eea333b8c65e1adb92964fc8f97863ab003fa13f9d12bff5345cd7dbe"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "a7ae8b838a75711c06f86a2a8293dcad85a20b564670a120717e704c436e6f3a"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "60254978b8ee2c1b21b41d16a18a621dbbcc72e43eb2fa9f916818256c77e9ee"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "86d31f6fb799e91fa21bad341484564510ca287703a16e9e46c53338776f4f42"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "c6e023b172383fae5318c600e6f2f3a153513df62bf06ad6c9269296d2a78e89"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "4f746b4f190ce8e5328dc2c584d48b0849517d7ee4fe5a0b5c34b64639e954c7",
+  "catalog_sha256": "41d99edca795c6cc3f41c08d64c60e565ff5db32c9e35b97b4b9431e8f1ac466",
+  "revision": 2,
+  "system": "x86_64-linux",
+  "build": {
+    "backend": "custom",
+    "url": "https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz",
+    "sha256": "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
+    "archive": "tar.gz",
+    "strip_prefix": "lz4-1.10.0",
+    "configure": [],
+    "dependencies": [],
+    "libraries": [
+      "lib/liblz4.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "sed",
+          "-i.bak",
+          "-e",
+          "s/ffm = self.cvinfo.file_frame_map\\[i\\]/ffm = os.path.basename(self.cvinfo.file_frame_map[i])/",
+          "-e",
+          "s/if start != 0 and end != 0:/if end != 0:/",
+          "tests/test-lz4-list.py"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}",
+          "BUILD_SHARED=no",
+          "PREFIX=/"
+        ]
+      ],
+      "check": [
+        [
+          "make",
+          "BUILD_SHARED=no",
+          "PREFIX=/",
+          "test"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "BUILD_SHARED=no",
+          "PREFIX=/",
+          "DESTDIR={prefix}",
+          "install"
+        ]
+      ]
+    }
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "9af54f57e28495829981fbdb8d2f5531d6b3ed74"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "41d99edca795c6cc3f41c08d64c60e565ff5db32c9e35b97b4b9431e8f1ac466"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "lz4",
+    "version": "1.10.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpiJywtF/.tmpOJ2606/build/package.tar.gz",
+        "sha256": "665792a6db1d21a590ce56531736f63866deb19ba8709d7749e0f6adfee8df9e"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "lz4": "bin/lz4",
+        "lz4c": "bin/lz4c",
+        "lz4cat": "bin/lz4cat",
+        "unlz4": "bin/unlz4"
+      }
+    },
+    "output_sha256": "0414ca4a79bcbc6353ae19589836e14490dad062f5fb79b61a9f1acef3305f04"
+  }
+}
