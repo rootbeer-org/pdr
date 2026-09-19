@@ -10,15 +10,15 @@ return {
         repository_id = 207951619,
         tag_prefix = "v",
     },
-    build = {
-        backend = "rust",
-        rust = { packages = { "choose" } },
-    },
     inputs = {
-        source = {
-            url = "https://codeload.github.com/theryangeary/choose/tar.gz/refs/tags/v{version}",
-            archive = "tar.gz",
-            strip_prefix = "choose-{version}",
+        prebuilt = {
+            github = "theryangeary/choose",
+            tag = "v{version}",
+            assets = {
+                ["x86_64-linux"] = "choose-x86_64-unknown-linux-musl",
+                ["aarch64-macos"] = "choose-aarch64-apple-darwin",
+                ["aarch64-linux"] = "choose-aarch64-unknown-linux-gnu",
+            },
         },
     },
     outputs = {
@@ -26,13 +26,6 @@ return {
         checks = { { "choose", "--version" }, { "choose", "--help" } },
     },
     versions = {
-        ["1.3.7"] = {
-            revision = 2,
-            inputs = {
-                source = {
-                    sha256 = "8f51a315fbbe0688c4a2078ba8bc8446d36943b6cce6ed9bbd6a11f33bd1a134",
-                },
-            },
-        },
+        ["1.3.7"] = {},
     },
 }

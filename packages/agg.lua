@@ -10,15 +10,15 @@ return {
         repository_id = 519132476,
         tag_prefix = "v",
     },
-    build = {
-        backend = "rust",
-        rust = { packages = { "agg" } },
-    },
     inputs = {
-        source = {
-            url = "https://codeload.github.com/asciinema/agg/tar.gz/refs/tags/v{version}",
-            archive = "tar.gz",
-            strip_prefix = "agg-{version}",
+        prebuilt = {
+            github = "asciinema/agg",
+            tag = "v{version}",
+            assets = {
+                ["x86_64-linux"] = "agg-x86_64-unknown-linux-musl",
+                ["aarch64-macos"] = "agg-aarch64-apple-darwin",
+                ["aarch64-linux"] = "agg-aarch64-unknown-linux-gnu",
+            },
         },
     },
     outputs = {
@@ -27,12 +27,7 @@ return {
     },
     versions = {
         ["1.9.0"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "8170119502ad2c1c697e5cd4d050d87c425ecee726c5f6c3c2140703bcb31bb3",
-                },
-            },
+            revision = 2,
         },
     },
 }

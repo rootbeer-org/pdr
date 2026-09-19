@@ -10,15 +10,15 @@ return {
         repository_id = 156294298,
         tag_prefix = "v",
     },
-    build = {
-        backend = "rust",
-        rust = { packages = { "hexyl" } },
-    },
     inputs = {
-        source = {
-            url = "https://codeload.github.com/sharkdp/hexyl/tar.gz/refs/tags/v{version}",
-            archive = "tar.gz",
-            strip_prefix = "hexyl-{version}",
+        prebuilt = {
+            github = "sharkdp/hexyl",
+            tag = "v{version}",
+            assets = {
+                ["x86_64-linux"] = "hexyl-{tag}-x86_64-unknown-linux-musl.tar.gz",
+                ["aarch64-macos"] = "hexyl-{tag}-aarch64-apple-darwin.tar.gz",
+                ["aarch64-linux"] = "hexyl-{tag}-aarch64-unknown-linux-gnu.tar.gz",
+            },
         },
     },
     outputs = {
@@ -27,12 +27,7 @@ return {
     },
     versions = {
         ["0.17.0"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "72fa17397ad187eec6b295d02c7caabbb209a6e0d5706187b8a599bd5df8615e",
-                },
-            },
+            revision = 2,
         },
     },
 }

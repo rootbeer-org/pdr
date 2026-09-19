@@ -10,18 +10,15 @@ return {
         repository_id = 321792527,
         tag_prefix = "v",
     },
-    build = {
-        backend = "rust",
-        rust = {
-            packages = { "stylua" },
-            features = { "lua52", "lua53", "lua54", "luau", "luajit", "cfxlua" },
-        },
-    },
     inputs = {
-        source = {
-            url = "https://codeload.github.com/JohnnyMorganz/StyLua/tar.gz/refs/tags/v{version}",
-            archive = "tar.gz",
-            strip_prefix = "StyLua-{version}",
+        prebuilt = {
+            github = "JohnnyMorganz/StyLua",
+            tag = "v{version}",
+            assets = {
+                ["x86_64-linux"] = "stylua-linux-x86_64-musl.zip",
+                ["aarch64-macos"] = "stylua-macos-aarch64.zip",
+                ["aarch64-linux"] = "stylua-linux-aarch64-musl.zip",
+            },
         },
     },
     outputs = {
@@ -30,12 +27,7 @@ return {
     },
     versions = {
         ["2.5.2"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "26a220c7bf3a8f50d12b76c952fc4569a1162e2d002440faac3344a3634db4f2",
-                },
-            },
+            revision = 2,
         },
     },
 }

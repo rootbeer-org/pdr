@@ -10,15 +10,15 @@ return {
         repository_id = 158295285,
         tag_prefix = "v",
     },
-    build = {
-        backend = "rust",
-        rust = { packages = { "vivid" } },
-    },
     inputs = {
-        source = {
-            url = "https://codeload.github.com/sharkdp/vivid/tar.gz/refs/tags/v{version}",
-            archive = "tar.gz",
-            strip_prefix = "vivid-{version}",
+        prebuilt = {
+            github = "sharkdp/vivid",
+            tag = "v{version}",
+            assets = {
+                ["x86_64-linux"] = "vivid-{tag}-x86_64-unknown-linux-musl.tar.gz",
+                ["aarch64-macos"] = "vivid-{tag}-aarch64-apple-darwin.tar.gz",
+                ["aarch64-linux"] = "vivid-{tag}-aarch64-unknown-linux-gnu.tar.gz",
+            },
         },
     },
     outputs = {
@@ -27,12 +27,7 @@ return {
     },
     versions = {
         ["0.11.1"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "a43ccfbc6554055181a08f2740664f9280fa2d0e57c4641850c60dd0e5323720",
-                },
-            },
+            revision = 2,
         },
     },
 }
