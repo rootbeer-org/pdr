@@ -106,6 +106,7 @@ jobs:
     permissions:
       contents: read
       actions: read
+      packages: read
     needs: discover
     if: always() && needs.discover.outputs.changed == 'true'
     uses: ./.github/workflows/packages.yml

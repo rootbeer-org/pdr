@@ -102,8 +102,8 @@ compile once per export, including full rechecks.
 Verified results are cached by engine inputs and build environment, including
 successful work from failed runs. Compatible results survive unrelated engine
 commits. PR caches remain scoped to that PR and support its retries; main's caches
-also seed new PRs. Promoting a verified bundle does not copy a PR cache into main.
-Scheduled full checks refresh main's cache.
+also seed new PRs. Approved OCI candidates can seed an empty cache independently
+of Actions cache retention. Scheduled full checks refresh qualification evidence.
 
 Verification also retains an immutable `package-results-<runner>-<attempt>`
 checkpoint for 14 days, including successful qualifications and dependency build
@@ -129,8 +129,8 @@ names remain unique to their attempt. Verified bundles now remain available for
 Checkpoints are retry transport, not cross-run producer admission. They do not
 copy PR results into main's cache or grant registry credentials to build jobs.
 Cancelled jobs or jobs that time out before checkpoint upload cannot retain their
-latest work. OCI retention and promotion after Actions artifacts expire remain
-separate follow-up work.
+latest work. The collector retains successful complete candidates in OCI before
+Actions artifacts expire.
 Package updates are independent of Rootbeer binary
 releases. See [index hosting and trust](https://rootbeer.tale.me/contributing/package-hosting)
 for deployment and client verification details.
@@ -156,14 +156,55 @@ license and reject source selectors.
 
 ## Build verification and publication
 
-Pull requests run package verification without publishing credentials. Successful
-runs retain a verified bundle. After merge, `Publish packages` reuses that bundle
-only when the recipes, engine pin, verification workflow, actions, and helper
-scripts match the approved inputs. A changed pipeline, missing bundle, or explicit recheck causes a
-fresh verification build.
+Pull requests run package verification without publishing credentials. A separate
+[collector](.github/workflows/retain-results.yml) checks out trusted main, builds
+its own pinned Forge, and admits only unchanged verification tooling from
+same-repository PRs or allowed main events. It checks successful assembly, GitHub
+artifact digests, complete qualifications, and catalog equality. Source Git objects
+are read as data; uploaded executables are never run by the collector or publisher.
+Fork results require a same-repository verification run before admission.
 
-The publishing job builds its own engine in a separate cache namespace. It checks
-the downloaded bundle's GitHub artifact digest, then runs `verify-bundle` against
-the approved recipes to validate complete coverage and local contents before
-uploading binaries and signing the index. It never runs an
-engine executable uploaded by a pull request. Scheduled runs perform full rechecks.
+The collector stores raw files in `ghcr.io/tale/rootbeer-index/results` and attests
+the resulting OCI digest. `sha256-<digest>` tags retain immutable candidates;
+`catalog-<digest>` and `collector-<run>-<attempt>` tags are locators only. Readers
+resolve a locator once, verify the main collector's attestation, and consume exact
+content by digest. Keep these images and their OCI attestation referrers indefinitely.
+Actions artifacts can then expire without preventing publication.
+
+Publication matches that candidate to the approved catalog and engine pin, checks
+that main has not advanced, and signs the existing bundle. Discovery promotion uses
+its retained report and recipes. Publication adds a separate catalog-approval
+attestation and advances `accepted`. Builds import only candidates with both the
+collector and publication attestations. Registry write/signing credentials remain
+in separate trusted jobs. Qualification keys still decide per-package reuse;
+importing evidence never executes package code.
+
+Automatic publication with missing evidence waits for collection or repair; it
+never falls back to a catalog build. A manual publication may qualify missing
+inputs using compatible caches. Scheduled runs and manual `recheck` explicitly
+requalify everything. A changed engine pin requires a candidate from that pin;
+unrelated engine changes still reuse qualifications through Forge's semantic
+engine identity. Changed verification tooling must land on main before producing
+admissible evidence.
+
+### Rollout and recovery
+
+1. Push the engine commit, then this repository's matching `engine-revision`.
+2. Run the branch-only [retention fixture](.github/workflows/candidate-fixture.yml).
+   It builds one synthetic package, retains and attests it under the separate
+   `ci-fixture` image, restores into an empty cache, and verifies no rebuild.
+   Production admission must reject its branch signer. No catalog jobs run.
+3. After review and merge, retain and publish a candidate with the new engine.
+   Existing bundles without qualification records cannot be upgraded from archives.
+   Inspect caches and Forge plans before explicitly requesting missing verification.
+4. Set repository variable `DURABLE_PACKAGE_RESULTS=true` after the `results` image
+   and its first approved `accepted` candidate exist. Before this switch, cross-run
+   OCI seeding is disabled; collectors and publication from their events still work.
+   Allow Actions read access to this package (including PR jobs), or make it public.
+
+A failed collection can be rerun while producer artifacts remain available. A
+failed publication retries the same digest; it does not rebuild. If main advanced,
+select evidence for the current catalog instead of replaying an older release.
+If evidence expired before collection, recover it from retained checkpoints or
+compatible caches and explicitly qualify only missing inputs. Digest, attestation,
+and authentication failures are errors, never cache misses.

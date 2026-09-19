@@ -1,7 +1,7 @@
 name: Publish packages
 on:
   workflow_run:
-    workflows: [Upstream discovery]
+    workflows: [Retain package results]
     types: [completed]
     branches: [main]
   push:
@@ -24,18 +24,43 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  select:
+  trigger:
     if: github.ref == 'refs/heads/main' && github.event.repository.private == false && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - name: Skip collector runs with no candidate
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COLLECTOR_RUN: ${{ github.event.workflow_run.id }}
+        run: |
+          ready=true
+          if [ -n "$COLLECTOR_RUN" ]; then
+            ready=$(gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$COLLECTOR_RUN/jobs?per_page=100" \
+              --jq '[.[].jobs[].steps[]? | select(.name == "Expose authenticated candidate locators" and .conclusion == "success")] | length > 0')
+          fi
+          echo "ready=$ready" >> "$GITHUB_OUTPUT"
+
+  select:
+    needs: trigger
+    if: needs.trigger.outputs.ready == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
       actions: read
       contents: write
-      pull-requests: read
+      packages: read
     outputs:
-      run_id: ${{ steps.promotion.outputs.run_id || steps.bundle.outputs.run_id }}
+      candidate: ${{ steps.decision.outputs.candidate }}
       revision: ${{ steps.promotion.outputs.revision || steps.current.outputs.revision }}
-      ready: ${{ github.event_name != 'workflow_run' || steps.promotion.outputs.ready == 'true' }}
+      ready: ${{ steps.decision.outputs.ready }}
+      qualify: ${{ steps.decision.outputs.qualify }}
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -44,52 +69,98 @@ jobs:
           ref: ${{ github.event_name == 'workflow_run' && 'main' || github.sha }}
       - name: Record publication revision
         id: current
-        run: echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - name: Check for a qualified discovery bundle
-        if: github.event_name == 'workflow_run'
-        id: discovery
-        env:
-          GH_TOKEN: ${{ github.token }}
-          DISCOVERY_RUN: ${{ github.event.workflow_run.id }}
         run: |
-          found=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$DISCOVERY_RUN/artifacts?per_page=100" \
-            --jq '[.artifacts[] | select(.name == "verified-bundle" and .expired == false)] | length == 1')
-          echo "qualified=$found" >> "$GITHUB_OUTPUT"
+          echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "engine=$(cat engine-revision)" >> "$GITHUB_OUTPUT"
       - uses: ./.github/actions/setup-engine
-        if: steps.discovery.outputs.qualified == 'true'
         with:
           runner: ubuntu-24.04
           cache-scope: publish
+      - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d # v2.0.1
+        with:
+          version: 1.3.0
+      - name: Authenticate reader
+        run: printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+      - name: Select an admitted candidate by digest
+        if: github.event_name == 'workflow_run' || (vars.DURABLE_PACKAGE_RESULTS == 'true' && github.event_name != 'schedule' && inputs.recheck != true)
+        id: candidate
+        env:
+          COLLECTOR_RUN: ${{ github.event.workflow_run.id }}
+          COLLECTOR_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+        run: |
+          options=()
+          if [ -n "$COLLECTOR_RUN" ]; then options+=(--tag "collector-$COLLECTOR_RUN-$COLLECTOR_ATTEMPT"); fi
+          python3 .github/scripts/candidate-store.py select "${options[@]}"
+      - name: Read retained candidate
+        if: steps.candidate.outputs.candidate != ''
+        id: retained
+        env:
+          CANDIDATE: ${{ steps.candidate.outputs.candidate }}
+        run: python3 .github/scripts/candidate-store.py pull --reference "$CANDIDATE"
       - name: Promote verified discovery candidates
-        if: steps.discovery.outputs.qualified == 'true' && vars.PUBLISH_INDEX == 'true'
+        if: steps.retained.outputs.source_workflow == '.github/workflows/discovery.yml' && steps.retained.outputs.engine_revision == steps.current.outputs.engine && vars.PUBLISH_INDEX == 'true'
         id: promotion
         env:
-          GH_TOKEN: ${{ github.token }}
-          DISCOVERY_RUN: ${{ github.event.workflow_run.id }}
+          DISCOVERY_RUN: ${{ steps.retained.outputs.source_run }}
+          RETAINED_CANDIDATE: retained
         run: |
           gh auth setup-git
           ruby .github/scripts/promote-updates.rb
-      - name: Select an approved verification run
-        if: github.event_name != 'workflow_run'
-        id: bundle
+      - name: Decide publication or explicit qualification
+        id: decision
         env:
-          GH_TOKEN: ${{ github.token }}
-          RECHECK: ${{ github.event_name == 'schedule' || inputs.recheck == true }}
-        run: ruby .github/scripts/verified-bundle.rb select
+          CANDIDATE: ${{ steps.candidate.outputs.candidate }}
+          SOURCE_WORKFLOW: ${{ steps.retained.outputs.source_workflow }}
+          CANDIDATE_CATALOG: ${{ steps.retained.outputs.catalog_sha256 }}
+          CANDIDATE_ENGINE: ${{ steps.retained.outputs.engine_revision }}
+          APPROVED_ENGINE: ${{ steps.current.outputs.engine }}
+          PROMOTED: ${{ steps.promotion.outputs.ready }}
+          ALLOW_QUALIFICATION: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+        run: |
+          ready=false
+          qualify=false
+          if [ "$CANDIDATE_ENGINE" != "$APPROVED_ENGINE" ]; then CANDIDATE=""; fi
+          if [ -n "$CANDIDATE" ]; then
+            catalog=$(engine/target/release/rootbeer-forge --catalog packages check)
+            if [ "$CANDIDATE_CATALOG" != "${catalog##*sha256:}" ]; then CANDIDATE=""; fi
+          fi
+          if [ -n "$CANDIDATE" ]; then
+            if [ "$SOURCE_WORKFLOW" != '.github/workflows/discovery.yml' ] || [ "$PROMOTED" = true ]; then ready=true; fi
+          elif [ "$ALLOW_QUALIFICATION" = true ]; then
+            ready=true
+            qualify=true
+          else
+            echo 'No admitted candidate matches this publication. Retention completion will retry; repair missing evidence before requesting qualification.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "candidate=$CANDIDATE" >> "$GITHUB_OUTPUT"
+          echo "ready=$ready" >> "$GITHUB_OUTPUT"
+          echo "qualify=$qualify" >> "$GITHUB_OUTPUT"
 
   verify:
     permissions:
       contents: read
       actions: read
+      packages: read
     needs: select
-    if: needs.select.outputs.ready == 'true' && needs.select.outputs.run_id == ''
+    if: needs.select.outputs.qualify == 'true'
     uses: ./.github/workflows/packages.yml
     with:
       recheck: ${{ github.event_name == 'schedule' || inputs.recheck == true }}
 
+  retain:
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: read
+      packages: write
+      id-token: write
+      attestations: write
+    needs: verify
+    uses: ./.github/workflows/retain-results.yml
+
   publish:
-    needs: [select, verify]
-    if: always() && github.ref == 'refs/heads/main' && needs.select.result == 'success' && needs.select.outputs.ready == 'true' && (needs.verify.result == 'success' || needs.verify.result == 'skipped') && vars.PUBLISH_INDEX == 'true'
+    needs: [select, verify, retain]
+    if: always() && github.ref == 'refs/heads/main' && needs.select.result == 'success' && needs.select.outputs.ready == 'true' && (needs.retain.result == 'success' || (needs.verify.result == 'skipped' && needs.select.outputs.candidate != '')) && vars.PUBLISH_INDEX == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     environment: package-publishing
@@ -99,6 +170,9 @@ jobs:
       packages: write
       pages: write
       id-token: write
+      attestations: write
+    env:
+      CANDIDATE: ${{ needs.select.outputs.candidate || needs.retain.outputs.candidate }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -108,16 +182,20 @@ jobs:
         with:
           runner: ubuntu-24.04
           cache-scope: publish
-      - name: Download verified bundle by digest
-        env:
-          GH_TOKEN: ${{ github.token }}
-          SOURCE_RUN: ${{ needs.select.outputs.run_id || github.run_id }}
-        run: ruby .github/scripts/verified-bundle.rb download
-      - name: Match bundle to approved recipes
-        run: engine/target/release/rootbeer-forge --catalog packages verify-bundle bundle
       - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d # v2.0.1
         with:
           version: 1.3.0
+      - name: Authenticate publisher
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+      - name: Verify retained candidate against approved current main
+        id: approved
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 .github/scripts/candidate-store.py pull --reference "$CANDIDATE"
+          python3 .github/scripts/candidate-store.py approve --reference "$CANDIDATE"
       - name: Restore retained Pages history
         env:
           GH_TOKEN: ${{ github.token }}
@@ -130,10 +208,6 @@ jobs:
             git -C site fetch --depth=1 origin gh-pages
             git -C site reset --hard FETCH_HEAD
           fi
-      - name: Authenticate publisher
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
       - name: Upload blobs and sign snapshot
         env:
           INDEX_SIGNING_KEY: ${{ secrets.INDEX_SIGNING_KEY }}
@@ -146,7 +220,7 @@ jobs:
           trap 'rm -f "$key"' EXIT
           printf '%s' "$INDEX_SIGNING_KEY" | base64 --decode > "$key"
           unset INDEX_SIGNING_KEY
-          engine/target/release/rootbeer-forge publish --bundle bundle --site site \
+          engine/target/release/rootbeer-forge publish --bundle retained/bundle --site site \
             --site-url "$INDEX_URL" --registry tale/rootbeer-index --sequence "$sequence" \
             --repository-url "https://github.com/$GITHUB_REPOSITORY" \
             --key "$key" --public-key "$INDEX_PUBLIC_KEY" --manifest current.json
@@ -154,6 +228,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"
           git -C site config user.name 'github-actions[bot]'
           git -C site config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git -C site add public
@@ -163,3 +238,16 @@ jobs:
         with:
           path: site/public
       - uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+      - name: Attest catalog approval
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-name: ghcr.io/${{ github.repository }}/results
+          subject-digest: ${{ steps.approved.outputs.digest }}
+          predicate-type: https://rootbeer.tale.me/attestations/catalog-approval/v1
+          predicate-path: approval.json
+          push-to-registry: true
+          create-storage-record: false
+      - name: Expose approved results for reuse
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/candidate-store.py locate --reference "$CANDIDATE" --tag accepted

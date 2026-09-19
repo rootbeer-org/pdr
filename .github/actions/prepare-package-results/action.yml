@@ -41,6 +41,18 @@ runs:
         restore-keys: |
           results-v4-${{ inputs.runner }}-${{ steps.environment.outputs.digest }}-${{ inputs.revision }}-
           results-v4-${{ inputs.runner }}-${{ steps.environment.outputs.digest }}-
+    - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d # v2.0.1
+      if: inputs.recheck != 'true' && vars.DURABLE_PACKAGE_RESULTS == 'true'
+      with:
+        version: 1.3.0
+    - name: Import approved durable qualifications
+      if: inputs.recheck != 'true' && vars.DURABLE_PACKAGE_RESULTS == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+        python3 .github/scripts/candidate-store.py seed
     - name: Recover completed work from an earlier attempt
       shell: bash
       env:

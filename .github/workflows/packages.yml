@@ -2,7 +2,7 @@ name: Package index
 on:
   pull_request:
     branches: [main]
-    paths: ["engine-revision", "packages/**", ".github/workflows/packages.yml", ".github/actions/**", ".github/scripts/package-results.py", "tests/package-results_test.py"]
+    paths: ["engine-revision", "packages/**", ".github/workflows/packages.yml", ".github/actions/**", ".github/scripts/**", "tests/**"]
   workflow_dispatch:
     inputs:
       recheck:
@@ -41,6 +41,7 @@ jobs:
     permissions:
       contents: read
       actions: read
+      packages: read
     strategy:
       fail-fast: false
       matrix:
@@ -51,6 +52,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: ./.github/actions/setup-engine
         id: engine
         with:

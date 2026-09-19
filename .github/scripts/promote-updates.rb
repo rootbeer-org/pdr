@@ -1,5 +1,36 @@
 require 'fileutils'
-require_relative 'verified-bundle'
+require 'json'
+require 'open3'
+
+def command(*args)
+  output, error, status = Open3.capture3(*args)
+  raise "#{args.first} failed: #{error}" unless status.success?
+
+  output
+end
+
+def api(path)
+  JSON.parse(command('gh', 'api', path))
+end
+
+def revision(value)
+  raise 'invalid commit SHA' unless value.match?(/\A[0-9a-f]{40}\z/)
+
+  value
+end
+
+def fetch_commit(sha)
+  revision(sha)
+  return if system('git', 'cat-file', '-e', "#{sha}^{commit}", out: File::NULL, err: File::NULL)
+
+  command('git', 'fetch', '--no-tags', 'origin', sha)
+end
+
+def same_inputs?(source, target)
+  %w[packages engine-revision .github/actions .github/scripts].all? do |path|
+    command('git', 'rev-parse', "#{source}:#{path}") == command('git', 'rev-parse', "#{target}:#{path}")
+  end
+end
 
 def discovery_run?(run, repository)
   run['path'] == '.github/workflows/discovery.yml' &&
@@ -21,7 +52,7 @@ def candidate_names(report)
   names
 end
 
-def promote(repository, run_id)
+def promote(repository, run_id, retained)
   raise 'invalid run ID' unless run_id.match?(/\A[0-9]+\z/)
 
   run = api("repos/#{repository}/actions/runs/#{run_id}")
@@ -37,20 +68,20 @@ def promote(repository, run_id)
     return nil
   end
 
-  download_bundle(repository, run_id, 'candidates', 'upstream-candidates')
-  names = candidate_names(JSON.parse(File.read('candidates/report.json')))
+  candidates = File.join(retained, 'discovery')
+  names = candidate_names(JSON.parse(File.read(File.join(candidates, 'report.json'))))
   return nil if names.empty?
 
-  download_bundle(repository, run_id, 'bundle')
+  bundle = File.join(retained, 'bundle')
   engine = 'engine/target/release/rootbeer-forge'
-  command(engine, 'verify-index', '--complete', 'bundle/index.json')
-  expected = JSON.parse(command(engine, '--catalog', 'candidates/packages', 'index'))
-  actual = JSON.parse(File.read('bundle/index.json')).fetch('catalog')
+  command(engine, '--catalog', File.join(candidates, 'packages'), 'verify-candidate', bundle)
+  expected = JSON.parse(command(engine, '--catalog', File.join(candidates, 'packages'), 'index'))
+  actual = JSON.parse(File.read(File.join(bundle, 'index.json'))).fetch('catalog')
   raise 'candidate recipes differ from verified bundle' unless expected == actual
 
   paths = names.map { |name| "packages/#{name}.lua" }
   paths.each do |path|
-    candidate = "candidates/#{path}"
+    candidate = File.join(candidates, path)
     raise 'candidate is not a regular file' unless File.file?(candidate) && !File.symlink?(candidate)
     raise 'updates must refer to existing recipes' unless File.file?(path) && !File.symlink?(path)
 
@@ -75,7 +106,7 @@ if $PROGRAM_NAME == __FILE__
   repository = ENV.fetch('GITHUB_REPOSITORY')
   raise 'promotion must run on main' unless ENV.fetch('GITHUB_REF') == 'refs/heads/main'
 
-  sha = promote(repository, ENV.fetch('DISCOVERY_RUN'))
+  sha = promote(repository, ENV.fetch('DISCOVERY_RUN'), ENV.fetch('RETAINED_CANDIDATE'))
   File.open(ENV.fetch('GITHUB_OUTPUT'), 'a') do |file|
     file.puts("revision=#{sha}")
     file.puts("ready=#{!sha.nil?}")

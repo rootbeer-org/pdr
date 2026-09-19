@@ -1,0 +1,72 @@
+name: Retain package results
+on:
+  workflow_run:
+    workflows: [Package index, Upstream discovery]
+    types: [completed]
+  workflow_call:
+    outputs:
+      candidate:
+        description: Admitted candidate addressed by OCI digest
+        value: ${{ jobs.retain.outputs.candidate }}
+
+permissions:
+  contents: read
+
+jobs:
+  retain:
+    if: github.event.repository.private == false && (github.event_name == 'workflow_run' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: read
+      packages: write
+      id-token: write
+      attestations: write
+    outputs:
+      candidate: ${{ steps.collect.outputs.reference }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_RUN: ${{ github.event.workflow_run.id || github.run_id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Check for completed assembly
+        id: probe
+        run: python3 .github/scripts/retain-results.py --run "$SOURCE_RUN" --probe
+      - uses: ./.github/actions/setup-engine
+        if: steps.probe.outputs.ready == 'true'
+        with:
+          runner: ubuntu-24.04
+          cache-scope: publish
+      - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d # v2.0.1
+        if: steps.probe.outputs.ready == 'true'
+        with:
+          version: 1.3.0
+      - name: Authenticate collector
+        if: steps.probe.outputs.ready == 'true'
+        run: printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+      - name: Admit producer and retain exact evidence
+        if: steps.probe.outputs.ready == 'true'
+        id: collect
+        run: python3 .github/scripts/retain-results.py --run "$SOURCE_RUN"
+      - name: Attest collector admission
+        if: steps.collect.outputs.reference != ''
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-name: ghcr.io/${{ github.repository }}/results
+          subject-digest: ${{ steps.collect.outputs.digest }}
+          push-to-registry: true
+          create-storage-record: false
+      - name: Expose authenticated candidate locators
+        if: steps.collect.outputs.reference != ''
+        env:
+          CANDIDATE: ${{ steps.collect.outputs.reference }}
+          CATALOG: ${{ steps.collect.outputs.catalog_sha256 }}
+        run: |
+          python3 .github/scripts/candidate-store.py locate --reference "$CANDIDATE" --tag "catalog-$CATALOG"
+          python3 .github/scripts/candidate-store.py locate --reference "$CANDIDATE" --tag "collector-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
