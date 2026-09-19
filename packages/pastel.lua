@@ -10,15 +10,15 @@ return {
         repository_id = 189867161,
         tag_prefix = "v",
     },
+    build = {
+        backend = "rust",
+        rust = { packages = { "pastel" } },
+    },
     inputs = {
-        prebuilt = {
-            github = "sharkdp/pastel",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "pastel-{tag}-x86_64-unknown-linux-musl.tar.gz",
-                ["aarch64-macos"] = "pastel-{tag}-aarch64-apple-darwin.tar.gz",
-                ["aarch64-linux"] = "pastel-{tag}-aarch64-unknown-linux-gnu.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/sharkdp/pastel/tar.gz/refs/tags/v{version}",
+            archive = "tar.gz",
+            strip_prefix = "pastel-{version}",
         },
     },
     outputs = {
@@ -27,7 +27,12 @@ return {
     },
     versions = {
         ["0.12.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "2903853f24d742fe955edd9bea17947eb8f3f44000a8ac528d16f2ea1e52b78b",
+                },
+            },
         },
     },
 }

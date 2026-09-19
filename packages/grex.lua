@@ -10,15 +10,15 @@ return {
         repository_id = 213043312,
         tag_prefix = "v",
     },
+    build = {
+        backend = "rust",
+        rust = { packages = { "grex" } },
+    },
     inputs = {
-        prebuilt = {
-            github = "pemistahl/grex",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "grex-{tag}-x86_64-unknown-linux-musl.tar.gz",
-                ["aarch64-macos"] = "grex-{tag}-aarch64-apple-darwin.tar.gz",
-                ["aarch64-linux"] = "grex-{tag}-aarch64-unknown-linux-musl.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/pemistahl/grex/tar.gz/refs/tags/v{version}",
+            archive = "tar.gz",
+            strip_prefix = "grex-{version}",
         },
     },
     outputs = {
@@ -27,7 +27,12 @@ return {
     },
     versions = {
         ["1.4.6"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "2ab9cb4c3d921711f23ea33a9e60dc11e9eaab450b16d1f2247bea2276822433",
+                },
+            },
         },
     },
 }

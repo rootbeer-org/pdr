@@ -10,15 +10,15 @@ return {
         repository_id = 245166720,
         tag_prefix = "v",
     },
+    build = {
+        backend = "rust",
+        rust = { packages = { "zoxide" } },
+    },
     inputs = {
-        prebuilt = {
-            github = "ajeetdsouza/zoxide",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "zoxide-{version}-x86_64-unknown-linux-musl.tar.gz",
-                ["aarch64-macos"] = "zoxide-{version}-aarch64-apple-darwin.tar.gz",
-                ["aarch64-linux"] = "zoxide-{version}-aarch64-unknown-linux-musl.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/ajeetdsouza/zoxide/tar.gz/refs/tags/v{version}",
+            archive = "tar.gz",
+            strip_prefix = "zoxide-{version}",
         },
     },
     outputs = {
@@ -27,7 +27,12 @@ return {
     },
     versions = {
         ["0.10.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "4fcd4272b013a10b637dbcc299c58a9924b94470a9042677ca1a204cc2e9150e",
+                },
+            },
         },
     },
 }

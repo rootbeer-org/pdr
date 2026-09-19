@@ -11,24 +11,33 @@ return {
         repository_id = 53631945,
         tag_prefix = "",
     },
+    build = {
+        backend = "rust",
+        rust = {
+            packages = { "ripgrep" },
+            features = { "pcre2" },
+            environment = { PCRE2_SYS_STATIC = "1" },
+        },
+    },
     inputs = {
-        prebuilt = {
-            github = "BurntSushi/ripgrep",
-            tag = "{version}",
-            assets = {
-                ["x86_64-linux"] = "ripgrep-{tag}-x86_64-unknown-linux-musl.tar.gz",
-                ["aarch64-macos"] = "ripgrep-{tag}-aarch64-apple-darwin.tar.gz",
-                ["aarch64-linux"] = "ripgrep-{tag}-aarch64-unknown-linux-musl.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/BurntSushi/ripgrep/tar.gz/refs/tags/{version}",
+            archive = "tar.gz",
+            strip_prefix = "ripgrep-{version}",
         },
     },
     outputs = {
         bins = { "rg" },
-        checks = { { "rg", "--version" } },
+        checks = { { "rg", "--version" }, { "rg", "--pcre2-version" } },
     },
     versions = {
         ["15.2.0"] = {
-            revision = 3,
+            revision = 4,
+            inputs = {
+                source = {
+                    sha256 = "7605249d3eb0d5f170e3414498e3344e26b1e7a147aec518b57090b80036a562",
+                },
+            },
         },
     },
 }

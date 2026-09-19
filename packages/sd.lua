@@ -10,15 +10,15 @@ return {
         repository_id = 162863623,
         tag_prefix = "v",
     },
+    build = {
+        backend = "rust",
+        rust = { packages = { "sd-cli" } },
+    },
     inputs = {
-        prebuilt = {
-            github = "chmln/sd",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "sd-{tag}-x86_64-unknown-linux-musl.tar.gz",
-                ["aarch64-macos"] = "sd-{tag}-aarch64-apple-darwin.tar.gz",
-                ["aarch64-linux"] = "sd-{tag}-aarch64-unknown-linux-musl.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/chmln/sd/tar.gz/refs/tags/v{version}",
+            archive = "tar.gz",
+            strip_prefix = "sd-{version}",
         },
     },
     outputs = {
@@ -27,7 +27,12 @@ return {
     },
     versions = {
         ["1.1.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "defdce484f8c92f265e1282490572575028967c2c55d356111d1e49a3ea9a88e",
+                },
+            },
         },
     },
 }

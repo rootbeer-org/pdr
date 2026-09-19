@@ -11,15 +11,15 @@ return {
         repository_id = 48739367,
         tag_prefix = "v",
     },
+    build = {
+        backend = "rust",
+        rust = { packages = { "tealdeer" } },
+    },
     inputs = {
-        prebuilt = {
-            github = "tealdeer-rs/tealdeer",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "tealdeer-linux-x86_64-musl",
-                ["aarch64-macos"] = "tealdeer-macos-aarch64",
-                ["aarch64-linux"] = "tealdeer-linux-aarch64-musl",
-            },
+        source = {
+            url = "https://codeload.github.com/tealdeer-rs/tealdeer/tar.gz/refs/tags/v{version}",
+            archive = "tar.gz",
+            strip_prefix = "tealdeer-{version}",
         },
     },
     outputs = {
@@ -28,7 +28,12 @@ return {
     },
     versions = {
         ["1.9.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "1387a04ddba714668ff0925377a2de0d0ab14533d44dd0766d673fbbd71e3119",
+                },
+            },
         },
     },
 }
