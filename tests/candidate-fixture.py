@@ -111,7 +111,7 @@ def local_transport(root, engine):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('operation', choices=['produce', 'consume', 'local'])
+    parser.add_argument('operation', choices=['prepare', 'retain', 'consume', 'local'])
     parser.add_argument('--root', type=Path, default=Path('fixture'))
     parser.add_argument('--engine', default='engine/target/release/rootbeer-forge')
     parser.add_argument('--reference')
@@ -121,8 +121,11 @@ def main():
     if args.operation == 'local':
         local_transport(root, engine)
         return
-    if args.operation == 'produce':
-        directory = prepare(root, engine)
+    if args.operation == 'prepare':
+        prepare(root, engine)
+        return
+    if args.operation == 'retain':
+        directory = root / 'candidate'
         reference = store.push(directory, f"run-{os.environ['GITHUB_RUN_ID']}-{os.environ['GITHUB_RUN_ATTEMPT']}", store.command('git', 'show', '-s', '--format=%cI', 'HEAD'))
         store.output('reference', reference)
         store.output('digest', reference.split('@')[1])
