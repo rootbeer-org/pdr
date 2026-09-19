@@ -1,9 +1,6 @@
 name: Prepare package results
 description: Identify the build environment and restore verified package results.
 inputs:
-  revision:
-    description: Full Rootbeer engine commit SHA
-    required: true
   runner:
     description: Runner image label
     required: true
@@ -31,15 +28,37 @@ runs:
           make --version
         } > "$RUNNER_TEMP/package-environment"
         echo "digest=$(shasum -a 256 "$RUNNER_TEMP/package-environment" | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+    - name: Select result cache scope
+      id: scope
+      shell: bash
+      env:
+        SHOULD_RECHECK: ${{ inputs.recheck }}
+        RESULT_RUNNER: ${{ inputs.runner }}
+        RESULT_CONTEXT: ${{ steps.environment.outputs.digest }}
+      run: |
+        scope="results-v5-$RESULT_RUNNER-$RESULT_CONTEXT"
+        if [ "$SHOULD_RECHECK" = true ]; then scope="$scope-recheck-$GITHUB_RUN_ID"; fi
+        echo "prefix=$scope" >> "$GITHUB_OUTPUT"
     - name: Restore verified package results
       id: cache
       uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: .package-results
-        key: results-v4-${{ inputs.runner }}-${{ steps.environment.outputs.digest }}-${{ inputs.revision }}-${{ github.run_id }}-${{ github.run_attempt }}
+        key: ${{ steps.scope.outputs.prefix }}-${{ github.run_id }}-${{ github.run_attempt }}
         restore-keys: |
-          results-v4-${{ inputs.runner }}-${{ steps.environment.outputs.digest }}-${{ inputs.revision }}-
-          results-v4-${{ inputs.runner }}-${{ steps.environment.outputs.digest }}-
+          ${{ steps.scope.outputs.prefix }}-${{ github.run_id }}-
+          ${{ github.run_attempt == 1 && format('{0}-', steps.scope.outputs.prefix) || '' }}
+          ${{ github.run_attempt == 1 && inputs.recheck != 'true' && format('results-v4-{0}-{1}-', inputs.runner, steps.environment.outputs.digest) || '' }}
+    - name: Require retained work on retry
+      if: github.run_attempt > 1
+      shell: bash
+      env:
+        MATCHED_KEY: ${{ steps.cache.outputs.cache-matched-key }}
+      run: |
+        if [ -z "$MATCHED_KEY" ]; then
+          echo 'Retry results are missing or the environment changed. Investigate retention before starting a new run.' >&2
+          exit 1
+        fi
     - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d # v2.0.1
       if: inputs.recheck != 'true' && vars.DURABLE_PACKAGE_RESULTS == 'true'
       with:
@@ -52,16 +71,3 @@ runs:
       run: |
         printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
         python3 .github/scripts/candidate-store.py seed
-    - name: Recover completed work from an earlier attempt
-      shell: bash
-      env:
-        GH_TOKEN: ${{ github.token }}
-        SHOULD_RECHECK: ${{ inputs.recheck }}
-        RESULT_RUNNER: ${{ inputs.runner }}
-        RESULT_CONTEXT: ${{ steps.environment.outputs.digest }}
-        ENGINE_REVISION: ${{ inputs.revision }}
-      run: |
-        options=()
-        if [ "$SHOULD_RECHECK" = true ]; then options+=(--recheck); fi
-        python3 .github/scripts/package-results.py restore \
-          --runner "$RESULT_RUNNER" --context "$RESULT_CONTEXT" --engine-revision "$ENGINE_REVISION" "${options[@]}"

@@ -57,10 +57,6 @@ jobs:
         id: engine
         with:
           runner: ${{ matrix.runner }}
-      - name: Test result handoff
-        env:
-          ROOTBEER_FORGE: engine/target/release/rootbeer-forge
-        run: python3 tests/package-results_test.py
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         if: inputs.candidates != ''
         with:
@@ -69,7 +65,6 @@ jobs:
       - uses: ./.github/actions/prepare-package-results
         id: results
         with:
-          revision: ${{ steps.engine.outputs.revision }}
           recheck: ${{ inputs.recheck }}
           runner: ${{ matrix.runner }}
       - uses: ./.github/actions/export-packages
@@ -78,28 +73,6 @@ jobs:
           cache-context: ${{ steps.results.outputs.cache-context }}
           recheck: ${{ inputs.recheck }}
           catalog: ${{ inputs.catalog || 'packages' }}
-      - name: Checkpoint completed package results
-        if: ${{ !cancelled() && steps.results.outcome == 'success' }}
-        id: checkpoint
-        env:
-          SHOULD_RECHECK: ${{ inputs.recheck }}
-          RESULT_RUNNER: ${{ matrix.runner }}
-          RESULT_CONTEXT: ${{ steps.results.outputs.cache-context }}
-          ENGINE_REVISION: ${{ steps.engine.outputs.revision }}
-        run: |
-          options=()
-          if [ "$SHOULD_RECHECK" = true ]; then options+=(--recheck); fi
-          python3 .github/scripts/package-results.py save \
-            --runner "$RESULT_RUNNER" --context "$RESULT_CONTEXT" --engine-revision "$ENGINE_REVISION" "${options[@]}"
-      - name: Retain completed work independently of job success
-        if: ${{ !cancelled() && steps.checkpoint.outputs.has-results == 'true' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: package-results-${{ matrix.runner }}-${{ github.run_attempt }}
-          path: package-checkpoint/package-results.tar
-          retention-days: ${{ inputs.retention-days || 14 }}
-          compression-level: 0
-          if-no-files-found: error
       - name: Retain package work plan
         if: ${{ !cancelled() && hashFiles('package-plan.json') != '' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -107,12 +80,8 @@ jobs:
           name: package-plan-${{ matrix.runner }}-${{ github.run_attempt }}
           path: package-plan.json
           retention-days: ${{ inputs.retention-days || 14 }}
-      - name: Discard reconstructed build store
-        if: ${{ !cancelled() }}
-        shell: bash
-        run: rm -rf .package-results/builds/store
       - name: Save verified package results
-        if: ${{ !cancelled() && (github.ref == 'refs/heads/main' || github.event_name == 'pull_request') && steps.results.outputs.cache-key != '' && hashFiles('.package-results/**/record.json', '.package-results/builds/results/**/receipt.json') != '' }}
+        if: ${{ !cancelled() && steps.results.outcome == 'success' }}
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .package-results

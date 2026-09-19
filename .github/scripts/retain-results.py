@@ -31,20 +31,13 @@ def pages(path, field):
         page += 1
 
 
-def revision(value):
-    if not re.fullmatch(r'[0-9a-f]{40}', value):
-        raise ValueError('invalid source revision')
-    return value
-
-
 def fetch(sha):
-    subprocess.run(['git', 'fetch', '--no-tags', 'origin', revision(sha)], check=True)
+    subprocess.run(['git', 'fetch', '--no-tags', 'origin', store.revision(sha)], check=True)
 
 
 def same_verifier(source, trusted):
-    for path in ['engine-revision', '.github/workflows', '.github/actions', '.github/scripts']:
-        if store.command('git', 'rev-parse', f'{source}:{path}') != store.command('git', 'rev-parse', f'{trusted}:{path}'):
-            raise ValueError(f'producer differs from the trusted verifier: {path}')
+    if not store.same_inputs(source, trusted):
+        raise ValueError('producer differs from the trusted verifier')
 
 
 def admit(run, repository, trusted):
@@ -52,7 +45,7 @@ def admit(run, repository, trusted):
         raise ValueError('untrusted producer workflow or repository')
     if run.get('status') not in ['completed', 'in_progress']:
         raise ValueError('producer has not run verification')
-    source = revision(run['head_sha'])
+    source = store.revision(run['head_sha'])
     fetch(source)
     same_verifier(source, trusted)
     event = run.get('event')
@@ -65,9 +58,9 @@ def admit(run, repository, trusted):
                     and pull.get('base', {}).get('ref') == 'main']
         if len(matching) != 1:
             raise ValueError('producer must be a same-repository pull request targeting main')
-        base = revision(matching[0]['base']['sha'])
+        base = store.revision(matching[0]['base']['sha'])
         fetch(base)
-        base = revision(store.command('git', 'merge-base', source, base))
+        base = store.revision(store.command('git', 'merge-base', source, base))
         same_verifier(source, base)
     elif event not in ['push', 'schedule', 'workflow_dispatch', 'repository_dispatch', 'workflow_run'] or run.get('head_branch') != 'main':
         raise ValueError('producer must verify main or an admitted pull request')
@@ -111,7 +104,7 @@ def download(repository, artifact, destination, prefix):
 
 
 def source_recipes(source, directory):
-    entries = subprocess.check_output(['git', 'ls-tree', '-rz', revision(source), 'packages']).split(b'\0')
+    entries = subprocess.check_output(['git', 'ls-tree', '-rz', store.revision(source), 'packages']).split(b'\0')
     directory.mkdir()
     for entry in entries:
         if not entry:
@@ -127,7 +120,7 @@ def source_recipes(source, directory):
 def collect(run_id, engine, destination):
     repository = store.repository()
     run = api(f'repos/{repository}/actions/runs/{run_id}')
-    trusted = revision(store.command('git', 'rev-parse', 'HEAD'))
+    trusted = store.revision(store.command('git', 'rev-parse', 'HEAD'))
     source = admit(run, repository, trusted)
     artifacts = pages(f'repos/{repository}/actions/runs/{run_id}/artifacts', 'artifacts')
     required = {'verified-bundle': 'bundle'}
@@ -155,7 +148,7 @@ def collect(run_id, engine, destination):
         'producer': {'run_id': int(run_id), 'attempt': run['run_attempt'], 'revision': source,
                      'workflow': run['path'], 'event': run['event']},
         'verifier_revision': trusted,
-        'engine_revision': revision(Path('engine-revision').read_text().strip()),
+        'engine_revision': store.revision(Path('engine-revision').read_text().strip()),
         'artifacts': evidence,
     }
     (destination / 'candidate.json').write_text(json.dumps(metadata, sort_keys=True, separators=(',', ':')))

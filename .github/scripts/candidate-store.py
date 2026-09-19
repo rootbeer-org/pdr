@@ -11,6 +11,7 @@ import tempfile
 ARTIFACT_TYPE = 'application/vnd.rootbeer.candidate.v1'
 APPROVAL_TYPE = 'https://rootbeer.tale.me/attestations/catalog-approval/v1'
 DIGEST = r'sha256:[0-9a-f]{64}'
+VERIFIER_INPUTS = ('engine-revision', '.github/workflows', '.github/actions', '.github/scripts')
 FILE = re.compile(r'(?:candidate\.json|bundle/index\.json|bundle/(?:receipts|qualifications)/[0-9a-f]{64}\.json|bundle/artifacts/[0-9a-f]{64}\.tar\.gz|discovery/(?:report\.json|summary\.md|packages/[a-z0-9][a-z0-9+._-]*\.lua))')
 
 
@@ -190,9 +191,98 @@ def push(directory, tag, created):
     return pinned(registry() + '@sha256:' + hashlib.sha256(manifest.read_bytes()).hexdigest())
 
 
+def revision(value):
+    if not re.fullmatch(r'[0-9a-f]{40}', value):
+        raise ValueError('invalid source revision')
+    return value
+
+
+def same_inputs(source, target, paths=VERIFIER_INPUTS):
+    return all(command('git', 'rev-parse', f'{source}:{path}') ==
+               command('git', 'rev-parse', f'{target}:{path}') for path in paths)
+
+
+def promote(value, directory, engine, catalog):
+    if os.environ.get('GITHUB_REF') != 'refs/heads/main':
+        raise ValueError('promotion must run on main')
+    producer = value['producer']
+    run_id = producer['run_id']
+    run = json.loads(command('gh', 'api', f'repos/{repository()}/actions/runs/{run_id}'))
+    if (run['path'] != '.github/workflows/discovery.yml' or producer['workflow'] != run['path']
+            or run['head_repository']['full_name'] != repository() or run['head_branch'] != 'main'
+            or run['event'] not in ['push', 'schedule', 'workflow_dispatch', 'repository_dispatch']
+            or run['status'] != 'completed' or run['conclusion'] != 'success'
+            or run['head_sha'] != producer['revision']):
+        raise ValueError('untrusted discovery run')
+    source = revision(producer['revision'])
+    command('git', 'fetch', '--no-tags', 'origin', source)
+    target = revision(command('git', 'rev-parse', 'HEAD'))
+    trailer = f'Verified-Discovery-Run: {run_id}'
+    paths = ('packages', *VERIFIER_INPUTS)
+    is_retry = trailer in command('git', 'show', '-s', '--format=%B', target).splitlines() and same_inputs(source, f'{target}^', paths)
+    if not same_inputs(source, target, paths) and not is_retry:
+        print('Discovery inputs changed; a fresh scan must qualify the new catalog.')
+        return None
+    report = json.loads((directory / 'discovery/report.json').read_text())
+    names = sorted(set(report['updated'] + report['rules_changed']))
+    if any(not re.fullmatch(r'[a-z0-9][a-z0-9+._-]*', name) for name in names):
+        raise ValueError('invalid candidate name')
+    if not names:
+        return None
+    command(engine, '--catalog', str(directory / 'discovery/packages'), 'verify-candidate', str(directory / 'bundle'))
+    if catalog_digest(engine, directory / 'discovery/packages') != value['catalog_sha256']:
+        raise ValueError('candidate metadata differs from verified recipes')
+    recipes = [catalog / f'{name}.lua' for name in names]
+    for recipe in recipes:
+        candidate = directory / 'discovery/packages' / recipe.name
+        if any(path.is_symlink() or not path.is_file() for path in [recipe, candidate]):
+            raise ValueError('promotion requires existing regular recipe files')
+        recipe.write_bytes(candidate.read_bytes())
+    if catalog_digest(engine, catalog) != value['catalog_sha256']:
+        raise ValueError('candidate report omits recipe changes')
+    command('git', 'add', '--', *map(str, recipes))
+    if not command('git', 'diff', '--cached', '--name-only'):
+        return target if is_retry else None
+    if is_retry:
+        raise ValueError('promoted recipes changed during retry')
+    command('git', 'config', 'user.name', 'github-actions[bot]')
+    command('git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com')
+    command('git', 'commit', '-m', 'chore(packages): advance verified upstream updates', '-m', trailer)
+    command('git', 'push', 'origin', 'HEAD:main')
+    return revision(command('git', 'rev-parse', 'HEAD'))
+
+
+def select(engine, catalog, destination, tag=None, allow_qualification=False, should_promote=False, recheck=False):
+    approved = revision(command('git', 'rev-parse', 'HEAD'))
+    reference = None if recheck else resolve(tag or 'catalog-' + catalog_digest(engine, catalog))
+    if reference:
+        value = pull(reference, destination)
+        if value['engine_revision'] != Path('engine-revision').read_text().strip():
+            reference = None
+        elif value['producer']['workflow'] == '.github/workflows/discovery.yml':
+            promoted = promote(value, destination, engine, catalog) if should_promote else None
+            if promoted:
+                approved = promoted
+            else:
+                reference = None
+        if reference and value['catalog_sha256'] != catalog_digest(engine, catalog):
+            reference = None
+    should_qualify = not reference and allow_qualification
+    if not reference and not should_qualify:
+        with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+            summary.write('No admitted candidate matches this publication. Repair missing evidence before requesting qualification.\n')
+    for key, value in {'candidate': reference or '', 'revision': approved,
+                       'ready': str(bool(reference) or should_qualify).lower(),
+                       'qualify': str(should_qualify).lower()}.items():
+        output(key, value)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('operation', choices=['select', 'pull', 'seed', 'locate', 'approve'])
+    parser.add_argument('--recheck', action='store_true')
+    parser.add_argument('--allow-qualification', action='store_true')
+    parser.add_argument('--promote', action='store_true')
     parser.add_argument('--reference')
     parser.add_argument('--tag')
     parser.add_argument('--output', type=Path, default=Path('retained'))
@@ -216,11 +306,7 @@ def main():
         output('digest', pinned(args.reference).split('@')[1])
         return
     if args.operation == 'select':
-        tag = args.tag or 'catalog-' + catalog_digest(args.engine, args.catalog)
-        reference = resolve(tag)
-        if reference:
-            verify_provenance(reference)
-        output('candidate', reference or '')
+        select(args.engine, args.catalog, args.output, args.tag, args.allow_qualification, args.promote, args.recheck)
         return
     if args.operation == 'locate':
         verify_provenance(args.reference)
@@ -242,11 +328,7 @@ def main():
             subprocess.run([args.engine, 'import-results', '--bundle', str(destination / 'bundle'),
                             '--cache', '.package-results', '--system', plan['system']], check=True)
         return
-    metadata = pull(args.reference, args.output)
-    output('engine_revision', metadata['engine_revision'])
-    output('source_run', metadata['producer']['run_id'])
-    output('source_workflow', metadata['producer']['workflow'])
-    output('catalog_sha256', metadata['catalog_sha256'])
+    pull(args.reference, args.output)
 
 
 if __name__ == '__main__':

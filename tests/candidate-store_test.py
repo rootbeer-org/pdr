@@ -7,7 +7,6 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
-import textwrap
 import unittest
 from unittest.mock import patch
 import zipfile
@@ -186,36 +185,154 @@ class CandidateTests(unittest.TestCase):
 
 
 class PublicationDecisionTests(unittest.TestCase):
-    def test_missing_or_stale_evidence_never_implicitly_starts_qualification(self):
-        workflow = (Path(__file__).resolve().parents[1] / '.github/workflows/publish.yml').read_text()
-        script = textwrap.dedent(workflow.split('- name: Decide publication or explicit qualification')[1].split('run: |\n')[1].split('\n\n  verify:')[0])
+    def test_only_explicit_qualification_can_replace_missing_or_stale_evidence(self):
         cases = [
             ({}, ('true', 'false')),
-            ({'CANDIDATE': ''}, ('false', 'false')),
-            ({'CANDIDATE': '', 'ALLOW_QUALIFICATION': 'true'}, ('true', 'true')),
-            ({'CANDIDATE_ENGINE': 'old'}, ('false', 'false')),
-            ({'CANDIDATE_ENGINE': 'old', 'ALLOW_QUALIFICATION': 'true'}, ('true', 'true')),
-            ({'CANDIDATE_CATALOG': 'unmerged'}, ('false', 'false')),
-            ({'SOURCE_WORKFLOW': '.github/workflows/discovery.yml', 'PROMOTED': 'false'}, ('false', 'false')),
-            ({'SOURCE_WORKFLOW': '.github/workflows/discovery.yml', 'PROMOTED': 'true'}, ('true', 'false')),
+            ({'reference': None}, ('false', 'false')),
+            ({'reference': None, 'allow_qualification': True}, ('true', 'true')),
+            ({'engine': 'old'}, ('false', 'false')),
+            ({'catalog': 'unmerged'}, ('false', 'false')),
+            ({'engine': 'old', 'allow_qualification': True}, ('true', 'true')),
+            ({'discovery': True}, ('false', 'false')),
+            ({'discovery': True, 'should_promote': True}, ('true', 'false')),
+            ({'recheck': True, 'allow_qualification': True}, ('true', 'true')),
         ]
         for overrides, expected in cases:
             with self.subTest(overrides=overrides), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
-                engine = root / 'engine/target/release/rootbeer-forge'
-                engine.parent.mkdir(parents=True)
-                engine.write_text('#!/bin/sh\necho "1 packages; sha256:catalog"\n')
-                engine.chmod(0o755)
-                environment = dict(os.environ, CANDIDATE='immutable', SOURCE_WORKFLOW='.github/workflows/packages.yml',
-                                   CANDIDATE_ENGINE='pin', APPROVED_ENGINE='pin', CANDIDATE_CATALOG='catalog',
-                                   PROMOTED='', ALLOW_QUALIFICATION='false', GITHUB_OUTPUT=str(root / 'output'),
-                                   GITHUB_STEP_SUMMARY=str(root / 'summary'))
-                environment.update(overrides)
-                subprocess.run(['bash', '-euo', 'pipefail', '-c', script], cwd=root, env=environment, check=True)
-                outputs = dict(line.split('=', 1) for line in (root / 'output').read_text().splitlines())
+                value = candidate_metadata()
+                value['engine_revision'] = overrides.get('engine', 'b' * 40)
+                value['catalog_sha256'] = overrides.get('catalog', 'a' * 64)
+                if overrides.get('discovery'):
+                    value['producer']['workflow'] = '.github/workflows/discovery.yml'
+                outputs = {}
+                with patch.object(store, 'command', return_value='c' * 40), \
+                     patch.object(store, 'resolve', return_value=overrides.get('reference', 'immutable')) as resolve, \
+                     patch.object(store, 'pull', return_value=value) as pull, \
+                     patch.object(store, 'promote', return_value='d' * 40) as promote, \
+                     patch.object(store, 'catalog_digest', return_value='a' * 64), \
+                     patch.object(store.Path, 'read_text', return_value='b' * 40), \
+                     patch.object(store, 'output', side_effect=lambda key, value: outputs.update({key: value})), \
+                     patch.dict(os.environ, GITHUB_STEP_SUMMARY=str(root / 'summary')):
+                    store.select('forge', root / 'packages', root / 'retained',
+                                 allow_qualification=overrides.get('allow_qualification', False),
+                                 should_promote=overrides.get('should_promote', False),
+                                 recheck=overrides.get('recheck', False))
                 self.assertEqual(expected, (outputs['ready'], outputs['qualify']))
+                if overrides.get('recheck'):
+                    resolve.assert_not_called()
+                    pull.assert_not_called()
                 if outputs['qualify'] == 'true':
                     self.assertEqual('', outputs['candidate'])
+                if overrides.get('engine') == 'old' or not overrides.get('should_promote'):
+                    promote.assert_not_called()
+
+
+class PromotionTests(unittest.TestCase):
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory()
+        self.addCleanup(self.directory.cleanup)
+        self.root = Path(self.directory.name)
+        previous = Path.cwd()
+        os.chdir(self.root)
+        self.addCleanup(os.chdir, previous)
+        self.environment = patch.dict(os.environ, GITHUB_REPOSITORY='owner/index', GITHUB_REF='refs/heads/main')
+        self.environment.start()
+        self.addCleanup(self.environment.stop)
+        self.command = store.command
+        self.command('git', 'init', '-q')
+        for key, value in [('user.name', 'Test'), ('user.email', 'test@example.com'), ('commit.gpgsign', 'false')]:
+            self.command('git', 'config', key, value)
+        self.paths = ['packages/tool.lua', 'engine-revision', '.github/workflows/discovery.yml',
+                      '.github/actions/setup/action.yml', '.github/scripts/candidate-store.py']
+        for name in self.paths:
+            path = Path(name)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('original')
+        self.command('git', 'add', '.')
+        self.command('git', 'commit', '-qm', 'initial')
+        self.source = self.command('git', 'rev-parse', 'HEAD')
+        self.retained = self.root / 'retained'
+        (self.retained / 'discovery/packages').mkdir(parents=True)
+        (self.retained / 'discovery/packages/tool.lua').write_text('updated')
+        (self.retained / 'discovery/report.json').write_text(json.dumps({'updated': [], 'rules_changed': ['tool']}))
+        self.value = candidate_metadata()
+        self.value['producer'].update(revision=self.source, workflow='.github/workflows/discovery.yml')
+        self.value['catalog_sha256'] = self.digest('forge', self.retained / 'discovery/packages')
+        self.run = {'path': '.github/workflows/discovery.yml', 'head_repository': {'full_name': 'owner/index'},
+                    'head_sha': self.source, 'head_branch': 'main', 'event': 'schedule',
+                    'status': 'completed', 'conclusion': 'success'}
+        self.pushed = []
+
+    def digest(self, engine, catalog):
+        return hashlib.sha256(b''.join(path.read_bytes() for path in sorted(catalog.glob('*.lua')))).hexdigest()
+
+    def execute(self, *args):
+        if args[:2] == ('gh', 'api'):
+            return json.dumps(self.run)
+        if args[:2] == ('git', 'fetch') or args[0] == 'forge':
+            return ''
+        if args[:2] == ('git', 'push'):
+            self.pushed.append(args)
+            return ''
+        return self.command(*args)
+
+    def promote(self):
+        with patch.object(store, 'command', side_effect=self.execute), patch.object(store, 'catalog_digest', side_effect=self.digest):
+            return store.promote(self.value, self.retained, 'forge', Path('packages'))
+
+    def test_rules_only_promotion_is_idempotent_on_retry(self):
+        promoted = self.promote()
+        self.assertNotEqual(self.source, promoted)
+        self.assertEqual('updated', Path('packages/tool.lua').read_text())
+        self.assertEqual(promoted, self.promote())
+        self.assertEqual(1, len(self.pushed))
+
+    def test_wrong_producer_or_unfinished_discovery_cannot_promote(self):
+        for field, value in [('path', '.github/workflows/packages.yml'), ('head_branch', 'feature'),
+                             ('event', 'pull_request'), ('status', 'in_progress'), ('conclusion', 'failure'),
+                             ('head_sha', 'e' * 40), ('head_repository', {'full_name': 'other/index'})]:
+            previous = self.run[field]
+            self.run[field] = value
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                self.promote()
+            self.run[field] = previous
+        self.assertEqual('original', Path('packages/tool.lua').read_text())
+        self.assertEqual([], self.pushed)
+
+    def test_changed_catalog_or_verifier_prevents_promotion_but_docs_do_not(self):
+        Path('README.md').write_text('docs')
+        self.command('git', 'add', 'README.md')
+        self.command('git', 'commit', '-qm', 'docs')
+        self.assertTrue(store.same_inputs(self.source, 'HEAD', ('packages', *store.VERIFIER_INPUTS)))
+        for name in self.paths:
+            Path(name).write_text('changed')
+            self.command('git', 'add', name)
+            self.command('git', 'commit', '-qm', 'changed input')
+            with self.subTest(name=name):
+                self.assertIsNone(self.promote())
+            self.command('git', 'restore', '--source', self.source, '--staged', '--worktree', name)
+            self.command('git', 'commit', '-qm', 'restore input')
+        self.assertEqual([], self.pushed)
+
+    def test_invalid_names_symlinks_and_omitted_changes_cannot_push(self):
+        report = self.retained / 'discovery/report.json'
+        report.write_text(json.dumps({'updated': ['../escape'], 'rules_changed': []}))
+        with self.assertRaises(ValueError):
+            self.promote()
+        report.write_text(json.dumps({'updated': ['tool'], 'rules_changed': []}))
+        recipe = self.retained / 'discovery/packages/tool.lua'
+        recipe.unlink()
+        recipe.symlink_to(self.root / 'packages/tool.lua')
+        with self.assertRaises(ValueError):
+            self.promote()
+        recipe.unlink()
+        recipe.write_text('updated')
+        (self.retained / 'discovery/packages/omitted.lua').write_text('unreported')
+        self.value['catalog_sha256'] = self.digest('forge', self.retained / 'discovery/packages')
+        with self.assertRaises(ValueError):
+            self.promote()
+        self.assertEqual([], self.pushed)
 
 
 class AdmissionTests(unittest.TestCase):

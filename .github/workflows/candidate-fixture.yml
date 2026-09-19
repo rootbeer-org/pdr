@@ -10,6 +10,10 @@ on:
       - tests/candidate-*.py
   workflow_dispatch:
     inputs:
+      cache-retry:
+        description: Exercise failed package recovery; rerun the expected failed job once
+        type: boolean
+        default: false
       source-run:
         description: Reuse completed fixture builds from this run and retry retention only
         type: string
@@ -20,7 +24,7 @@ permissions:
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/refactor/package-ci' && inputs.source-run == ''
+    if: github.ref == 'refs/heads/refactor/package-ci' && inputs.source-run == '' && inputs.cache-retry != true
     strategy:
       fail-fast: false
       matrix:
@@ -34,13 +38,11 @@ jobs:
       - uses: ./.github/actions/setup-engine
         with:
           runner: ${{ matrix.runner }}
-      - name: Test admission and existing handoff
+      - name: Test candidate admission and publication
         env:
           ROOTBEER_FORGE: engine/target/release/rootbeer-forge
         run: |
           python3 tests/candidate-store_test.py
-          python3 tests/package-results_test.py
-          ruby tests/promote-updates_test.rb
       - name: Build one fixture without registry credentials
         run: python3 tests/candidate-fixture.py prepare --systems x86_64-linux aarch64-linux
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -97,3 +99,31 @@ jobs:
         env:
           CANDIDATE: ${{ steps.candidate.outputs.reference }}
         run: python3 tests/candidate-fixture.py consume --reference "$CANDIDATE"
+
+  cache-retry:
+    if: github.ref == 'refs/heads/refactor/package-ci' && inputs.cache-retry == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-engine
+        with:
+          runner: ubuntu-24.04
+      - uses: ./.github/actions/prepare-package-results
+        id: results
+        with:
+          runner: fixture-retry
+          recheck: "true"
+      - name: Test failure and recovery with the actual Forge cache
+        env:
+          ROOTBEER_FORGE: engine/target/release/rootbeer-forge
+          CACHE_CONTEXT: ${{ steps.results.outputs.cache-context }}
+        run: python3 tests/cache-fixture.py
+      - name: Save completed work even when another package failed
+        if: ${{ !cancelled() && steps.results.outcome == 'success' }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .package-results
+          key: ${{ steps.results.outputs.cache-key }}

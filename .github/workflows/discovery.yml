@@ -49,7 +49,6 @@ jobs:
           ROOTBEER_FORGE: engine/target/release/rootbeer-forge
         run: |
           python3 tests/rootbeer-update_test.py
-          ruby tests/promote-updates_test.rb
       - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         if: >-
           github.event_name != 'repository_dispatch' && github.event.head_commit.message != 'ci(rootbeer): request update' && github.event.schedule != '*/15 * * * *' && inputs.rootbeer_only != true

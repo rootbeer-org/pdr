@@ -112,32 +112,22 @@ commits. PR caches remain scoped to that PR and support its retries; main's cach
 also seed new PRs. Approved OCI candidates can seed an empty cache independently
 of Actions cache retention. Scheduled full checks refresh qualification evidence.
 
-Verification also retains an immutable `package-results-<runner>-<attempt>`
-checkpoint for 14 days, including successful qualifications and dependency build
-results when another package fails. Checkpoints omit downloads and reconstructed
-stores. A retry restores the latest unexpired checkpoint from an earlier attempt
-of the **same run**, verifies its GitHub artifact SHA-256, and checks repository,
-source revision, engine pin, platform, and recheck mode before installing it. A
-changed runner environment leaves that checkpoint unused. Forge then verifies
-recipe compatibility and receipt/archive contents before reuse. Checkpoint
-restoration rejects traversal, symlinks, and duplicate entries.
+Actions saves the opaque Forge cache after successful or failed verification.
+Retries restore the current run's most recent cache in the same runner environment.
+An explicit recheck uses a run-specific namespace, so older results cannot satisfy
+it; retries reuse only work completed within that recheck. Cache contents and their
+validation belong to Forge. Workflows do not parse or rewrite cache entries.
 
-An explicit recheck discards prior qualification and compilation entries before
-starting. Retries discard the ordinary cache's result entries again, then recover
-only the recheck's own checkpoint. Completed work is reused; old baseline results
-cannot satisfy the recheck. Source downloads remain cached.
+Caches are temporary and may be evicted. A retry without retained results stops
+for investigation rather than silently restarting completed builds. Cancelled jobs
+or jobs that time out before saving may lose their latest work. Approved complete
+candidates remain in OCI independently of the Actions cache.
 
 Each platform emits `package-plan-<runner>-<attempt>` with Forge's JSON decisions
-and adds reuse/qualification counts to the job summary. Ordinary engine/platform
-bundle outputs are replaced on rerun so a failed upload can be retried; checkpoint
-names remain unique to their attempt. Verified bundles now remain available for
-14 days too.
+and adds reuse/qualification counts to the job summary. Verified bundles remain
+in Actions artifacts for 14 days; the collector retains complete candidates in
+OCI before those artifacts expire. PR caches remain isolated from main.
 
-Checkpoints are retry transport, not cross-run producer admission. They do not
-copy PR results into main's cache or grant registry credentials to build jobs.
-Cancelled jobs or jobs that time out before checkpoint upload cannot retain their
-latest work. The collector retains successful complete candidates in OCI before
-Actions artifacts expire.
 Package updates are independent of Rootbeer binary
 releases. See [index hosting and trust](https://rootbeer.tale.me/contributing/package-hosting)
 for deployment and client verification details.
@@ -217,11 +207,13 @@ admissible evidence.
 
 If only fixture retention fails, dispatch `candidate-fixture.yml` on the feature
 branch with `source-run` set to the completed producer run. Its build jobs are
-skipped and the existing fixture artifacts are reused.
+skipped and the existing fixture artifacts are reused. Dispatch with `cache-retry=true`
+to test failed-package recovery independently. Its first attempt deliberately fails
+after one package succeeds; rerun the failed job to verify that only the failed
+package builds and the successful receipt stays identical.
 
 A failed collection can be rerun while producer artifacts remain available. A
 failed publication retries the same digest; it does not rebuild. If main advanced,
 select evidence for the current catalog instead of replaying an older release.
-If evidence expired before collection, recover it from retained checkpoints or
-compatible caches and explicitly qualify only missing inputs. Digest, attestation,
+If evidence expired before collection, recover it from compatible caches and explicitly qualify only missing inputs. Digest, attestation,
 and authentication failures are errors, never cache misses.
