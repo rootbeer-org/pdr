@@ -63,7 +63,7 @@ def verify_provenance(reference, approved=False):
     return json.loads(command(*args, '--format', 'json'))
 
 
-def pull_files(reference, destination):
+def pull_files(reference, destination, engine=None):
     manifest_bytes = subprocess.check_output(['oras', 'manifest', 'fetch', pinned(reference)])
     if 'sha256:' + hashlib.sha256(manifest_bytes).hexdigest() != reference.split('@')[1]:
         raise ValueError('candidate manifest digest mismatch')
@@ -87,19 +87,37 @@ def pull_files(reference, destination):
     with tempfile.TemporaryDirectory(dir=destination.parent) as temporary:
         staging = Path(temporary) / 'candidate'
         staging.mkdir()
-        for layer in layers:
-            name = layer['annotations']['org.opencontainers.image.title']
-            path = staging / name
-            path.parent.mkdir(parents=True, exist_ok=True)
-            subprocess.run(['oras', 'blob', 'fetch', '--output', str(path), registry() + '@' + layer['digest']], check=True)
-            digest = hashlib.sha256()
-            with path.open('rb') as source:
-                for chunk in iter(lambda: source.read(1024 * 1024), b''):
-                    digest.update(chunk)
-            if path.stat().st_size != layer['size'] or 'sha256:' + digest.hexdigest() != layer['digest']:
-                raise ValueError('candidate layer digest or size mismatch')
+        for folder in ['artifacts', 'receipts', 'qualifications']:
+            (staging / 'bundle' / folder).mkdir(parents=True)
+        by_name = {layer['annotations']['org.opencontainers.image.title']: layer for layer in layers}
+        metadata_names = {name for name in names if name in ['candidate.json', 'bundle/index.json']
+                          or name.startswith('bundle/qualifications/')}
+        for name in sorted(metadata_names):
+            fetch_layer(by_name[name], staging)
+        selected = names - metadata_names
+        if engine:
+            plan = json.loads(command(engine, 'candidate-files', str(staging / 'bundle')))
+            if plan.get('schema') != 1 or plan.get('system') not in ['aarch64-macos', 'aarch64-linux', 'x86_64-linux']:
+                raise ValueError('invalid candidate transfer plan')
+            selected = {'bundle/' + name for name in plan['files']}
+            if not selected <= names or any(not FILE.fullmatch(name) for name in selected):
+                raise ValueError('candidate is missing required platform layers')
+        for name in sorted(selected):
+            fetch_layer(by_name[name], staging)
         staging.rename(destination)
     return json.loads((destination / 'candidate.json').read_text())
+
+
+def fetch_layer(layer, directory):
+    path = directory / layer['annotations']['org.opencontainers.image.title']
+    path.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run(['oras', 'blob', 'fetch', '--output', str(path), registry() + '@' + layer['digest']], check=True)
+    digest = hashlib.sha256()
+    with path.open('rb') as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b''):
+            digest.update(chunk)
+    if path.stat().st_size != layer['size'] or 'sha256:' + digest.hexdigest() != layer['digest']:
+        raise ValueError('candidate layer digest or size mismatch')
 
 
 def metadata(directory):
@@ -132,10 +150,10 @@ def verify_approval(attestations, metadata):
     raise ValueError('candidate has no matching catalog approval')
 
 
-def pull(reference, destination, approved=False):
+def pull(reference, destination, approved=False, engine=None):
     verify_provenance(reference)
     attestations = verify_provenance(reference, approved=True) if approved else None
-    pull_files(reference, destination)
+    pull_files(reference, destination, engine=engine)
     value = metadata(destination)
     if approved:
         verify_approval(attestations, value)
@@ -219,9 +237,10 @@ def main():
             return
         with tempfile.TemporaryDirectory() as directory:
             destination = Path(directory) / 'candidate'
-            pull(reference, destination, approved=True)
+            pull(reference, destination, approved=True, engine=args.engine)
+            plan = json.loads(command(args.engine, 'candidate-files', str(destination / 'bundle')))
             subprocess.run([args.engine, 'import-results', '--bundle', str(destination / 'bundle'),
-                            '--cache', '.package-results'], check=True)
+                            '--cache', '.package-results', '--system', plan['system']], check=True)
         return
     metadata = pull(args.reference, args.output)
     output('engine_revision', metadata['engine_revision'])

@@ -99,6 +99,13 @@ sharing a compiler job budget detected from the runner's CPU count. Dependencies
 run before consumers; independent source builds can overlap. Shared dependencies
 compile once per export, including full rechecks.
 
+Cache identities separate the four backend implementations from shared build
+behavior. A Rust backend edit changes Rust compilation and any qualification whose
+dependency closure uses Rust; independent C results remain reusable. Shared or
+unclassified build code, manifests, the workspace lockfile, and runner-image changes
+still invalidate conservatively. Rust toolchain identity is recorded by Forge for
+Rust closures, not injected into every platform cache context.
+
 Verified results are cached by engine inputs and build environment, including
 successful work from failed runs. Compatible results survive unrelated engine
 commits. PR caches remain scoped to that PR and support its retries; main's caches
@@ -177,7 +184,11 @@ its retained report and recipes. Publication adds a separate catalog-approval
 attestation and advances `accepted`. Builds import only candidates with both the
 collector and publication attestations. Registry write/signing credentials remain
 in separate trusted jobs. Qualification keys still decide per-package reuse;
-importing evidence never executes package code.
+importing evidence never executes package code. For cache seeding, the reader first
+fetches authenticated index/qualification metadata and asks Forge's `candidate-files`
+command for the current platform's receipts and runtime archives. Only those blobs
+are downloaded and imported with `--system`. Full publication still requires every
+platform's contents; a partial transfer cannot satisfy its verification gate.
 
 Automatic publication with missing evidence waits for collection or repair; it
 never falls back to a catalog build. A manual publication may qualify missing
@@ -191,8 +202,10 @@ admissible evidence.
 
 1. Push the engine commit, then this repository's matching `engine-revision`.
 2. Run the branch-only [retention fixture](.github/workflows/candidate-fixture.yml).
-   It builds one synthetic package, retains and attests it under the separate
-   `ci-fixture` image, restores into an empty cache, and verifies no rebuild.
+   It builds one synthetic package on Linux x86-64 and ARM64, assembles and attests
+   it under the separate `ci-fixture` image, then downloads only x86-64 contents into
+   an empty cache. It checks exact bytes, skipped foreign blobs, no rebuild, and
+   rejection of that partial bundle by the complete-publication gate.
    Production admission must reject its branch signer. No catalog jobs run.
 3. After review and merge, retain and publish a candidate with the new engine.
    Existing bundles without qualification records cannot be upgraded from archives.

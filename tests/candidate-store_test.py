@@ -94,14 +94,14 @@ class CandidateTests(unittest.TestCase):
             layers.append({'digest': digest, 'size': len(data), 'annotations': {'org.opencontainers.image.title': name}})
         return {'artifactType': store.ARTIFACT_TYPE, 'layers': layers}
 
-    def pull_manifest(self, manifest, corrupt=False):
+    def pull_manifest(self, manifest, corrupt=False, engine=None):
         data = json.dumps(manifest).encode()
         reference = store.registry() + '@sha256:' + hashlib.sha256(data).hexdigest()
         def fetch(args, **kwargs):
             path = Path(args[args.index('--output') + 1])
             path.write_bytes(b'corrupt' if corrupt else self.blobs[args[-1].split('@')[1]])
         with patch.object(store.subprocess, 'check_output', return_value=data), patch.object(store.subprocess, 'run', side_effect=fetch):
-            return store.pull_files(reference, self.root / 'out')
+            return store.pull_files(reference, self.root / 'out', engine=engine)
 
     def test_raw_oci_layers_round_trip_without_unpacking_package_archives(self):
         files = {'candidate.json': json.dumps(candidate_metadata()).encode(), 'bundle/index.json': b'{}',
@@ -109,6 +109,29 @@ class CandidateTests(unittest.TestCase):
         self.assertEqual(candidate_metadata(), self.pull_manifest(self.manifest(files)))
         for name, data in files.items():
             self.assertEqual(data, (self.root / 'out' / name).read_bytes())
+
+    def test_platform_transfer_downloads_only_forge_selected_content_and_all_metadata(self):
+        selected = 'bundle/artifacts/' + 'a' * 64 + '.tar.gz'
+        unselected = 'bundle/artifacts/' + 'b' * 64 + '.tar.gz'
+        qualification = 'bundle/qualifications/' + 'c' * 64 + '.json'
+        receipt = 'bundle/receipts/' + 'd' * 64 + '.json'
+        files = {'candidate.json': json.dumps(candidate_metadata()).encode(), 'bundle/index.json': b'{}',
+                 qualification: b'qualification', selected: b'current platform archive',
+                 unselected: b'foreign platform archive', receipt: b'current receipt', 'discovery/report.json': b'{}'}
+        plan = {'schema': 1, 'system': 'aarch64-macos', 'files': [selected.removeprefix('bundle/'), receipt.removeprefix('bundle/')]}
+        with patch.object(store, 'command', return_value=json.dumps(plan)) as command:
+            self.pull_manifest(self.manifest(files), engine='trusted-forge')
+        self.assertEqual(('trusted-forge', 'candidate-files'), command.call_args.args[:2])
+        actual = {path.relative_to(self.root / 'out').as_posix() for path in (self.root / 'out').rglob('*') if path.is_file()}
+        self.assertEqual({'candidate.json', 'bundle/index.json', qualification, selected, receipt}, actual)
+
+    def test_missing_platform_layers_fail_without_exposing_a_partial_candidate(self):
+        manifest = self.manifest({'candidate.json': b'{}', 'bundle/index.json': b'{}'})
+        for name in ['artifacts/' + 'a' * 64 + '.tar.gz', '../escape']:
+            plan = {'schema': 1, 'system': 'x86_64-linux', 'files': [name]}
+            with self.subTest(name=name), patch.object(store, 'command', return_value=json.dumps(plan)), self.assertRaises(ValueError):
+                self.pull_manifest(manifest, engine='trusted-forge')
+            self.assertFalse((self.root / 'out').exists())
 
     def test_unsafe_duplicate_and_corrupt_layers_fail_before_destination_is_visible(self):
         files = {'candidate.json': b'{}', 'bundle/index.json': b'{}'}

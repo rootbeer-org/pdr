@@ -29,7 +29,6 @@ runs:
           printf '%s\n' "$ImageOS" "$ImageVersion" "$RUNNER_ARCH"
           cc --version
           make --version
-          rustc --version --verbose
         } > "$RUNNER_TEMP/package-environment"
         echo "digest=$(shasum -a 256 "$RUNNER_TEMP/package-environment" | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
     - name: Restore verified package results
