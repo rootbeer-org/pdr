@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "build_key": "5bde2ab2746d71603e57eab9f5a7d19397b8d2fb2d4159f1b526da9d779156a9",
+  "build_environment": "48b3aebbfe861dcbf0f3d43f3331e4bac253ad32b0d3d60089cd8e863ac3f17e",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "0adbb5ac0ef590a8ce1c5877bccd0f09030b94c34b34d101031156cd23224f46",
+  "catalog_sha256": "797262ba087f2759dd86ecce82382891e5bb74cda7d53b59bd397179eee46cc3",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "custom",
+    "url": "https://github.com/Cyan4973/xxHash/archive/refs/tags/v0.8.3.tar.gz",
+    "sha256": "aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80",
+    "archive": "tar.gz",
+    "strip_prefix": "xxHash-0.8.3",
+    "configure": [],
+    "dependencies": [],
+    "libraries": [
+      "lib/libxxhash.a"
+    ],
+    "steps": {
+      "configure": [],
+      "build": [
+        [
+          "make",
+          "-j{jobs}",
+          "libxxhash.a",
+          "xxhsum"
+        ]
+      ],
+      "check": [
+        [
+          "make",
+          "check"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "PREFIX=/",
+          "DESTDIR={prefix}",
+          "install_libxxhash.a",
+          "install_libxxhash.includes",
+          "install_libxxhash.pc",
+          "install_xxhsum",
+          "install_man"
+        ]
+      ]
+    }
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "2f2e283d1c9e2a8787abe30c1d901cc259e40c73"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "797262ba087f2759dd86ecce82382891e5bb74cda7d53b59bd397179eee46cc3"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "xxhash",
+    "version": "0.8.3",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpHJRaAH/.tmpUYdjRk/build/package.tar.gz",
+        "sha256": "bcaa80a8db095f51e17b61c8f5df3d5b9b5712b7334f32da3a33f409262ff0d1"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "xxhsum": "bin/xxhsum"
+      }
+    },
+    "output_sha256": "88d1bee304022bb93b804e13f2cf4413658d404970efba0826af8a5008fe681f"
+  }
+}

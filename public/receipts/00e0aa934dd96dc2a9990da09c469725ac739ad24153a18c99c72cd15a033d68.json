@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "build_key": "e32cb162e2ed292894c8c3294df048ec48f8ce7898abdc4e909041a5399316bc",
+  "build_environment": "48b3aebbfe861dcbf0f3d43f3331e4bac253ad32b0d3d60089cd8e863ac3f17e",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "dbf6862f9afa2635ae8a12971307d5620917772bd3b15b251ca92164e20e04e8",
+  "catalog_sha256": "797262ba087f2759dd86ecce82382891e5bb74cda7d53b59bd397179eee46cc3",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "autotools",
+    "url": "https://github.com/rockdaboot/libpsl/releases/download/0.23.3/libpsl-0.23.3.tar.gz",
+    "sha256": "93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be",
+    "archive": "tar.gz",
+    "strip_prefix": "libpsl-0.23.3",
+    "configure": [
+      "--disable-shared",
+      "--enable-static",
+      "--disable-nls",
+      "--disable-rpath",
+      "--without-libiconv-prefix",
+      "--enable-runtime=libidn2",
+      "--enable-builtin",
+      "--without-libunistring-prefix"
+    ],
+    "patches": [
+      "--- a/configure\n+++ b/configure\n@@ -17475,7 +17475,7 @@\n   e)\n     acl_saved_LIBS=\"$LIBS\"\n                                 case \" $LIBUNISTRING\" in\n-      *\" -l\"*) LIBS=\"$LIBS $LIBUNISTRING\" ;;\n+      *\" -l\"*) LIBS=\"$LIBUNISTRING $LIBS\" ;;\n       *)       LIBS=\"$LIBUNISTRING $LIBS\" ;;\n     esac\n     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n@@ -18063,7 +18063,7 @@\n   e)\n     acl_saved_LIBS=\"$LIBS\"\n                                 case \" $LIBUNISTRING\" in\n-      *\" -l\"*) LIBS=\"$LIBS $LIBUNISTRING\" ;;\n+      *\" -l\"*) LIBS=\"$LIBUNISTRING $LIBS\" ;;\n       *)       LIBS=\"$LIBUNISTRING $LIBS\" ;;\n     esac\n     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n@@ -18654,7 +18654,7 @@\n   e)\n     acl_saved_LIBS=\"$LIBS\"\n                                 case \" $LIBUNISTRING\" in\n-      *\" -l\"*) LIBS=\"$LIBS $LIBUNISTRING\" ;;\n+      *\" -l\"*) LIBS=\"$LIBUNISTRING $LIBS\" ;;\n       *)       LIBS=\"$LIBUNISTRING $LIBS\" ;;\n     esac\n     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n"
+    ],
+    "dependencies": [
+      "libiconv@1.19",
+      "libidn2@2.3.8",
+      "libunistring@1.4.2",
+      "pkgconf@3.0.7"
+    ],
+    "libraries": [
+      "lib/libpsl.a"
+    ]
+  },
+  "dependencies": {
+    "libiconv@1.19": {
+      "name": "libiconv",
+      "version": "1.19",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpHJRaAH/.tmpNcLh1A/build/dependency-libiconv@1.19/package.tar.gz",
+          "sha256": "b2daf1a05490226a72ca852412672921113926a58baaf4f6da62814fa9a14c70"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "iconv": "bin/iconv"
+        }
+      },
+      "output_sha256": "92f190d786c1c5cd3b6bab576209e8458fafbbeac1900dd8a1a88ca91cd9c6c0"
+    },
+    "libidn2@2.3.8": {
+      "name": "libidn2",
+      "version": "2.3.8",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpHJRaAH/.tmpNcLh1A/build/dependency-libidn2@2.3.8/package.tar.gz",
+          "sha256": "3333455281769de8f2be7cbb0636064fc42e1d77fecea7f504bf4e35f5a961f6"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "idn2": "bin/idn2"
+        }
+      },
+      "output_sha256": "ef48c71d2cfb692a851776cee8138b61995eacd1a35bb2281795f85e12eb0047"
+    },
+    "libunistring@1.4.2": {
+      "name": "libunistring",
+      "version": "1.4.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpHJRaAH/.tmpNcLh1A/build/dependency-libunistring@1.4.2/package.tar.gz",
+          "sha256": "a2c0f3ecfb53a1be4e497f367cf33264293af1665e1f9afde9139edff4834cdf"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "5dd141498489ec13afb9fac4647fce206f95a3c90ba63fd6580b5ba0be45df0a"
+    },
+    "pkgconf@3.0.7": {
+      "name": "pkgconf",
+      "version": "3.0.7",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpHJRaAH/.tmpNcLh1A/build/dependency-pkgconf@3.0.7/package.tar.gz",
+          "sha256": "f900761609629aa9e8ef2526cb4b83ef8ef8c8b4696d18f050a6ac13b72f8fa4"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "pkg-config": "bin/pkg-config",
+          "pkgconf": "bin/pkgconf"
+        }
+      },
+      "output_sha256": "8d889a2133bc5244114f7b17850a6972b3e46bb8f2b2920b86168af288dc4313"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "2f2e283d1c9e2a8787abe30c1d901cc259e40c73"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "797262ba087f2759dd86ecce82382891e5bb74cda7d53b59bd397179eee46cc3"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "libpsl",
+    "version": "0.23.3",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpHJRaAH/.tmpNcLh1A/build/package.tar.gz",
+        "sha256": "8f03320052f29fbc99cdef4fdafee600079cc0fd473b91f36fa9736995338831"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "psl": "bin/psl"
+      }
+    },
+    "output_sha256": "95b91e54a3b3d5792b8cfeb863957b5a8fae86c710f5367d7b3fc746fd650f19"
+  }
+}

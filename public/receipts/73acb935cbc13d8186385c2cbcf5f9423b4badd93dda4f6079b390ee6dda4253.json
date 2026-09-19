@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "build_key": "4355963e111178daa1d35392da975cc5d7e95e2687713c6436c1900b1bc8f8df",
+  "build_environment": "48b3aebbfe861dcbf0f3d43f3331e4bac253ad32b0d3d60089cd8e863ac3f17e",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cargo": {
+        "path": "/home/runner/.rustup/toolchains/1.98.1-aarch64-unknown-linux-gnu/bin/cargo",
+        "sha256": "2101d7104b91a013912c94275dcd31c2b41061ef7f6e8530df11cdad55b8fbc5"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "rustc": {
+        "path": "/home/runner/.rustup/toolchains/1.98.1-aarch64-unknown-linux-gnu/bin/rustc",
+        "sha256": "d4217a981a778bfe445c0a29c408f5a25a92e9bb5222701579ad5a35bd913e8f"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {
+      "rust-libraries": {
+        "path": "/home/runner/.rustup/toolchains/1.98.1-aarch64-unknown-linux-gnu/lib",
+        "sha256": "95b6057127b6ccf9df1985011b8dcf59720c7d77dab0fc76ec67ee70675a94e0"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "ae7e88969f3e23de3ede655d6942c7c5ce81cfb3532907072a2f27cc65f70791",
+  "catalog_sha256": "797262ba087f2759dd86ecce82382891e5bb74cda7d53b59bd397179eee46cc3",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "git": {
+      "github": "tale/prtui",
+      "branch": "main"
+    },
+    "backend": "rust",
+    "rust": {
+      "packages": [
+        "prtui"
+      ],
+      "features": [],
+      "no_default_features": false,
+      "environment": {}
+    },
+    "url": "https://codeload.github.com/tale/prtui/tar.gz/refs/tags/v0.4.0",
+    "sha256": "1620033443750761e0267ebac252474f9b63aec4576036183d6a6468835f6cbe",
+    "archive": "tar.gz",
+    "strip_prefix": "prtui-0.4.0",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "2f2e283d1c9e2a8787abe30c1d901cc259e40c73"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "797262ba087f2759dd86ecce82382891e5bb74cda7d53b59bd397179eee46cc3"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)"
+  },
+  "package": {
+    "name": "prtui",
+    "version": "0.4.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpHJRaAH/.tmpiL7YrF/build/package.tar.gz",
+        "sha256": "13d6b5973dd8e9d9d591df920720bba05cee9c35837502435b91f51d6dc32348"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "prtui": "bin/prtui"
+      }
+    },
+    "output_sha256": "bf7d186e9b9749dd54962fe4d401f1c280c40b6c267cf2319c6aed21ebdf05c1"
+  }
+}
