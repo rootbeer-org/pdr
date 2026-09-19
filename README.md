@@ -215,6 +215,10 @@ admissible evidence.
    OCI seeding is disabled; collectors and publication from their events still work.
    Allow Actions read access to this package (including PR jobs), or make it public.
 
+If only fixture retention fails, dispatch `candidate-fixture.yml` on the feature
+branch with `source-run` set to the completed producer run. Its build jobs are
+skipped and the existing fixture artifacts are reused.
+
 A failed collection can be rerun while producer artifacts remain available. A
 failed publication retries the same digest; it does not rebuild. If main advanced,
 select evidence for the current catalog instead of replaying an older release.

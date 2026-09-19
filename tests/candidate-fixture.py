@@ -92,7 +92,11 @@ def combine(root, engine, inputs):
     shutil.copyfile(chosen / 'compilations', root / 'compilations')
     (root / 'candidate').mkdir()
     shutil.copyfile(chosen / 'candidate/candidate.json', root / 'candidate/candidate.json')
-    subprocess.run([engine, 'assemble', '--inputs', str(inputs), '--output', str(root / 'candidate/bundle')], check=True)
+    assembly = root / 'assembly-inputs'
+    assembly.mkdir()
+    for path in bundles:
+        shutil.move(path / 'candidate/bundle', assembly / path.name)
+    subprocess.run([engine, 'assemble', '--inputs', str(assembly), '--output', str(root / 'candidate/bundle')], check=True)
     subprocess.run([engine, '--catalog', str(root / 'packages'), 'verify-candidate', str(root / 'candidate/bundle')], check=True)
 
 
