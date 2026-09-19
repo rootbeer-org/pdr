@@ -1,0 +1,309 @@
+{
+  "schema": 1,
+  "build_key": "e6130aa5edf5d5f2497adb53a5e8fe5099d0dd2288338099fab6b6fc9001dfe3",
+  "build_environment": "48b3aebbfe861dcbf0f3d43f3331e4bac253ad32b0d3d60089cd8e863ac3f17e",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "22bc3d7205481ccc113b93e573f6ddcf962216770a60cc5133827e0023aecb75",
+  "catalog_sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "custom",
+    "url": "https://download.samba.org/pub/rsync/src/rsync-3.5.0.tar.gz",
+    "sha256": "c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33",
+    "archive": "tar.gz",
+    "strip_prefix": "rsync-3.5.0",
+    "configure": [],
+    "patches": [
+      "--- a/testsuite/chmod-setid_test.py\n+++ b/testsuite/chmod-setid_test.py\n@@ -8,6 +8,9 @@\n from rsyncfns import SCRATCHDIR, run_rsync, test_fail\n \n base = SCRATCHDIR / 'chmod_setid'\n+base.mkdir(parents=True, exist_ok=True)\n+# macOS clears setgid when the inherited directory group is not ours.\n+os.chown(base, -1, os.getgid())\n src = base / 'src'\n dst = base / 'dst'\n src.mkdir(parents=True, exist_ok=True)\n"
+    ],
+    "dependencies": [
+      "openssl@4.0.2",
+      "xxhash@0.8.3",
+      "zstd@1.5.7",
+      "lz4@1.10.0",
+      "zlib@1.3.2"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "sh",
+          "./configure",
+          "--prefix=/",
+          "--disable-debug",
+          "--disable-md2man"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "make",
+          "check"
+        ],
+        [
+          "/bin/sh",
+          "-ec",
+          "PATH=\"$PWD:$PATH\"; export PATH; directory=$(mktemp -d); trap 'rm -rf \"$directory\"' EXIT; mkdir \"$directory/source\" \"$directory/destination\"; printf rootbeer-rsync > \"$directory/source/file\"; rsync -a --checksum \"$directory/source/\" \"$directory/destination/\"; cmp \"$directory/source/file\" \"$directory/destination/file\"; rm \"$directory/source/file\"; rsync -a --delete \"$directory/source/\" \"$directory/destination/\"; test ! -e \"$directory/destination/file\""
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "DESTDIR={prefix}",
+          "install"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpRrVWcc/build/dependency-cmake@4.4.3/package.tar.gz",
+          "sha256": "9134c7f328e94c3b66dada29f1e5d52595a94ed60050127ff3ce5028a1d641d4"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "bin/cmake",
+          "cpack": "bin/cpack",
+          "ctest": "bin/ctest"
+        }
+      },
+      "output_sha256": "c2a8098e016256f2a4f30eca298a04fb374fd114149c74d845f5b2ef5b27bd83"
+    },
+    "lz4@1.10.0": {
+      "name": "lz4",
+      "version": "1.10.0",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpRrVWcc/build/dependency-lz4@1.10.0/package.tar.gz",
+          "sha256": "244b959997a3a0caff666fc47d80b37d2fd16a5bf8851fc2ebd03445cc2b1919"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lz4": "bin/lz4",
+          "lz4c": "bin/lz4c",
+          "lz4cat": "bin/lz4cat",
+          "unlz4": "bin/unlz4"
+        }
+      },
+      "output_sha256": "ca09e2581f4dc1cf2730e693c2f5065aae4c0017566dd03536742eed7bde917a"
+    },
+    "openssl@4.0.2": {
+      "name": "openssl",
+      "version": "4.0.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpRrVWcc/build/dependency-openssl@4.0.2/package.tar.gz",
+          "sha256": "35da35e5f5fc52da5ad2036a547c25d31b711f0cd51b4d4183cd816799be17f3"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "openssl": "bin/openssl"
+        }
+      },
+      "output_sha256": "8adbeb8c24f8fc9d9c56dea510ee330898c31edc408e92754feb8defd6718eb9"
+    },
+    "xxhash@0.8.3": {
+      "name": "xxhash",
+      "version": "0.8.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpRrVWcc/build/dependency-xxhash@0.8.3/package.tar.gz",
+          "sha256": "bcaa80a8db095f51e17b61c8f5df3d5b9b5712b7334f32da3a33f409262ff0d1"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "xxhsum": "bin/xxhsum"
+        }
+      },
+      "output_sha256": "88d1bee304022bb93b804e13f2cf4413658d404970efba0826af8a5008fe681f"
+    },
+    "xz@5.8.3": {
+      "name": "xz",
+      "version": "5.8.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpRrVWcc/build/dependency-xz@5.8.3/package.tar.gz",
+          "sha256": "c42d62a569a51a35597ef59a46d19b4280c4d7cdffd84c722ebf55e251020c1f"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lzmadec": "bin/lzmadec",
+          "lzmainfo": "bin/lzmainfo",
+          "xz": "bin/xz",
+          "xzdec": "bin/xzdec"
+        }
+      },
+      "output_sha256": "9b30cfa42c543fea9a6f52461437894f17b851b45607162bd4f803ad0ff25ba9"
+    },
+    "zlib@1.3.2": {
+      "name": "zlib",
+      "version": "1.3.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpRrVWcc/build/dependency-zlib@1.3.2/package.tar.gz",
+          "sha256": "5deb9b620f11a6e903a16d2f3858b9b4a2c406eeb3da9197dc06b047e6dca105"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "2e3831e32d81b2b2d9ad4a028a987c4ce9a51ef282e80932bc4d2cfc626ca04b"
+    },
+    "zstd@1.5.7": {
+      "name": "zstd",
+      "version": "1.5.7",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpRrVWcc/build/dependency-zstd@1.5.7/package.tar.gz",
+          "sha256": "eb69709f7eab9d7325af5b0a379db1b68f1727a8745af388038d928184658fa2"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "unzstd": "bin/unzstd",
+          "zstd": "bin/zstd",
+          "zstdcat": "bin/zstdcat",
+          "zstdmt": "bin/zstdmt"
+        }
+      },
+      "output_sha256": "2c56d2eb09ff41d5af6fe674cd8787559a042cc31464e93c347f27dc219d2c48"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "13a4da3569dd50322c8d525b84a343465cccb5b6"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "rsync",
+    "version": "3.5.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpRrVWcc/build/package.tar.gz",
+        "sha256": "a8ca492c7fd7ddc2c7882426da82da725dea333b77db4cc94e8ea08bc0888f87"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "rsync": "bin/rsync"
+      }
+    },
+    "output_sha256": "4d67660c8bd86fab2c661b08d7aa0bd31ce671b085a0ced26b18daaa180e2ad0"
+  }
+}

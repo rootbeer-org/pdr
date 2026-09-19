@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "build_key": "12147642e408d6c72914077b0751048e0a17e4f251cde569a8a40bfe6c11e491",
+  "build_environment": "281f18ab6cfc799bc02b754dc8d93a50e3ad9d5cc99d2fd9754a263dc33e754a",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cargo": {
+        "path": "/Users/runner/.rustup/toolchains/1.98.1-aarch64-apple-darwin/bin/cargo",
+        "sha256": "6e17e865f3a20dd55a1d212f849f58b77124179f0de7c52973096d84ba34118d"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "rustc": {
+        "path": "/Users/runner/.rustup/toolchains/1.98.1-aarch64-apple-darwin/bin/rustc",
+        "sha256": "766eda9d8f53afd6fc7f27b3cd2e444dd22afacb5afa710a5625fc8e45b8c941"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {
+      "rust-libraries": {
+        "path": "/Users/runner/.rustup/toolchains/1.98.1-aarch64-apple-darwin/lib",
+        "sha256": "4aeaea1450ae69b0f9cca1318a567881c82dd53454d373f1430c9e80cdd94d84"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "c74ab96bee6f96d08ca5b9cbb57acd0d6ce6cdb037071de6c4bdb438bde3b747",
+  "catalog_sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "git": {
+      "github": "tale/rootbeer",
+      "branch": "main"
+    },
+    "backend": "rust",
+    "rust": {
+      "packages": [
+        "rootbeer-cli",
+        "rootbeer-forge"
+      ],
+      "features": [],
+      "no_default_features": false,
+      "environment": {
+        "RB_BUILD_TIMESTAMP": "2026-09-18 17:32 UTC",
+        "ROOTBEER_INDEX_PUBLIC_KEY": "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
+        "ROOTBEER_INDEX_URL": "https://tale.github.io/rootbeer-index/current.json"
+      }
+    },
+    "url": "https://codeload.github.com/tale/rootbeer/tar.gz/64c18d5414f4268ae254c9db008664b62efab093",
+    "sha256": "ecd4684166f31a9c95f7e3632bfff033f48e289ca9cb0476d2e8b136adeb1b99",
+    "archive": "tar.gz",
+    "strip_prefix": "rootbeer-64c18d5414f4268ae254c9db008664b62efab093",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "13a4da3569dd50322c8d525b84a343465cccb5b6"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)"
+  },
+  "package": {
+    "name": "rootbeer",
+    "version": "0.1.0-main+64c18d5414f4",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpbmwHAj/.tmpwiIn2z/build/package.tar.gz",
+        "sha256": "f7c8c7490840f5b2a382aa940ea971c0c5db476154374f02623c2e17413b15a3"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "rb": "bin/rb",
+        "rootbeer-forge": "bin/rootbeer-forge"
+      }
+    },
+    "output_sha256": "58ba6cad6b7177cc6902184cb1b5a3d94c567c6d4a072b515967a231bfcc6c6a"
+  }
+}

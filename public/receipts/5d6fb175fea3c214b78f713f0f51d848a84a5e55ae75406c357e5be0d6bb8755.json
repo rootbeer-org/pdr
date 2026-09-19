@@ -1,0 +1,308 @@
+{
+  "schema": 1,
+  "build_key": "cdeda5dd89bbd0d65e3e962a2531c92c060f99943e4b375129c0a4ea2fdec6e7",
+  "build_environment": "48b0f753b50e5a4dd0bdf899ff489f06b9b4884c2a21419c430c565e5790c94a",
+  "environment": {
+    "schema": 1,
+    "system": "x86_64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "6452af2eea333b8c65e1adb92964fc8f97863ab003fa13f9d12bff5345cd7dbe"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "a7ae8b838a75711c06f86a2a8293dcad85a20b564670a120717e704c436e6f3a"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "60254978b8ee2c1b21b41d16a18a621dbbcc72e43eb2fa9f916818256c77e9ee"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "86d31f6fb799e91fa21bad341484564510ca287703a16e9e46c53338776f4f42"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "c6e023b172383fae5318c600e6f2f3a153513df62bf06ad6c9269296d2a78e89"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "dcaaa12ff3f808e523efd0cc9174ea6e85ca384853afea894eccf8f987d15943",
+  "catalog_sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f",
+  "revision": 2,
+  "system": "x86_64-linux",
+  "build": {
+    "backend": "custom",
+    "url": "https://ftp.gnu.org/gnu/wget/wget-1.25.0.tar.gz",
+    "sha256": "766e48423e79359ea31e41db9e5c289675947a7fcf2efdcedb726ac9d0da3784",
+    "archive": "tar.gz",
+    "strip_prefix": "wget-1.25.0",
+    "configure": [],
+    "patches": [
+      "--- a/src/openssl.c\n+++ b/src/openssl.c\n@@ -226,7 +226,7 @@\n       break;\n \n     case secure_protocol_sslv3:\n-#ifndef OPENSSL_NO_SSL3_METHOD\n+#if !defined(OPENSSL_NO_SSL3_METHOD) && OPENSSL_VERSION_NUMBER < 0x40000000L\n       meth = SSLv3_client_method ();\n #endif\n       break;\n",
+      "--- a/tests/Test-ftp-iri.px\n+++ b/tests/Test-ftp-iri.px\n@@ -2,6 +2,15 @@\n \n use strict;\n use warnings;\n+\n+# APFS cannot represent the byte-oriented filenames used by this test.\n+my $probe_name = \"wget-filename-$$-\\xE7\";\n+open my $probe, '>', $probe_name or do {\n+    exit 77 if $!{EILSEQ};\n+    die \"Cannot probe filename support: $!\";\n+};\n+close $probe;\n+unlink $probe_name;\n \n use WgetFeature qw(iri);\n use FTPTest;\n",
+      "--- a/tests/Test-ftp-iri-fallback.px\n+++ b/tests/Test-ftp-iri-fallback.px\n@@ -2,6 +2,15 @@\n \n use strict;\n use warnings;\n+\n+# APFS cannot represent the byte-oriented filenames used by this test.\n+my $probe_name = \"wget-filename-$$-\\xE7\";\n+open my $probe, '>', $probe_name or do {\n+    exit 77 if $!{EILSEQ};\n+    die \"Cannot probe filename support: $!\";\n+};\n+close $probe;\n+unlink $probe_name;\n \n use WgetFeature qw(iri);\n use FTPTest;\n",
+      "--- a/tests/Test-ftp-iri-recursive.px\n+++ b/tests/Test-ftp-iri-recursive.px\n@@ -2,6 +2,15 @@\n \n use strict;\n use warnings;\n+\n+# APFS cannot represent the byte-oriented filenames used by this test.\n+my $probe_name = \"wget-filename-$$-\\xE7\";\n+open my $probe, '>', $probe_name or do {\n+    exit 77 if $!{EILSEQ};\n+    die \"Cannot probe filename support: $!\";\n+};\n+close $probe;\n+unlink $probe_name;\n \n use WgetFeature qw(iri);\n use FTPTest;\n",
+      "--- a/tests/Test-ftp-iri-disabled.px\n+++ b/tests/Test-ftp-iri-disabled.px\n@@ -2,6 +2,15 @@\n \n use strict;\n use warnings;\n+\n+# APFS cannot represent the byte-oriented filenames used by this test.\n+my $probe_name = \"wget-filename-$$-\\xE7\";\n+open my $probe, '>', $probe_name or do {\n+    exit 77 if $!{EILSEQ};\n+    die \"Cannot probe filename support: $!\";\n+};\n+close $probe;\n+unlink $probe_name;\n \n use WgetFeature qw(iri);\n use FTPTest;\n"
+    ],
+    "dependencies": [
+      "openssl@4.0.2",
+      "libpsl@0.23.3",
+      "libidn2@2.3.8",
+      "libiconv@1.19",
+      "libunistring@1.4.2",
+      "zlib@1.3.2",
+      "pkgconf@3.0.7"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "/bin/sh",
+          "-ec",
+          "LIBPSL_LIBS=\"$(pkg-config --static --libs libpsl)\" LIBIDN2_LIBS=\"$(pkg-config --static --libs libidn2)\" ./configure --prefix=/ --with-ssl=openssl --disable-nls --disable-rpath --disable-pcre --disable-pcre2 --without-libiconv-prefix --without-libunistring-prefix"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "make",
+          "-C",
+          "lib",
+          "check"
+        ],
+        [
+          "/bin/sh",
+          "-ec",
+          "cd tests; make check TESTS=\"unit-tests $(printf '%s ' Test-ftp*.px)\""
+        ],
+        [
+          "python3",
+          "-c",
+          "import http.server\nimport pathlib\nimport ssl\nimport subprocess\nimport tempfile\nimport threading\n\nwget = str(pathlib.Path('src/wget').resolve())\npayload = b'rootbeer-wget\\n' * 4096\n\nclass Handler(http.server.BaseHTTPRequestHandler):\n    def log_message(self, *args):\n        pass\n\n    def do_GET(self):\n        if self.path == '/redirect':\n            self.send_response(302)\n            self.send_header('Location', '/payload')\n            self.end_headers()\n            return\n        if self.path != '/payload':\n            self.send_error(404)\n            return\n        start = int(self.headers.get('Range', 'bytes=0-')[6:].split('-')[0])\n        self.send_response(206 if start else 200)\n        self.send_header('Content-Length', str(len(payload) - start))\n        if start:\n            self.send_header('Content-Range', f'bytes {start}-{len(payload)-1}/{len(payload)}')\n        self.end_headers()\n        self.wfile.write(payload[start:])\n\nwith tempfile.TemporaryDirectory() as directory:\n    root = pathlib.Path(directory)\n    def run(*args, success=True):\n        result = subprocess.run([wget, '--no-config', '--no-hsts', '--tries=1', '--timeout=5', '-q', *args], cwd=root, capture_output=True, timeout=15)\n        assert (result.returncode == 0) == success, (args, result.returncode, result.stderr)\n        return result.stdout\n\n    server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), Handler)\n    thread = threading.Thread(target=server.serve_forever, daemon=True)\n    thread.start()\n    url = f'http://127.0.0.1:{server.server_port}'\n    try:\n        assert run('-O-', url + '/redirect') == payload\n        run('-O-', url + '/missing', success=False)\n        (root / 'download').write_bytes(payload[:123])\n        run('-c', '-O', 'download', url + '/payload')\n        assert (root / 'download').read_bytes() == payload\n    finally:\n        server.shutdown()\n        server.server_close()\n\n    certificate = root / 'certificate.pem'\n    key = root / 'key.pem'\n    subprocess.run(['openssl', 'req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-days', '1', '-subj', '/CN=localhost', '-addext', 'subjectAltName=DNS:localhost', '-keyout', str(key), '-out', str(certificate)], check=True, capture_output=True)\n    server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), Handler)\n    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)\n    context.load_cert_chain(certificate, key)\n    server.socket = context.wrap_socket(server.socket, server_side=True)\n    threading.Thread(target=server.serve_forever, daemon=True).start()\n    url = f'https://localhost:{server.server_port}/payload'\n    try:\n        assert run('--ca-certificate=' + str(certificate), '-O-', url) == payload\n        run('-O-', url, success=False)\n    finally:\n        server.shutdown()\n        server.server_close()\nprint('HTTP redirects, resume, errors, and HTTPS certificate validation passed')\n"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "DESTDIR={prefix}",
+          "install"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "libiconv@1.19": {
+      "name": "libiconv",
+      "version": "1.19",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmp5kgkEM/.tmpd56Pak/build/dependency-libiconv@1.19/package.tar.gz",
+          "sha256": "6ed2c06accd537d845baa79608b8e89ea8fabbd2a1eeca1599272d88b8f9a446"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "iconv": "bin/iconv"
+        }
+      },
+      "output_sha256": "d3de1cf5511bb26a2cc2f3178149b2de6882f29c32b0736bc1a75ffa45ab3db3"
+    },
+    "libidn2@2.3.8": {
+      "name": "libidn2",
+      "version": "2.3.8",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmp5kgkEM/.tmpd56Pak/build/dependency-libidn2@2.3.8/package.tar.gz",
+          "sha256": "6c025974de3427dd6dfdb6d72ae0ba6bf3a9707164d381aed11cbb70030bab58"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "idn2": "bin/idn2"
+        }
+      },
+      "output_sha256": "63d49e69999f0a9ee491a4b7ff7d077cd27ca30388ee99c9c8baeee612548ffd"
+    },
+    "libpsl@0.23.3": {
+      "name": "libpsl",
+      "version": "0.23.3",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmp5kgkEM/.tmpd56Pak/build/dependency-libpsl@0.23.3/package.tar.gz",
+          "sha256": "25e64d350568bda64f94b4eb24295b33c836638f49a32fb46eb4b311f8104f9c"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "psl": "bin/psl"
+        }
+      },
+      "output_sha256": "bcb3b52ce42e66d3d703495dab641eb669d278ddccce28ae35a928069d353a9a"
+    },
+    "libunistring@1.4.2": {
+      "name": "libunistring",
+      "version": "1.4.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmp5kgkEM/.tmpd56Pak/build/dependency-libunistring@1.4.2/package.tar.gz",
+          "sha256": "97e07f12ccedd79bad124c12ef933fe9eb28e072b2e194509ce790295979fc52"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "e7dfbbbf777781708b42cb9dac929a8d54d1796f594826b387b6f3de954bcfbf"
+    },
+    "openssl@4.0.2": {
+      "name": "openssl",
+      "version": "4.0.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmp5kgkEM/.tmpd56Pak/build/dependency-openssl@4.0.2/package.tar.gz",
+          "sha256": "4e6699e82411fa389260320b871ee52e833352ce6e7a13cd752f511f4ca1b5c6"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "openssl": "bin/openssl"
+        }
+      },
+      "output_sha256": "90314d8dc09615ad032a06a313c981a2c45747d6079f848d8c7e8b8d563143cd"
+    },
+    "pkgconf@3.0.7": {
+      "name": "pkgconf",
+      "version": "3.0.7",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmp5kgkEM/.tmpd56Pak/build/dependency-pkgconf@3.0.7/package.tar.gz",
+          "sha256": "45e00cff3f26a338ce86cccf76dffd4c044426ccdd4a88d9efdb6e2be57fc4fb"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "pkg-config": "bin/pkg-config",
+          "pkgconf": "bin/pkgconf"
+        }
+      },
+      "output_sha256": "cbfaeceeb3bcc95d2f34bb219893a7e306eee32e9cfe97d0dc7ee7f486edcb77"
+    },
+    "zlib@1.3.2": {
+      "name": "zlib",
+      "version": "1.3.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmp5kgkEM/.tmpd56Pak/build/dependency-zlib@1.3.2/package.tar.gz",
+          "sha256": "89d075fb35982c9e518f05e3462344e11e6e9cd017e3f5b859769159b627664e"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "333bcc79a31464e4abf1ada4c00bf81074e1d9db3015dfd6f7730a41a40a0935"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "13a4da3569dd50322c8d525b84a343465cccb5b6"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "wget",
+    "version": "1.25.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmp5kgkEM/.tmpd56Pak/build/package.tar.gz",
+        "sha256": "61ce6dc4f794edad0282e05ae7d8572bf8f6e22772d4c09bd621c8d2c1baad66"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "wget": "bin/wget"
+      }
+    },
+    "output_sha256": "9b44a7e6796a2e29231cf3d1753e2794a18c50f19fb1a082cf4acb9bbcbea0c5"
+  }
+}

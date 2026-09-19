@@ -1,0 +1,158 @@
+{
+  "schema": 1,
+  "build_key": "39ddf39d7ff328bf228fc8fb6bdd06cf9fc77ad6b7a0fa86f6013cc23c00fa26",
+  "build_environment": "48b3aebbfe861dcbf0f3d43f3331e4bac253ad32b0d3d60089cd8e863ac3f17e",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "9928936fa0962abfb0b3ef8977373427513dc62973a40a6f6a20649bc80fba2d",
+  "catalog_sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "autotools",
+    "url": "https://ftp.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz",
+    "sha256": "f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a",
+    "archive": "tar.gz",
+    "strip_prefix": "libidn2-2.3.8",
+    "configure": [
+      "--disable-shared",
+      "--enable-static",
+      "--disable-nls",
+      "--disable-doc",
+      "--disable-rpath",
+      "--without-libiconv-prefix",
+      "--without-libunistring-prefix"
+    ],
+    "dependencies": [
+      "libiconv@1.19",
+      "libunistring@1.4.2"
+    ],
+    "libraries": [
+      "lib/libidn2.a"
+    ]
+  },
+  "dependencies": {
+    "libiconv@1.19": {
+      "name": "libiconv",
+      "version": "1.19",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpYhrZuZ/build/dependency-libiconv@1.19/package.tar.gz",
+          "sha256": "b2daf1a05490226a72ca852412672921113926a58baaf4f6da62814fa9a14c70"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "iconv": "bin/iconv"
+        }
+      },
+      "output_sha256": "92f190d786c1c5cd3b6bab576209e8458fafbbeac1900dd8a1a88ca91cd9c6c0"
+    },
+    "libunistring@1.4.2": {
+      "name": "libunistring",
+      "version": "1.4.2",
+      "source": {
+        "File": {
+          "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpYhrZuZ/build/dependency-libunistring@1.4.2/package.tar.gz",
+          "sha256": "a2c0f3ecfb53a1be4e497f367cf33264293af1665e1f9afde9139edff4834cdf"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "5dd141498489ec13afb9fac4647fce206f95a3c90ba63fd6580b5ba0be45df0a"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "13a4da3569dd50322c8d525b84a343465cccb5b6"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "libidn2",
+    "version": "2.3.8",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpYhrZuZ/build/package.tar.gz",
+        "sha256": "3333455281769de8f2be7cbb0636064fc42e1d77fecea7f504bf4e35f5a961f6"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "idn2": "bin/idn2"
+      }
+    },
+    "output_sha256": "ef48c71d2cfb692a851776cee8138b61995eacd1a35bb2281795f85e12eb0047"
+  }
+}

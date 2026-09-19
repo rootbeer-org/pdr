@@ -1,0 +1,168 @@
+{
+  "schema": 1,
+  "build_key": "d635716ce49e9236d83096044c2672adb1730cc71836fb5be3c0e75b27444cea",
+  "build_environment": "48b3aebbfe861dcbf0f3d43f3331e4bac253ad32b0d3d60089cd8e863ac3f17e",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "3c54e8eaa91f1cc76a941ed02a76623969e49e1cfeb2ef4f82bdfd55b2712a20",
+  "catalog_sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "custom",
+    "url": "https://ftp.gnu.org/gnu/ncurses/ncurses-6.6.tar.gz",
+    "sha256": "355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11",
+    "archive": "tar.gz",
+    "strip_prefix": "ncurses-6.6",
+    "configure": [],
+    "dependencies": [],
+    "libraries": [
+      "lib/libncurses.a",
+      "lib/libform.a",
+      "lib/libmenu.a",
+      "lib/libpanel.a"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "sh",
+          "./configure",
+          "--prefix=/",
+          "--without-shared",
+          "--with-normal",
+          "--without-debug",
+          "--without-ada",
+          "--without-cxx",
+          "--disable-widec",
+          "--without-manpages",
+          "--enable-pc-files",
+          "--with-pkg-config-libdir=/lib/pkgconfig",
+          "--with-terminfo-dirs=/etc/terminfo:/lib/terminfo:/usr/share/terminfo"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "make",
+          "-C",
+          "include",
+          "check"
+        ],
+        [
+          "make",
+          "-C",
+          "test",
+          "check"
+        ],
+        [
+          "progs/tic",
+          "-x",
+          "-o",
+          "test-terminfo",
+          "misc/terminfo.src"
+        ],
+        [
+          "progs/infocmp",
+          "-A",
+          "test-terminfo",
+          "xterm-256color"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "DESTDIR={prefix}",
+          "install"
+        ]
+      ]
+    }
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "13a4da3569dd50322c8d525b84a343465cccb5b6"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "a4eea520509a202a7e47f2707cc5d7e1743624bcc6edce07ec63a5160e84570f"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "ncurses",
+    "version": "6.6",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpdHOXX8/.tmpLf0hy4/build/package.tar.gz",
+        "sha256": "5ac61e047a3ce2f440e61d47241bb7407281e7a431074501bb81c66f470963f4"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "infocmp": "bin/infocmp",
+        "tic": "bin/tic",
+        "tput": "bin/tput"
+      }
+    },
+    "output_sha256": "4baa11ba6a353984a5d91423b8b2904fe557e8931b382b5932e41d3d312ad41e"
+  }
+}
