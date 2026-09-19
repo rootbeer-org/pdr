@@ -78,6 +78,9 @@ jobs:
         run: ruby .github/scripts/verified-bundle.rb select
 
   verify:
+    permissions:
+      contents: read
+      actions: read
     needs: select
     if: needs.select.outputs.ready == 'true' && needs.select.outputs.run_id == ''
     uses: ./.github/workflows/packages.yml
@@ -111,18 +114,7 @@ jobs:
           SOURCE_RUN: ${{ needs.select.outputs.run_id || github.run_id }}
         run: ruby .github/scripts/verified-bundle.rb download
       - name: Match bundle to approved recipes
-        run: |
-          engine/target/release/rootbeer-forge --catalog packages index > expected-catalog.json
-          engine/target/release/rootbeer-forge verify-index --complete bundle/index.json
-          python3 - <<'PYTHON'
-          import json
-          with open('expected-catalog.json') as file:
-              expected = json.load(file)
-          with open('bundle/index.json') as file:
-              actual = json.load(file)['catalog']
-          if actual != expected:
-              raise SystemExit('verified bundle does not match approved recipes')
-          PYTHON
+        run: engine/target/release/rootbeer-forge --catalog packages verify-bundle bundle
       - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d # v2.0.1
         with:
           version: 1.3.0

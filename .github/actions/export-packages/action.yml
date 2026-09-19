@@ -32,8 +32,19 @@ runs:
         fi
         if [ "$jobs" -gt 64 ]; then jobs=64; fi
         options=()
-        if [ "$SHOULD_RECHECK" = true ]; then options+=(--recheck); fi
+        if [ "$SHOULD_RECHECK" = true ] && [ "$GITHUB_RUN_ATTEMPT" = 1 ]; then options+=(--recheck); fi
         "$ENGINE" --catalog "$CATALOG" check
+        "$ENGINE" --catalog "$CATALOG" export --plan \
+          --registry tale/rootbeer-index --output package-plan.json \
+          --cache .package-results --cache-context "$CACHE_CONTEXT" "${options[@]}"
+        python3 - <<'PYTHON'
+        import collections, json, os
+        with open('package-plan.json') as source:
+            plan = json.load(source)
+        counts = collections.Counter(item['action'] for item in plan['packages'].values())
+        with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+            summary.write(f"Package plan: {counts['reuse']} reusable, {counts['qualify']} need qualification.\n")
+        PYTHON
         "$ENGINE" --catalog "$CATALOG" export \
           --registry tale/rootbeer-index --output "$RUNNER_TEMP/package-result" --workers 2 --jobs "$jobs" \
           --cache .package-results --cache-context "$CACHE_CONTEXT" "${options[@]}"

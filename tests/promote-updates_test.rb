@@ -52,6 +52,7 @@ class PromotionTest < Minitest::Test
           command('git', 'add', '.')
           command('git', 'commit', '-qm', 'change input')
           refute same_discovery_inputs?(previous, 'HEAD'), path
+          refute same_inputs?(previous, 'HEAD'), path if path.start_with?('.github/scripts/')
         end
       end
     end

@@ -88,8 +88,9 @@ For problems with `rb` itself, use the [Rootbeer repository](https://github.com/
 This repository owns package discovery, build checks, and publication. The engine
 repository owns the tools and their regression tests.
 
-The [publication workflow](.github/workflows/packages.yml) verifies recipes and
-publishes the signed index using `rootbeer-forge`. The exact engine commit lives in
+The [verification workflow](.github/workflows/packages.yml) qualifies recipes; the
+[publication workflow](.github/workflows/publish.yml) publishes the signed index
+using `rootbeer-forge`. The exact engine commit lives in
 [`engine-revision`](engine-revision); changing it runs package CI and discovery.
 Update the pin together with any required recipe or workflow migrations.
 
@@ -103,6 +104,33 @@ successful work from failed runs. Compatible results survive unrelated engine
 commits. PR caches remain scoped to that PR and support its retries; main's caches
 also seed new PRs. Promoting a verified bundle does not copy a PR cache into main.
 Scheduled full checks refresh main's cache.
+
+Verification also retains an immutable `package-results-<runner>-<attempt>`
+checkpoint for 14 days, including successful qualifications and dependency build
+results when another package fails. Checkpoints omit downloads and reconstructed
+stores. A retry restores the latest unexpired checkpoint from an earlier attempt
+of the **same run**, verifies its GitHub artifact SHA-256, and checks repository,
+source revision, engine pin, platform, and recheck mode before installing it. A
+changed runner environment leaves that checkpoint unused. Forge then verifies
+recipe compatibility and receipt/archive contents before reuse. Checkpoint
+restoration rejects traversal, symlinks, and duplicate entries.
+
+An explicit recheck discards prior qualification and compilation entries before
+starting. Retries discard the ordinary cache's result entries again, then recover
+only the recheck's own checkpoint. Completed work is reused; old baseline results
+cannot satisfy the recheck. Source downloads remain cached.
+
+Each platform emits `package-plan-<runner>-<attempt>` with Forge's JSON decisions
+and adds reuse/qualification counts to the job summary. Ordinary engine/platform
+bundle outputs are replaced on rerun so a failed upload can be retried; checkpoint
+names remain unique to their attempt. Verified bundles now remain available for
+14 days too.
+
+Checkpoints are retry transport, not cross-run producer admission. They do not
+copy PR results into main's cache or grant registry credentials to build jobs.
+Cancelled jobs or jobs that time out before checkpoint upload cannot retain their
+latest work. OCI retention and promotion after Actions artifacts expire remain
+separate follow-up work.
 Package updates are independent of Rootbeer binary
 releases. See [index hosting and trust](https://rootbeer.tale.me/contributing/package-hosting)
 for deployment and client verification details.
@@ -130,11 +158,12 @@ license and reject source selectors.
 
 Pull requests run package verification without publishing credentials. Successful
 runs retain a verified bundle. After merge, `Publish packages` reuses that bundle
-only when the recipes, engine pin, and verification workflow and actions match the
-approved inputs. A changed pipeline, missing bundle, or explicit recheck causes a
+only when the recipes, engine pin, verification workflow, actions, and helper
+scripts match the approved inputs. A changed pipeline, missing bundle, or explicit recheck causes a
 fresh verification build.
 
 The publishing job builds its own engine in a separate cache namespace. It checks
-the downloaded bundle's GitHub artifact digest and compares its catalog with the
-merged recipes before uploading binaries and signing the index. It never runs an
+the downloaded bundle's GitHub artifact digest, then runs `verify-bundle` against
+the approved recipes to validate complete coverage and local contents before
+uploading binaries and signing the index. It never runs an
 engine executable uploaded by a pull request. Scheduled runs perform full rechecks.

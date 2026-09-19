@@ -7,6 +7,9 @@ inputs:
   runner:
     description: Runner image label
     required: true
+  recheck:
+    description: Start a fresh recheck and recover only results from this run
+    default: "false"
 outputs:
   cache-key:
     description: Key for saving completed results
@@ -38,3 +41,16 @@ runs:
         restore-keys: |
           results-v4-${{ inputs.runner }}-${{ steps.environment.outputs.digest }}-${{ inputs.revision }}-
           results-v4-${{ inputs.runner }}-${{ steps.environment.outputs.digest }}-
+    - name: Recover completed work from an earlier attempt
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        SHOULD_RECHECK: ${{ inputs.recheck }}
+        RESULT_RUNNER: ${{ inputs.runner }}
+        RESULT_CONTEXT: ${{ steps.environment.outputs.digest }}
+        ENGINE_REVISION: ${{ inputs.revision }}
+      run: |
+        options=()
+        if [ "$SHOULD_RECHECK" = true ]; then options+=(--recheck); fi
+        python3 .github/scripts/package-results.py restore \
+          --runner "$RESULT_RUNNER" --context "$RESULT_CONTEXT" --engine-revision "$ENGINE_REVISION" "${options[@]}"

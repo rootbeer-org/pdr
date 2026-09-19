@@ -45,7 +45,7 @@ def workflow(sha)
 end
 
 def same_inputs?(source, target)
-  %w[packages engine-revision .github/actions].all? do |path|
+  %w[packages engine-revision .github/actions .github/scripts].all? do |path|
     command('git', 'rev-parse', "#{source}:#{path}") == command('git', 'rev-parse', "#{target}:#{path}")
   end
 end
