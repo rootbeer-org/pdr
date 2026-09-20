@@ -93,6 +93,7 @@ jobs:
             git -C site add public
             git -C site commit -m "publish package discovery $GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT"
             if git -C site push origin HEAD:gh-pages; then exit 0; fi
+            echo "Retrying discovery merge ($attempt/5)" >&2
           done
           echo 'Discovery changed concurrently; retry this metadata job.' >&2
           exit 1

@@ -1,11 +1,11 @@
-# Rootbeer package index
+# Rootbeer package distribution
 
-Packages for [Rootbeer](https://rootbeer.tale.me), with package recipes
+Packages for [Rootbeer](https://rbpkg.com), with package recipes
 for Apple silicon macOS and Linux on ARM64 and x86-64. Availability varies by package.
 
-[Browse packages](https://rootbeer.tale.me/packages/) ·
-[Install Rootbeer](https://rootbeer.tale.me/guide/getting-started) ·
-[Package guide](https://rootbeer.tale.me/guide/packages)
+[Browse packages](https://rbpkg.com/packages/) ·
+[Install Rootbeer](https://rbpkg.com/guide/getting-started) ·
+[Package guide](https://rbpkg.com/guide/packages)
 
 ## Use a package
 
@@ -41,7 +41,7 @@ served. Published snapshots, receipts, and archives remain available for existin
 
 Recipes live in [`packages/`](packages/), one schema 2 Lua file per tool. Start with an
 existing recipe such as [`jq.lua`](packages/jq.lua), then follow the
-[package authoring guide](https://rootbeer.tale.me/contributing/packaging).
+[package authoring guide](https://rbpkg.com/contributing/packaging).
 
 - Use the canonical lowercase name and exact upstream versions.
 - Separate `upstream` discovery, `inputs`, optional `build`, and `outputs`.
@@ -63,24 +63,17 @@ downloads or builds packages and runs their declared checks, so it requires netw
 access and can take time. Open a pull request with the recipe changes; CI verifies all declared
 platforms before publication.
 
-The [upstream discovery workflow](.github/workflows/discovery.yml) checks for new
-releases daily and automatically promotes candidates after verification on every
-supported platform. Publication checks artifact digests and catalog equality, commits
-updated recipes, and publishes the exact verified bundle without rebuilding. Stale
-catalog or pipeline inputs prevent promotion; subsequent scans retry using cached
-results. Packages without discovery rules remain visible as untracked.
-
-Rootbeer updates also run every 15 minutes, or immediately when successful Rootbeer
-CI pushes the `rootbeer-update` request file (repository dispatch is also supported). Only successful main commits are
-eligible; older recipes remain pinned. Configure `INDEX_UPDATE_SSH_KEY` in `tale/rootbeer`
-with a writable deploy key scoped to this repository to enable immediate notification. Polling
-works without it. `PUBLISH_INDEX` controls both automatic promotion and publication;
-main must allow the workflow token to push verified recipe updates.
+Set `PACKAGE_DISCOVERY=true` to use the individual publication flow below. This
+pauses legacy automatic upstream builds and promotion so they cannot overwrite
+new discovery or build candidates that the retired publisher cannot publish.
+Recipe updates currently need approval on main and an explicit package selection.
+Automatic upstream promotion and dependency builds will migrate separately.
 
 ## Individual package publication
 
-The new `Build selected packages` workflow is a manual rollout path for exact,
-dependency-free source packages already approved on main. Each platform plans
+The `Build selected packages` workflow publishes exact, dependency-free source
+packages and upstream binary archives already approved on main. DMG/PKG preparation
+is not supported yet. Each platform plans
 missing results, each package builds on its own runner using all CPU cores, and
 each successful build gets a separate signing job. There is no catalog assembly
 barrier. Failures leave other package publications intact.
@@ -104,8 +97,19 @@ Missing or incompatible evidence stops recovery instead of rebuilding packages.
 `package-engine-revision` pins the attested Forge binary for this path. The existing
 catalog pipeline keeps `engine-revision` until cutover, so deploying package jobs
 does not invalidate catalog receipts or trigger a catalog-wide qualification.
-This path does not switch the existing PR/discovery workflows or catalog search over yet.
-Dependency results and automatic PR-to-main promotion are subsequent stages.
+Successful jobs add their signed records to `https://pdr.rbpkg.com/current.json`.
+The web UI and `rb search` share this single discovery manifest; installation
+fetches only the selected record and its archive. Concurrent updates preserve
+other packages, and pending replacements keep their previous published defaults.
+
+```sh
+gh workflow run package-builds.yml -f packages='fd@10.5.0'
+```
+
+Leave `packages` empty to refresh only discovery. At cutover, this converts the
+existing signed catalog into individual records while preserving its approvals
+and receipts. It does not rebuild packages. Existing dependency-bearing artifacts
+remain usable; preparing new dependency-bearing packages is a subsequent stage.
 
 ## Report a problem
 
@@ -113,7 +117,11 @@ For a missing tool, broken package, or outdated version, [open an issue here](ht
 Include the package, requested version, platform, and error output when applicable.
 For problems with `rb` itself, use the [Rootbeer repository](https://github.com/tale/rootbeer/issues).
 
-## Maintenance
+## Legacy pipeline reference
+
+The following describes retained tooling for old candidates and locks. Its
+automatic publisher is disabled once `PACKAGE_DISCOVERY=true`; use individual
+publication above for new packages. Keep `engine-revision` unchanged during cutover.
 
 This repository owns package discovery, build checks, and publication. The engine
 repository owns the tools and their regression tests.
@@ -167,7 +175,7 @@ in Actions artifacts for 14 days; the collector retains complete candidates in
 OCI before those artifacts expire. PR caches remain isolated from main.
 
 Package updates are independent of Rootbeer binary
-releases. See [index hosting and trust](https://rootbeer.tale.me/contributing/package-hosting)
+releases. See [index hosting and trust](https://rbpkg.com/contributing/package-hosting)
 for deployment and client verification details.
 
 Retain published snapshots, receipts, and package archives: existing lockfiles

@@ -119,7 +119,7 @@ jobs:
 
   publish:
     needs: [select, verify, retain]
-    if: always() && github.ref == 'refs/heads/main' && needs.select.result == 'success' && needs.select.outputs.ready == 'true' && (needs.retain.result == 'success' || (needs.verify.result == 'skipped' && needs.select.outputs.candidate != '')) && vars.PUBLISH_INDEX == 'true'
+    if: always() && vars.PACKAGE_DISCOVERY != 'true' && github.ref == 'refs/heads/main' && needs.select.result == 'success' && needs.select.outputs.ready == 'true' && (needs.retain.result == 'success' || (needs.verify.result == 'skipped' && needs.select.outputs.candidate != '')) && vars.PUBLISH_INDEX == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     environment: package-publishing
