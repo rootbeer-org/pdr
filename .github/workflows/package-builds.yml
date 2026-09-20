@@ -7,6 +7,10 @@ on:
         description: Exact packages to publish, separated by spaces (name@version)
         required: true
         type: string
+      reuse-run:
+        description: Recover verified artifacts from this main-branch run without rebuilding
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -27,3 +31,4 @@ jobs:
     with:
       runner: ${{ matrix.runner }}
       packages: ${{ inputs.packages }}
+      reuse-run: ${{ inputs.reuse-run }}

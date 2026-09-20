@@ -1,6 +1,10 @@
 name: Build and publish one package
 on:
   workflow_call:
+    secrets:
+      INDEX_SIGNING_KEY:
+        description: Supplied by the package-publishing environment in the publisher job
+        required: false
     inputs:
       runner:
         type: string
@@ -17,6 +21,12 @@ on:
       context:
         type: string
         required: true
+      artifact:
+        type: string
+        default: ""
+      reuse-run:
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -32,6 +42,7 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: read
+      actions: read
     outputs:
       artifact: ${{ steps.retain.outputs.artifact-id }}
     steps:
@@ -63,7 +74,7 @@ jobs:
           PACKAGE_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
         run: python3 .github/scripts/package-jobs.py
       - name: Build and check this package
-        if: steps.reuse.outputs.has-work == 'true'
+        if: steps.reuse.outputs.has-work == 'true' && inputs.artifact == ''
         env:
           PACKAGE: ${{ inputs.package }}
           INPUT_KEY: ${{ inputs.key }}
@@ -72,6 +83,15 @@ jobs:
           engine-bin/rootbeer-forge --catalog packages build "$PACKAGE" \
             --input-key "$INPUT_KEY" --output result \
             --cache "$RUNNER_TEMP/package-cache" --cache-context "$BUILD_CONTEXT"
+      - name: Recover the admitted verified build
+        if: steps.reuse.outputs.has-work == 'true' && inputs.artifact != ''
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ inputs.artifact }}
+          run-id: ${{ inputs.reuse-run }}
+          github-token: ${{ github.token }}
+          path: result
+          merge-multiple: true
       - name: Retain this verified build
         if: steps.reuse.outputs.has-work == 'true'
         id: retain
@@ -122,6 +142,7 @@ jobs:
           INDEX_SIGNING_KEY: ${{ secrets.INDEX_SIGNING_KEY }}
           INDEX_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
         run: |
+          : "${INDEX_SIGNING_KEY:?The publication environment did not provide its signing key}"
           umask 077
           key="$RUNNER_TEMP/package-key.der"
           trap 'rm -f "$key"' EXIT

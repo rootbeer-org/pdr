@@ -96,6 +96,11 @@ already published results. Each platform accepts up to GitHub's 256 matrix jobs,
 with at most 16 active package jobs; larger requests must be split. Packages whose
 GHCR repositories are not public must have registry access configured first.
 
+After a workflow fix, dispatch `Build selected packages` with `reuse-run` set to
+the original run ID. The planner admits only successful package jobs from completed
+main-branch verification, matches exact input keys, and restores immutable artifacts.
+Missing or incompatible evidence stops recovery instead of rebuilding packages.
+
 `package-engine-revision` pins the attested Forge binary for this path. The existing
 catalog pipeline keeps `engine-revision` until cutover, so deploying package jobs
 does not invalidate catalog receipts or trigger a catalog-wide qualification.

@@ -8,6 +8,9 @@ on:
       packages:
         required: true
         type: string
+      reuse-run:
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -17,6 +20,9 @@ jobs:
     name: Find missing signed results
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
     outputs:
       matrix: ${{ steps.plan.outputs.matrix }}
       has-work: ${{ steps.plan.outputs.has-work }}
@@ -43,6 +49,9 @@ jobs:
           BUILD_CONTEXT: ${{ steps.tools.outputs.context }}
           PACKAGE_REGISTRY: ${{ github.repository }}
           PACKAGE_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
+          GH_TOKEN: ${{ github.token }}
+          REUSE_RUN: ${{ inputs.reuse-run }}
+          PACKAGE_RUNNER: ${{ inputs.runner }}
         run: python3 .github/scripts/package-jobs.py
 
   package:
@@ -64,3 +73,5 @@ jobs:
       name: ${{ matrix.name }}
       key: ${{ matrix.key }}
       context: ${{ needs.plan.outputs.context }}
+      artifact: ${{ matrix.artifact || '' }}
+      reuse-run: ${{ inputs.reuse-run }}
