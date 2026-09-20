@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "build_key": "1e90efb0ddcf2c861e312f8a8f35f4eea5c29db0431d6c9bb1c6661226d28897",
+  "build_environment": "0bf2397f3368e0f17c73edec39b1b5fe7f342d6227c7927d6edcf16d73e88843",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "33b9adba6728f93e9ba5b81131153161704fe2486d46871611fbab6b7c225591",
+  "catalog_sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "custom",
+    "url": "https://github.com/Cyan4973/xxHash/archive/refs/tags/v0.8.3.tar.gz",
+    "sha256": "aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80",
+    "archive": "tar.gz",
+    "strip_prefix": "xxHash-0.8.3",
+    "configure": [],
+    "dependencies": [],
+    "libraries": [
+      "lib/libxxhash.a"
+    ],
+    "steps": {
+      "configure": [],
+      "build": [
+        [
+          "make",
+          "-j{jobs}",
+          "libxxhash.a",
+          "xxhsum"
+        ]
+      ],
+      "check": [
+        [
+          "make",
+          "check"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "PREFIX=/",
+          "DESTDIR={prefix}",
+          "install_libxxhash.a",
+          "install_libxxhash.includes",
+          "install_libxxhash.pc",
+          "install_xxhsum",
+          "install_man"
+        ]
+      ]
+    }
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "a13c5e22e2ad8c542dc358b4e129bba2c2ce744b"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "xxhash",
+    "version": "0.8.3",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpKjCei3/.tmpiENknf/build/package.tar.gz",
+        "sha256": "f51fbf3bb3316dc2e68048207993143f5d8369758643abb23956f8afc4ad0f81"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "xxhsum": "bin/xxhsum"
+      }
+    },
+    "output_sha256": "f8f6f304114df7281b8933969469561bd1506a0ccbe2348cf1cf5d0164cab84a"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "build_key": "4b090223d4c4502582f6dc501ba1a8706cf2b4536bd70f2a07b05e683624dc89",
+  "build_environment": "42294d9d924396c14d0421e8abb98ed1fde6d02b264a2684e6e5912c6c57e782",
+  "environment": {
+    "schema": 1,
+    "system": "x86_64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "6452af2eea333b8c65e1adb92964fc8f97863ab003fa13f9d12bff5345cd7dbe"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769"
+      },
+      "cargo": {
+        "path": "/home/runner/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/cargo",
+        "sha256": "da77c8b33849312255ccde3179198ada4c8deb370488d050286146b1d1b27e14"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "a7ae8b838a75711c06f86a2a8293dcad85a20b564670a120717e704c436e6f3a"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "60254978b8ee2c1b21b41d16a18a621dbbcc72e43eb2fa9f916818256c77e9ee"
+      },
+      "rustc": {
+        "path": "/home/runner/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "sha256": "859254978c0a0402c32f949f6de0d99aee73be8d15f45aac00ae1448aac51e74"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "86d31f6fb799e91fa21bad341484564510ca287703a16e9e46c53338776f4f42"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "c6e023b172383fae5318c600e6f2f3a153513df62bf06ad6c9269296d2a78e89"
+      }
+    },
+    "inputs": {
+      "rust-libraries": {
+        "path": "/home/runner/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib",
+        "sha256": "7df0ff21ef0ede4acfb1183dd9f42521a447e473116f28be66502d88aa36a17b"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "ffe6c5b3e018c6a08a3156eda4594729c93a8d1732897587d4d187974e0c7539",
+  "catalog_sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c",
+  "revision": 1,
+  "system": "x86_64-linux",
+  "build": {
+    "git": {
+      "github": "tale/rootbeer",
+      "branch": "main"
+    },
+    "backend": "rust",
+    "rust": {
+      "packages": [
+        "rootbeer-cli",
+        "rootbeer-forge"
+      ],
+      "features": [],
+      "no_default_features": false,
+      "environment": {
+        "RB_BUILD_TIMESTAMP": "2026-09-20 05:15 UTC",
+        "ROOTBEER_INDEX_PUBLIC_KEY": "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
+        "ROOTBEER_INDEX_URL": "https://tale.github.io/rootbeer-index/current.json"
+      }
+    },
+    "url": "https://codeload.github.com/tale/rootbeer/tar.gz/7e6f55977be8609efd37db42f4cd1b0628e53307",
+    "sha256": "a6539590f1958a021d897c014c1fbcf6887e3bd237694c99028f74b761fd7fcc",
+    "archive": "tar.gz",
+    "strip_prefix": "rootbeer-7e6f55977be8609efd37db42f4cd1b0628e53307",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "a13c5e22e2ad8c542dc358b4e129bba2c2ce744b"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)"
+  },
+  "package": {
+    "name": "rootbeer",
+    "version": "0.1.0-main+7e6f55977be8",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmp3FKDgn/.tmpbmn078/build/package.tar.gz",
+        "sha256": "8698f256a6bd40980f8b1b4b7f0f7b4e004b4af02661920df2c031e2961e6d1c"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "rb": "bin/rb",
+        "rootbeer-forge": "bin/rootbeer-forge"
+      }
+    },
+    "output_sha256": "37a2692105529e6e44694e5be2cc2e33c9ad29e4a73eefca772108cb14c1bb94"
+  }
+}

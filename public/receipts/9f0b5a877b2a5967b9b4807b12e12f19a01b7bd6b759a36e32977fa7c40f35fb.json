@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "build_key": "30dd6581a604fa7e3287da91ef10bd17da0062cd0e8d0f177a5159933695fe90",
+  "build_environment": "9b65c50690460b8a4b00b58490b7631cf2d766c5f52c9ce8f84f490e3473af97",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "b7e8d4dc44f62d8101fbc65e9b989bb3214d5a1df051e27e6160dc37fd1025ea",
+  "catalog_sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "autotools",
+    "url": "https://ftp.gnu.org/gnu/libiconv/libiconv-1.19.tar.gz",
+    "sha256": "88dd96a8c0464eca144fc791ae60cd31cd8ee78321e67397e25fc095c4a19aa6",
+    "archive": "tar.gz",
+    "strip_prefix": "libiconv-1.19",
+    "configure": [
+      "--disable-shared",
+      "--enable-static",
+      "--disable-rpath",
+      "--disable-nls"
+    ],
+    "dependencies": [],
+    "libraries": [
+      "lib/libiconv.a",
+      "lib/libcharset.a"
+    ]
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "a13c5e22e2ad8c542dc358b4e129bba2c2ce744b"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "make": "GNU Make 4.3\nBuilt for aarch64-unknown-linux-gnu\nCopyright (C) 1988-2020 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "libiconv",
+    "version": "1.19",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpv2SZCZ/.tmptnnqRB/build/package.tar.gz",
+        "sha256": "613fabf0b6d5c6be0269cc69b7a52bd4ee435ce77f9a649a8fdd6562eb108e89"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "iconv": "bin/iconv"
+      }
+    },
+    "output_sha256": "d9fe654fff9fc35bd7cb29f6292edbd2dcf58cc4f133e77bc96b19967ef06fc3"
+  }
+}

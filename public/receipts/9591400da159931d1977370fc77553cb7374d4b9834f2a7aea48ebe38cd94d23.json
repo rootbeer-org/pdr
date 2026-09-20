@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "build_key": "f8b810226b867d48d241eb629252da35e1cdab429b90247f78453e1d7f9ec421",
+  "build_environment": "0bf2397f3368e0f17c73edec39b1b5fe7f342d6227c7927d6edcf16d73e88843",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "80a6f9426f17e7f1d9914a7e55d6cb91e9b2334de554566317b96cb508a36dc7",
+  "catalog_sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "autotools",
+    "url": "https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.2.tar.gz",
+    "sha256": "e82664b170064e62331962126b259d452d53b227bb4a93ab20040d846fec01d8",
+    "archive": "tar.gz",
+    "strip_prefix": "libunistring-1.4.2",
+    "configure": [
+      "--disable-shared",
+      "--enable-static",
+      "--disable-rpath",
+      "--without-libiconv-prefix"
+    ],
+    "dependencies": [
+      "libiconv@1.19"
+    ],
+    "libraries": [
+      "lib/libunistring.a"
+    ]
+  },
+  "dependencies": {
+    "libiconv@1.19": {
+      "name": "libiconv",
+      "version": "1.19",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpKjCei3/.tmpLdq5Vf/build/dependency-libiconv@1.19/package.tar.gz",
+          "sha256": "e3dc930f9909ebdcb59ace21489bad15a987ffb1a626ee4bda616196563821db"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "iconv": "bin/iconv"
+        }
+      },
+      "output_sha256": "699b67c5d895992ee285ca984938c2cfbbde88a4a839691809ececb67fa4a293"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "a13c5e22e2ad8c542dc358b4e129bba2c2ce744b"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "libunistring",
+    "version": "1.4.2",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpKjCei3/.tmpLdq5Vf/build/package.tar.gz",
+        "sha256": "c9a039a42b8a287c59353ad5c6c71b19d1ea24bdb565f242f5095d5291c3af04"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {}
+    },
+    "output_sha256": "f0aec291d19b8785abf0d9ef15ed4fef191a84dfa61beb0901ce08a31d3bf8b3"
+  }
+}

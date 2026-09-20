@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "build_key": "69e7009bd7fc844e68c2bf07ce0d979316f30c3d45d0807976b02ad460fe559d",
+  "build_environment": "0bf2397f3368e0f17c73edec39b1b5fe7f342d6227c7927d6edcf16d73e88843",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "c65b90c31c46ac3f466d0c253bb55b9d0eab498a80b78eada97df834cadb3b3f",
+  "catalog_sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c",
+  "revision": 1,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "autotools",
+    "url": "https://ftp.gnu.org/gnu/inetutils/inetutils-2.8.tar.gz",
+    "sha256": "57b3cf4f77555992881e5ba2a09a63b05aa2c56342a60ed4305b5f45938390b5",
+    "archive": "tar.gz",
+    "strip_prefix": "inetutils-2.8",
+    "configure": [
+      "--disable-servers",
+      "--disable-clients",
+      "--enable-telnet",
+      "--disable-nls",
+      "--disable-rpath",
+      "--without-idn",
+      "--without-libreadline-prefix",
+      "--with-ncurses-include-dir={dependencies}/include"
+    ],
+    "dependencies": [
+      "ncurses@6.6"
+    ]
+  },
+  "dependencies": {
+    "ncurses@6.6": {
+      "name": "ncurses",
+      "version": "6.6",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmppTqsKH/build/dependency-ncurses@6.6/package.tar.gz",
+          "sha256": "14c2a55614da74d751fe3d930a544dac823acd2e831346600c34c92c1e207262"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "infocmp": "bin/infocmp",
+          "tic": "bin/tic",
+          "tput": "bin/tput"
+        }
+      },
+      "output_sha256": "669b99307afa9f419f58eb9d3da06c6b43050ab5eb05944d2bc3933cd4ccba44"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "b41b976b816e7cb53ab8d568617023c52fbddc1d"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "telnet",
+    "version": "2.8",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmppTqsKH/build/package.tar.gz",
+        "sha256": "6dffcd9685d3bc5e38286c0ab3966ee06037f4ec2b3cb7fe42c1bc5eb57d5f01"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "telnet": "bin/telnet"
+      }
+    },
+    "output_sha256": "9561c1b644901fe6d9a30a052200fa3444692fa96fb6c3a968286ac31e3a4a30"
+  }
+}

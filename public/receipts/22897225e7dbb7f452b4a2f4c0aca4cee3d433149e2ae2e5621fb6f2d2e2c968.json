@@ -1,0 +1,545 @@
+{
+  "schema": 1,
+  "build_key": "e091fc3b925fa9b6b226ff96abee530e6982744841814956a8fb4f7c22bb7c4f",
+  "build_environment": "0bf2397f3368e0f17c73edec39b1b5fe7f342d6227c7927d6edcf16d73e88843",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {},
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "72e4a446ca9160a2079584ef35be3635dd43bf2968e9ec6a030dc8bece8bb7bd",
+  "catalog_sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c",
+  "revision": 4,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "custom",
+    "url": "https://www.kernel.org/pub/software/scm/git/git-2.55.0.tar.xz",
+    "sha256": "457fdb04dc8728e007d4688695e6912e6f680727920f2a40bf11eacc17505357",
+    "archive": "tar.xz",
+    "strip_prefix": "git-2.55.0",
+    "configure": [],
+    "patches": [
+      "--- a/exec-cmd.c\n+++ b/exec-cmd.c\n@@ -143,7 +143,8 @@\n \t\ttrace_printf(\n \t\t\t\"trace: resolved executable path from Darwin stack: %s\\n\",\n \t\t\tpath);\n-\t\tstrbuf_addstr(buf, path);\n+\t\tif (!strbuf_realpath(buf, path, 0))\n+\t\t\treturn -1;\n \t\treturn 0;\n \t}\n \treturn -1;\n"
+    ],
+    "dependencies": [
+      "curl@8.22.0",
+      "expat@2.8.4",
+      "openssl@4.0.2",
+      "zlib@1.3.2",
+      "libiconv@1.19",
+      "pkgconf@3.0.7"
+    ],
+    "steps": {
+      "configure": [
+        [
+          "/bin/sh",
+          "-ec",
+          "printf '%s' \"$1\" > config.mak; printf \"CURL_LDFLAGS = %s\\nCURL_CFLAGS = %s\\n\" \"$(pkg-config --static --libs libcurl)\" \"$(pkg-config --cflags libcurl)\" >> config.mak",
+          "rootbeer-git",
+          "prefix = /\nRUNTIME_PREFIX = YesPlease\nINSTALL_SYMLINKS = YesPlease\nNO_GETTEXT = YesPlease\nNEEDS_LIBICONV = YesPlease\nNO_RUST = YesPlease\nNO_TCLTK = YesPlease\nPERL_PATH = /usr/bin/perl\nPYTHON_PATH = /usr/bin/python3\nUSE_LIBPCRE =\n"
+        ]
+      ],
+      "build": [
+        [
+          "make",
+          "-j{jobs}"
+        ]
+      ],
+      "check": [
+        [
+          "make",
+          "-j{jobs}",
+          "test",
+          "NO_SVN_TESTS=YesPlease",
+          "T=t0000-basic.sh t0001-init.sh t1300-config.sh t1500-rev-parse.sh t5500-fetch-pack.sh t5601-clone.sh t5700-protocol-v1.sh"
+        ]
+      ],
+      "install": [
+        [
+          "make",
+          "DESTDIR={prefix}",
+          "install"
+        ]
+      ]
+    }
+  },
+  "dependencies": {
+    "brotli@1.2.0": {
+      "name": "brotli",
+      "version": "1.2.0",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-brotli@1.2.0/package.tar.gz",
+          "sha256": "7ee8608a44e621300171a2c6beefaf9fc8bc95bd922899b0a04670ef2662284b"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "brotli": "bin/brotli"
+        }
+      },
+      "output_sha256": "53d0951dda62be21c14e0476fbee1ee57e3a6a08b220a2091058242e74ac3dbe"
+    },
+    "cmake@4.4.3": {
+      "name": "cmake",
+      "version": "4.4.3",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-cmake@4.4.3/package.tar.gz",
+          "sha256": "28c95826c9dc8956b683674ea4a2c56656aad241eb6b882694f5abb22ecf3036"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "cmake": "bin/cmake",
+          "cpack": "bin/cpack",
+          "ctest": "bin/ctest"
+        }
+      },
+      "output_sha256": "e15258b07911334c9144440f2eb492e9c131f0666720371d146324abe64aed15"
+    },
+    "curl@8.22.0": {
+      "name": "curl",
+      "version": "8.22.0",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-curl@8.22.0/package.tar.gz",
+          "sha256": "302aad309fe41b9aa81d0618c2fa1da4a526d5da6222d3e78508708145881186"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "curl": "bin/curl",
+          "curl-config": "bin/curl-config"
+        }
+      },
+      "output_sha256": "f7c39b023190d1964a32da39fe01adf7f8b546ea6b2009f42a9b4a303fe14401"
+    },
+    "expat@2.8.4": {
+      "name": "expat",
+      "version": "2.8.4",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-expat@2.8.4/package.tar.gz",
+          "sha256": "77a8e59643e2001dc74a83632756009f4d3a06ddd51f17ebc3eaf7868bcb7e37"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "xmlwf": "bin/xmlwf"
+        }
+      },
+      "output_sha256": "5534bc60917f019ba638d50c9f9b680fa5e16c3091ef7878b1026bbf4400094a"
+    },
+    "libiconv@1.19": {
+      "name": "libiconv",
+      "version": "1.19",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-libiconv@1.19/package.tar.gz",
+          "sha256": "e3dc930f9909ebdcb59ace21489bad15a987ffb1a626ee4bda616196563821db"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "iconv": "bin/iconv"
+        }
+      },
+      "output_sha256": "699b67c5d895992ee285ca984938c2cfbbde88a4a839691809ececb67fa4a293"
+    },
+    "libidn2@2.3.8": {
+      "name": "libidn2",
+      "version": "2.3.8",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-libidn2@2.3.8/package.tar.gz",
+          "sha256": "78c0385868be5911d3f02a439d54d6da6c8cc262bb310f4c84788de66b81f201"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "idn2": "bin/idn2"
+        }
+      },
+      "output_sha256": "454cda465f48aa7b668c8dd4d1962b3023bc0cc7c4a18dbc569650b1f9047bd8"
+    },
+    "libpsl@0.23.3": {
+      "name": "libpsl",
+      "version": "0.23.3",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-libpsl@0.23.3/package.tar.gz",
+          "sha256": "9e8d19456bb8a70840ebb50371cd3792119ebc46102b52b3ae5aa92602066fe2"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "psl": "bin/psl"
+        }
+      },
+      "output_sha256": "c7ae942e031f57de12555263b0766e161da2747aa8205883ad12b18637300b69"
+    },
+    "libssh2@1.11.1": {
+      "name": "libssh2",
+      "version": "1.11.1",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-libssh2@1.11.1/package.tar.gz",
+          "sha256": "dfefb47c62ae5b618a48c0ff8b1923ae568230d86f842835205207040b7a7d4a"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "6819f9082b19d6d56f449a1bd686e034980b1c9f56858a3a9b2a21fa69c92323"
+    },
+    "libunistring@1.4.2": {
+      "name": "libunistring",
+      "version": "1.4.2",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-libunistring@1.4.2/package.tar.gz",
+          "sha256": "c9a039a42b8a287c59353ad5c6c71b19d1ea24bdb565f242f5095d5291c3af04"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "f0aec291d19b8785abf0d9ef15ed4fef191a84dfa61beb0901ce08a31d3bf8b3"
+    },
+    "lz4@1.10.0": {
+      "name": "lz4",
+      "version": "1.10.0",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-lz4@1.10.0/package.tar.gz",
+          "sha256": "ac27eb54bb3af36724c9a0623d7dfe6f056d75f77e4ec3e0415c1aeb988c1715"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lz4": "bin/lz4",
+          "lz4c": "bin/lz4c",
+          "lz4cat": "bin/lz4cat",
+          "unlz4": "bin/unlz4"
+        }
+      },
+      "output_sha256": "2041ca43de037702c84334267de7209b3018c7270e15c1f86c1e16349386bbf5"
+    },
+    "nghttp2@1.70.0": {
+      "name": "nghttp2",
+      "version": "1.70.0",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-nghttp2@1.70.0/package.tar.gz",
+          "sha256": "aca7d6f2ae832ab5e5a85bdb0b418afcdb5fb9b0ecde3ca67438af6c28b6e1f7"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "fb75eda4841db5308e4717c5337574263d2064eac5f5c9acd1a8c39cb5fe129a"
+    },
+    "nghttp3@1.18.0": {
+      "name": "nghttp3",
+      "version": "1.18.0",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-nghttp3@1.18.0/package.tar.gz",
+          "sha256": "9402d3076cc26cebe680164d4e3c6e4a180c1d5d9db73cd9a9199b2645780f08"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "144269168b6ec48287748b2595823474fe51869e01dbf6a5fc1e8a853b6f1a92"
+    },
+    "ngtcp2@1.25.0": {
+      "name": "ngtcp2",
+      "version": "1.25.0",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-ngtcp2@1.25.0/package.tar.gz",
+          "sha256": "ce383ee3d2f4c0464f893b1bd47e486e6c4190a51526b0d47818a5e8593a773c"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "1740aafb8bdcabfcaffd05c79437b23f71e21ecf19f501338818498fecb4a0b4"
+    },
+    "openssl@4.0.2": {
+      "name": "openssl",
+      "version": "4.0.2",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-openssl@4.0.2/package.tar.gz",
+          "sha256": "5e9135b3f529a7b4d8a51e1359375b79cd37c2d3615055cf9f7bbfec868b837a"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "openssl": "bin/openssl"
+        }
+      },
+      "output_sha256": "44e3773f061f59b00d96ed0b2a566f249404a28aa4c4eff3726a8bfca96dce6c"
+    },
+    "pkgconf@3.0.7": {
+      "name": "pkgconf",
+      "version": "3.0.7",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-pkgconf@3.0.7/package.tar.gz",
+          "sha256": "d0d600e5339e6e35e20952e50983c46900bbdfb0b91271d80f8352e609d021ca"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "pkg-config": "bin/pkg-config",
+          "pkgconf": "bin/pkgconf"
+        }
+      },
+      "output_sha256": "2fcf3aa1300a6c081f9acb02cb13d413a05797d061fe0908d967e5235d27bba9"
+    },
+    "xz@5.8.3": {
+      "name": "xz",
+      "version": "5.8.3",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-xz@5.8.3/package.tar.gz",
+          "sha256": "3cd7e04ffb9f4d7c90060dfc2f4b10811af63dfb1e91a2defcb256bba3ec051d"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "lzmadec": "bin/lzmadec",
+          "lzmainfo": "bin/lzmainfo",
+          "xz": "bin/xz",
+          "xzdec": "bin/xzdec"
+        }
+      },
+      "output_sha256": "39ea1cb14a54ade0ea0a7cdc00edfb133fbd67545be3524f1fed40c9404aa0cb"
+    },
+    "zlib@1.3.2": {
+      "name": "zlib",
+      "version": "1.3.2",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-zlib@1.3.2/package.tar.gz",
+          "sha256": "0e3afe043cc5be5d14721c50a4648a96341c8bf4c37874f6d370d7e5d90969b8"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {}
+      },
+      "output_sha256": "e41bfab54392617bf490401b7b288466435ac0f3bd6be23eb55b8ca85bc64413"
+    },
+    "zstd@1.5.7": {
+      "name": "zstd",
+      "version": "1.5.7",
+      "source": {
+        "File": {
+          "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/dependency-zstd@1.5.7/package.tar.gz",
+          "sha256": "1383652426c11a61489e42d4c52e30dedf400758c612e49c0abcb46e402129e2"
+        }
+      },
+      "install": {
+        "Archive": {
+          "format": "TarGz",
+          "strip_prefix": null
+        }
+      },
+      "provides": {
+        "bins": {
+          "unzstd": "bin/unzstd",
+          "zstd": "bin/zstd",
+          "zstdcat": "bin/zstdcat",
+          "zstdmt": "bin/zstdmt"
+        }
+      },
+      "output_sha256": "8fcb42ad91d107a2c818177403595ddfdf141882561f0d02791f7bfdedb80395"
+    }
+  },
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "b41b976b816e7cb53ab8d568617023c52fbddc1d"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "3155f756e016489080eb6473d2a106e5fb1d79f08e69fa0a949010c8f4b7612c"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "make": "GNU Make 3.81\nCopyright (C) 2006  Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\nPARTICULAR PURPOSE.\n\nThis program built for i386-apple-darwin11.3.0",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "git",
+    "version": "2.55.0",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpkPhH6d/.tmpFx0N8Q/build/package.tar.gz",
+        "sha256": "c407254a7113d859e475e238588bb343cd25f4e2fc3b53785179f49d07ea2490"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "git": "bin/git",
+        "git-receive-pack": "bin/git-receive-pack",
+        "git-upload-archive": "bin/git-upload-archive",
+        "git-upload-pack": "bin/git-upload-pack"
+      }
+    },
+    "output_sha256": "b19d6be2f100936408801d5112a609dc2a08719a8c762907e695451b805a1a6c"
+  }
+}
