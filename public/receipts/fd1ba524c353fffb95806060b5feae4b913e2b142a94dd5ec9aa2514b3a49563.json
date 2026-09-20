@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "build_key": "e5ab9ddbee692b8877bd8a03968bdf7b9e7443fadb6114c1c55be0ed5d5a7ec2",
+  "build_environment": "9b65c50690460b8a4b00b58490b7631cf2d766c5f52c9ce8f84f490e3473af97",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cargo": {
+        "path": "/home/runner/.rustup/toolchains/1.98.1-aarch64-unknown-linux-gnu/bin/cargo",
+        "sha256": "2101d7104b91a013912c94275dcd31c2b41061ef7f6e8530df11cdad55b8fbc5"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "rustc": {
+        "path": "/home/runner/.rustup/toolchains/1.98.1-aarch64-unknown-linux-gnu/bin/rustc",
+        "sha256": "d4217a981a778bfe445c0a29c408f5a25a92e9bb5222701579ad5a35bd913e8f"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {
+      "rust-libraries": {
+        "path": "/home/runner/.rustup/toolchains/1.98.1-aarch64-unknown-linux-gnu/lib",
+        "sha256": "95b6057127b6ccf9df1985011b8dcf59720c7d77dab0fc76ec67ee70675a94e0"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "61b49f5bb89cba5e2b5c09adafe125454a2f69400acc200b2a8dd50937dad40b",
+  "catalog_sha256": "7a50c49fc14fa0997f96df4527abb39d22cb7720dc7b72404e29924c40d6a7ec",
+  "revision": 1,
+  "system": "aarch64-linux",
+  "build": {
+    "git": {
+      "github": "tale/rootbeer",
+      "branch": "main"
+    },
+    "backend": "rust",
+    "rust": {
+      "packages": [
+        "rootbeer-cli",
+        "rootbeer-forge"
+      ],
+      "features": [],
+      "no_default_features": false,
+      "environment": {
+        "RB_BUILD_TIMESTAMP": "2026-09-20 20:10 UTC",
+        "ROOTBEER_INDEX_PUBLIC_KEY": "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
+        "ROOTBEER_INDEX_URL": "https://pdr.rbpkg.com/current.json"
+      }
+    },
+    "url": "https://codeload.github.com/tale/rootbeer/tar.gz/5024c18768d156de175c90229728aafe3561b994",
+    "sha256": "534fc0c0914922443b7afb255cf1ef99b088ab2371ddce6714c644eb43beda42",
+    "archive": "tar.gz",
+    "strip_prefix": "rootbeer-5024c18768d156de175c90229728aafe3561b994",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "7a50c49fc14fa0997f96df4527abb39d22cb7720dc7b72404e29924c40d6a7ec"
+      }
+    }
+  },
+  "toolchain": {
+    "/usr/bin/cc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)"
+  },
+  "package": {
+    "name": "rootbeer",
+    "version": "0.1.0-main+5024c18768d1",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpdKFkRH/.tmpcw3inB/build/package.tar.gz",
+        "sha256": "cec43b8a4e418ad906bd13acaae3f79dc15dcefd27e418e1bafdfd00da11cf5c"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "rb": "bin/rb",
+        "rootbeer-forge": "bin/rootbeer-forge"
+      }
+    },
+    "output_sha256": "85ae02bec942edf653af826589cd34ed6f2d13eaca652ef5a3041481c7d3fbc2"
+  }
+}
