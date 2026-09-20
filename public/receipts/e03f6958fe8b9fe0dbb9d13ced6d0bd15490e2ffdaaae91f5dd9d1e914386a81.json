@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "build_key": "1e771d9b16695b91bce5ff80c1f616350d95fb7ee76ccbda1be5084b627e1144",
+  "build_environment": "9b65c50690460b8a4b00b58490b7631cf2d766c5f52c9ce8f84f490e3473af97",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "go": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/arm64/bin/go",
+        "sha256": "1675694ef690db0f18fbe7046a886170904bede1d9db6ec96ae27945c1705c64"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {
+      "go-toolchain": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/arm64",
+        "sha256": "eff111165a0b53498c0be2c6370748ac7493a4bc6c1fcc9f1aa9b31d70a4372a"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "6aade6aed47ae7490b78abe02cf1cf0c6c1a67c9ce6b31f9140d694bd9861735",
+  "catalog_sha256": "8024aefaf11ad5ebfe234c4e92355c3a8bc1f08fdecdcef92499e7001458fc90",
+  "revision": 4,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "go",
+    "go": {
+      "binaries": {
+        "shfmt": "./cmd/shfmt"
+      },
+      "generate": [],
+      "experiments": [],
+      "tags": [],
+      "variables": {
+        "main.version": "v3.14.1"
+      },
+      "cgo": false
+    },
+    "url": "https://codeload.github.com/mvdan/sh/tar.gz/refs/tags/v3.14.1",
+    "sha256": "ec4bdb88ab6c95686be3a4eeb4ad77d2b49d33d2ed7b0a65035cd52d2d87c443",
+    "archive": "tar.gz",
+    "strip_prefix": "sh-3.14.1",
+    "configure": [],
+    "patches": [
+      "--- a/cmd/shfmt/main.go\n+++ b/cmd/shfmt/main.go\n@@ -66,6 +66,8 @@\n }\n \n var (\n+\tversion = \"(unknown)\"\n+\n \t// Generic flags.\n \tversionFlag = flagVal(\"\", \"version\", false, flag.BoolVar)\n \tlist        = flagVal(\"l\", \"list\", \"false\", boolStringVar)\n@@ -156,8 +158,7 @@\n \tflag.Parse()\n \n \tif versionFlag.val {\n-\t\tversion := \"(unknown)\"\n-\t\tif info, ok := debug.ReadBuildInfo(); ok {\n+\t\tif info, ok := debug.ReadBuildInfo(); version == \"(unknown)\" && ok {\n \t\t\tmod := &info.Main\n \t\t\tif mod.Replace != nil {\n \t\t\t\tmod = mod.Replace\n"
+    ],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "8024aefaf11ad5ebfe234c4e92355c3a8bc1f08fdecdcef92499e7001458fc90"
+      }
+    }
+  },
+  "toolchain": {
+    "/home/runner/work/_temp/.tmp4AlCEC/.tmp3kIzrY/build/.tmptwskrj/environment-tools/go": "go version go1.27.1 linux/arm64",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "shfmt",
+    "version": "3.14.1",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmp4AlCEC/.tmp3kIzrY/build/package.tar.gz",
+        "sha256": "b90d724519175bcaeb47f663edb5a4805a384a62eb0c5df69276396844fe629b"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "shfmt": "bin/shfmt"
+      }
+    },
+    "output_sha256": "937eec99ffdb9d426d56af7a6efb4b68b972e071d0a92a05720a6657939b520a"
+  }
+}
