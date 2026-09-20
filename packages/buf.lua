@@ -11,14 +11,16 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "bufbuild/buf",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "buf-Linux-x86_64.tar.gz",
-                ["aarch64-macos"] = "buf-Darwin-arm64.tar.gz",
-                ["aarch64-linux"] = "buf-Linux-aarch64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/bufbuild/buf/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "buf-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { buf = "./cmd/buf" },
         },
     },
     outputs = {
@@ -27,7 +29,12 @@ return {
     },
     versions = {
         ["1.73.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "5b74e94416114ccfcef2692592150a5c8459a9cb6f94088d42341ac06c389a22",
+                },
+            },
         },
     },
 }

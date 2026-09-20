@@ -11,14 +11,16 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "sqlc-dev/sqlc",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "sqlc_{version}_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "sqlc_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "sqlc_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/sqlc-dev/sqlc/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "sqlc-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { sqlc = "./cmd/sqlc" },
         },
     },
     outputs = {
@@ -27,7 +29,12 @@ return {
     },
     versions = {
         ["1.31.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "de82593a200e4130dc2a0413a808f93fc30fdc7b5ecd402913ed08a8fea06c4a",
+                },
+            },
         },
     },
 }

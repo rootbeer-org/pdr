@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "FiloSottile/age",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "age-{tag}-linux-amd64.tar.gz",
-                ["aarch64-macos"] = "age-{tag}-darwin-arm64.tar.gz",
-                ["aarch64-linux"] = "age-{tag}-linux-arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/FiloSottile/age/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "age-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { age = "./cmd/age", ["age-keygen"] = "./cmd/age-keygen" },
+            variables = { ["main.Version"] = "v{version}" },
         },
     },
     outputs = {
@@ -26,12 +29,22 @@ return {
         checks = { { "age", "--version" }, { "age-keygen", "--version" } },
     },
     versions = {
-        ["1.3.2"] = {
-            revision = 2,
-            systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-        },
         ["1.3.1"] = {
+            revision = 4,
+            inputs = {
+                source = {
+                    sha256 = "396007bc0bc53de253391493bda1252757ba63af1a19db86cfb60a35cb9d290a",
+                },
+            },
+            systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+        },
+        ["1.3.2"] = {
             revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "b07c28c6c4bdafa272073a310b75bc22c49da8904585a89c30e5ca4233e63843",
+                },
+            },
         },
     },
 }

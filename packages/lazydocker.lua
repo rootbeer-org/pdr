@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "jesseduffield/lazydocker",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "lazydocker_{version}_Linux_x86_64.tar.gz",
-                ["aarch64-macos"] = "lazydocker_{version}_Darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "lazydocker_{version}_Linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/jesseduffield/lazydocker/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "lazydocker-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { lazydocker = "." },
+            variables = { ["main.version"] = "{version}", ["main.buildSource"] = "Rootbeer" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["0.25.2"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "405071220e5be9aa061c65d290e0347143b73ae0a3cc01df164f0105de2b53c4",
+                },
+            },
         },
     },
 }

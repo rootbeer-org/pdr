@@ -12,14 +12,20 @@ return {
         exclude_tags = { "v0.5.4-homebrew" },
     },
     inputs = {
-        prebuilt = {
-            github = "git-lfs/git-lfs",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "git-lfs-linux-amd64-{tag}.tar.gz",
-                ["aarch64-macos"] = "git-lfs-darwin-arm64-{tag}.zip",
-                ["aarch64-linux"] = "git-lfs-linux-arm64-{tag}.tar.gz",
+        source = {
+            url = "https://codeload.github.com/git-lfs/git-lfs/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "git-lfs-{version}",
+            patches = {
+                "--- a/git-lfs.go\n+++ b/git-lfs.go\n@@ -11,7 +11,7 @@\n )\n \n func main() {\n-\tc := make(chan os.Signal)\n+\tc := make(chan os.Signal, 1)\n \tsignal.Notify(c, os.Interrupt, os.Kill)\n \n \tgo func() {\n",
             },
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { ["git-lfs"] = "." },
+            generate = { "./commands" },
         },
     },
     outputs = {
@@ -28,7 +34,12 @@ return {
     },
     versions = {
         ["3.8.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "a12ecfc17ebee002d1f6acca79442029d41cbf5e5b4ba9e02249ed96de20300f",
+                },
+            },
         },
     },
 }

@@ -11,13 +11,19 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "oras-project/oras",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "oras_{version}_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "oras_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "oras_{version}_linux_arm64.tar.gz",
+        source = {
+            url = "https://codeload.github.com/oras-project/oras/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "oras-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { oras = "./cmd/oras" },
+            variables = {
+                ["oras.land/oras/internal/version.Version"] = "{version}",
+                ["oras.land/oras/internal/version.BuildMetadata"] = "",
             },
         },
     },
@@ -27,7 +33,12 @@ return {
     },
     versions = {
         ["1.3.4"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "0967062b09d82c902e7f6bdd22fc6dd4577811bf46ba63dab8791ff047c55392",
+                },
+            },
         },
     },
 }

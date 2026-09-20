@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "docker/compose",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "docker-compose-linux-x86_64",
-                ["aarch64-macos"] = "docker-compose-darwin-aarch64",
-                ["aarch64-linux"] = "docker-compose-linux-aarch64",
-            },
+        source = {
+            url = "https://codeload.github.com/docker/compose/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "compose-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { ["docker-compose"] = "./cmd" },
+            variables = { ["github.com/docker/compose/v5/internal.Version"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["5.5.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "311077662698fd8e34769a894f9d5240befb1730990efa8ed58e0fa8725d2d84",
+                },
+            },
         },
     },
 }

@@ -10,14 +10,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "nats-io/natscli",
-            tag = "v{version}",
-            assets = {
-                ["aarch64-linux"] = "nats-{version}-linux-arm64.zip",
-                ["aarch64-macos"] = "nats-{version}-darwin-arm64.zip",
-                ["x86_64-linux"] = "nats-{version}-linux-amd64.zip",
-            },
+        source = {
+            url = "https://codeload.github.com/nats-io/natscli/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "natscli-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { nats = "./nats" },
+            variables = { ["main.version"] = "{version}" },
         },
     },
     systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
@@ -30,8 +33,20 @@ return {
     },
     versions = {
         ["0.4.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "6dc9056aa439f90de2a705983005363ae05f1f9985b81881cbfffa867a344ef6",
+                },
+            },
         },
-        ["0.5.0"] = {},
+        ["0.5.0"] = {
+            revision = 2,
+            inputs = {
+                source = {
+                    sha256 = "832f2fcd53de5eceeb9d497ab603cbf32698646dfe156d23b70553e40eb1438b",
+                },
+            },
+        },
     },
 }

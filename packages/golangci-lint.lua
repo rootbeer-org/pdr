@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "golangci/golangci-lint",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "golangci-lint-{version}-linux-amd64.tar.gz",
-                ["aarch64-macos"] = "golangci-lint-{version}-darwin-arm64.tar.gz",
-                ["aarch64-linux"] = "golangci-lint-{version}-linux-arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/golangci/golangci-lint/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "golangci-lint-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { ["golangci-lint"] = "./cmd/golangci-lint" },
+            variables = { ["main.version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["2.13.2"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "a79a7a1faad9c1538e3f7f8b32843a53bbeedfa9ead45d9e8ca3bb210d55ece0",
+                },
+            },
         },
     },
 }

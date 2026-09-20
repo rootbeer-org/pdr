@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "charmbracelet/glow",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "glow_{version}_Linux_x86_64.tar.gz",
-                ["aarch64-macos"] = "glow_{version}_Darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "glow_{version}_Linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/charmbracelet/glow/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "glow-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { glow = "." },
+            variables = { ["main.Version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["3.0.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "18df6f3c09157021366b8c702b5badba405d37dbb42f132353eb50c1b0d3f464",
+                },
+            },
         },
     },
 }

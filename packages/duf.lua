@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "muesli/duf",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "duf_{version}_linux_x86_64.tar.gz",
-                ["aarch64-macos"] = "duf_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "duf_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/muesli/duf/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "duf-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { duf = "." },
+            variables = { ["main.Version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["0.9.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "1334d8c1a7957d0aceebe651e3af9e1c1e0c6f298f1feb39643dd0bd8ad1e955",
+                },
+            },
         },
     },
 }

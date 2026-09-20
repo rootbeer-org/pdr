@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "pressly/goose",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "goose_linux_x86_64",
-                ["aarch64-macos"] = "goose_darwin_arm64",
-                ["aarch64-linux"] = "goose_linux_arm64",
-            },
+        source = {
+            url = "https://codeload.github.com/pressly/goose/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "goose-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { goose = "./cmd/goose" },
+            variables = { ["main.version"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["3.28.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "71644c9d60710096ecc721edba4edf44e1f53cd0417564321c4b848e26c75bfa",
+                },
+            },
         },
     },
 }

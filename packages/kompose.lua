@@ -11,14 +11,16 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "kubernetes/kompose",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "kompose-linux-amd64",
-                ["aarch64-macos"] = "kompose-darwin-arm64",
-                ["aarch64-linux"] = "kompose-linux-arm64",
-            },
+        source = {
+            url = "https://codeload.github.com/kubernetes/kompose/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "kompose-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { kompose = "." },
         },
     },
     outputs = {
@@ -27,7 +29,12 @@ return {
     },
     versions = {
         ["1.38.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "1a6eb3e9a5084d0ce6d1a81628b314686b7cfa41124bace13eb188865f7640a0",
+                },
+            },
         },
     },
 }

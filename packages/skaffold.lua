@@ -10,14 +10,19 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "GoogleContainerTools/skaffold",
-            tag = "v{version}",
-            assets = {
-                ["aarch64-linux"] = "skaffold-linux-arm64",
-                ["aarch64-macos"] = "skaffold-darwin-arm64",
-                ["x86_64-linux"] = "skaffold-linux-amd64",
-            },
+        source = {
+            url = "https://codeload.github.com/GoogleContainerTools/skaffold/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "skaffold-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { skaffold = "./cmd/skaffold" },
+            tags = { "timetzdata", "release" },
+            variables = { ["github.com/GoogleContainerTools/skaffold/v2/pkg/skaffold/version.version"] = "v{version}" },
+            cgo = true,
         },
     },
     systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
@@ -29,8 +34,20 @@ return {
     },
     versions = {
         ["2.24.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "a8a5b2f7f291834be1fffff0f2eb1a32245c6279546b2037e0281d62d5607bb5",
+                },
+            },
         },
-        ["2.25.0"] = {},
+        ["2.25.0"] = {
+            revision = 2,
+            inputs = {
+                source = {
+                    sha256 = "23290d3ef180391b9c248e11d15a63d5434c1522597600c843de1316507aa751",
+                },
+            },
+        },
     },
 }

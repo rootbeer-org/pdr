@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "stern/stern",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "stern_{version}_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "stern_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "stern_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/stern/stern/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "stern-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { stern = "." },
+            variables = { ["github.com/stern/stern/cmd.version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["1.34.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "1cfec22cef9705e68fc46060ba85164af12bd07ede9264bafb67d11400996e71",
+                },
+            },
         },
     },
 }

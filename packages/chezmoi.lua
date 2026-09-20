@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "twpayne/chezmoi",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "chezmoi_{version}_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "chezmoi_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "chezmoi_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/twpayne/chezmoi/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "chezmoi-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { chezmoi = "." },
+            variables = { ["main.version"] = "{version}" },
         },
     },
     outputs = {
@@ -26,12 +29,22 @@ return {
         checks = { { "chezmoi", "--version" } },
     },
     versions = {
-        ["2.72.2"] = {
-            revision = 2,
-            systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-        },
         ["2.72.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "52a2fbff0c11285bac91b9267bce0f48069153c111890debf61836953dfcbca8",
+                },
+            },
+            systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+        },
+        ["2.72.2"] = {
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "977c779f616ebf3d49700ceca426d61f367e2850ff397d3ae95ca32d7f954309",
+                },
+            },
         },
     },
 }

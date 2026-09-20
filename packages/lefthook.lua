@@ -10,14 +10,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "evilmartians/lefthook",
-            tag = "v{version}",
-            assets = {
-                ["aarch64-linux"] = "lefthook_{version}_Linux_arm64",
-                ["aarch64-macos"] = "lefthook_{version}_MacOS_arm64",
-                ["x86_64-linux"] = "lefthook_{version}_Linux_x86_64",
-            },
+        source = {
+            url = "https://codeload.github.com/evilmartians/lefthook/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "lefthook-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { lefthook = "." },
+            tags = { "no_self_update" },
         },
     },
     systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
@@ -30,8 +33,20 @@ return {
     },
     versions = {
         ["2.1.12"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "c2e79ff53d31aaeb5a5765d118552a7b6f6e2667647347200386615ee4e88acf",
+                },
+            },
         },
-        ["2.1.14"] = {},
+        ["2.1.14"] = {
+            revision = 2,
+            inputs = {
+                source = {
+                    sha256 = "b1a99784f93339b24a24731646d4489d2f3496c4f79c9dac449aea3d92fc2be0",
+                },
+            },
+        },
     },
 }

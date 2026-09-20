@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "helmfile/helmfile",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "helmfile_{version}_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "helmfile_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "helmfile_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/helmfile/helmfile/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "helmfile-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { helmfile = "." },
+            variables = { ["go.szostok.io/version.version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["1.8.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "acc51a53c5da30a33745c3cd0de813f2a2c9f3866ac986caac7c8b8ad01600e0",
+                },
+            },
         },
     },
 }

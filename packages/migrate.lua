@@ -11,14 +11,18 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "golang-migrate/migrate",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "migrate.linux-amd64.tar.gz",
-                ["aarch64-macos"] = "migrate.darwin-arm64.tar.gz",
-                ["aarch64-linux"] = "migrate.linux-arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/golang-migrate/migrate/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "migrate-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { migrate = "./cmd/migrate" },
+            tags = { "file", "go_bindata", "github", "github_ee", "bitbucket", "aws_s3", "google_cloud_storage", "godoc_vfs", "gitlab", "postgres", "mysql", "redshift", "cassandra", "spanner", "cockroachdb", "yugabytedb", "clickhouse", "mongodb", "sqlserver", "firebird", "neo4j", "pgx", "pgx5", "rqlite" },
+            variables = { ["main.Version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +31,12 @@ return {
     },
     versions = {
         ["4.20.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "365a1c5b517348301a540b04bda5d8778e61bff7e68583bcf2f278da570f4b46",
+                },
+            },
         },
     },
 }

@@ -11,13 +11,19 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "rhysd/actionlint",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "actionlint_{version}_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "actionlint_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "actionlint_{version}_linux_arm64.tar.gz",
+        source = {
+            url = "https://codeload.github.com/rhysd/actionlint/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "actionlint-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { actionlint = "./cmd/actionlint" },
+            variables = {
+                ["github.com/rhysd/actionlint.version"] = "{version}",
+                ["github.com/rhysd/actionlint.installedFrom"] = "built by Rootbeer",
             },
         },
     },
@@ -27,7 +33,12 @@ return {
     },
     versions = {
         ["1.7.12"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "454800bd4f854592bcfe79b161f71d56e35940eb7016e48a26dd356adc9d400a",
+                },
+            },
         },
     },
 }

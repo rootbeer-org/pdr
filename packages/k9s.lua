@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "derailed/k9s",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "k9s_Linux_amd64.tar.gz",
-                ["aarch64-macos"] = "k9s_Darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "k9s_Linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/derailed/k9s/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "k9s-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { k9s = "." },
+            variables = { ["github.com/derailed/k9s/cmd.version"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["0.51.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "e2c3851c909b87f9cfafa262e426f4a89023ca4e745cba5cab6d0153f76e7dcd",
+                },
+            },
         },
     },
 }

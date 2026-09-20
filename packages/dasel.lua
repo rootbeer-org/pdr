@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "TomWright/dasel",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "dasel_linux_amd64",
-                ["aarch64-macos"] = "dasel_darwin_arm64",
-                ["aarch64-linux"] = "dasel_linux_arm64",
-            },
+        source = {
+            url = "https://codeload.github.com/TomWright/dasel/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "dasel-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { dasel = "./cmd/dasel" },
+            variables = { ["github.com/tomwright/dasel/v3/internal.Version"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["3.11.2"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "5471fe33b28c98efed2b1a13431ed24097785f56a24dc9fb15e37b1e266446e1",
+                },
+            },
         },
     },
 }

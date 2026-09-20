@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "jesseduffield/lazygit",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "lazygit_{version}_linux_x86_64.tar.gz",
-                ["aarch64-macos"] = "lazygit_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "lazygit_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/jesseduffield/lazygit/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "lazygit-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { lazygit = "." },
+            variables = { ["main.version"] = "{version}", ["main.buildSource"] = "Rootbeer" },
         },
     },
     outputs = {
@@ -26,11 +29,21 @@ return {
         checks = { { "lazygit", "--version" } },
     },
     versions = {
-        ["0.65.1"] = {
-            revision = 2,
-        },
         ["0.65.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "972151d83d8fdfa5c7c881c34349ba4a38c37b7085667696b85c443d2fca97ed",
+                },
+            },
+        },
+        ["0.65.1"] = {
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "df30ec1a5032b3c5672a30090fe787fb32d4122fd996d6d85e1d10135acfbc89",
+                },
+            },
         },
     },
 }

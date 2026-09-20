@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "sigstore/cosign",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "cosign-linux-amd64",
-                ["aarch64-macos"] = "cosign-darwin-arm64",
-                ["aarch64-linux"] = "cosign-linux-arm64",
-            },
+        source = {
+            url = "https://codeload.github.com/sigstore/cosign/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "cosign-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { cosign = "./cmd/cosign" },
+            variables = { ["sigs.k8s.io/release-utils/version.gitVersion"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["3.1.3"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "ab8fcb8e0b4c0b8d01aefa37790cdd5ad099366b2efb8636b7a0250915b93362",
+                },
+            },
         },
     },
 }

@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "mr-karan/doggo",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "doggo-linux-x86_64.tar.gz",
-                ["aarch64-macos"] = "doggo-darwin-aarch64.tar.gz",
-                ["aarch64-linux"] = "doggo-linux-aarch64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/mr-karan/doggo/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "doggo-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { doggo = "./cmd/doggo" },
+            variables = { ["main.buildVersion"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["1.4.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "e0d043aa34fb8daa44df07558fd32fe2686eba6644d5f6834edbc8a789d42e1d",
+                },
+            },
         },
     },
 }

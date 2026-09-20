@@ -10,14 +10,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "cli/cli",
-            tag = "v{version}",
-            assets = {
-                ["aarch64-linux"] = "gh_{version}_linux_arm64.tar.gz",
-                ["aarch64-macos"] = "gh_{version}_macOS_arm64.zip",
-                ["x86_64-linux"] = "gh_{version}_linux_amd64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/cli/cli/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "cli-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { gh = "./cmd/gh" },
+            variables = { ["github.com/cli/cli/v2/internal/build.Version"] = "{version}" },
         },
     },
     systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
@@ -29,10 +32,21 @@ return {
     },
     versions = {
         ["2.100.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
+                },
+            },
+            systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
         },
         ["2.101.0"] = {
-            systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
+            revision = 2,
+            inputs = {
+                source = {
+                    sha256 = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
+                },
+            },
         },
     },
 }

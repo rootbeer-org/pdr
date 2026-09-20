@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "cilium/hubble",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "hubble-linux-amd64.tar.gz",
-                ["aarch64-macos"] = "hubble-darwin-arm64.tar.gz",
-                ["aarch64-linux"] = "hubble-linux-arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/cilium/hubble/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "hubble-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { hubble = "." },
+            variables = { ["github.com/cilium/cilium/hubble/pkg.Version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["1.19.4"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "82e8d062e8f2cfeecaeda19f300350d6b453d6d1584f2111f6a7763722994366",
+                },
+            },
         },
     },
 }

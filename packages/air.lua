@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "air-verse/air",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "air_{version}_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "air_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "air_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/air-verse/air/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "air-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { air = "." },
+            variables = { ["main.airVersion"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["1.67.4"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "d74de50458f4f2cd744bb08a1acf84dbbcc99138ea0682176568f9a381a81887",
+                },
+            },
         },
     },
 }

@@ -11,14 +11,16 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "mikefarah/yq",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "yq_linux_amd64",
-                ["aarch64-macos"] = "yq_darwin_arm64",
-                ["aarch64-linux"] = "yq_linux_arm64",
-            },
+        source = {
+            url = "https://codeload.github.com/mikefarah/yq/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "yq-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { yq = "." },
         },
     },
     outputs = {
@@ -27,7 +29,12 @@ return {
     },
     versions = {
         ["4.53.6"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "132a28a669526f99dba52486ac80de3bdafdf9a1a52a0c6bd6045301aca0cd25",
+                },
+            },
         },
     },
 }

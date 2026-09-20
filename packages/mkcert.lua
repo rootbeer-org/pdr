@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "FiloSottile/mkcert",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "mkcert-{tag}-linux-amd64",
-                ["aarch64-macos"] = "mkcert-{tag}-darwin-arm64",
-                ["aarch64-linux"] = "mkcert-{tag}-linux-arm64",
-            },
+        source = {
+            url = "https://codeload.github.com/FiloSottile/mkcert/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "mkcert-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { mkcert = "." },
+            variables = { ["main.Version"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["1.4.4"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "32bd5519581bf0b03f53e5b22721692b99f39ab5b161dc27532c51eafa512ca9",
+                },
+            },
         },
     },
 }

@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "fullstorydev/grpcurl",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "grpcurl_{version}_linux_x86_64.tar.gz",
-                ["aarch64-macos"] = "grpcurl_{version}_osx_arm64.tar.gz",
-                ["aarch64-linux"] = "grpcurl_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/fullstorydev/grpcurl/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "grpcurl-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { grpcurl = "./cmd/grpcurl" },
+            variables = { ["main.version"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["1.9.4"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "bea899ba2f483a951bf40aa05d41e069dd2f7bfe52d2a229717abfdb5620cb7c",
+                },
+            },
         },
     },
 }

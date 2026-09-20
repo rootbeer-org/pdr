@@ -10,14 +10,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "anchore/syft",
-            tag = "v{version}",
-            assets = {
-                ["aarch64-linux"] = "syft_{version}_linux_arm64.tar.gz",
-                ["aarch64-macos"] = "syft_{version}_darwin_arm64.tar.gz",
-                ["x86_64-linux"] = "syft_{version}_linux_amd64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/anchore/syft/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "syft-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { syft = "./cmd/syft" },
+            variables = { ["main.version"] = "{version}" },
         },
     },
     systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
@@ -29,8 +32,20 @@ return {
     },
     versions = {
         ["1.51.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "da8d83cdca78f2c553e08a5ecb9734016a05adb904168531f582bebfbb9bb2cf",
+                },
+            },
         },
-        ["1.52.0"] = {},
+        ["1.52.0"] = {
+            revision = 2,
+            inputs = {
+                source = {
+                    sha256 = "8b999a1b8bd08b12512176cdec5d063db9cfe209c65cc5de9c4eb2ab7bdc7b3c",
+                },
+            },
+        },
     },
 }

@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "wagoodman/dive",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "dive_{version}_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "dive_{version}_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "dive_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/wagoodman/dive/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "dive-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { dive = "." },
+            variables = { ["main.version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["0.13.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "2a9666e9c3fddd5e2e5bad81dccda520b8102e7cea34e2888f264b4eb0506852",
+                },
+            },
         },
     },
 }

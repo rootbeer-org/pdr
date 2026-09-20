@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "devspace-sh/devspace",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "devspace-linux-amd64",
-                ["aarch64-macos"] = "devspace-darwin-arm64",
-                ["aarch64-linux"] = "devspace-linux-arm64",
-            },
+        source = {
+            url = "https://codeload.github.com/devspace-sh/devspace/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "devspace-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { devspace = "." },
+            variables = { ["main.version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["6.3.21"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "c6e4f9d6587d77b5498d56391667c5d88b65ced06ca7e03a4ac74f600c19c8c4",
+                },
+            },
         },
     },
 }

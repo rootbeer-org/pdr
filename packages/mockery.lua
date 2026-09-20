@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "vektra/mockery",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "mockery_{version}_Linux_x86_64.tar.gz",
-                ["aarch64-macos"] = "mockery_{version}_Darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "mockery_{version}_Linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/vektra/mockery/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "mockery-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { mockery = "." },
+            variables = { ["github.com/vektra/mockery/v3/internal/logging.SemVer"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["3.8.0"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "166487e34348d95057252e5a1a172d272f12eb01902c0c05c2a948567028800f",
+                },
+            },
         },
     },
 }

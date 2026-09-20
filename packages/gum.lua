@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "charmbracelet/gum",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "gum_{version}_Linux_x86_64.tar.gz",
-                ["aarch64-macos"] = "gum_{version}_Darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "gum_{version}_Linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/charmbracelet/gum/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "gum-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { gum = "." },
+            variables = { ["main.Version"] = "{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["2.0.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "2cbc41662ff6c8df30ff3f6c133d4276db72a6f9b3df7eb942f1a798bcbf3d80",
+                },
+            },
         },
     },
 }

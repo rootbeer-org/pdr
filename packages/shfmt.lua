@@ -11,14 +11,17 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "mvdan/sh",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "shfmt_{tag}_linux_amd64",
-                ["aarch64-macos"] = "shfmt_{tag}_darwin_arm64",
-                ["aarch64-linux"] = "shfmt_{tag}_linux_arm64",
-            },
+        source = {
+            url = "https://codeload.github.com/mvdan/sh/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "sh-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { shfmt = "./cmd/shfmt" },
+            variables = { ["main.version"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +30,12 @@ return {
     },
     versions = {
         ["3.14.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "ec4bdb88ab6c95686be3a4eeb4ad77d2b49d33d2ed7b0a65035cd52d2d87c443",
+                },
+            },
         },
     },
 }

@@ -11,14 +11,16 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "go-task/task",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "task_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "task_darwin_arm64.tar.gz",
-                ["aarch64-linux"] = "task_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/go-task/task/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "task-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { task = "./cmd/task" },
         },
     },
     outputs = {
@@ -27,7 +29,12 @@ return {
     },
     versions = {
         ["3.53.1"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "dd22395f4548ba58bc3adf83cb9ce33f1c5fad7e7c5f0a229bb2709af439fa9a",
+                },
+            },
         },
     },
 }

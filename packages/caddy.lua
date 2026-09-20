@@ -11,14 +11,18 @@ return {
         tag_prefix = "v",
     },
     inputs = {
-        prebuilt = {
-            github = "caddyserver/caddy",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "caddy_{version}_linux_amd64.tar.gz",
-                ["aarch64-macos"] = "caddy_{version}_mac_arm64.tar.gz",
-                ["aarch64-linux"] = "caddy_{version}_linux_arm64.tar.gz",
-            },
+        source = {
+            url = "https://codeload.github.com/caddyserver/caddy/tar.gz/refs/tags/{tag}",
+            archive = "tar.gz",
+            strip_prefix = "caddy-{version}",
+        },
+    },
+    build = {
+        backend = "go",
+        go = {
+            binaries = { caddy = "./cmd/caddy" },
+            tags = { "nobadger", "nomysql", "nopgx" },
+            variables = { ["github.com/caddyserver/caddy/v2.CustomVersion"] = "v{version}" },
         },
     },
     outputs = {
@@ -27,7 +31,12 @@ return {
     },
     versions = {
         ["2.11.4"] = {
-            revision = 2,
+            revision = 3,
+            inputs = {
+                source = {
+                    sha256 = "2c3d02078286a6282cdb4d1d8744077788d556659dac0b64d8ed5886a7e5aeb9",
+                },
+            },
         },
     },
 }
