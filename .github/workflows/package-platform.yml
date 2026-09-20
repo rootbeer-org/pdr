@@ -52,7 +52,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REUSE_RUN: ${{ inputs.reuse-run }}
           PACKAGE_RUNNER: ${{ inputs.runner }}
+          RECORD_DIRECTORY: discovery-records
         run: python3 .github/scripts/package-jobs.py
+      - name: Retain reused package records for discovery
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: published-records-plan-${{ inputs.runner }}-${{ github.run_attempt }}
+          path: discovery-records/*.json
+          if-no-files-found: ignore
 
   package:
     name: ${{ matrix.package }} (${{ matrix.system }})

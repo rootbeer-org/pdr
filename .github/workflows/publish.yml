@@ -25,7 +25,7 @@ concurrency:
 
 jobs:
   trigger:
-    if: github.ref == 'refs/heads/main' && github.event.repository.private == false && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    if: vars.PACKAGE_DISCOVERY != 'true' && github.ref == 'refs/heads/main' && github.event.repository.private == false && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-24.04
     permissions:
       actions: read

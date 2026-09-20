@@ -1,11 +1,12 @@
 name: Build selected packages
-run-name: Build ${{ inputs.packages }}
+run-name: ${{ inputs.packages && format('Publish {0}', inputs.packages) || 'Refresh package discovery' }}
 on:
   workflow_dispatch:
     inputs:
       packages:
-        description: Exact packages to publish, separated by spaces (name@version)
-        required: true
+        description: Exact packages (name@version); leave empty to publish retained discovery only
+        required: false
+        default: ""
         type: string
       reuse-run:
         description: Recover verified artifacts from this main-branch run without rebuilding
@@ -17,7 +18,7 @@ permissions:
 
 jobs:
   platform:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && inputs.packages != ''
     name: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -33,3 +34,93 @@ jobs:
       runner: ${{ matrix.runner }}
       packages: ${{ inputs.packages }}
       reuse-run: ${{ inputs.reuse-run }}
+
+  discovery:
+    name: Publish package discovery
+    needs: platform
+    if: always() && !cancelled() && github.ref == 'refs/heads/main' && vars.PUBLISH_INDEX == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: package-publishing
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Read current approved recipes
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: ./.github/actions/setup-engine
+        with:
+          runner: ubuntu-24.04
+          revision-file: package-engine-revision
+      - name: Collect successful package records
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          pattern: published-records-*
+          path: discovery-records
+          merge-multiple: true
+      - name: Restore published metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh auth setup-git
+          git clone --depth=1 --branch gh-pages "https://github.com/$GITHUB_REPOSITORY.git" site
+          mkdir -p discovery-records
+          git -C site config user.name 'github-actions[bot]'
+          git -C site config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Merge signed records into discovery
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INDEX_SIGNING_KEY: ${{ secrets.INDEX_SIGNING_KEY }}
+          INDEX_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
+          INDEX_URL: ${{ vars.INDEX_URL }}
+        run: |
+          : "${INDEX_SIGNING_KEY:?The publication environment did not provide its signing key}"
+          umask 077
+          key="$RUNNER_TEMP/discovery-key.der"
+          trap 'rm -f "$key"' EXIT
+          printf '%s' "$INDEX_SIGNING_KEY" | base64 --decode > "$key"
+          unset INDEX_SIGNING_KEY
+          for attempt in 1 2 3 4 5; do
+            git -C site fetch --depth=1 origin gh-pages
+            git -C site reset --hard FETCH_HEAD
+            engine-bin/rootbeer-forge --catalog packages publish-records \
+              --records discovery-records --site site/public --site-url "$INDEX_URL" \
+              --key "$key" --public-key "$INDEX_PUBLIC_KEY"
+            test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"
+            git -C site add public
+            git -C site commit -m "publish package discovery $GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT"
+            if git -C site push origin HEAD:gh-pages; then exit 0; fi
+          done
+          echo 'Discovery changed concurrently; retry this metadata job.' >&2
+          exit 1
+
+  deploy:
+    name: Deploy latest discovery
+    needs: discovery
+    if: always() && needs.discovery.result == 'success'
+    concurrency:
+      group: package-discovery-pages
+      cancel-in-progress: false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment: github-pages
+    steps:
+      - name: Read all committed package updates
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: gh-pages
+          path: site
+          persist-credentials: false
+      - name: Upload discovery site
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
+        with:
+          path: site/public
+      - name: Deploy discovery site
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346

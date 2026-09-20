@@ -72,7 +72,14 @@ jobs:
           EXPECTED_KEY: ${{ inputs.key }}
           PACKAGE_REGISTRY: ${{ github.repository }}
           PACKAGE_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
+          RECORD_DIRECTORY: discovery-records
         run: python3 .github/scripts/package-jobs.py
+      - name: Retain concurrently published package records
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: published-records-reuse-${{ inputs.key }}-${{ github.run_attempt }}
+          path: discovery-records/*.json
+          if-no-files-found: ignore
       - name: Build and check this package
         if: steps.reuse.outputs.has-work == 'true' && inputs.artifact == ''
         env:
@@ -80,7 +87,7 @@ jobs:
           INPUT_KEY: ${{ inputs.key }}
           BUILD_CONTEXT: ${{ inputs.context }}
         run: |
-          engine-bin/rootbeer-forge --catalog packages build "$PACKAGE" \
+          engine-bin/rootbeer-forge --catalog packages prepare "$PACKAGE" \
             --input-key "$INPUT_KEY" --output result \
             --cache "$RUNNER_TEMP/package-cache" --cache-context "$BUILD_CONTEXT"
       - name: Recover the admitted verified build
@@ -160,3 +167,11 @@ jobs:
           printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
           engine-bin/rootbeer-forge push release --public-key "$INDEX_PUBLIC_KEY" | tee publication.txt
           cat publication.txt >> "$GITHUB_STEP_SUMMARY"
+          mkdir discovery-records
+          cp release/package.json "discovery-records/${{ inputs.key }}.json"
+      - name: Retain this published package record for discovery
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: published-records-${{ inputs.key }}-${{ github.run_attempt }}
+          path: discovery-records/*.json
+          if-no-files-found: error

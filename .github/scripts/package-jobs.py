@@ -1,5 +1,6 @@
 import json
 import os
+from pathlib import Path
 import re
 import subprocess
 
@@ -78,9 +79,14 @@ def plan():
         if len(layers) != 1 or not re.fullmatch(r'sha256:[a-f0-9]{64}', layers[0]['digest']):
             raise ValueError(f'{locator}: expected one signed package record')
         reference = f"ghcr://{repository}@{layers[0]['digest']}"
+        output = []
+        if os.environ.get('RECORD_DIRECTORY'):
+            directory = Path(os.environ['RECORD_DIRECTORY'])
+            directory.mkdir(parents=True, exist_ok=True)
+            output = ['--output', str(directory / f"{task['key']}.json")]
         command(engine, 'verify-record', reference, '--package', task['package'],
                 '--system', task['system'], '--input-key', task['key'],
-                '--public-key', os.environ['PACKAGE_PUBLIC_KEY'])
+                '--public-key', os.environ['PACKAGE_PUBLIC_KEY'], *output)
         reused.append((task, reference))
     if len(missing) > 256:
         raise ValueError('GitHub permits 256 jobs per matrix; submit smaller package selections')
