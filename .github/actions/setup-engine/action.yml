@@ -4,9 +4,12 @@ inputs:
   runner:
     description: Runner image label used by the job
     required: true
+  revision-file:
+    description: File containing the approved engine commit for this publication flow
+    default: engine-revision
 outputs:
   revision:
-    description: Full Rootbeer commit SHA from engine-revision
+    description: Full Rootbeer commit SHA
     value: ${{ steps.install.outputs.revision }}
 runs:
   using: composite
@@ -17,10 +20,11 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
         ENGINE_RUNNER: ${{ inputs.runner }}
+        ENGINE_REVISION_FILE: ${{ inputs.revision-file }}
       run: |
-        revision=$(cat engine-revision)
+        revision=$(cat "$ENGINE_REVISION_FILE")
         if ! [[ "$revision" =~ ^[0-9a-f]{40}$ ]]; then
-          echo 'engine-revision must contain a full lowercase commit SHA.' >&2
+          echo 'Engine revision must be a full lowercase commit SHA.' >&2
           exit 1
         fi
         case "$ENGINE_RUNNER" in

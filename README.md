@@ -96,9 +96,10 @@ already published results. Each platform accepts up to GitHub's 256 matrix jobs,
 with at most 16 active package jobs; larger requests must be split. Packages whose
 GHCR repositories are not public must have registry access configured first.
 
-Rollout requires publishing Forge with `package-plan`, `verify-record`, and
-`--input-key` support, then updating `engine-revision`. This branch deliberately
-does not switch the existing PR/discovery workflows or catalog search over yet.
+`package-engine-revision` pins the attested Forge binary for this path. The existing
+catalog pipeline keeps `engine-revision` until cutover, so deploying package jobs
+does not invalidate catalog receipts or trigger a catalog-wide qualification.
+This path does not switch the existing PR/discovery workflows or catalog search over yet.
 Dependency results and automatic PR-to-main promotion are subsequent stages.
 
 ## Report a problem
