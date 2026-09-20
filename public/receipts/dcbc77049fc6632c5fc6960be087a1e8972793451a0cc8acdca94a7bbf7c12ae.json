@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "build_key": "81da98f5a20d750bafd40190e364315ca70dc6be21d027a0a11af2e64cb94859",
+  "build_environment": "0bf2397f3368e0f17c73edec39b1b5fe7f342d6227c7927d6edcf16d73e88843",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "go": {
+        "path": "/Users/runner/hostedtoolcache/go/1.27.1/arm64/bin/go",
+        "sha256": "132b69336a1f809932a8a20b0201dbbb980e86e3a323ae32e893639d83d71598"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {
+      "go-toolchain": {
+        "path": "/Users/runner/hostedtoolcache/go/1.27.1/arm64",
+        "sha256": "e3bdd297ba5d1b890b463ce03bd9b95404829a878ab83d2fbcd665c320050d2f"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "803571308af471f782fa59845ea31dfb27934cbc1c164d955a99459ffb051423",
+  "catalog_sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac",
+  "revision": 3,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "go",
+    "go": {
+      "binaries": {
+        "git-lfs": "."
+      },
+      "generate": [
+        "./commands"
+      ],
+      "experiments": [],
+      "tags": [],
+      "variables": {},
+      "cgo": false
+    },
+    "url": "https://codeload.github.com/git-lfs/git-lfs/tar.gz/refs/tags/v3.8.0",
+    "sha256": "a12ecfc17ebee002d1f6acca79442029d41cbf5e5b4ba9e02249ed96de20300f",
+    "archive": "tar.gz",
+    "strip_prefix": "git-lfs-3.8.0",
+    "configure": [],
+    "patches": [
+      "--- a/git-lfs.go\n+++ b/git-lfs.go\n@@ -11,7 +11,7 @@\n )\n \n func main() {\n-\tc := make(chan os.Signal)\n+\tc := make(chan os.Signal, 1)\n \tsignal.Notify(c, os.Interrupt, os.Kill)\n \n \tgo func() {\n"
+    ],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "9f5eb79133d296366b3624e78e244de16c21c793"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac"
+      }
+    }
+  },
+  "toolchain": {
+    "/Users/runner/work/_temp/.tmpik9y1j/.tmphtBq6u/build/.tmpVkfJ8z/environment-tools/go": "go version go1.27.1 darwin/arm64",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "git-lfs",
+    "version": "3.8.0",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpik9y1j/.tmphtBq6u/build/package.tar.gz",
+        "sha256": "2d0d807860cc17ddfdc3a7ce3b397ccf01fa15d6ba1061e3921c74a4dfa9214c"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "git-lfs": "bin/git-lfs"
+      }
+    },
+    "output_sha256": "b5f243a4479d13e461c07ae54265dcde592dff7c2e2b407cced84b36c119e431"
+  }
+}

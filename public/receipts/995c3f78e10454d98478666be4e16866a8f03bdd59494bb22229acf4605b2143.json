@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "build_key": "2201a8923dafa535afb3a867137a7454a0b2cbfeb380e03fea25b7495e3bc139",
+  "build_environment": "0bf2397f3368e0f17c73edec39b1b5fe7f342d6227c7927d6edcf16d73e88843",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "go": {
+        "path": "/Users/runner/hostedtoolcache/go/1.27.1/arm64/bin/go",
+        "sha256": "132b69336a1f809932a8a20b0201dbbb980e86e3a323ae32e893639d83d71598"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {
+      "go-toolchain": {
+        "path": "/Users/runner/hostedtoolcache/go/1.27.1/arm64",
+        "sha256": "e3bdd297ba5d1b890b463ce03bd9b95404829a878ab83d2fbcd665c320050d2f"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "35ab14793320e26a2c0f0ea837bfe17c592e163e080882d3b0b5568e806ea58e",
+  "catalog_sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac",
+  "revision": 3,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "go",
+    "go": {
+      "binaries": {
+        "doggo": "./cmd/doggo"
+      },
+      "generate": [],
+      "experiments": [],
+      "tags": [],
+      "variables": {
+        "main.buildVersion": "v1.4.0"
+      },
+      "cgo": false
+    },
+    "url": "https://codeload.github.com/mr-karan/doggo/tar.gz/refs/tags/v1.4.0",
+    "sha256": "e0d043aa34fb8daa44df07558fd32fe2686eba6644d5f6834edbc8a789d42e1d",
+    "archive": "tar.gz",
+    "strip_prefix": "doggo-1.4.0",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "9f5eb79133d296366b3624e78e244de16c21c793"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac"
+      }
+    }
+  },
+  "toolchain": {
+    "/Users/runner/work/_temp/.tmpik9y1j/.tmpbKvvjg/build/.tmpTiXtaY/environment-tools/go": "go version go1.27.1 darwin/arm64",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "doggo",
+    "version": "1.4.0",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpik9y1j/.tmpbKvvjg/build/package.tar.gz",
+        "sha256": "fc1e58b13f406751236e435cbc106239c1aa7dd646f51f8ddedbeadf83f653c8"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "doggo": "bin/doggo"
+      }
+    },
+    "output_sha256": "f9fc1466feb09c1bb3e214bc7c3ea9ba5f7242ff04ea4369d771b4b4b4576078"
+  }
+}

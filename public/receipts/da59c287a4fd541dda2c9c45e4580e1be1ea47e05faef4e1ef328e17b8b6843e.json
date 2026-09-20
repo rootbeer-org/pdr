@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "build_key": "7f80fe25218e73e769e9bafb4576dd19103b0c1674d7d0e90b8b90a8c5c3d51c",
+  "build_environment": "42294d9d924396c14d0421e8abb98ed1fde6d02b264a2684e6e5912c6c57e782",
+  "environment": {
+    "schema": 1,
+    "system": "x86_64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "6452af2eea333b8c65e1adb92964fc8f97863ab003fa13f9d12bff5345cd7dbe"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+      },
+      "go": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/x64/bin/go",
+        "sha256": "30969f97169d7f43fe6a085873d75613adc21e30818a8c61d95bd27275df4624"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "a7ae8b838a75711c06f86a2a8293dcad85a20b564670a120717e704c436e6f3a"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "60254978b8ee2c1b21b41d16a18a621dbbcc72e43eb2fa9f916818256c77e9ee"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "86d31f6fb799e91fa21bad341484564510ca287703a16e9e46c53338776f4f42"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "c6e023b172383fae5318c600e6f2f3a153513df62bf06ad6c9269296d2a78e89"
+      }
+    },
+    "inputs": {
+      "go-toolchain": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/x64",
+        "sha256": "a8725cfb0f79f9e9393f28e0113714a7cbcdb14b0f795132a4e5388ebbf6bcb0"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "37fba2be6c8beb59ff7a9bdd73c75fc87537c5f968c4e3ad6de0a7b21af08922",
+  "catalog_sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac",
+  "revision": 3,
+  "system": "x86_64-linux",
+  "build": {
+    "backend": "go",
+    "go": {
+      "binaries": {
+        "dive": "."
+      },
+      "generate": [],
+      "experiments": [],
+      "tags": [],
+      "variables": {
+        "main.version": "0.13.1"
+      },
+      "cgo": false
+    },
+    "url": "https://codeload.github.com/wagoodman/dive/tar.gz/refs/tags/v0.13.1",
+    "sha256": "2a9666e9c3fddd5e2e5bad81dccda520b8102e7cea34e2888f264b4eb0506852",
+    "archive": "tar.gz",
+    "strip_prefix": "dive-0.13.1",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "aqua": {
+        "type": "aqua_registry",
+        "owner": "aquaproj",
+        "repo": "aqua-registry",
+        "rev": "9f5eb79133d296366b3624e78e244de16c21c793"
+      },
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac"
+      }
+    }
+  },
+  "toolchain": {
+    "/home/runner/work/_temp/.tmpaV5O0G/.tmpDphhgK/build/.tmpEHu0hl/environment-tools/go": "go version go1.27.1 linux/amd64",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "dive",
+    "version": "0.13.1",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpaV5O0G/.tmpDphhgK/build/package.tar.gz",
+        "sha256": "f7eace6242c599c6658697752c816d99be84eb62e5a1bcc2f2f8344ffd34d424"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "dive": "bin/dive"
+      }
+    },
+    "output_sha256": "9c4f78f160a349c6893287d5a056bdd281065791e2797a3b2f1e60eef952a4fa"
+  }
+}

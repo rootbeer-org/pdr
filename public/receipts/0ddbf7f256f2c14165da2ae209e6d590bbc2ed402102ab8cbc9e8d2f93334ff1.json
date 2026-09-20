@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "build_key": "0c925cd3c0f43c22be57a6c2ffd2b253a84078e96a4ab4a959fdf30843e65ecc",
+  "build_environment": "0bf2397f3368e0f17c73edec39b1b5fe7f342d6227c7927d6edcf16d73e88843",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-macos",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "go": {
+        "path": "/Users/runner/hostedtoolcache/go/1.27.1/arm64/bin/go",
+        "sha256": "132b69336a1f809932a8a20b0201dbbb980e86e3a323ae32e893639d83d71598"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "5f1577051f23e9a4232aa8d763bd1ed51b788815b28e3f90dd453ec459f2795d"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e"
+      },
+      "sh": {
+        "path": "/bin/sh",
+        "sha256": "fcde7861d5e4f86f3a90d4fc3132f8712cf139f9fda52a59361d35007b605d61"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "6900a4b92282ed31bab441b8569ab5c7dd230051e0c290c4cb3506f00ba843d9"
+      }
+    },
+    "inputs": {
+      "go-toolchain": {
+        "path": "/Users/runner/hostedtoolcache/go/1.27.1/arm64",
+        "sha256": "e3bdd297ba5d1b890b463ce03bd9b95404829a878ab83d2fbcd665c320050d2f"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "bdc56624ed8e6572ae73580de574f7ee7007e6f0026b280ac85d79298a2e4d48",
+  "catalog_sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac",
+  "revision": 2,
+  "system": "aarch64-macos",
+  "build": {
+    "backend": "go",
+    "go": {
+      "binaries": {
+        "lefthook": "."
+      },
+      "generate": [],
+      "experiments": [],
+      "tags": [
+        "no_self_update"
+      ],
+      "variables": {},
+      "cgo": false
+    },
+    "url": "https://codeload.github.com/evilmartians/lefthook/tar.gz/refs/tags/v2.1.14",
+    "sha256": "b1a99784f93339b24a24731646d4489d2f3496c4f79c9dac449aea3d92fc2be0",
+    "archive": "tar.gz",
+    "strip_prefix": "lefthook-2.1.14",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac"
+      }
+    }
+  },
+  "toolchain": {
+    "/Users/runner/work/_temp/.tmpCyGHqF/.tmpj66XRS/build/.tmpNcgrrD/environment-tools/go": "go version go1.27.1 darwin/arm64",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "lefthook",
+    "version": "2.1.14",
+    "source": {
+      "File": {
+        "path": "/Users/runner/work/_temp/.tmpCyGHqF/.tmpj66XRS/build/package.tar.gz",
+        "sha256": "d4557aa41e7889f8eba177b734bdb7120d86336b298ff1863463ddc5c3b29553"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "lefthook": "bin/lefthook"
+      }
+    },
+    "output_sha256": "4bfd3f577be6e20ababef57799e70dd3a06b3245e9d1cfdf320ae4797f9be08d"
+  }
+}

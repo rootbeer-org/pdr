@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "build_key": "9be2be723ea5f141e002245fa3be83e82a7dd2ffc11cc31a275af167c9ed4ad2",
+  "build_environment": "9b65c50690460b8a4b00b58490b7631cf2d766c5f52c9ce8f84f490e3473af97",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "go": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/arm64/bin/go",
+        "sha256": "1675694ef690db0f18fbe7046a886170904bede1d9db6ec96ae27945c1705c64"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {
+      "go-toolchain": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/arm64",
+        "sha256": "eff111165a0b53498c0be2c6370748ac7493a4bc6c1fcc9f1aa9b31d70a4372a"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "5a1548ad1de8a2fefac02f93effca77733b0ad00ad67544f45ae0261b703aae8",
+  "catalog_sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac",
+  "revision": 3,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "go",
+    "go": {
+      "binaries": {
+        "mockery": "."
+      },
+      "generate": [],
+      "experiments": [],
+      "tags": [],
+      "variables": {
+        "github.com/vektra/mockery/v3/internal/logging.SemVer": "v3.8.0"
+      },
+      "cgo": false
+    },
+    "url": "https://codeload.github.com/vektra/mockery/tar.gz/refs/tags/v3.8.0",
+    "sha256": "166487e34348d95057252e5a1a172d272f12eb01902c0c05c2a948567028800f",
+    "archive": "tar.gz",
+    "strip_prefix": "mockery-3.8.0",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac"
+      }
+    }
+  },
+  "toolchain": {
+    "/home/runner/work/_temp/.tmpb4WHkO/.tmpvu42iD/build/.tmpy7BTNi/environment-tools/go": "go version go1.27.1 linux/arm64",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "mockery",
+    "version": "3.8.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpb4WHkO/.tmpvu42iD/build/package.tar.gz",
+        "sha256": "ddb8d86fb731f77015b24f4a69350026b61d9d398aed63f83f47f294597861dc"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "mockery": "bin/mockery"
+      }
+    },
+    "output_sha256": "762c902cbd7462424f836257fbe7bbb192413a96092c852242f8d86e70b5232e"
+  }
+}

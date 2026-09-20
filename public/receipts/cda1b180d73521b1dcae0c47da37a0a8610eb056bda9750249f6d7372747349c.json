@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "build_key": "5e1d029146ef0f4808f498da0b4c45f31be6c47fc1ac30bbfc71fbe052c146c6",
+  "build_environment": "42294d9d924396c14d0421e8abb98ed1fde6d02b264a2684e6e5912c6c57e782",
+  "environment": {
+    "schema": 1,
+    "system": "x86_64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "6452af2eea333b8c65e1adb92964fc8f97863ab003fa13f9d12bff5345cd7dbe"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+      },
+      "go": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/x64/bin/go",
+        "sha256": "30969f97169d7f43fe6a085873d75613adc21e30818a8c61d95bd27275df4624"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "a7ae8b838a75711c06f86a2a8293dcad85a20b564670a120717e704c436e6f3a"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "60254978b8ee2c1b21b41d16a18a621dbbcc72e43eb2fa9f916818256c77e9ee"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "86d31f6fb799e91fa21bad341484564510ca287703a16e9e46c53338776f4f42"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "c6e023b172383fae5318c600e6f2f3a153513df62bf06ad6c9269296d2a78e89"
+      }
+    },
+    "inputs": {
+      "go-toolchain": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/x64",
+        "sha256": "a8725cfb0f79f9e9393f28e0113714a7cbcdb14b0f795132a4e5388ebbf6bcb0"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "0c6e0b82dbb0c55ea460dd39c219a7f54b3af9d7a083ec45f76bed467274d406",
+  "catalog_sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac",
+  "revision": 3,
+  "system": "x86_64-linux",
+  "build": {
+    "backend": "go",
+    "go": {
+      "binaries": {
+        "yq": "."
+      },
+      "generate": [],
+      "experiments": [],
+      "tags": [],
+      "variables": {},
+      "cgo": false
+    },
+    "url": "https://codeload.github.com/mikefarah/yq/tar.gz/refs/tags/v4.53.6",
+    "sha256": "132a28a669526f99dba52486ac80de3bdafdf9a1a52a0c6bd6045301aca0cd25",
+    "archive": "tar.gz",
+    "strip_prefix": "yq-4.53.6",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac"
+      }
+    }
+  },
+  "toolchain": {
+    "/home/runner/work/_temp/.tmpzILFgw/.tmp5wfR3F/build/.tmp5ZnuM3/environment-tools/go": "go version go1.27.1 linux/amd64",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "yq",
+    "version": "4.53.6",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpzILFgw/.tmp5wfR3F/build/package.tar.gz",
+        "sha256": "ee433a5f1dcc60c451e50a8c43583aaca1f7ec66178fc95d6e71980a9d9464f9"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "yq": "bin/yq"
+      }
+    },
+    "output_sha256": "84a9d494f5f379a7549e517b2aeecf4e135e61e97faf80ce4458bdbb556a35c8"
+  }
+}

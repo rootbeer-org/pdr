@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "build_key": "73a3892c1c6f40e0b8b80f94f84aacb845e5d7380084aed954f9ae56ecfa5ba3",
+  "build_environment": "9b65c50690460b8a4b00b58490b7631cf2d766c5f52c9ce8f84f490e3473af97",
+  "environment": {
+    "schema": 1,
+    "system": "aarch64-linux",
+    "tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "sha256": "f4583a612510e038dbc1ae8afb5eae5f0445c435bdd7c4c28e78acc7e757d2b1"
+      },
+      "c++": {
+        "path": "/usr/bin/c++",
+        "sha256": "fc02363794280f404c6ca6f5da1c8fe469be902e9de140d35d8573bb3393f53b"
+      },
+      "cc": {
+        "path": "/usr/bin/cc",
+        "sha256": "a20520ee21543f243d40636a9181a142c45ecd989de31ab86b99a8ea5ada870d"
+      },
+      "go": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/arm64/bin/go",
+        "sha256": "1675694ef690db0f18fbe7046a886170904bede1d9db6ec96ae27945c1705c64"
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "sha256": "abbecc214fcadef6530d1cc137bde7ceb74cae3f6b992c7d10a8669a7314c7e0"
+      },
+      "patch": {
+        "path": "/usr/bin/patch",
+        "sha256": "1b04b2a8dffbcfa9d75d17eb386a73f271415142d4e48baab2acfc10b1cca8f5"
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "sha256": "824de22ce448c3567e631425f7754a6df72e90bd758079daa94f1aa6edf41513"
+      },
+      "sh": {
+        "path": "/usr/bin/sh",
+        "sha256": "c883d9c27228339580994a1d0ea960645368c7d1b960a712bd0c655860c2d0d7"
+      },
+      "uname": {
+        "path": "/usr/bin/uname",
+        "sha256": "3546dcb97c9bf54b891d85c64fb876584e2cb9b589c6efcab4a45f3b0a8994ac"
+      }
+    },
+    "inputs": {
+      "go-toolchain": {
+        "path": "/opt/hostedtoolcache/go/1.27.1/arm64",
+        "sha256": "eff111165a0b53498c0be2c6370748ac7493a4bc6c1fcc9f1aa9b31d70a4372a"
+      }
+    },
+    "variables": {}
+  },
+  "isolation": "host",
+  "runtime_audit_sha256": "7358c8df2c364f54f59ec278f72ad3b5e36c0cd5eee2b0e9d725251d88e4eb01",
+  "catalog_sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac",
+  "revision": 2,
+  "system": "aarch64-linux",
+  "build": {
+    "backend": "go",
+    "go": {
+      "binaries": {
+        "syft": "./cmd/syft"
+      },
+      "generate": [],
+      "experiments": [],
+      "tags": [],
+      "variables": {
+        "main.version": "1.52.0"
+      },
+      "cgo": false
+    },
+    "url": "https://codeload.github.com/anchore/syft/tar.gz/refs/tags/v1.52.0",
+    "sha256": "8b999a1b8bd08b12512176cdec5d063db9cfe209c65cc5de9c4eb2ab7bdc7b3c",
+    "archive": "tar.gz",
+    "strip_prefix": "syft-1.52.0",
+    "configure": [],
+    "dependencies": []
+  },
+  "dependencies": {},
+  "resolver_inputs": {
+    "resolvers": {
+      "rootbeer": {
+        "type": "catalog",
+        "sha256": "91a5f0c54e64cbd2d48835174bb3d06c6b15b16c172d122b73611905cb5733ac"
+      }
+    }
+  },
+  "toolchain": {
+    "/home/runner/work/_temp/.tmpDDUrze/.tmp2uAV9d/build/.tmpJ0TGUR/environment-tools/go": "go version go1.27.1 linux/arm64",
+    "rootbeer.host-path": "/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "package": {
+    "name": "syft",
+    "version": "1.52.0",
+    "source": {
+      "File": {
+        "path": "/home/runner/work/_temp/.tmpDDUrze/.tmp2uAV9d/build/package.tar.gz",
+        "sha256": "e34bc4feae5cbbd728cf51922a98f35596a32097c75c9a2b98cd9aa1d7109734"
+      }
+    },
+    "install": {
+      "Archive": {
+        "format": "TarGz",
+        "strip_prefix": null
+      }
+    },
+    "provides": {
+      "bins": {
+        "syft": "bin/syft"
+      }
+    },
+    "output_sha256": "499f4c3ee2a60cc239d6ecf13b4fdf85131b1069663ebb4b1179e0ce119327d6"
+  }
+}
