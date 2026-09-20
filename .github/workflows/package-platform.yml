@@ -63,6 +63,7 @@ jobs:
       max-parallel: 16
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     uses: ./.github/workflows/package-job.yml
+    secrets: inherit
     permissions:
       contents: read
       actions: read

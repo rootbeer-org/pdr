@@ -24,6 +24,7 @@ jobs:
       matrix:
         runner: [ubuntu-24.04, ubuntu-24.04-arm, macos-15]
     uses: ./.github/workflows/package-platform.yml
+    secrets: inherit
     permissions:
       contents: read
       actions: read
