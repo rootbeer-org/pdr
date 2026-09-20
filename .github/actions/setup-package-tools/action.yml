@@ -1,0 +1,24 @@
+name: Set up package tools
+description: Install the tools used by package planning and building.
+outputs:
+  context:
+    description: Runner image and architecture identity
+    value: ${{ steps.image.outputs.context }}
+runs:
+  using: composite
+  steps:
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de
+      with:
+        toolchain: 1.98.1
+    - name: Install Go
+      uses: actions/setup-go@e626ada899467caf4efc6cfd0484b965da944ce8
+      with:
+        go-version: "1.27.1"
+        cache: false
+    - name: Identify runner image
+      id: image
+      shell: bash
+      run: |
+        : "${ImageOS:?}" "${ImageVersion:?}" "${RUNNER_ARCH:?}"
+        printf 'context=%s-%s-%s\n' "$ImageOS" "$ImageVersion" "$RUNNER_ARCH" >> "$GITHUB_OUTPUT"

@@ -77,6 +77,30 @@ with a writable deploy key scoped to this repository to enable immediate notific
 works without it. `PUBLISH_INDEX` controls both automatic promotion and publication;
 main must allow the workflow token to push verified recipe updates.
 
+## Individual package publication
+
+The new `Build selected packages` workflow is a manual rollout path for exact,
+dependency-free source packages already approved on main. Each platform plans
+missing results, each package builds on its own runner using all CPU cores, and
+each successful build gets a separate signing job. There is no catalog assembly
+barrier. Failures leave other package publications intact.
+
+The signing job consumes the immutable artifact ID from its own successful build
+job at the same approved commit. Build jobs have no signing key or registry write
+permission. Signed records and archives live together in each package's public
+GHCR repository. Input tags locate records; Forge verifies signatures and input
+keys before reuse. Registry errors fail planning instead of triggering rebuilds.
+
+Rerun failed jobs to reuse successful builds. Resubmitting a selection skips its
+already published results. Each platform accepts up to GitHub's 256 matrix jobs,
+with at most 16 active package jobs; larger requests must be split. Packages whose
+GHCR repositories are not public must have registry access configured first.
+
+Rollout requires publishing Forge with `package-plan`, `verify-record`, and
+`--input-key` support, then updating `engine-revision`. This branch deliberately
+does not switch the existing PR/discovery workflows or catalog search over yet.
+Dependency results and automatic PR-to-main promotion are subsequent stages.
+
 ## Report a problem
 
 For a missing tool, broken package, or outdated version, [open an issue here](https://github.com/tale/rootbeer-index/issues).

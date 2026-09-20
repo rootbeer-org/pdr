@@ -1,0 +1,29 @@
+name: Build selected packages
+run-name: Build ${{ inputs.packages }}
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: Exact packages to publish, separated by spaces (name@version)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  platform:
+    if: github.ref == 'refs/heads/main'
+    name: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm, macos-15]
+    uses: ./.github/workflows/package-platform.yml
+    permissions:
+      contents: read
+      actions: read
+      packages: write
+    with:
+      runner: ${{ matrix.runner }}
+      packages: ${{ inputs.packages }}
