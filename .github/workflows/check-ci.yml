@@ -1,10 +1,10 @@
 name: Validate CI
 on:
   pull_request:
-    paths: [".github/**"]
+    paths: [".github/**", "tests/**"]
   push:
     branches: [main]
-    paths: [".github/**"]
+    paths: [".github/**", "tests/**"]
 
 permissions:
   contents: read
@@ -28,3 +28,5 @@ jobs:
         run: '"$RUNNER_TEMP/actionlint"'
       - name: Check automation syntax
         run: python3 -m compileall -q .github/scripts
+      - name: Check selection and artifact admission
+        run: python3 tests/package-automation_test.py

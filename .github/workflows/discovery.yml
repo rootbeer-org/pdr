@@ -2,7 +2,7 @@ name: Upstream discovery
 on:
   push:
     branches: [main]
-    paths: ["rootbeer-update", "engine-revision", "packages/**"]
+    paths: ["rootbeer-update"]
   workflow_dispatch:
     inputs:
       rootbeer_only:
@@ -24,11 +24,12 @@ concurrency:
 
 jobs:
   discover:
-    if: vars.PACKAGE_DISCOVERY != 'true'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     outputs:
       changed: ${{ steps.report.outputs.changed }}
+      packages: ${{ steps.select.outputs.packages }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -44,6 +45,7 @@ jobs:
         id: engine
         with:
           runner: ubuntu-24.04
+          revision-file: package-engine-revision
       - name: Test update automation
         if: steps.engine.outcome == 'success'
         env:
@@ -79,6 +81,16 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 .github/scripts/rootbeer-update.py
+      - name: Select changed package inputs
+        id: select
+        if: steps.engine.outcome == 'success'
+        env:
+          BASE_REVISION: ${{ github.sha }}
+          CATALOG: candidates/packages
+        run: |
+          if [ -d candidates/packages ]; then
+            python3 .github/scripts/package-selection.py
+          fi
       - name: Summarize candidates and exceptions
         id: report
         if: always()
@@ -102,15 +114,28 @@ jobs:
         if: steps.discovery.outcome == 'failure'
         run: echo "::warning::Some upstreams failed; see the discovery report. Successful candidates continue independently."
 
-  qualify:
-    permissions:
-      contents: read
-      actions: read
-      packages: read
+  propose:
+    name: Open recipe update PR
     needs: discover
-    if: always() && needs.discover.outputs.changed == 'true'
-    uses: ./.github/workflows/packages.yml
-    with:
-      catalog: candidates/packages
-      candidates: upstream-candidates
-      retention-days: 14
+    if: needs.discover.outputs.packages != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - name: Read approved automation
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Read candidate recipes
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: upstream-candidates
+          path: candidates
+      - name: Propose updates and start package verification
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGES: ${{ needs.discover.outputs.packages }}
+        run: python3 .github/scripts/propose-updates.py

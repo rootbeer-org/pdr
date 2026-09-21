@@ -15,27 +15,45 @@ def retained_results(run_id):
     repository = os.environ['GITHUB_REPOSITORY']
     base = f'repos/{repository}/actions/runs/{run_id}'
     run = json.loads(command('gh', 'api', base))
-    if (run['status'] != 'completed' or run['event'] != 'workflow_dispatch'
-            or run['head_branch'] != 'main' or run['head_repository']['full_name'] != repository
-            or run['path'] != '.github/workflows/package-builds.yml'):
-        raise ValueError('Reuse requires completed package verification on approved main')
-    comparison = json.loads(command('gh', 'api', f"repos/{repository}/compare/{run['head_sha']}...{os.environ['GITHUB_SHA']}"))
-    if comparison['status'] not in ('ahead', 'identical'):
-        raise ValueError('Producer revision is not an ancestor of this approved commit')
+    is_retry = run_id == os.environ['GITHUB_RUN_ID']
+    if not is_retry and run['status'] != 'completed':
+        raise ValueError('Producer verification is still running')
+    if run['path'] != '.github/workflows/package-builds.yml':
+        raise ValueError('Unrecognized package producer')
+    revision = run['head_sha']
+    if not is_retry and (run['event'] == 'pull_request' or run['head_branch'] != 'main'):
+        pulls = json.loads(command('gh', 'api', f'repos/{repository}/commits/{revision}/pulls'))
+        approved = [pull for pull in pulls if pull['merged_at'] and pull['base']['ref'] == 'main'
+                    and pull['head']['sha'] == revision]
+        if not approved:
+            raise ValueError('PR results require the exact contributor revision to be merged')
+        revision = approved[0]['merge_commit_sha']
+    elif not is_retry and (run['head_branch'] != 'main' or run['head_repository']['full_name'] != repository):
+        raise ValueError('Producer must run on approved main or an exactly merged PR')
+    if not is_retry:
+        command('git', 'fetch', '--no-tags', 'origin', revision)
+        subprocess.run(['git', 'merge-base', '--is-ancestor', revision, 'HEAD'], check=True)
+        command('git', 'fetch', '--no-tags', 'origin', run['head_sha'])
+        trusted = ['.github/workflows/package-builds.yml', '.github/workflows/package-platform.yml',
+                   '.github/workflows/package-job.yml', '.github/scripts/package-jobs.py',
+                   '.github/scripts/package-selection.py', '.github/actions/setup-engine',
+                   '.github/actions/setup-package-tools', 'package-engine-revision']
+        if command('git', 'diff', '--name-only', run['head_sha'], 'HEAD', '--', *trusted):
+            raise ValueError('Producer verification tooling differs from approved tooling')
     def pages(suffix, field):
-        responses = json.loads(command('gh', 'api', '--paginate', '--slurp', f'{base}/{suffix}?per_page=100'))
+        responses = json.loads(command('gh', 'api', '--paginate', '--slurp', f'{base}/{suffix}'))
         return [item for response in responses for item in response[field]]
-    return run, pages('artifacts', 'artifacts'), pages('jobs', 'jobs')
+    return run, pages('artifacts?per_page=100', 'artifacts'), pages('jobs?filter=all&per_page=100', 'jobs')
 
 
 def retained_artifact(retained, task):
     run, artifacts, jobs = retained
     expected_job = f"{os.environ['PACKAGE_RUNNER']} / {task['package']} ({task['system']}) / Build and check"
-    if not any(job['name'] == expected_job and job['conclusion'] == 'success'
+    if not any(job['name'].endswith(expected_job) and job['conclusion'] == 'success'
                and any(step['name'] in ('Build and check this package', 'Recover the admitted verified build')
                        and step['conclusion'] == 'success' for step in job.get('steps', []))
                for job in jobs):
-        raise ValueError(f'{expected_job}: no successful verification to recover')
+        return ''
     prefix = f"package-{task['key']}-"
     matches = [artifact for artifact in artifacts if not artifact['expired']
                and artifact['name'].startswith(prefix)
@@ -54,15 +72,30 @@ def plan():
     if not requests or any(not re.fullmatch(r'[a-z0-9][a-z0-9+._-]*@[A-Za-z0-9._+-]+', item) for item in requests):
         raise ValueError('Select exact packages: name@version separated by spaces')
     engine = 'engine-bin/rootbeer-forge'
-    tasks = json.loads(command(engine, '--catalog', 'packages', 'package-plan',
-                               '--context', os.environ['BUILD_CONTEXT'], *requests))
+    tasks = []
+    system = {'ubuntu-24.04': 'x86_64-linux', 'ubuntu-24.04-arm': 'aarch64-linux',
+              'macos-15': 'aarch64-macos'}[os.environ['PACKAGE_RUNNER']]
+    for request in requests:
+        result = subprocess.run([engine, '--catalog', os.environ.get('CATALOG', 'packages'), 'package-plan',
+                                 '--context', os.environ['BUILD_CONTEXT'], request], text=True, capture_output=True)
+        if result.returncode:
+            tasks.append({'package': request, 'name': request.split('@')[0], 'system': system,
+                          'error': result.stderr.strip(), 'key': ''})
+            continue
+        tasks.extend(json.loads(result.stdout))
     expected = os.environ.get('EXPECTED_KEY')
     if expected and (len(tasks) != 1 or tasks[0]['key'] != expected):
         raise ValueError('Package inputs changed after planning')
     missing = []
     reused = []
-    retained = retained_results(os.environ['REUSE_RUN']) if os.environ.get('REUSE_RUN') else None
+    reuse_run = os.environ.get('REUSE_RUN', '')
+    if not expected and not reuse_run and int(os.environ.get('GITHUB_RUN_ATTEMPT', '1')) > 1:
+        reuse_run = os.environ['GITHUB_RUN_ID']
+    retained = retained_results(reuse_run) if reuse_run else None
     for task in tasks:
+        if task.get('error'):
+            missing.append(task)
+            continue
         repository = f"{os.environ['PACKAGE_REGISTRY']}/{task['name']}"
         locator = f"ghcr.io/{repository}:inputs-{task['key']}"
         result = subprocess.run(['oras', 'manifest', 'fetch', locator], text=True, capture_output=True)
@@ -71,6 +104,7 @@ def plan():
                 raise RuntimeError(f'Cannot inspect {locator}: {result.stderr}')
             if retained:
                 task['artifact'] = retained_artifact(retained, task)
+                task['reuse_run'] = reuse_run
             missing.append(task)
             continue
         manifest = json.loads(result.stdout)
@@ -88,6 +122,7 @@ def plan():
                 '--system', task['system'], '--input-key', task['key'],
                 '--public-key', os.environ['PACKAGE_PUBLIC_KEY'], *output)
         reused.append((task, reference))
+    Path('package-plan.json').write_text(json.dumps({'tasks': tasks, 'reused': [task['key'] for task, _ in reused]}))
     if len(missing) > 256:
         raise ValueError('GitHub permits 256 jobs per matrix; submit smaller package selections')
     with open(os.environ['GITHUB_OUTPUT'], 'a') as output:

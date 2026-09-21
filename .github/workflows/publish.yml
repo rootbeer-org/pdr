@@ -1,211 +1,21 @@
-name: Publish packages
+name: Publish verified packages
 on:
   workflow_run:
-    workflows: [Retain package results]
+    workflows: [Packages]
     types: [completed]
-    branches: [main]
-  push:
-    branches: [main]
-    paths: ["engine-revision", "packages/**"]
-  workflow_dispatch:
-    inputs:
-      recheck:
-        description: Rebuild and recheck every package
-        type: boolean
-        default: false
-  schedule:
-    - cron: "23 6 * * 1"
 
 permissions:
   contents: read
 
-concurrency:
-  group: publish-packages
-  cancel-in-progress: false
-
 jobs:
-  trigger:
-    if: vars.PACKAGE_DISCOVERY != 'true' && github.ref == 'refs/heads/main' && github.event.repository.private == false && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
-    runs-on: ubuntu-24.04
-    permissions:
-      actions: read
-    outputs:
-      ready: ${{ steps.check.outputs.ready }}
-    steps:
-      - name: Skip collector runs with no candidate
-        id: check
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          COLLECTOR_RUN: ${{ github.event.workflow_run.id }}
-        run: |
-          ready=true
-          if [ -n "$COLLECTOR_RUN" ]; then
-            ready=$(gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$COLLECTOR_RUN/jobs?per_page=100" |
-              jq '[.[].jobs[].steps[]? | select(.name == "Expose authenticated candidate locators" and .conclusion == "success")] | length > 0')
-          fi
-          echo "ready=$ready" >> "$GITHUB_OUTPUT"
-
-  select:
-    needs: trigger
-    if: needs.trigger.outputs.ready == 'true'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    permissions:
-      actions: read
-      contents: write
-      packages: read
-    outputs:
-      candidate: ${{ steps.decision.outputs.candidate }}
-      revision: ${{ steps.decision.outputs.revision }}
-      ready: ${{ steps.decision.outputs.ready }}
-      qualify: ${{ steps.decision.outputs.qualify }}
-    env:
-      GH_TOKEN: ${{ github.token }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-          ref: ${{ github.event_name == 'workflow_run' && 'main' || github.sha }}
-      - uses: ./.github/actions/setup-engine
-        with:
-          runner: ubuntu-24.04
-      - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d # v2.0.1
-        with:
-          version: 1.3.0
-      - name: Authenticate reader
-        run: printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
-      - name: Select verified publication inputs
-        id: decision
-        env:
-          COLLECTOR_RUN: ${{ github.event.workflow_run.id }}
-          COLLECTOR_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-          ALLOW_QUALIFICATION: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
-          SHOULD_RECHECK: ${{ github.event_name == 'schedule' || inputs.recheck == true }}
-          SHOULD_PROMOTE: ${{ vars.PUBLISH_INDEX == 'true' }}
-        run: |
-          options=()
-          if [ "$ALLOW_QUALIFICATION" = true ]; then options+=(--allow-qualification); fi
-          if [ "$SHOULD_PROMOTE" = true ]; then gh auth setup-git; options+=(--promote); fi
-          if [ -n "$COLLECTOR_RUN" ]; then
-            options+=(--tag "collector-$COLLECTOR_RUN-$COLLECTOR_ATTEMPT")
-          elif [ "$SHOULD_RECHECK" = true ]; then
-            options+=(--recheck)
-          fi
-          python3 .github/scripts/candidate-store.py select "${options[@]}"
-
-  verify:
-    permissions:
-      contents: read
-      actions: read
-      packages: read
-    needs: select
-    if: needs.select.outputs.qualify == 'true'
-    uses: ./.github/workflows/packages.yml
-    with:
-      recheck: ${{ github.event_name == 'schedule' || inputs.recheck == true }}
-
-  retain:
-    permissions:
-      actions: read
-      contents: read
-      pull-requests: read
-      packages: write
-      id-token: write
-      attestations: write
-    needs: verify
-    uses: ./.github/workflows/retain-results.yml
-
   publish:
-    needs: [select, verify, retain]
-    if: always() && vars.PACKAGE_DISCOVERY != 'true' && github.ref == 'refs/heads/main' && needs.select.result == 'success' && needs.select.outputs.ready == 'true' && (needs.retain.result == 'success' || (needs.verify.result == 'skipped' && needs.select.outputs.candidate != '')) && vars.PUBLISH_INDEX == 'true'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 60
-    environment: package-publishing
+    name: Promote merged package results
+    if: github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.head_branch != 'main'
+    uses: ./.github/workflows/package-builds.yml
     permissions:
-      actions: read
       contents: write
+      actions: read
+      pull-requests: read
       packages: write
       pages: write
       id-token: write
-      attestations: write
-    env:
-      CANDIDATE: ${{ needs.select.outputs.candidate || needs.retain.outputs.candidate }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          ref: ${{ needs.select.outputs.revision }}
-      - uses: ./.github/actions/setup-engine
-        with:
-          runner: ubuntu-24.04
-      - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d # v2.0.1
-        with:
-          version: 1.3.0
-      - name: Authenticate publisher
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
-      - name: Verify retained candidate against approved current main
-        id: approved
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          python3 .github/scripts/candidate-store.py pull --reference "$CANDIDATE"
-          python3 .github/scripts/candidate-store.py approve --reference "$CANDIDATE"
-      - name: Restore retained Pages history
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh auth setup-git
-          git init -b gh-pages site
-          git -C site remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
-          refs=$(git -C site ls-remote --heads origin gh-pages)
-          if [ -n "$refs" ]; then
-            git -C site fetch --depth=1 origin gh-pages
-            git -C site reset --hard FETCH_HEAD
-          fi
-      - name: Upload blobs and sign snapshot
-        env:
-          INDEX_SIGNING_KEY: ${{ secrets.INDEX_SIGNING_KEY }}
-          INDEX_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
-          INDEX_URL: ${{ vars.INDEX_URL }}
-        run: |
-          sequence=$((GITHUB_RUN_ID * 1000 + GITHUB_RUN_ATTEMPT))
-          umask 077
-          key="$RUNNER_TEMP/index-signing-key.der"
-          trap 'rm -f "$key"' EXIT
-          printf '%s' "$INDEX_SIGNING_KEY" | base64 --decode > "$key"
-          unset INDEX_SIGNING_KEY
-          engine-bin/rootbeer-forge publish --bundle retained/bundle --site site \
-            --site-url "$INDEX_URL" --registry tale/rootbeer-index --sequence "$sequence" \
-            --repository-url "https://github.com/$GITHUB_REPOSITORY" \
-            --key "$key" --public-key "$INDEX_PUBLIC_KEY" --manifest current.json
-      - name: Retain immutable snapshots
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"
-          git -C site config user.name 'github-actions[bot]'
-          git -C site config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git -C site add public
-          git -C site commit -m "publish package snapshot ${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}"
-          git -C site push origin HEAD:gh-pages
-      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        with:
-          path: site/public
-      - uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
-      - name: Attest catalog approval
-        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
-        with:
-          subject-name: ghcr.io/${{ github.repository }}/results
-          subject-digest: ${{ steps.approved.outputs.digest }}
-          predicate-type: https://rootbeer.tale.me/attestations/catalog-approval/v1
-          predicate-path: approval.json
-          push-to-registry: true
-          create-storage-record: false
-      - name: Expose approved results for reuse
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/candidate-store.py locate --reference "$CANDIDATE" --tag accepted

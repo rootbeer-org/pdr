@@ -6,7 +6,7 @@ inputs:
     required: true
   revision-file:
     description: File containing the approved engine commit for this publication flow
-    default: engine-revision
+    default: package-engine-revision
 outputs:
   revision:
     description: Full Rootbeer commit SHA

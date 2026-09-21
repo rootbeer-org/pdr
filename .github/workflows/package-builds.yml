@@ -1,15 +1,21 @@
-name: Build selected packages
-run-name: ${{ inputs.packages && format('Publish {0}', inputs.packages) || 'Refresh package discovery' }}
+name: Packages
+run-name: ${{ github.event.pull_request.title || inputs.packages || 'Package updates' }}
 on:
+  pull_request:
+    branches: [main]
+    paths: ["packages/**"]
+  push:
+    branches: [main]
+    paths: ["packages/**"]
+  workflow_call:
   workflow_dispatch:
     inputs:
       packages:
-        description: Exact packages (name@version); leave empty to publish retained discovery only
-        required: false
-        default: ""
+        description: Exact name@version selections; empty refreshes discovery only
         type: string
+        default: ""
       reuse-run:
-        description: Recover verified artifacts from this main-branch run without rebuilding
+        description: Recover successful package builds from this approved run
         type: string
         default: ""
 
@@ -17,28 +23,68 @@ permissions:
   contents: read
 
 jobs:
+  select:
+    name: Select changed packages
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.head_branch != 'main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+    outputs:
+      packages: ${{ steps.select.outputs.packages }}
+      reuse-run: ${{ steps.producer.outputs.reuse-run }}
+      waiting: ${{ steps.producer.outputs.waiting }}
+    steps:
+      - name: Read recipes and history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Find completed PR verification
+        id: producer
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REUSE_RUN: ${{ inputs.reuse-run }}
+        run: python3 .github/scripts/package-producer.py
+      - name: Install approved package engine
+        if: steps.producer.outputs.waiting != 'true'
+        uses: ./.github/actions/setup-engine
+        with:
+          runner: ubuntu-24.04
+          revision-file: package-engine-revision
+      - name: Compare expanded package inputs
+        if: steps.producer.outputs.waiting != 'true'
+        id: select
+        env:
+          PACKAGES: ${{ inputs.packages }}
+          BASE_REVISION: ${{ steps.producer.outputs.base || github.event.pull_request.base.sha || github.event.before }}
+        run: python3 .github/scripts/package-selection.py
+
   platform:
-    if: github.ref == 'refs/heads/main' && inputs.packages != ''
+    needs: select
+    if: needs.select.outputs.packages != '' && needs.select.outputs.waiting != 'true'
     name: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
         runner: [ubuntu-24.04, ubuntu-24.04-arm, macos-15]
     uses: ./.github/workflows/package-platform.yml
-    secrets: inherit
     permissions:
       contents: read
       actions: read
       packages: write
     with:
       runner: ${{ matrix.runner }}
-      packages: ${{ inputs.packages }}
-      reuse-run: ${{ inputs.reuse-run }}
+      packages: ${{ needs.select.outputs.packages }}
+      reuse-run: ${{ needs.select.outputs.reuse-run }}
+      publish: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
 
   discovery:
     name: Publish package discovery
-    needs: platform
-    if: always() && !cancelled() && github.ref == 'refs/heads/main' && vars.PUBLISH_INDEX == 'true'
+    needs: [select, platform]
+    if: always() && !cancelled() && needs.select.result == 'success' && needs.select.outputs.waiting != 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.PUBLISH_INDEX == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: package-publishing

@@ -29,7 +29,7 @@ Declare only platforms CI can verify. Source-capable recipes publish our compile
 outputs; upstream prebuilts do not replace declared source builds. Verify Git-source
 build steps against repository archives before declaring `inputs.source.git`.
 
-Keep `engine-revision` pinned to a full commit SHA. Change it only when required by
+Keep `package-engine-revision` pinned to a full commit SHA. Change it only when required by
 engine-dependent recipes or workflows, coordinating schema changes with the engine.
 Unrelated engine changes should not force catalog-wide rebuilds; fix overly broad
 invalidation when necessary. Never expose publication credentials to build or PR

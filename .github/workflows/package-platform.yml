@@ -8,6 +8,9 @@ on:
       packages:
         required: true
         type: string
+      publish:
+        type: boolean
+        default: false
       reuse-run:
         type: string
         default: ""
@@ -32,11 +35,14 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-engine
+          fetch-depth: 0
+      - name: Install verified Forge
+        uses: ./.github/actions/setup-engine
         with:
           runner: ${{ inputs.runner }}
           revision-file: package-engine-revision
-      - uses: ./.github/actions/setup-package-tools
+      - name: Prepare build toolchains
+        uses: ./.github/actions/setup-package-tools
         id: tools
       - name: Install registry client
         uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d
@@ -54,6 +60,12 @@ jobs:
           PACKAGE_RUNNER: ${{ inputs.runner }}
           RECORD_DIRECTORY: discovery-records
         run: python3 .github/scripts/package-jobs.py
+      - name: Retain package plan
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: plan-${{ inputs.runner }}-${{ github.run_attempt }}
+          path: package-plan.json
+          if-no-files-found: error
       - name: Retain reused package records for discovery
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -67,10 +79,8 @@ jobs:
     if: needs.plan.outputs.has-work == 'true'
     strategy:
       fail-fast: false
-      max-parallel: 16
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     uses: ./.github/workflows/package-job.yml
-    secrets: inherit
     permissions:
       contents: read
       actions: read
@@ -80,6 +90,8 @@ jobs:
       package: ${{ matrix.package }}
       name: ${{ matrix.name }}
       key: ${{ matrix.key }}
+      error: ${{ matrix.error || '' }}
       context: ${{ needs.plan.outputs.context }}
       artifact: ${{ matrix.artifact || '' }}
-      reuse-run: ${{ inputs.reuse-run }}
+      reuse-run: ${{ matrix.reuse_run || inputs.reuse-run }}
+      publish: ${{ inputs.publish }}
