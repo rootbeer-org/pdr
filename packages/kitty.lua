@@ -3,8 +3,10 @@ return {
     name = "kitty",
     description = "Use a fast, feature-rich, GPU-based terminal emulator",
     homepage = "https://sw.kovidgoyal.net/kitty/",
-    default_version = "0.48.2",
-    default_versions = { ["aarch64-macos"] = "0.48.2" },
+    default_version = "0.49.0",
+    default_versions = {
+        ["aarch64-macos"] = "0.48.2",
+    },
     upstream = {
         github = "kovidgoyal/kitty",
         repository_id = 71056775,
@@ -24,8 +26,8 @@ return {
     outputs = {
         bins = { "kitty", "kitten" },
         bin_paths = {
-            kitty = "bin/kitty",
             kitten = "bin/kitten",
+            kitty = "bin/kitty",
         },
         checks = {
             { "kitty", "--version" },
@@ -52,16 +54,20 @@ return {
                     outputs = {
                         bins = { "kitty", "kitten" },
                         bin_paths = {
-                            kitty = "kitty.app/Contents/MacOS/kitty",
                             kitten = "kitty.app/Contents/MacOS/kitten",
+                            kitty = "kitty.app/Contents/MacOS/kitty",
                         },
                         apps = {
                             ["kitty.app"] = "kitty.app",
                         },
-                        checks = { { "kitty", "--version" }, { "kitten", "--version" } },
+                        checks = {
+                            { "kitty", "--version" },
+                            { "kitten", "--version" },
+                        },
                     },
                 },
             },
         },
+        ["0.49.0"] = {},
     },
 }
