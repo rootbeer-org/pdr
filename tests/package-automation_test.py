@@ -32,6 +32,20 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(selection.changed_requests(before, after), ['app@3', 'lib@1', 'tool@2'])
 
 
+class PlatformSelectionTests(unittest.TestCase):
+    def test_mac_override_does_not_rebuild_linux(self):
+        linux = {'revision': 1, 'systems': ['x86_64-linux', 'aarch64-linux'], 'bins': ['tool']}
+        before = {'tool': {'versions': {'1': linux}}}
+        after = copy.deepcopy(before)
+        after['tool']['versions']['1']['platforms'] = {'aarch64-macos': {'revision': 1, 'systems': ['aarch64-macos'], 'bins': [], 'apps': {'Tool.app': 'Tool.app'}}}
+        self.assertEqual(selection.changed_requests(before, after), ['tool@1'])
+        self.assertEqual(selection.changed_requests(before, after, 'aarch64-macos'), ['tool@1'])
+        for system in ['aarch64-linux', 'x86_64-linux']:
+            self.assertEqual(selection.changed_requests(before, after, system), [])
+        after['tool']['versions']['1']['revision'] = 2
+        self.assertEqual(selection.changed_requests(before, after, 'x86_64-linux'), ['tool@1'])
+
+
 class RegistryTests(unittest.TestCase):
     def test_denied_is_missing_only_for_an_unpublished_name(self):
         error = 'Error response from registry: denied: requested access to the resource is denied'
@@ -55,6 +69,14 @@ class RegistryTests(unittest.TestCase):
 
     def test_outage_does_not_trigger_a_build(self):
         self.assertFalse(jobs.is_missing('registry/new:tag', 'new', 'TLS handshake timeout'))
+
+
+class ProducerSelectionTests(unittest.TestCase):
+    def test_completed_verification_wins_over_unstarted_pr_run(self):
+        verified = {'id': 10, 'event': 'workflow_dispatch', 'status': 'completed', 'conclusion': 'success'}
+        unstarted = {'id': 11, 'event': 'pull_request', 'status': 'completed', 'conclusion': 'failure'}
+        self.assertEqual(producer.verification_run([verified, unstarted]), verified)
+        self.assertEqual(producer.verification_run([unstarted]), unstarted)
 
 
 class RecoveryTests(unittest.TestCase):

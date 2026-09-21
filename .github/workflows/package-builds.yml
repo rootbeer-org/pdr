@@ -37,6 +37,7 @@ jobs:
       pull-requests: read
     outputs:
       packages: ${{ steps.select.outputs.packages }}
+      platforms: ${{ steps.select.outputs.platforms }}
       reuse-run: ${{ steps.producer.outputs.reuse-run }}
       waiting: ${{ steps.producer.outputs.waiting }}
     steps:
@@ -71,8 +72,7 @@ jobs:
     name: ${{ matrix.runner }}
     strategy:
       fail-fast: false
-      matrix:
-        runner: [ubuntu-24.04, ubuntu-24.04-arm, macos-15]
+      matrix: ${{ fromJSON(needs.select.outputs.platforms) }}
     uses: ./.github/workflows/package-platform.yml
     secrets:
       INDEX_SIGNING_KEY: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && secrets.INDEX_SIGNING_KEY || '' }}
@@ -82,7 +82,7 @@ jobs:
       packages: write
     with:
       runner: ${{ matrix.runner }}
-      packages: ${{ needs.select.outputs.packages }}
+      packages: ${{ matrix.packages }}
       reuse-run: ${{ needs.select.outputs.reuse-run }}
       publish: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
 

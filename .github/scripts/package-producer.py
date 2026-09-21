@@ -8,6 +8,10 @@ def api(path):
     return json.loads(subprocess.check_output(['gh', 'api', path]))
 
 
+def verification_run(runs):
+    return max(runs, key=lambda run: (run.get('conclusion') == 'success', run['id']))
+
+
 def main():
     event = json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
     repository = os.environ['GITHUB_REPOSITORY']
@@ -29,7 +33,7 @@ def main():
         runs = api(f'repos/{repository}/actions/workflows/package-builds.yml/runs?head_sha={pull["head"]["sha"]}&per_page=100')['workflow_runs']
         if not runs:
             continue
-        run = max(runs, key=lambda run: run['id'])
+        run = verification_run(runs)
         is_waiting = run['status'] != 'completed'
         if not is_waiting:
             reuse = str(run['id'])

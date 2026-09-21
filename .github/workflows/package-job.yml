@@ -64,23 +64,28 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: Install verified Forge
+        if: inputs.artifact == ''
         uses: ./.github/actions/setup-engine
         with:
           runner: ${{ inputs.runner }}
           revision-file: package-engine-revision
       - name: Prepare build toolchains
+        if: inputs.artifact == ''
         uses: ./.github/actions/setup-package-tools
         id: tools
       - name: Require the planned runner image
+        if: inputs.artifact == ''
         env:
           EXPECTED: ${{ inputs.context }}
           ACTUAL: ${{ steps.tools.outputs.context }}
         run: test "$EXPECTED" = "$ACTUAL"
       - name: Install registry client
+        if: inputs.artifact == ''
         uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d
         with:
           version: 1.3.0
       - name: Reuse a result published while this job was queued
+        if: inputs.artifact == ''
         id: reuse
         env:
           PACKAGES: ${{ inputs.package }}
@@ -93,6 +98,7 @@ jobs:
           PACKAGE_RUNNER: ${{ inputs.runner }}
         run: python3 .github/scripts/package-jobs.py
       - name: Retain concurrently published package records
+        if: inputs.artifact == ''
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: published-records-reuse-${{ inputs.key }}-${{ github.run_attempt }}
@@ -110,7 +116,7 @@ jobs:
             --input-key "$INPUT_KEY" --output result \
             --cache "$RUNNER_TEMP/package-cache" --cache-context "$BUILD_CONTEXT"
       - name: Recover the admitted verified build
-        if: steps.reuse.outputs.has-work == 'true' && inputs.artifact != ''
+        if: inputs.artifact != ''
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           artifact-ids: ${{ inputs.artifact }}
@@ -119,7 +125,7 @@ jobs:
           path: result
           merge-multiple: true
       - name: Retain this verified build
-        if: steps.reuse.outputs.has-work == 'true'
+        if: inputs.artifact != '' || steps.reuse.outputs.has-work == 'true'
         id: retain
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -134,7 +140,7 @@ jobs:
     name: Sign and publish
     needs: build
     if: needs.build.outputs.artifact != '' && github.ref == 'refs/heads/main' && inputs.publish && vars.PUBLISH_INDEX == 'true'
-    runs-on: ubuntu-24.04
+    runs-on: ${{ inputs.runner }}
     timeout-minutes: 15
     environment: package-publishing
     permissions:
@@ -149,7 +155,7 @@ jobs:
       - name: Install verified Forge
         uses: ./.github/actions/setup-engine
         with:
-          runner: ubuntu-24.04
+          runner: ${{ inputs.runner }}
           revision-file: package-engine-revision
       - name: Download this job's verified build
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c

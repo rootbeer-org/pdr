@@ -121,7 +121,7 @@ def plan():
         tasks.extend(json.loads(result.stdout))
     expected = os.environ.get('EXPECTED_KEY')
     if expected and (len(tasks) != 1 or tasks[0]['key'] != expected):
-        raise ValueError('Package inputs changed after planning')
+        raise ValueError(f'Package inputs changed after planning: expected {expected}, resolved {json.dumps(tasks)}')
     missing = []
     reused = []
     reuse_run = os.environ.get('REUSE_RUN', '')
