@@ -39,6 +39,31 @@ class ProposalLockTests(unittest.TestCase):
         open_pulls = [self.pull('fix/something', 'packages/rootbeer.lua')]
         self.assertIsNone(proposals.conflicting_proposal(open_pulls, ['rootbeer']))
 
+    def test_lanes_separate_the_engine_from_package_updates(self):
+        self.assertEqual(proposals.lane(['rootbeer']), 'engine')
+        self.assertEqual(proposals.lane(['kitty']), 'packages')
+        self.assertEqual(proposals.lane(['kitty', 'rootbeer']), 'packages')
+
+    def test_open_lane_proposal_is_reused(self):
+        open_pulls = [self.pull('updates/packages-1', 'packages/kitty.lua'),
+                      self.pull('updates/engine-2', 'packages/rootbeer.lua')]
+        self.assertEqual(proposals.lane_proposal(open_pulls, 'engine')['headRefName'], 'updates/engine-2')
+        self.assertIsNone(proposals.lane_proposal([], 'engine'))
+
+
+class CoalescingTests(unittest.TestCase):
+    def test_newer_version_replaces_the_pending_one(self):
+        body = proposals.body_text(['kitty@0.48.2', 'zoxide@1.0'])
+        self.assertEqual(proposals.coalesced_requests(body, ['kitty@0.49.0']),
+                         ['kitty@0.49.0', 'zoxide@1.0'])
+
+    def test_first_proposal_keeps_its_requests(self):
+        self.assertEqual(proposals.coalesced_requests('', ['kitty@0.49.0']), ['kitty@0.49.0'])
+
+    def test_body_round_trips(self):
+        requests = ['kitty@0.49.0', 'rootbeer@0.1.0-main+a248a77d983a']
+        self.assertEqual(proposals.coalesced_requests(proposals.body_text(requests), []), requests)
+
 
 class SelectionTests(unittest.TestCase):
     def test_metadata_does_not_rebuild_and_dependencies_propagate(self):
