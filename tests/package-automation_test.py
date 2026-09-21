@@ -32,6 +32,17 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(selection.changed_requests(before, after), ['app@3', 'lib@1', 'tool@2'])
 
 
+class RegistryTests(unittest.TestCase):
+    def test_denied_is_missing_only_for_an_unpublished_name(self):
+        error = 'Error response from registry: denied: requested access to the resource is denied'
+        with patch.object(jobs, 'published_names', return_value={'existing'}):
+            self.assertTrue(jobs.is_missing('registry/new:tag', 'new', error))
+            self.assertFalse(jobs.is_missing('registry/existing:tag', 'existing', error))
+
+    def test_outage_does_not_trigger_a_build(self):
+        self.assertFalse(jobs.is_missing('registry/new:tag', 'new', 'TLS handshake timeout'))
+
+
 class RecoveryTests(unittest.TestCase):
     def setUp(self):
         self.environment = patch.dict(os.environ, {'PACKAGE_RUNNER': 'macos-15', 'GITHUB_REPOSITORY': 'tale/rootbeer-index', 'GITHUB_RUN_ID': '20'})

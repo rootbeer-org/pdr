@@ -1,4 +1,5 @@
 import json
+from functools import lru_cache
 import os
 from pathlib import Path
 import re
@@ -7,6 +8,22 @@ import subprocess
 
 def command(*arguments):
     return subprocess.check_output(arguments, text=True).strip()
+
+
+@lru_cache(maxsize=1)
+def published_names():
+    command('git', 'fetch', '--depth=1', '--no-tags', 'origin', 'gh-pages')
+    manifest = json.loads(command('git', 'show', 'FETCH_HEAD:public/current.json'))
+    if manifest.get('schema') != 2:
+        raise ValueError('Expected deployed package discovery before planning new namespaces')
+    return set(manifest['catalog']['packages'])
+
+
+def is_missing(locator, name, error):
+    if error.strip().endswith(f'{locator}: not found'):
+        return True
+    # GHCR hides nonexistent namespaces behind DENIED; approved discovery identifies first publication.
+    return 'denied: requested access to the resource is denied' in error and name not in published_names()
 
 
 def retained_results(run_id):
@@ -100,7 +117,7 @@ def plan():
         locator = f"ghcr.io/{repository}:inputs-{task['key']}"
         result = subprocess.run(['oras', 'manifest', 'fetch', locator], text=True, capture_output=True)
         if result.returncode:
-            if not result.stderr.strip().endswith(f'{locator}: not found'):
+            if not is_missing(locator, task['name'], result.stderr):
                 raise RuntimeError(f'Cannot inspect {locator}: {result.stderr}')
             if retained:
                 task['artifact'] = retained_artifact(retained, task)
