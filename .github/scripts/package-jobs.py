@@ -11,19 +11,38 @@ def command(*arguments):
 
 
 @lru_cache(maxsize=1)
-def published_names():
+def approved_discovery():
     command('git', 'fetch', '--depth=1', '--no-tags', 'origin', 'gh-pages')
-    manifest = json.loads(command('git', 'show', 'FETCH_HEAD:public/current.json'))
+    revision = command('git', 'rev-parse', 'FETCH_HEAD')
+    manifest = json.loads(command('git', 'show', f'{revision}:public/current.json'))
     if manifest.get('schema') != 2:
         raise ValueError('Expected deployed package discovery before planning new namespaces')
-    return set(manifest['catalog']['packages'])
+    return revision, manifest
+
+
+@lru_cache(maxsize=None)
+def has_published_namespace(name):
+    revision, manifest = approved_discovery()
+    prefix = f"ghcr://{os.environ['PACKAGE_REGISTRY']}/{name}@"
+    for package, systems in manifest['records'].items():
+        if package.split('@')[0] != name:
+            continue
+        for pointer in systems.values():
+            digest = pointer['sha256']
+            if not re.fullmatch(r'[a-f0-9]{64}', digest):
+                raise ValueError('Invalid published record digest')
+            signed = json.loads(command('git', 'show', f'{revision}:public/records/{digest}.json'))
+            source = signed['record']['artifact']['package']['source']
+            if source.get('Url', {}).get('url', '').startswith(prefix):
+                return True
+    return False
 
 
 def is_missing(locator, name, error):
     if error.strip().endswith(f'{locator}: not found'):
         return True
-    # GHCR hides nonexistent namespaces behind DENIED; approved discovery identifies first publication.
-    return 'denied: requested access to the resource is denied' in error and name not in published_names()
+    # Catalog entries can precede binaries; only actual GHCR records establish a published namespace.
+    return 'denied: requested access to the resource is denied' in error and not has_published_namespace(name)
 
 
 def retained_results(run_id):

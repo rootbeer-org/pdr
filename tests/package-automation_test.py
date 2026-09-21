@@ -35,9 +35,23 @@ class SelectionTests(unittest.TestCase):
 class RegistryTests(unittest.TestCase):
     def test_denied_is_missing_only_for_an_unpublished_name(self):
         error = 'Error response from registry: denied: requested access to the resource is denied'
-        with patch.object(jobs, 'published_names', return_value={'existing'}):
+        with patch.object(jobs, 'has_published_namespace', side_effect=lambda name: name == 'existing'):
             self.assertTrue(jobs.is_missing('registry/new:tag', 'new', error))
             self.assertFalse(jobs.is_missing('registry/existing:tag', 'existing', error))
+
+    def test_catalog_entry_without_records_is_still_unpublished(self):
+        jobs.has_published_namespace.cache_clear()
+        with patch.dict(os.environ, {'PACKAGE_REGISTRY': 'tale/rootbeer-index'}), patch.object(jobs, 'approved_discovery', return_value=('revision', {'catalog': {'packages': {'new': {}}}, 'records': {}})):
+            self.assertFalse(jobs.has_published_namespace('new'))
+        jobs.has_published_namespace.cache_clear()
+
+    def test_upstream_archive_does_not_establish_a_ghcr_namespace(self):
+        jobs.has_published_namespace.cache_clear()
+        manifest = {'records': {'tool@1': {'system': {'sha256': 'a' * 64}}}}
+        record = {'record': {'artifact': {'package': {'source': {'Url': {'url': 'https://upstream.example/tool.zip'}}}}}}
+        with patch.dict(os.environ, {'PACKAGE_REGISTRY': 'tale/rootbeer-index'}), patch.object(jobs, 'approved_discovery', return_value=('revision', manifest)), patch.object(jobs, 'command', return_value=json.dumps(record)):
+            self.assertFalse(jobs.has_published_namespace('tool'))
+        jobs.has_published_namespace.cache_clear()
 
     def test_outage_does_not_trigger_a_build(self):
         self.assertFalse(jobs.is_missing('registry/new:tag', 'new', 'TLS handshake timeout'))
