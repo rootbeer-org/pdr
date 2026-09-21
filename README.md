@@ -3,7 +3,7 @@
 Packages for [Rootbeer](https://rbpkg.com), with package recipes
 for Apple silicon macOS and Linux on ARM64 and x86-64. Availability varies by package.
 
-[Browse packages](https://rbpkg.com/packages/) ·
+[Browse packages](https://search.rbpkg.com) ·
 [Install Rootbeer](https://rbpkg.com/guide/getting-started) ·
 [Package guide](https://rbpkg.com/guide/packages)
 
@@ -31,7 +31,10 @@ our index CI; binary-only packages use upstream releases.
 Packages can also export macOS apps: `rb use bobrwm` links `Bobrwm.app` into
 `~/Applications`. Existing apps are never overwritten. `rb unuse bobrwm` removes
 the user installation, retaining the app link if your Lua configuration still needs it.
-For an existing Bobrwm installation, run `rb update`, then `rb use bobrwm --update`.
+DMG-backed apps work the same way: `rb use helium kitty` installs their declared app
+bundles on Apple silicon macOS. Kitty also exports `kitty` and `kitten`. Qualification
+verifies bundle executables and upstream code signatures without opening GUI windows.
+PKG installers and apps requiring external signing attributes are not supported yet.
 
 Run `rb update` on supported platforms to use the active `current.json` catalog.
 Intel macOS is unsupported; its retired binary and frozen catalog channel are no longer
@@ -90,7 +93,7 @@ gh workflow run package-builds.yml -f packages='fd@10.5.0' -f reuse-run=RUN_ID
 
 An empty selection refreshes discovery without builds. There is no custom concurrency
 cap; GitHub's runner quota and 256-entry matrix limit still apply. Split selections
-exceeding that matrix limit. New dependency-bearing builds and DMG/PKG preparation
+exceeding that matrix limit. New dependency-bearing builds and PKG preparation
 remain engine follow-ups; they fail individually without blocking unrelated packages.
 Existing published dependency-bearing packages remain installable.
 
