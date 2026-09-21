@@ -8,6 +8,9 @@ on:
     branches: [main]
     paths: ["packages/**"]
   workflow_call:
+    secrets:
+      INDEX_SIGNING_KEY:
+        required: false
   workflow_dispatch:
     inputs:
       packages:
@@ -71,6 +74,8 @@ jobs:
       matrix:
         runner: [ubuntu-24.04, ubuntu-24.04-arm, macos-15]
     uses: ./.github/workflows/package-platform.yml
+    secrets:
+      INDEX_SIGNING_KEY: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && secrets.INDEX_SIGNING_KEY || '' }}
     permissions:
       contents: read
       actions: read

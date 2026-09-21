@@ -1,6 +1,9 @@
 name: Plan platform packages
 on:
   workflow_call:
+    secrets:
+      INDEX_SIGNING_KEY:
+        required: false
     inputs:
       runner:
         required: true
@@ -81,6 +84,8 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     uses: ./.github/workflows/package-job.yml
+    secrets:
+      INDEX_SIGNING_KEY: ${{ inputs.publish && secrets.INDEX_SIGNING_KEY || '' }}
     permissions:
       contents: read
       actions: read
