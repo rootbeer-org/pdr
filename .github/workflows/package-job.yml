@@ -103,6 +103,7 @@ jobs:
         env:
           PACKAGE: ${{ inputs.package }}
           INPUT_KEY: ${{ inputs.key }}
+          GITHUB_TOKEN: ${{ github.token }}
           BUILD_CONTEXT: ${{ inputs.context }}
         run: |
           engine-bin/rootbeer-forge --catalog packages prepare "$PACKAGE" \

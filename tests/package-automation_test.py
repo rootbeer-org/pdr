@@ -88,8 +88,10 @@ class RecoveryTests(unittest.TestCase):
                'event': 'pull_request', 'head_branch': 'feature'}
         pulls = [{'merged_at': 'now', 'base': {'ref': 'main'}, 'head': {'sha': 'abc'}, 'merge_commit_sha': 'def'}]
         responses = [json.dumps(run), json.dumps(pulls), '', '', '', '[{"artifacts":[]}]', '[{"jobs":[]}]']
-        with patch.object(jobs, 'command', side_effect=responses), patch.object(jobs.subprocess, 'run'):
+        with patch.object(jobs, 'command', side_effect=responses) as command, patch.object(jobs.subprocess, 'run'):
             self.assertEqual(jobs.retained_results('10'), (run, [], []))
+            comparison = next(call.args for call in command.call_args_list if call.args[:2] == ('git', 'diff'))
+            self.assertEqual(comparison[3:5], ('abc', 'def'))
 
 
 class ProducerTests(unittest.TestCase):

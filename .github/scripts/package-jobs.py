@@ -55,7 +55,7 @@ def retained_results(run_id):
                    '.github/workflows/package-job.yml', '.github/scripts/package-jobs.py',
                    '.github/scripts/package-selection.py', '.github/actions/setup-engine',
                    '.github/actions/setup-package-tools', 'package-engine-revision']
-        if command('git', 'diff', '--name-only', run['head_sha'], 'HEAD', '--', *trusted):
+        if command('git', 'diff', '--name-only', run['head_sha'], revision, '--', *trusted):
             raise ValueError('Producer verification tooling differs from approved tooling')
     def pages(suffix, field):
         responses = json.loads(command('gh', 'api', '--paginate', '--slurp', f'{base}/{suffix}'))
