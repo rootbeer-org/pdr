@@ -16,9 +16,17 @@ def catalog(directory):
 def platform_recipe(recipe, system):
     if recipe is None or system is None:
         return recipe
-    resolved = dict(recipe.get('platforms', {}).get(system, recipe))
-    resolved.pop('platforms', None)
-    return resolved if system in resolved['systems'] else None
+    if system not in recipe['platforms']:
+        return None
+    shared = {key: value for key, value in recipe.items() if key != 'platforms'}
+    return shared | recipe['platforms'][system]
+
+
+def dependencies(recipe, system):
+    platforms = recipe['platforms'] if system is None else {system: recipe['platforms'][system]}
+    return {item if isinstance(item, str) else item['package']
+            for platform in platforms.values()
+            for item in platform.get('build', {}).get('dependencies', [])}
 
 
 def changed_requests(before, after, system=None):
@@ -32,12 +40,7 @@ def changed_requests(before, after, system=None):
         affected = set(changed)
         for name, package in after.items():
             for version, recipe in package['versions'].items():
-                recipe = platform_recipe(recipe, system)
-                if recipe is None:
-                    continue
-                dependencies = recipe.get('build', {}).get('dependencies', [])
-                dependencies = [item if isinstance(item, str) else item['package'] for item in dependencies]
-                if changed.intersection(dependencies):
+                if platform_recipe(recipe, system) is not None and changed & dependencies(recipe, system):
                     affected.add(f'{name}@{version}')
         if affected == changed:
             return sorted(changed)

@@ -60,35 +60,69 @@ class CoalescingTests(unittest.TestCase):
     def test_first_proposal_keeps_its_requests(self):
         self.assertEqual(proposals.coalesced_requests('', ['kitty@0.49.0']), ['kitty@0.49.0'])
 
+    def test_a_package_can_propose_one_version_per_platform(self):
+        body = proposals.body_text(['kitty@0.48.2', 'zoxide@1.0'])
+        self.assertEqual(proposals.coalesced_requests(body, ['kitty@0.49.0', 'kitty@0.49.1']),
+                         ['kitty@0.49.0', 'kitty@0.49.1', 'zoxide@1.0'])
+
     def test_body_round_trips(self):
         requests = ['kitty@0.49.0', 'rootbeer@0.1.0-main+a248a77d983a']
         self.assertEqual(proposals.coalesced_requests(proposals.body_text(requests), []), requests)
 
 
+def version(revision=1, **platforms):
+    return {'license': 'MIT', 'revision': revision, 'platforms': platforms}
+
+
 class SelectionTests(unittest.TestCase):
     def test_metadata_does_not_rebuild_and_dependencies_propagate(self):
-        before = {'lib': {'description': 'old', 'versions': {'1': {'revision': 1}}},
-                  'tool': {'versions': {'2': {'build': {'dependencies': ['lib@1']}}}},
-                  'app': {'versions': {'3': {'build': {'dependencies': [{'package': 'tool@2', 'kind': 'build'}]}}}}}
+        linux = 'x86_64-linux'
+        before = {'lib': {'description': 'old', 'versions': {'1': version(**{linux: {}})}},
+                  'tool': {'versions': {'2': version(**{linux: {'build': {'dependencies': ['lib@1']}}})}},
+                  'app': {'versions': {'3': version(**{linux: {'build': {'dependencies': [{'package': 'tool@2', 'kind': 'build'}]}}})}}}
         after = copy.deepcopy(before)
         after['lib']['description'] = 'new'
         self.assertEqual(selection.changed_requests(before, after), [])
         after['lib']['versions']['1']['revision'] = 2
         self.assertEqual(selection.changed_requests(before, after), ['app@3', 'lib@1', 'tool@2'])
+        self.assertEqual(selection.changed_requests(before, after, linux), ['app@3', 'lib@1', 'tool@2'])
+
+    def test_a_dependency_on_another_platform_does_not_propagate(self):
+        before = {'lib': {'versions': {'1': version(**{'aarch64-macos': {}, 'x86_64-linux': {}})}},
+                  'tool': {'versions': {'2': version(**{'aarch64-macos': {},
+                                                        'x86_64-linux': {'build': {'dependencies': ['lib@1']}}})}}}
+        after = copy.deepcopy(before)
+        after['lib']['versions']['1']['platforms']['aarch64-macos']['sha256'] = 'new'
+        self.assertEqual(selection.changed_requests(before, after, 'aarch64-macos'), ['lib@1'])
+        self.assertEqual(selection.changed_requests(before, after, 'x86_64-linux'), [])
 
 
 class PlatformSelectionTests(unittest.TestCase):
-    def test_mac_override_does_not_rebuild_linux(self):
-        linux = {'revision': 1, 'systems': ['x86_64-linux', 'aarch64-linux'], 'bins': ['tool']}
-        before = {'tool': {'versions': {'1': linux}}}
+    systems = ['aarch64-linux', 'aarch64-macos', 'x86_64-linux']
+
+    def kitty(self):
+        return {'kitty': {'default_versions': dict.fromkeys(self.systems, '0.48.2'),
+                          'versions': {'0.48.2': version(**{system: {'sha256': system} for system in self.systems})}}}
+
+    def test_a_macos_bump_selects_macos_alone(self):
+        before = self.kitty()
         after = copy.deepcopy(before)
-        after['tool']['versions']['1']['platforms'] = {'aarch64-macos': {'revision': 1, 'systems': ['aarch64-macos'], 'bins': [], 'apps': {'Tool.app': 'Tool.app'}}}
-        self.assertEqual(selection.changed_requests(before, after), ['tool@1'])
-        self.assertEqual(selection.changed_requests(before, after, 'aarch64-macos'), ['tool@1'])
+        after['kitty']['versions']['0.49.0'] = version(**{'aarch64-macos': {'sha256': 'new'}})
+        after['kitty']['default_versions']['aarch64-macos'] = '0.49.0'
+        self.assertEqual(selection.changed_requests(before, after), ['kitty@0.49.0'])
+        self.assertEqual(selection.changed_requests(before, after, 'aarch64-macos'), ['kitty@0.49.0'])
         for system in ['aarch64-linux', 'x86_64-linux']:
             self.assertEqual(selection.changed_requests(before, after, system), [])
-        after['tool']['versions']['1']['revision'] = 2
-        self.assertEqual(selection.changed_requests(before, after, 'x86_64-linux'), ['tool@1'])
+
+    def test_changing_one_platform_contract_leaves_the_others_alone(self):
+        before = self.kitty()
+        after = copy.deepcopy(before)
+        after['kitty']['versions']['0.48.2']['platforms']['aarch64-macos']['apps'] = {'kitty.app': 'kitty.app'}
+        self.assertEqual(selection.changed_requests(before, after, 'aarch64-macos'), ['kitty@0.48.2'])
+        for system in ['aarch64-linux', 'x86_64-linux']:
+            self.assertEqual(selection.changed_requests(before, after, system), [])
+        after['kitty']['versions']['0.48.2']['revision'] = 2
+        self.assertEqual(selection.changed_requests(before, after, 'x86_64-linux'), ['kitty@0.48.2'])
 
 
 class RegistryTests(unittest.TestCase):

@@ -32,10 +32,11 @@ def conflicting_proposal(pulls, names):
 
 
 def coalesced_requests(body, requests):
-    """A lane keeps one open proposal, so a newer version replaces the pending one."""
-    selections = dict(item.split('@', 1) for item in re.findall(r'^- `([^`]+)`$', body or '', re.M))
-    selections.update(item.split('@', 1) for item in requests)
-    return [f'{name}@{version}' for name, version in sorted(selections.items())]
+    """A lane keeps one open proposal, so a package's new versions replace its pending ones."""
+    pending = re.findall(r'^- `([^`]+)`$', body or '', re.M)
+    replaced = {request.split('@', 1)[0] for request in requests}
+    kept = [request for request in pending if request.split('@', 1)[0] not in replaced]
+    return sorted(set(kept) | set(requests))
 
 
 def body_text(requests):
