@@ -1,32 +1,34 @@
 return {
-    schema = 2,
     name = "sd",
     description = "Find and replace text",
-    default_version = "1.1.0",
     homepage = "https://github.com/chmln/sd",
-    systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-    upstream = {
-        github = "chmln/sd",
-        repository_id = 162863623,
-        tag_prefix = "v",
-    },
-    inputs = {
-        prebuilt = {
-            github = "chmln/sd",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "sd-{tag}-x86_64-unknown-linux-musl.tar.gz",
-                ["aarch64-macos"] = "sd-{tag}-aarch64-apple-darwin.tar.gz",
-                ["aarch64-linux"] = "sd-{tag}-aarch64-unknown-linux-musl.tar.gz",
-            },
+    default_license = "MIT",
+    prebuilt = { github = "chmln/sd", tag = "v{version}", asset = "sd-{tag}-{target}.tar.gz" },
+    outputs = { bins = { "sd" }, checks = { { "sd", "--version" } } },
+    platforms = {
+        ["aarch64-linux"] = {
+            target = "aarch64-unknown-linux-musl",
+            default_version = "1.1.0",
+            upstream = { github = "chmln/sd", repository_id = 162863623, tag_prefix = "v" },
         },
-    },
-    outputs = {
-        bins = { "sd" },
-        checks = { { "sd", "--version" } },
+        ["aarch64-macos"] = {
+            target = "aarch64-apple-darwin",
+            default_version = "1.1.0",
+            upstream = { github = "chmln/sd", repository_id = 162863623, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            target = "x86_64-unknown-linux-musl",
+            default_version = "1.1.0",
+            upstream = { github = "chmln/sd", repository_id = 162863623, tag_prefix = "v" },
+        },
     },
     versions = {
         ["1.1.0"] = {
+            digests = {
+                ["aarch64-linux"] = "ec8c93c0533ff21f4851d11566808d4082544baf063d9b96ea77c27e98b7cd99",
+                ["aarch64-macos"] = "4bd3c09226376ca0a1d69589c91e86276fae36c5fbaaee669afce583f6682030",
+                ["x86_64-linux"] = "02f00f4777d43e8e95b7b8d49e1a0d6e502fed4b8e79c1c8b8063857a30caa2e",
+            },
             revision = 2,
         },
     },

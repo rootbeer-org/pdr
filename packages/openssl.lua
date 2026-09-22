@@ -1,13 +1,17 @@
 return {
-    schema = 2,
     name = "openssl",
     description = "TLS and cryptography libraries and tools",
-    default_version = "4.0.2",
     homepage = "https://openssl-library.org/",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://github.com/openssl/openssl/releases/download/openssl-4.0.2/openssl-4.0.2.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "openssl-4.0.2",
+    },
     build = {
+        backend = "custom",
+        libraries = { "lib/libssl.a", "lib/libcrypto.a" },
         steps = {
-            check = { { "/usr/bin/env", "HARNESS_JOBS={jobs}", "make", "test" } },
             configure = {
                 {
                     "perl",
@@ -19,20 +23,12 @@ return {
                     "no-module",
                 },
             },
-            install = { { "make", "DESTDIR={prefix}", "install_sw" } },
             build = { { "make", "-j{jobs}" } },
-        },
-        backend = "custom",
-    },
-    inputs = {
-        source = {
-            url = "https://github.com/openssl/openssl/releases/download/openssl-4.0.2/openssl-4.0.2.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "openssl-4.0.2",
+            check = { { "/usr/bin/env", "HARNESS_JOBS={jobs}", "make", "test" } },
+            install = { { "make", "DESTDIR={prefix}", "install_sw" } },
         },
     },
     outputs = {
-        libraries = { "lib/libssl.a", "lib/libcrypto.a" },
         bins = { "openssl" },
         checks = {
             { "openssl", "version", "-a" },
@@ -40,12 +36,17 @@ return {
             { "openssl", "dgst", "-sha256" },
         },
     },
+    platforms = {
+        ["aarch64-linux"] = { default_version = "4.0.2" },
+        ["aarch64-macos"] = { default_version = "4.0.2" },
+        ["x86_64-linux"] = { default_version = "4.0.2" },
+    },
     versions = {
         ["4.0.2"] = {
-            inputs = {
-                source = {
-                    sha256 = "736b467530f916737b7031310ccb21d8218c6229e61e8e160cd1d3458cd543a8",
-                },
+            digests = {
+                ["aarch64-linux"] = "736b467530f916737b7031310ccb21d8218c6229e61e8e160cd1d3458cd543a8",
+                ["aarch64-macos"] = "736b467530f916737b7031310ccb21d8218c6229e61e8e160cd1d3458cd543a8",
+                ["x86_64-linux"] = "736b467530f916737b7031310ccb21d8218c6229e61e8e160cd1d3458cd543a8",
             },
         },
     },

@@ -1,28 +1,10 @@
 return {
-    schema = 2,
     name = "neovim",
     aliases = { "nvim" },
     description = "Edit text with Neovim",
-    default_version = "0.12.5",
     homepage = "https://github.com/neovim/neovim",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
-    upstream = {
-        github = "neovim/neovim",
-        repository_id = 16408992,
-        tag_prefix = "v",
-        exclude_tags = { "stable" },
-    },
-    inputs = {
-        prebuilt = {
-            github = "neovim/neovim",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "nvim-linux-x86_64.tar.gz",
-                ["aarch64-macos"] = "nvim-macos-arm64.tar.gz",
-                ["aarch64-linux"] = "nvim-linux-arm64.tar.gz",
-            },
-        },
-    },
+    default_license = "NOASSERTION",
+    prebuilt = { github = "neovim/neovim", tag = "v{version}", asset = "nvim-{target}.tar.gz" },
     outputs = {
         bins = { "nvim" },
         checks = {
@@ -42,8 +24,45 @@ return {
             },
         },
     },
+    platforms = {
+        ["aarch64-linux"] = {
+            target = "linux-arm64",
+            default_version = "0.12.5",
+            upstream = {
+                github = "neovim/neovim",
+                repository_id = 16408992,
+                tag_prefix = "v",
+                exclude_tags = { "stable" },
+            },
+        },
+        ["aarch64-macos"] = {
+            target = "macos-arm64",
+            default_version = "0.12.5",
+            upstream = {
+                github = "neovim/neovim",
+                repository_id = 16408992,
+                tag_prefix = "v",
+                exclude_tags = { "stable" },
+            },
+        },
+        ["x86_64-linux"] = {
+            target = "linux-x86_64",
+            default_version = "0.12.5",
+            upstream = {
+                github = "neovim/neovim",
+                repository_id = 16408992,
+                tag_prefix = "v",
+                exclude_tags = { "stable" },
+            },
+        },
+    },
     versions = {
         ["0.12.5"] = {
+            digests = {
+                ["aarch64-linux"] = "1aa5ca085249580ae0f91eb14f27ec0919773ff2d99a163d03f3d6c21ac29725",
+                ["aarch64-macos"] = "65fb000099e47ca1b762584c484cc833f40e30851a0ec450d4174e16317c1f9b",
+                ["x86_64-linux"] = "bce0f56eda1f1b1db6eee8f4133d7a38813ea07933837dd1777411ca384c6875",
+            },
             revision = 2,
         },
     },

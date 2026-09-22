@@ -1,17 +1,23 @@
 return {
-    schema = 2,
     name = "ngtcp2",
     description = "QUIC transport library with OpenSSL support",
-    default_version = "1.25.0",
     homepage = "https://github.com/ngtcp2/ngtcp2",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
-    upstream = { github = "ngtcp2/ngtcp2", repository_id = 95347622, tag_prefix = "v" },
+    default_license = "MIT",
+    source = {
+        url = "https://github.com/ngtcp2/ngtcp2/releases/download/v{version}/ngtcp2-{version}.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "ngtcp2-{version}",
+        patches = {
+            '--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -380,2 +380,2 @@\n-set(libdir          "${CMAKE_INSTALL_FULL_LIBDIR}")\n-set(includedir      "${CMAKE_INSTALL_FULL_INCLUDEDIR}")\n+set(libdir          "\\${prefix}/${CMAKE_INSTALL_LIBDIR}")\n+set(includedir      "\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")\n',
+        },
+    },
     build = {
         backend = "custom",
         dependencies = {
-            { package = "cmake@4.4.3", kind = "build" },
-            { package = "openssl@4.0.2", kind = "link" },
+            { kind = "build", package = "cmake@4.4.3" },
+            { kind = "link", package = "openssl@4.0.2" },
         },
+        libraries = { "lib/libngtcp2.a", "lib/libngtcp2_crypto_ossl.a" },
         steps = {
             configure = {
                 {
@@ -52,35 +58,27 @@ return {
             install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
         },
     },
-    inputs = {
-        source = {
-            url = "https://github.com/ngtcp2/ngtcp2/releases/download/v{version}/ngtcp2-{version}.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "ngtcp2-{version}",
-            patches = {
-                [[
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -380,2 +380,2 @@
--set(libdir          "${CMAKE_INSTALL_FULL_LIBDIR}")
--set(includedir      "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
-+set(libdir          "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
-+set(includedir      "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
-]],
-            },
+    outputs = {},
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "1.25.0",
+            upstream = { github = "ngtcp2/ngtcp2", repository_id = 95347622, tag_prefix = "v" },
         },
-    },
-    outputs = {
-        libraries = { "lib/libngtcp2.a", "lib/libngtcp2_crypto_ossl.a" },
-        bins = {},
-        checks = {},
+        ["aarch64-macos"] = {
+            default_version = "1.25.0",
+            upstream = { github = "ngtcp2/ngtcp2", repository_id = 95347622, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.25.0",
+            upstream = { github = "ngtcp2/ngtcp2", repository_id = 95347622, tag_prefix = "v" },
+        },
     },
     versions = {
         ["1.25.0"] = {
-            inputs = {
-                source = {
-                    sha256 = "1c0843076528a87b65e9a9d455100941f4cb65d44f96c5da6ae56df146043955",
-                },
+            digests = {
+                ["aarch64-linux"] = "1c0843076528a87b65e9a9d455100941f4cb65d44f96c5da6ae56df146043955",
+                ["aarch64-macos"] = "1c0843076528a87b65e9a9d455100941f4cb65d44f96c5da6ae56df146043955",
+                ["x86_64-linux"] = "1c0843076528a87b65e9a9d455100941f4cb65d44f96c5da6ae56df146043955",
             },
         },
     },

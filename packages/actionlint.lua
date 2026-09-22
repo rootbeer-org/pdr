@@ -1,44 +1,46 @@
 return {
-    schema = 2,
     name = "actionlint",
     description = "Check GitHub Actions workflows",
-    default_version = "1.7.12",
     homepage = "https://github.com/rhysd/actionlint",
-    systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-    upstream = {
-        github = "rhysd/actionlint",
-        repository_id = 370668507,
-        tag_prefix = "v",
-    },
-    inputs = {
-        source = {
-            url = "https://codeload.github.com/rhysd/actionlint/tar.gz/refs/tags/{tag}",
-            archive = "tar.gz",
-            strip_prefix = "actionlint-{version}",
-        },
+    default_license = "MIT",
+    source = {
+        url = "https://codeload.github.com/rhysd/actionlint/tar.gz/refs/tags/{tag}",
+        archive = "tar.gz",
+        strip_prefix = "actionlint-{version}",
     },
     build = {
         backend = "go",
         go = {
             binaries = { actionlint = "./cmd/actionlint" },
             variables = {
-                ["github.com/rhysd/actionlint.version"] = "{version}",
                 ["github.com/rhysd/actionlint.installedFrom"] = "built by Rootbeer",
+                ["github.com/rhysd/actionlint.version"] = "{version}",
             },
         },
     },
-    outputs = {
-        bins = { "actionlint" },
-        checks = { { "actionlint", "-version" } },
+    outputs = { bins = { "actionlint" }, checks = { { "actionlint", "-version" } } },
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "1.7.12",
+            upstream = { github = "rhysd/actionlint", repository_id = 370668507, tag_prefix = "v" },
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.7.12",
+            upstream = { github = "rhysd/actionlint", repository_id = 370668507, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.7.12",
+            upstream = { github = "rhysd/actionlint", repository_id = 370668507, tag_prefix = "v" },
+        },
     },
     versions = {
         ["1.7.12"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "454800bd4f854592bcfe79b161f71d56e35940eb7016e48a26dd356adc9d400a",
-                },
+            digests = {
+                ["aarch64-linux"] = "454800bd4f854592bcfe79b161f71d56e35940eb7016e48a26dd356adc9d400a",
+                ["aarch64-macos"] = "454800bd4f854592bcfe79b161f71d56e35940eb7016e48a26dd356adc9d400a",
+                ["x86_64-linux"] = "454800bd4f854592bcfe79b161f71d56e35940eb7016e48a26dd356adc9d400a",
             },
+            revision = 3,
         },
     },
 }

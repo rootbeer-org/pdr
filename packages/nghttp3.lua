@@ -1,14 +1,20 @@
 return {
-    schema = 2,
     name = "nghttp3",
     description = "HTTP/3 C library",
-    default_version = "1.18.0",
     homepage = "https://github.com/ngtcp2/nghttp3",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
-    upstream = { github = "ngtcp2/nghttp3", repository_id = 156868263, tag_prefix = "v" },
+    default_license = "MIT",
+    source = {
+        url = "https://github.com/ngtcp2/nghttp3/releases/download/v{version}/nghttp3-{version}.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "nghttp3-{version}",
+        patches = {
+            '--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -178,2 +178,2 @@\n-set(libdir          "${CMAKE_INSTALL_FULL_LIBDIR}")\n-set(includedir      "${CMAKE_INSTALL_FULL_INCLUDEDIR}")\n+set(libdir          "\\${prefix}/${CMAKE_INSTALL_LIBDIR}")\n+set(includedir      "\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")\n',
+        },
+    },
     build = {
         backend = "custom",
-        dependencies = { { package = "cmake@4.4.3", kind = "build" } },
+        dependencies = { { kind = "build", package = "cmake@4.4.3" } },
+        libraries = { "lib/libnghttp3.a" },
         steps = {
             configure = {
                 {
@@ -45,31 +51,27 @@ return {
             install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
         },
     },
-    inputs = {
-        source = {
-            url = "https://github.com/ngtcp2/nghttp3/releases/download/v{version}/nghttp3-{version}.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "nghttp3-{version}",
-            patches = {
-                [[
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -178,2 +178,2 @@
--set(libdir          "${CMAKE_INSTALL_FULL_LIBDIR}")
--set(includedir      "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
-+set(libdir          "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
-+set(includedir      "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
-]],
-            },
+    outputs = {},
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "1.18.0",
+            upstream = { github = "ngtcp2/nghttp3", repository_id = 156868263, tag_prefix = "v" },
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.18.0",
+            upstream = { github = "ngtcp2/nghttp3", repository_id = 156868263, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.18.0",
+            upstream = { github = "ngtcp2/nghttp3", repository_id = 156868263, tag_prefix = "v" },
         },
     },
-    outputs = { libraries = { "lib/libnghttp3.a" }, bins = {}, checks = {} },
     versions = {
         ["1.18.0"] = {
-            inputs = {
-                source = {
-                    sha256 = "2812e9c06583fa24c8dc46bdb5291310a69196352ceaca8fbe98106ff36ae7d8",
-                },
+            digests = {
+                ["aarch64-linux"] = "2812e9c06583fa24c8dc46bdb5291310a69196352ceaca8fbe98106ff36ae7d8",
+                ["aarch64-macos"] = "2812e9c06583fa24c8dc46bdb5291310a69196352ceaca8fbe98106ff36ae7d8",
+                ["x86_64-linux"] = "2812e9c06583fa24c8dc46bdb5291310a69196352ceaca8fbe98106ff36ae7d8",
             },
         },
     },

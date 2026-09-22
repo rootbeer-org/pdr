@@ -1,13 +1,17 @@
 return {
-    schema = 2,
     name = "lz4",
     description = "Fast compression library and command-line tools",
-    default_version = "1.10.0",
     homepage = "https://lz4.org/",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "lz4-1.10.0",
+    },
     build = {
+        backend = "custom",
+        libraries = { "lib/liblz4.a" },
         steps = {
-            check = { { "make", "BUILD_SHARED=no", "PREFIX=/", "test" } },
             configure = {
                 {
                     "sed",
@@ -19,20 +23,12 @@ return {
                     "tests/test-lz4-list.py",
                 },
             },
-            install = { { "make", "BUILD_SHARED=no", "PREFIX=/", "DESTDIR={prefix}", "install" } },
             build = { { "make", "-j{jobs}", "BUILD_SHARED=no", "PREFIX=/" } },
-        },
-        backend = "custom",
-    },
-    inputs = {
-        source = {
-            url = "https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "lz4-1.10.0",
+            check = { { "make", "BUILD_SHARED=no", "PREFIX=/", "test" } },
+            install = { { "make", "BUILD_SHARED=no", "PREFIX=/", "DESTDIR={prefix}", "install" } },
         },
     },
     outputs = {
-        libraries = { "lib/liblz4.a" },
         bins = { "lz4", "lz4c", "lz4cat", "unlz4" },
         checks = {
             { "lz4", "--version" },
@@ -41,14 +37,19 @@ return {
             { "unlz4", "--version" },
         },
     },
+    platforms = {
+        ["aarch64-linux"] = { default_version = "1.10.0" },
+        ["aarch64-macos"] = { default_version = "1.10.0" },
+        ["x86_64-linux"] = { default_version = "1.10.0" },
+    },
     versions = {
         ["1.10.0"] = {
-            revision = 2,
-            inputs = {
-                source = {
-                    sha256 = "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
-                },
+            digests = {
+                ["aarch64-linux"] = "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
+                ["aarch64-macos"] = "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
+                ["x86_64-linux"] = "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
             },
+            revision = 2,
         },
     },
 }

@@ -1,11 +1,18 @@
 return {
-    schema = 2,
     name = "rush",
     description = "Run a POSIX shell with interactive editing and completions",
-    default_version = "0.1.0-dev.20260909+g294212ebd35f5b755062186a66bcfd6436d3627a",
     homepage = "https://rush.horse",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://codeload.github.com/rockorager/rush/tar.gz/294212ebd35f5b755062186a66bcfd6436d3627a",
+        archive = "tar.gz",
+        strip_prefix = "rush-294212ebd35f5b755062186a66bcfd6436d3627a",
+        patches = {
+            '--- a/build.zig\n+++ b/build.zig\n@@ -23,7 +23,7 @@\n         "lto",\n         "Link-time optimization (none, thin, full; default: none)",\n     ) orelse .none;\n-    const version = versionString(b);\n+    const version = b.option([]const u8, "version", "Exact version for source snapshot builds") orelse versionString(b);\n     const build_config = b.addOptions();\n     build_config.addOption([]const u8, "version", version);\n \n--- a/src/file_util.zig\n+++ b/src/file_util.zig\n@@ -22,3 +22,16 @@\n     }\n     return bytes.toOwnedSlice(allocator);\n }\n+\n+/// Returns an owned executable-relative data directory when available.\n+pub fn executableDataDir(allocator: std.mem.Allocator) !?[]u8 {\n+    if (comptime @import("builtin").cpu.arch.isWasm()) return null;\n+\n+    const io = std.Io.Threaded.global_single_threaded.io();\n+    var executable_buffer: [std.fs.max_path_bytes]u8 = undefined;\n+    const executable_len = std.process.executablePath(io, &executable_buffer) catch return null;\n+    var real_buffer: [std.fs.max_path_bytes]u8 = undefined;\n+    const real_len = std.Io.Dir.cwd().realPathFile(io, executable_buffer[0..executable_len], &real_buffer) catch return null;\n+    const bin_dir = std.fs.path.dirname(real_buffer[0..real_len]) orelse return null;\n+    return try std.fs.path.resolve(allocator, &.{ bin_dir, "..", "share" });\n+}\n--- a/src/function_autoload.zig\n+++ b/src/function_autoload.zig\n@@ -4,6 +4,7 @@\n const build_config = @import("build_config");\n \n const host = @import("host.zig");\n+const file_util = @import("file_util.zig");\n const shell = @import("shell.zig");\n \n const max_function_source_bytes = 1024 * 1024;\n@@ -87,6 +88,10 @@\n     try appendUserDataDir(allocator, sh, &data_dirs);\n     try appendXdgDataDirs(allocator, sh, &data_dirs);\n     try appendPath(allocator, &data_dirs, &.{ build_config.datadir, "rush", "functions" });\n+    if (try file_util.executableDataDir(allocator)) |data_dir| {\n+        defer allocator.free(data_dir);\n+        try appendPath(allocator, &data_dirs, &.{ data_dir, "rush", "functions" });\n+    }\n \n     var paths: std.ArrayList([]const u8) = .empty;\n     errdefer freePathList(allocator, &paths);\n--- a/src/completion.zig\n+++ b/src/completion.zig\n@@ -9,6 +9,7 @@\n const extensions = @import("extensions.zig");\n const history = @import("history.zig");\n const host = @import("host.zig");\n+const file_util = @import("file_util.zig");\n const shell = @import("shell.zig");\n \n pub const Application = editor_completion.Application;\n@@ -1114,6 +1115,10 @@\n         if (try findCompletionFileUnder(allocator, sh, part, file_name)) |path| return path;\n     }\n     if (try findCompletionFileUnder(allocator, sh, build_config.datadir, file_name)) |path| return path;\n+    if (try file_util.executableDataDir(allocator)) |data_dir| {\n+        defer allocator.free(data_dir);\n+        if (try findCompletionFileUnder(allocator, sh, data_dir, file_name)) |path| return path;\n+    }\n     return null;\n }\n \n',
+        },
+    },
     build = {
+        backend = "zig",
         args = {
             "-Doptimize=ReleaseSafe",
             "-Dregister-shell=false",
@@ -14,17 +21,6 @@ return {
             "-Dversion=0.1.0-dev.20260909+g294212ebd35f5b755062186a66bcfd6436d3627a",
         },
         dependencies = { "zig@0.16.0" },
-        backend = "zig",
-    },
-    inputs = {
-        source = {
-            url = "https://codeload.github.com/rockorager/rush/tar.gz/294212ebd35f5b755062186a66bcfd6436d3627a",
-            archive = "tar.gz",
-            strip_prefix = "rush-294212ebd35f5b755062186a66bcfd6436d3627a",
-            patches = {
-                '--- a/build.zig\n+++ b/build.zig\n@@ -23,7 +23,7 @@\n         "lto",\n         "Link-time optimization (none, thin, full; default: none)",\n     ) orelse .none;\n-    const version = versionString(b);\n+    const version = b.option([]const u8, "version", "Exact version for source snapshot builds") orelse versionString(b);\n     const build_config = b.addOptions();\n     build_config.addOption([]const u8, "version", version);\n \n--- a/src/file_util.zig\n+++ b/src/file_util.zig\n@@ -22,3 +22,16 @@\n     }\n     return bytes.toOwnedSlice(allocator);\n }\n+\n+/// Returns an owned executable-relative data directory when available.\n+pub fn executableDataDir(allocator: std.mem.Allocator) !?[]u8 {\n+    if (comptime @import("builtin").cpu.arch.isWasm()) return null;\n+\n+    const io = std.Io.Threaded.global_single_threaded.io();\n+    var executable_buffer: [std.fs.max_path_bytes]u8 = undefined;\n+    const executable_len = std.process.executablePath(io, &executable_buffer) catch return null;\n+    var real_buffer: [std.fs.max_path_bytes]u8 = undefined;\n+    const real_len = std.Io.Dir.cwd().realPathFile(io, executable_buffer[0..executable_len], &real_buffer) catch return null;\n+    const bin_dir = std.fs.path.dirname(real_buffer[0..real_len]) orelse return null;\n+    return try std.fs.path.resolve(allocator, &.{ bin_dir, "..", "share" });\n+}\n--- a/src/function_autoload.zig\n+++ b/src/function_autoload.zig\n@@ -4,6 +4,7 @@\n const build_config = @import("build_config");\n \n const host = @import("host.zig");\n+const file_util = @import("file_util.zig");\n const shell = @import("shell.zig");\n \n const max_function_source_bytes = 1024 * 1024;\n@@ -87,6 +88,10 @@\n     try appendUserDataDir(allocator, sh, &data_dirs);\n     try appendXdgDataDirs(allocator, sh, &data_dirs);\n     try appendPath(allocator, &data_dirs, &.{ build_config.datadir, "rush", "functions" });\n+    if (try file_util.executableDataDir(allocator)) |data_dir| {\n+        defer allocator.free(data_dir);\n+        try appendPath(allocator, &data_dirs, &.{ data_dir, "rush", "functions" });\n+    }\n \n     var paths: std.ArrayList([]const u8) = .empty;\n     errdefer freePathList(allocator, &paths);\n--- a/src/completion.zig\n+++ b/src/completion.zig\n@@ -9,6 +9,7 @@\n const extensions = @import("extensions.zig");\n const history = @import("history.zig");\n const host = @import("host.zig");\n+const file_util = @import("file_util.zig");\n const shell = @import("shell.zig");\n \n pub const Application = editor_completion.Application;\n@@ -1114,6 +1115,10 @@\n         if (try findCompletionFileUnder(allocator, sh, part, file_name)) |path| return path;\n     }\n     if (try findCompletionFileUnder(allocator, sh, build_config.datadir, file_name)) |path| return path;\n+    if (try file_util.executableDataDir(allocator)) |data_dir| {\n+        defer allocator.free(data_dir);\n+        if (try findCompletionFileUnder(allocator, sh, data_dir, file_name)) |path| return path;\n+    }\n     return null;\n }\n \n',
-            },
-        },
     },
     outputs = {
         bins = { "rush" },
@@ -42,14 +38,25 @@ return {
             },
         },
     },
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "0.1.0-dev.20260909+g294212ebd35f5b755062186a66bcfd6436d3627a",
+        },
+        ["aarch64-macos"] = {
+            default_version = "0.1.0-dev.20260909+g294212ebd35f5b755062186a66bcfd6436d3627a",
+        },
+        ["x86_64-linux"] = {
+            default_version = "0.1.0-dev.20260909+g294212ebd35f5b755062186a66bcfd6436d3627a",
+        },
+    },
     versions = {
         ["0.1.0-dev.20260909+g294212ebd35f5b755062186a66bcfd6436d3627a"] = {
-            revision = 2,
-            inputs = {
-                source = {
-                    sha256 = "b7eb240c58b7de30a80f1a2f27d1273effa1a1785d670ea6917995e5803422b6",
-                },
+            digests = {
+                ["aarch64-linux"] = "b7eb240c58b7de30a80f1a2f27d1273effa1a1785d670ea6917995e5803422b6",
+                ["aarch64-macos"] = "b7eb240c58b7de30a80f1a2f27d1273effa1a1785d670ea6917995e5803422b6",
+                ["x86_64-linux"] = "b7eb240c58b7de30a80f1a2f27d1273effa1a1785d670ea6917995e5803422b6",
             },
+            revision = 2,
         },
     },
 }

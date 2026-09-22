@@ -1,13 +1,18 @@
 return {
-    schema = 2,
     name = "libpsl",
     description = "Public suffix list library and tools",
-    default_version = "0.23.3",
     homepage = "https://github.com/rockdaboot/libpsl",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://github.com/rockdaboot/libpsl/releases/download/{version}/libpsl-{version}.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "libpsl-{version}",
+        patches = {
+            '--- a/configure\n+++ b/configure\n@@ -17475,7 +17475,7 @@\n   e)\n     acl_saved_LIBS="$LIBS"\n                                 case " $LIBUNISTRING" in\n-      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;\n+      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;\n       *)       LIBS="$LIBUNISTRING $LIBS" ;;\n     esac\n     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n@@ -18063,7 +18063,7 @@\n   e)\n     acl_saved_LIBS="$LIBS"\n                                 case " $LIBUNISTRING" in\n-      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;\n+      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;\n       *)       LIBS="$LIBUNISTRING $LIBS" ;;\n     esac\n     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n@@ -18654,7 +18654,7 @@\n   e)\n     acl_saved_LIBS="$LIBS"\n                                 case " $LIBUNISTRING" in\n-      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;\n+      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;\n       *)       LIBS="$LIBUNISTRING $LIBS" ;;\n     esac\n     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n',
+        },
+    },
     build = {
         backend = "autotools",
-        dependencies = { "libiconv@1.19", "libidn2@2.3.8", "libunistring@1.4.2", "pkgconf@3.0.7" },
         configure = {
             "--disable-shared",
             "--enable-static",
@@ -18,61 +23,21 @@ return {
             "--enable-builtin",
             "--without-libunistring-prefix",
         },
-    },
-    inputs = {
-        source = {
-            url = "https://github.com/rockdaboot/libpsl/releases/download/{version}/libpsl-{version}.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "libpsl-{version}",
-            -- Static libunistring probes must link libiconv after libunistring.
-            patches = {
-                [[
---- a/configure
-+++ b/configure
-@@ -17475,7 +17475,7 @@
-   e)
-     acl_saved_LIBS="$LIBS"
-                                 case " $LIBUNISTRING" in
--      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;
-+      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;
-       *)       LIBS="$LIBUNISTRING $LIBS" ;;
-     esac
-     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-@@ -18063,7 +18063,7 @@
-   e)
-     acl_saved_LIBS="$LIBS"
-                                 case " $LIBUNISTRING" in
--      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;
-+      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;
-       *)       LIBS="$LIBUNISTRING $LIBS" ;;
-     esac
-     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-@@ -18654,7 +18654,7 @@
-   e)
-     acl_saved_LIBS="$LIBS"
-                                 case " $LIBUNISTRING" in
--      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;
-+      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;
-       *)       LIBS="$LIBUNISTRING $LIBS" ;;
-     esac
-     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-]],
-            },
-        },
-    },
-    outputs = {
+        dependencies = { "libiconv@1.19", "libidn2@2.3.8", "libunistring@1.4.2", "pkgconf@3.0.7" },
         libraries = { "lib/libpsl.a" },
-        bins = { "psl" },
-        checks = {
-            { "psl", "--version" },
-        },
+    },
+    outputs = { bins = { "psl" }, checks = { { "psl", "--version" } } },
+    platforms = {
+        ["aarch64-linux"] = { default_version = "0.23.3" },
+        ["aarch64-macos"] = { default_version = "0.23.3" },
+        ["x86_64-linux"] = { default_version = "0.23.3" },
     },
     versions = {
         ["0.23.3"] = {
-            inputs = {
-                source = {
-                    sha256 = "93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be",
-                },
+            digests = {
+                ["aarch64-linux"] = "93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be",
+                ["aarch64-macos"] = "93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be",
+                ["x86_64-linux"] = "93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be",
             },
         },
     },

@@ -1,32 +1,34 @@
 return {
-    schema = 2,
     name = "just",
     description = "Run project commands",
-    default_version = "1.58.0",
     homepage = "https://just.systems",
-    systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-    upstream = {
-        github = "casey/just",
-        repository_id = 61349723,
-        tag_prefix = "",
-    },
-    inputs = {
-        prebuilt = {
-            github = "casey/just",
-            tag = "{version}",
-            assets = {
-                ["x86_64-linux"] = "just-{tag}-x86_64-unknown-linux-musl.tar.gz",
-                ["aarch64-macos"] = "just-{tag}-aarch64-apple-darwin.tar.gz",
-                ["aarch64-linux"] = "just-{tag}-aarch64-unknown-linux-musl.tar.gz",
-            },
+    default_license = "CC0-1.0",
+    prebuilt = { github = "casey/just", tag = "{version}", asset = "just-{tag}-{target}.tar.gz" },
+    outputs = { bins = { "just" }, checks = { { "just", "--version" } } },
+    platforms = {
+        ["aarch64-linux"] = {
+            target = "aarch64-unknown-linux-musl",
+            default_version = "1.58.0",
+            upstream = { github = "casey/just", repository_id = 61349723, tag_prefix = "" },
         },
-    },
-    outputs = {
-        bins = { "just" },
-        checks = { { "just", "--version" } },
+        ["aarch64-macos"] = {
+            target = "aarch64-apple-darwin",
+            default_version = "1.58.0",
+            upstream = { github = "casey/just", repository_id = 61349723, tag_prefix = "" },
+        },
+        ["x86_64-linux"] = {
+            target = "x86_64-unknown-linux-musl",
+            default_version = "1.58.0",
+            upstream = { github = "casey/just", repository_id = 61349723, tag_prefix = "" },
+        },
     },
     versions = {
         ["1.58.0"] = {
+            digests = {
+                ["aarch64-linux"] = "748237128c4c40cbdabc65e841d05ceba13cc23a91eaba395495894c1d9764df",
+                ["aarch64-macos"] = "50ae3e996c974a0bf32ea7d10f495070df33f1b43e0616b2769e3d4821ed8f48",
+                ["x86_64-linux"] = "4a5cc2f53e6f0f8c59092a6cc38291eb729d46a7dd95d3ae582008881b84931d",
+            },
             revision = 2,
         },
     },
