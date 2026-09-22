@@ -21,8 +21,8 @@ def resolved(recipe, system):
         for key in ("revision", "source", "install", "build",
                     "bins", "bin_paths", "apps", "checks", "mirror")
     }
-    fields["asset"] = (contract.get("assets") or {}).get(system)
-    fields["checksum"] = (contract.get("checksums") or {}).get(system)
+    fields["asset"] = contract.get("asset") or (contract.get("assets") or {}).get(system)
+    fields["checksum"] = contract.get("sha256") or (contract.get("checksums") or {}).get(system)
     return fields
 
 
