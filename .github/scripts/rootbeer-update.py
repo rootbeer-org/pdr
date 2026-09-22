@@ -27,19 +27,21 @@ def lua_value(value):
     raise ValueError('unsupported Rust build setting')
 
 
-def update_recipe(source, revision, version, digest, timestamp, build):
+def update_recipe(source, systems, revision, version, digest, timestamp, build):
     if not re.fullmatch(r'[0-9a-f]{40}', revision):
         raise ValueError('invalid source revision')
     if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
         raise ValueError('unsupported Rootbeer base version')
     if not re.fullmatch(r'[0-9a-f]{64}', digest):
         raise ValueError('invalid source digest')
+    if not systems:
+        raise ValueError('missing platforms')
 
     version = f'{version}-main+{revision[:12]}'
-    current = re.search(r'default_version\s*=\s*"([^"]+)"', source)
-    if current is None:
-        raise ValueError('missing default version')
-    if current[1] == version:
+    defaults = list(re.finditer(r'default_version\s*=\s*"([^"]+)"', source))
+    if len(defaults) != len(systems):
+        raise ValueError('expected one default version per platform')
+    if all(current[1] == version for current in defaults):
         return source
     if f'["{version}"]' in source:
         raise ValueError('refusing to move back to a retained version')
@@ -48,21 +50,45 @@ def update_recipe(source, revision, version, digest, timestamp, build):
     timestamp = timestamp.astimezone(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
     build = copy.deepcopy(build)
     build['rust'].setdefault('environment', {})['RB_BUILD_TIMESTAMP'] = timestamp
+    digests = ''.join(f'\n                ["{system}"] = "{digest}",' for system in sorted(systems))
     entry = f'''versions = {{
         ["{version}"] = {{
-            inputs = {{ source = {{
+            digests = {{{digests}
+            }},
+            source = {{
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/{revision}",
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-{revision}",
-                sha256 = "{digest}",
-            }} }},
+                git = {{ branch = "main", github = "tale/rootbeer" }},
+            }},
             build = {lua_value(build)},
         }},'''
-    source = source[:current.start(1)] + version + source[current.end(1):]
+    for current in reversed(defaults):
+        source = source[:current.start(1)] + version + source[current.end(1):]
     source, count = re.subn(r'\bversions\s*=\s*\{', lambda _: entry, source, count=1)
     if count != 1:
         raise ValueError('missing versions table')
     return source
+
+
+def authored_build(build):
+    """Expanded builds list every default; an empty Lua table is not a valid list."""
+    if isinstance(build, dict):
+        return {key: authored_build(value) for key, value in build.items() if value not in ([], {})}
+    return build
+
+
+def default_build(package):
+    """A source build compiles one archive everywhere, so every platform must agree on it."""
+    builds = {}
+    for system, version in package['default_versions'].items():
+        resolved = package['versions'][version]['platforms'][system]['build']
+        builds[system] = authored_build({key: value for key, value in resolved.items()
+                                         if key in {'backend', 'rust', 'configure', 'args', 'dependencies', 'steps'}})
+    build = next(iter(builds.values()))
+    if any(other != build for other in builds.values()):
+        raise ValueError('Rootbeer platforms disagree on their build')
+    return build, sorted(builds)
 
 
 def main():
@@ -102,11 +128,8 @@ def main():
         version = tomllib.loads(manifest.read().decode())['package']['version']
     catalog = json.loads(subprocess.check_output([
         'engine-bin/rootbeer-forge', '--catalog', 'packages', 'index']))
-    package = catalog['packages']['rootbeer']
-    resolved = package['versions'][package['default_version']]['build']
-    build = {key: value for key, value in resolved.items()
-             if key in {'backend', 'rust', 'configure', 'args', 'dependencies', 'steps'}}
-    updated = update_recipe(source, revision, version, hashlib.sha256(archive).hexdigest(),
+    build, systems = default_build(catalog['packages']['rootbeer'])
+    updated = update_recipe(source, systems, revision, version, hashlib.sha256(archive).hexdigest(),
                             head['commit']['committer']['date'], build)
     destination = Path('candidates/packages')
     if not any(destination.glob('*.lua')):
