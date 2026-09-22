@@ -1,20 +1,12 @@
 return {
-    schema = 2,
     name = "grype",
     description = "Find vulnerabilities in images and filesystems",
     homepage = "https://github.com/anchore/grype",
-    default_version = "0.119.0",
-    upstream = {
-        github = "anchore/grype",
-        repository_id = 267054247,
-        tag_prefix = "v",
-    },
-    inputs = {
-        source = {
-            url = "https://codeload.github.com/anchore/grype/tar.gz/refs/tags/{tag}",
-            archive = "tar.gz",
-            strip_prefix = "grype-{version}",
-        },
+    default_license = "Apache-2.0",
+    source = {
+        url = "https://codeload.github.com/anchore/grype/tar.gz/refs/tags/{tag}",
+        archive = "tar.gz",
+        strip_prefix = "grype-{version}",
     },
     build = {
         backend = "go",
@@ -23,29 +15,37 @@ return {
             variables = { ["main.version"] = "{version}" },
         },
     },
-    systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-    outputs = {
-        bins = { "grype" },
-        checks = {
-            { "grype", "version" },
+    outputs = { bins = { "grype" }, checks = { { "grype", "version" } } },
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "0.119.0",
+            upstream = { github = "anchore/grype", repository_id = 267054247, tag_prefix = "v" },
+        },
+        ["aarch64-macos"] = {
+            default_version = "0.119.0",
+            upstream = { github = "anchore/grype", repository_id = 267054247, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            default_version = "0.119.0",
+            upstream = { github = "anchore/grype", repository_id = 267054247, tag_prefix = "v" },
         },
     },
     versions = {
         ["0.118.0"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "6963758836cd46fd019d4c5e2eb903ec26960c34814a35058ebea56971dc592c",
-                },
+            digests = {
+                ["aarch64-linux"] = "6963758836cd46fd019d4c5e2eb903ec26960c34814a35058ebea56971dc592c",
+                ["aarch64-macos"] = "6963758836cd46fd019d4c5e2eb903ec26960c34814a35058ebea56971dc592c",
+                ["x86_64-linux"] = "6963758836cd46fd019d4c5e2eb903ec26960c34814a35058ebea56971dc592c",
             },
+            revision = 3,
         },
         ["0.119.0"] = {
-            revision = 2,
-            inputs = {
-                source = {
-                    sha256 = "be9c904938d9702e432e3c24ea2288913678af33968405980d2061d6159248b2",
-                },
+            digests = {
+                ["aarch64-linux"] = "be9c904938d9702e432e3c24ea2288913678af33968405980d2061d6159248b2",
+                ["aarch64-macos"] = "be9c904938d9702e432e3c24ea2288913678af33968405980d2061d6159248b2",
+                ["x86_64-linux"] = "be9c904938d9702e432e3c24ea2288913678af33968405980d2061d6159248b2",
             },
+            revision = 2,
         },
     },
 }

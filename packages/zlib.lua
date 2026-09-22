@@ -1,40 +1,38 @@
 return {
-    schema = 2,
     name = "zlib",
     description = "Deflate compression library",
-    default_version = "1.3.2",
     homepage = "https://zlib.net/",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://github.com/madler/zlib/releases/download/v1.3.2/zlib-1.3.2.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "zlib-1.3.2",
+        git = { github = "madler/zlib" },
+    },
     build = {
-        steps = {
-            check = { { "make", "test" } },
-            configure = { { "/bin/sh", "./configure", "--prefix=/", "--static" } },
-            install = { { "make", "DESTDIR={prefix}", "install" } },
-            build = { { "make", "-j{jobs}" } },
-        },
         backend = "custom",
-    },
-    inputs = {
-        source = {
-            git = { github = "madler/zlib" },
-            url = "https://github.com/madler/zlib/releases/download/v1.3.2/zlib-1.3.2.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "zlib-1.3.2",
+        libraries = { "lib/libz.a" },
+        steps = {
+            configure = { { "/bin/sh", "./configure", "--prefix=/", "--static" } },
+            build = { { "make", "-j{jobs}" } },
+            check = { { "make", "test" } },
+            install = { { "make", "DESTDIR={prefix}", "install" } },
         },
     },
-    outputs = {
-        libraries = { "lib/libz.a" },
-        bins = {},
-        checks = {},
+    outputs = {},
+    platforms = {
+        ["aarch64-linux"] = { default_version = "1.3.2" },
+        ["aarch64-macos"] = { default_version = "1.3.2" },
+        ["x86_64-linux"] = { default_version = "1.3.2" },
     },
     versions = {
         ["1.3.2"] = {
-            revision = 2,
-            inputs = {
-                source = {
-                    sha256 = "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16",
-                },
+            digests = {
+                ["aarch64-linux"] = "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16",
+                ["aarch64-macos"] = "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16",
+                ["x86_64-linux"] = "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16",
             },
+            revision = 2,
         },
     },
 }

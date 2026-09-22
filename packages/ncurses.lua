@@ -1,12 +1,16 @@
 return {
-    schema = 2,
     name = "ncurses",
     description = "Terminal handling and terminfo library",
-    default_version = "6.6",
     homepage = "https://invisible-island.net/ncurses/",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://ftp.gnu.org/gnu/ncurses/ncurses-{version}.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "ncurses-{version}",
+    },
     build = {
         backend = "custom",
+        libraries = { "lib/libncurses.a", "lib/libform.a", "lib/libmenu.a", "lib/libpanel.a" },
         steps = {
             configure = {
                 {
@@ -35,24 +39,21 @@ return {
             install = { { "make", "DESTDIR={prefix}", "install" } },
         },
     },
-    inputs = {
-        source = {
-            url = "https://ftp.gnu.org/gnu/ncurses/ncurses-{version}.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "ncurses-{version}",
-        },
-    },
     outputs = {
-        libraries = { "lib/libncurses.a", "lib/libform.a", "lib/libmenu.a", "lib/libpanel.a" },
         bins = { "tic", "infocmp", "tput" },
         checks = { { "tic", "-V" }, { "infocmp", "-V" }, { "tput", "-V" } },
     },
+    platforms = {
+        ["aarch64-linux"] = { default_version = "6.6" },
+        ["aarch64-macos"] = { default_version = "6.6" },
+        ["x86_64-linux"] = { default_version = "6.6" },
+    },
     versions = {
         ["6.6"] = {
-            inputs = {
-                source = {
-                    sha256 = "355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11",
-                },
+            digests = {
+                ["aarch64-linux"] = "355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11",
+                ["aarch64-macos"] = "355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11",
+                ["x86_64-linux"] = "355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11",
             },
         },
     },

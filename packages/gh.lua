@@ -1,20 +1,12 @@
 return {
-    schema = 2,
     name = "gh",
     description = "Work with GitHub from the command line",
     homepage = "https://github.com/cli/cli",
-    default_version = "2.101.0",
-    upstream = {
-        github = "cli/cli",
-        repository_id = 212613049,
-        tag_prefix = "v",
-    },
-    inputs = {
-        source = {
-            url = "https://codeload.github.com/cli/cli/tar.gz/refs/tags/{tag}",
-            archive = "tar.gz",
-            strip_prefix = "cli-{version}",
-        },
+    default_license = "MIT",
+    source = {
+        url = "https://codeload.github.com/cli/cli/tar.gz/refs/tags/{tag}",
+        archive = "tar.gz",
+        strip_prefix = "cli-{version}",
     },
     build = {
         backend = "go",
@@ -23,30 +15,37 @@ return {
             variables = { ["github.com/cli/cli/v2/internal/build.Version"] = "{version}" },
         },
     },
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
-    outputs = {
-        bins = { "gh" },
-        checks = {
-            { "gh", "--version" },
+    outputs = { bins = { "gh" }, checks = { { "gh", "--version" } } },
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "2.101.0",
+            upstream = { github = "cli/cli", repository_id = 212613049, tag_prefix = "v" },
+        },
+        ["aarch64-macos"] = {
+            default_version = "2.101.0",
+            upstream = { github = "cli/cli", repository_id = 212613049, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            default_version = "2.101.0",
+            upstream = { github = "cli/cli", repository_id = 212613049, tag_prefix = "v" },
         },
     },
     versions = {
         ["2.100.0"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
-                },
+            digests = {
+                ["aarch64-linux"] = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
+                ["aarch64-macos"] = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
+                ["x86_64-linux"] = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
             },
-            systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+            revision = 3,
         },
         ["2.101.0"] = {
-            revision = 2,
-            inputs = {
-                source = {
-                    sha256 = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
-                },
+            digests = {
+                ["aarch64-linux"] = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
+                ["aarch64-macos"] = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
+                ["x86_64-linux"] = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
             },
+            revision = 2,
         },
     },
 }

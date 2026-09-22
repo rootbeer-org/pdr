@@ -1,23 +1,18 @@
 return {
-    schema = 2,
     name = "brotli",
     description = "Brotli compression library and command-line tool",
-    default_version = "1.2.0",
     homepage = "https://github.com/google/brotli",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://github.com/google/brotli/archive/refs/tags/v1.2.0.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "brotli-1.2.0",
+    },
     build = {
+        backend = "custom",
+        dependencies = { "cmake@4.4.3" },
+        libraries = { "lib/libbrotlicommon.a", "lib/libbrotlidec.a", "lib/libbrotlienc.a" },
         steps = {
-            check = {
-                {
-                    "ctest",
-                    "--test-dir",
-                    "build",
-                    "--output-on-failure",
-                    "--no-tests=error",
-                    "--parallel",
-                    "{jobs}",
-                },
-            },
             configure = {
                 {
                     "curl",
@@ -50,30 +45,33 @@ return {
                     "-DCMAKE_INSTALL_INCLUDEDIR=/include",
                 },
             },
-            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
             build = { { "cmake", "--build", "build", "--parallel", "{jobs}" } },
+            check = {
+                {
+                    "ctest",
+                    "--test-dir",
+                    "build",
+                    "--output-on-failure",
+                    "--no-tests=error",
+                    "--parallel",
+                    "{jobs}",
+                },
+            },
+            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
         },
-        dependencies = { "cmake@4.4.3" },
-        backend = "custom",
     },
-    inputs = {
-        source = {
-            url = "https://github.com/google/brotli/archive/refs/tags/v1.2.0.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "brotli-1.2.0",
-        },
-    },
-    outputs = {
-        libraries = { "lib/libbrotlicommon.a", "lib/libbrotlidec.a", "lib/libbrotlienc.a" },
-        bins = { "brotli" },
-        checks = { { "brotli", "--version" } },
+    outputs = { bins = { "brotli" }, checks = { { "brotli", "--version" } } },
+    platforms = {
+        ["aarch64-linux"] = { default_version = "1.2.0" },
+        ["aarch64-macos"] = { default_version = "1.2.0" },
+        ["x86_64-linux"] = { default_version = "1.2.0" },
     },
     versions = {
         ["1.2.0"] = {
-            inputs = {
-                source = {
-                    sha256 = "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec",
-                },
+            digests = {
+                ["aarch64-linux"] = "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec",
+                ["aarch64-macos"] = "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec",
+                ["x86_64-linux"] = "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec",
             },
         },
     },

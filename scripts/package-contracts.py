@@ -12,15 +12,22 @@ import sys
 def resolved(recipe, system):
     """The contract a platform actually builds: its override, else the shared recipe.
 
-    System-keyed maps are resolved to this system's entry, so the projection survives
-    a recipe moving from an `assets` map to per-platform templates.
+    System-keyed maps are resolved to this system's entry, and fields that moved from
+    the recipe to the version it belongs to fall back, so the projection survives a
+    recipe moving from shared maps to per-platform contracts.
     """
     contract = recipe.get("platforms", {}).get(system, recipe)
     fields = {
         key: contract.get(key)
-        for key in ("revision", "source", "install", "build",
-                    "bins", "bin_paths", "apps", "checks", "mirror")
+        for key in ("source", "install", "build", "apps", "checks", "mirror")
     }
+    fields["revision"] = contract.get("revision") or recipe.get("revision")
+    fields["checks"] = contract.get("checks") or []
+    bins = contract.get("bins")
+    if isinstance(bins, dict):
+        fields["bins"], fields["bin_paths"] = sorted(bins), bins
+    else:
+        fields["bins"], fields["bin_paths"] = bins or [], contract.get("bin_paths")
     fields["asset"] = contract.get("asset") or (contract.get("assets") or {}).get(system)
     fields["checksum"] = contract.get("sha256") or (contract.get("checksums") or {}).get(system)
     return fields

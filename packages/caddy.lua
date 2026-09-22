@@ -1,21 +1,12 @@
 return {
-    schema = 2,
     name = "caddy",
     description = "Serve HTTP with automatic HTTPS",
-    default_version = "2.11.4",
     homepage = "https://github.com/caddyserver/caddy",
-    systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-    upstream = {
-        github = "caddyserver/caddy",
-        repository_id = 29207621,
-        tag_prefix = "v",
-    },
-    inputs = {
-        source = {
-            url = "https://codeload.github.com/caddyserver/caddy/tar.gz/refs/tags/{tag}",
-            archive = "tar.gz",
-            strip_prefix = "caddy-{version}",
-        },
+    default_license = "Apache-2.0",
+    source = {
+        url = "https://codeload.github.com/caddyserver/caddy/tar.gz/refs/tags/{tag}",
+        archive = "tar.gz",
+        strip_prefix = "caddy-{version}",
     },
     build = {
         backend = "go",
@@ -29,14 +20,28 @@ return {
         bins = { "caddy" },
         checks = { { "caddy", "version" }, { "caddy", "list-modules" } },
     },
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "2.11.4",
+            upstream = { github = "caddyserver/caddy", repository_id = 29207621, tag_prefix = "v" },
+        },
+        ["aarch64-macos"] = {
+            default_version = "2.11.4",
+            upstream = { github = "caddyserver/caddy", repository_id = 29207621, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            default_version = "2.11.4",
+            upstream = { github = "caddyserver/caddy", repository_id = 29207621, tag_prefix = "v" },
+        },
+    },
     versions = {
         ["2.11.4"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "2c3d02078286a6282cdb4d1d8744077788d556659dac0b64d8ed5886a7e5aeb9",
-                },
+            digests = {
+                ["aarch64-linux"] = "2c3d02078286a6282cdb4d1d8744077788d556659dac0b64d8ed5886a7e5aeb9",
+                ["aarch64-macos"] = "2c3d02078286a6282cdb4d1d8744077788d556659dac0b64d8ed5886a7e5aeb9",
+                ["x86_64-linux"] = "2c3d02078286a6282cdb4d1d8744077788d556659dac0b64d8ed5886a7e5aeb9",
             },
+            revision = 3,
         },
     },
 }

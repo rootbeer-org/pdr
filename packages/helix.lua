@@ -1,34 +1,39 @@
 return {
-    schema = 2,
     name = "helix",
     aliases = { "hx" },
     description = "Edit text with Helix",
     homepage = "https://helix-editor.com",
-    default_version = "25.07.1",
-    upstream = {
+    default_license = "MPL-2.0",
+    prebuilt = {
         github = "helix-editor/helix",
-        repository_id = 268424739,
+        tag = "{version}",
+        asset = "helix-{tag}-{target}.tar.xz",
     },
-    inputs = {
-        prebuilt = {
-            github = "helix-editor/helix",
-            tag = "{version}",
-            assets = {
-                ["aarch64-linux"] = "helix-{tag}-aarch64-linux.tar.xz",
-                ["aarch64-macos"] = "helix-{tag}-aarch64-macos.tar.xz",
-                ["x86_64-linux"] = "helix-{tag}-x86_64-linux.tar.xz",
-            },
+    outputs = { bins = { "hx" }, checks = { { "hx", "--version" }, { "hx", "--health", "toml" } } },
+    platforms = {
+        ["aarch64-linux"] = {
+            target = "aarch64-linux",
+            default_version = "25.07.1",
+            upstream = { github = "helix-editor/helix", repository_id = 268424739 },
         },
-    },
-    systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-    outputs = {
-        bins = { "hx" },
-        checks = {
-            { "hx", "--version" },
-            { "hx", "--health", "toml" },
+        ["aarch64-macos"] = {
+            target = "aarch64-macos",
+            default_version = "25.07.1",
+            upstream = { github = "helix-editor/helix", repository_id = 268424739 },
+        },
+        ["x86_64-linux"] = {
+            target = "x86_64-linux",
+            default_version = "25.07.1",
+            upstream = { github = "helix-editor/helix", repository_id = 268424739 },
         },
     },
     versions = {
-        ["25.07.1"] = {},
+        ["25.07.1"] = {
+            digests = {
+                ["aarch64-linux"] = "ce23fa8d395e633e3e54c052012f11965d91d8d5c2bfa659685f50430b4f8175",
+                ["aarch64-macos"] = "00b1651b4fdbbe0a2ae981c8e76b858bd26a7c33f5b3583f3b6bb9137d54f1ff",
+                ["x86_64-linux"] = "3f08e63ecd388fff657ad39722f88bb03dcf326f1f2da2700d99e1dc40ab2e8b",
+            },
+        },
     },
 }

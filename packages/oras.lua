@@ -1,29 +1,20 @@
 return {
-    schema = 2,
     name = "oras",
     description = "Push and pull OCI registry artifacts",
-    default_version = "1.3.4",
     homepage = "https://github.com/oras-project/oras",
-    systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-    upstream = {
-        github = "oras-project/oras",
-        repository_id = 162945532,
-        tag_prefix = "v",
-    },
-    inputs = {
-        source = {
-            url = "https://codeload.github.com/oras-project/oras/tar.gz/refs/tags/{tag}",
-            archive = "tar.gz",
-            strip_prefix = "oras-{version}",
-        },
+    default_license = "Apache-2.0",
+    source = {
+        url = "https://codeload.github.com/oras-project/oras/tar.gz/refs/tags/{tag}",
+        archive = "tar.gz",
+        strip_prefix = "oras-{version}",
     },
     build = {
         backend = "go",
         go = {
             binaries = { oras = "./cmd/oras" },
             variables = {
-                ["oras.land/oras/internal/version.Version"] = "{version}",
                 ["oras.land/oras/internal/version.BuildMetadata"] = "",
+                ["oras.land/oras/internal/version.Version"] = "{version}",
             },
         },
     },
@@ -31,14 +22,28 @@ return {
         bins = { "oras" },
         checks = { { "oras", "version" }, { "oras", "manifest", "--help" } },
     },
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "1.3.4",
+            upstream = { github = "oras-project/oras", repository_id = 162945532, tag_prefix = "v" },
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.3.4",
+            upstream = { github = "oras-project/oras", repository_id = 162945532, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.3.4",
+            upstream = { github = "oras-project/oras", repository_id = 162945532, tag_prefix = "v" },
+        },
+    },
     versions = {
         ["1.3.4"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "0967062b09d82c902e7f6bdd22fc6dd4577811bf46ba63dab8791ff047c55392",
-                },
+            digests = {
+                ["aarch64-linux"] = "0967062b09d82c902e7f6bdd22fc6dd4577811bf46ba63dab8791ff047c55392",
+                ["aarch64-macos"] = "0967062b09d82c902e7f6bdd22fc6dd4577811bf46ba63dab8791ff047c55392",
+                ["x86_64-linux"] = "0967062b09d82c902e7f6bdd22fc6dd4577811bf46ba63dab8791ff047c55392",
             },
+            revision = 3,
         },
     },
 }

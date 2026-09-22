@@ -1,14 +1,12 @@
 return {
-    schema = 2,
     name = "cmake",
     description = "Configure, build, test, and package software",
-    default_version = "4.4.3",
     homepage = "https://cmake.org/",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
-    upstream = {
-        github = "Kitware/CMake",
-        repository_id = 537699,
-        tag_prefix = "v",
+    default_license = "BSD-3-Clause",
+    source = {
+        url = "https://github.com/Kitware/CMake/releases/download/v{version}/cmake-{version}.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "cmake-{version}",
     },
     build = {
         backend = "custom",
@@ -43,22 +41,6 @@ return {
             install = { { "make", "DESTDIR={prefix}", "install" } },
         },
     },
-    inputs = {
-        source = {
-            url = "https://github.com/Kitware/CMake/releases/download/v{version}/cmake-{version}.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "cmake-{version}",
-        },
-        prebuilt = {
-            github = "Kitware/CMake",
-            tag = "v{version}",
-            assets = {
-                ["x86_64-linux"] = "cmake-{version}-linux-x86_64.tar.gz",
-                ["aarch64-macos"] = "cmake-{version}-macos-universal.tar.gz",
-                ["aarch64-linux"] = "cmake-{version}-linux-aarch64.tar.gz",
-            },
-        },
-    },
     outputs = {
         bins = { "cmake", "ctest", "cpack" },
         checks = {
@@ -69,14 +51,28 @@ return {
             { "cpack", "--version" },
         },
     },
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "4.4.3",
+            upstream = { github = "Kitware/CMake", repository_id = 537699, tag_prefix = "v" },
+        },
+        ["aarch64-macos"] = {
+            default_version = "4.4.3",
+            upstream = { github = "Kitware/CMake", repository_id = 537699, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            default_version = "4.4.3",
+            upstream = { github = "Kitware/CMake", repository_id = 537699, tag_prefix = "v" },
+        },
+    },
     versions = {
         ["4.4.3"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "c46400618b4f1f2b43507f24fb22f3ae830c3416cf23b776e16e1d413aa892f0",
-                },
+            digests = {
+                ["aarch64-linux"] = "c46400618b4f1f2b43507f24fb22f3ae830c3416cf23b776e16e1d413aa892f0",
+                ["aarch64-macos"] = "c46400618b4f1f2b43507f24fb22f3ae830c3416cf23b776e16e1d413aa892f0",
+                ["x86_64-linux"] = "c46400618b4f1f2b43507f24fb22f3ae830c3416cf23b776e16e1d413aa892f0",
             },
+            revision = 3,
         },
     },
 }

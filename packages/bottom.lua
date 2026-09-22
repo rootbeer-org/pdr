@@ -1,32 +1,50 @@
 return {
-    schema = 2,
     name = "bottom",
     description = "Monitor processes and system resources",
-    default_version = "0.14.9",
     homepage = "https://github.com/ClementTsang/bottom",
-    systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-    upstream = {
+    default_license = "MIT",
+    prebuilt = {
         github = "ClementTsang/bottom",
-        repository_id = 205042455,
-        tag_prefix = "",
+        tag = "{version}",
+        asset = "bottom_{target}.tar.gz",
     },
-    inputs = {
-        prebuilt = {
-            github = "ClementTsang/bottom",
-            tag = "{version}",
-            assets = {
-                ["x86_64-linux"] = "bottom_x86_64-unknown-linux-musl.tar.gz",
-                ["aarch64-macos"] = "bottom_aarch64-apple-darwin.tar.gz",
-                ["aarch64-linux"] = "bottom_aarch64-unknown-linux-musl.tar.gz",
+    outputs = { bins = { "btm" }, checks = { { "btm", "--version" }, { "btm", "--help" } } },
+    platforms = {
+        ["aarch64-linux"] = {
+            target = "aarch64-unknown-linux-musl",
+            default_version = "0.14.9",
+            upstream = {
+                github = "ClementTsang/bottom",
+                repository_id = 205042455,
+                tag_prefix = "",
+            },
+        },
+        ["aarch64-macos"] = {
+            target = "aarch64-apple-darwin",
+            default_version = "0.14.9",
+            upstream = {
+                github = "ClementTsang/bottom",
+                repository_id = 205042455,
+                tag_prefix = "",
+            },
+        },
+        ["x86_64-linux"] = {
+            target = "x86_64-unknown-linux-musl",
+            default_version = "0.14.9",
+            upstream = {
+                github = "ClementTsang/bottom",
+                repository_id = 205042455,
+                tag_prefix = "",
             },
         },
     },
-    outputs = {
-        bins = { "btm" },
-        checks = { { "btm", "--version" }, { "btm", "--help" } },
-    },
     versions = {
         ["0.14.9"] = {
+            digests = {
+                ["aarch64-linux"] = "7b6d532f6a6af356970f4e8d7d3a792590485aa4a53ebf038e10d20366125533",
+                ["aarch64-macos"] = "28358e19a3d62b3778fc0d1778b0028a682059145c9ac38ac5076bf124d77714",
+                ["x86_64-linux"] = "b4bee5b193e7d3f6e090ac14f0ca15acec2e7fe4ef64988e0bfc492e16c28c9a",
+            },
             revision = 2,
         },
     },

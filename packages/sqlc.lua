@@ -1,40 +1,40 @@
 return {
-    schema = 2,
     name = "sqlc",
     description = "Generate typed code from SQL",
-    default_version = "1.31.1",
     homepage = "https://github.com/sqlc-dev/sqlc",
-    systems = { "aarch64-linux", "aarch64-macos", "x86_64-linux" },
-    upstream = {
-        github = "sqlc-dev/sqlc",
-        repository_id = 193160679,
-        tag_prefix = "v",
+    default_license = "MIT",
+    source = {
+        url = "https://codeload.github.com/sqlc-dev/sqlc/tar.gz/refs/tags/{tag}",
+        archive = "tar.gz",
+        strip_prefix = "sqlc-{version}",
     },
-    inputs = {
-        source = {
-            url = "https://codeload.github.com/sqlc-dev/sqlc/tar.gz/refs/tags/{tag}",
-            archive = "tar.gz",
-            strip_prefix = "sqlc-{version}",
-        },
-    },
-    build = {
-        backend = "go",
-        go = {
-            binaries = { sqlc = "./cmd/sqlc" },
-        },
-    },
+    build = { backend = "go", go = { binaries = { sqlc = "./cmd/sqlc" } } },
     outputs = {
         bins = { "sqlc" },
         checks = { { "sqlc", "version" }, { "sqlc", "generate", "--help" } },
     },
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "1.31.1",
+            upstream = { github = "sqlc-dev/sqlc", repository_id = 193160679, tag_prefix = "v" },
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.31.1",
+            upstream = { github = "sqlc-dev/sqlc", repository_id = 193160679, tag_prefix = "v" },
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.31.1",
+            upstream = { github = "sqlc-dev/sqlc", repository_id = 193160679, tag_prefix = "v" },
+        },
+    },
     versions = {
         ["1.31.1"] = {
-            revision = 3,
-            inputs = {
-                source = {
-                    sha256 = "de82593a200e4130dc2a0413a808f93fc30fdc7b5ecd402913ed08a8fea06c4a",
-                },
+            digests = {
+                ["aarch64-linux"] = "de82593a200e4130dc2a0413a808f93fc30fdc7b5ecd402913ed08a8fea06c4a",
+                ["aarch64-macos"] = "de82593a200e4130dc2a0413a808f93fc30fdc7b5ecd402913ed08a8fea06c4a",
+                ["x86_64-linux"] = "de82593a200e4130dc2a0413a808f93fc30fdc7b5ecd402913ed08a8fea06c4a",
             },
+            revision = 3,
         },
     },
 }

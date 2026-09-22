@@ -1,13 +1,26 @@
 return {
-    schema = 2,
     name = "git",
     description = "Distributed version control system",
-    default_version = "2.55.0",
     homepage = "https://git-scm.com/",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://www.kernel.org/pub/software/scm/git/git-{version}.tar.xz",
+        archive = "tar.xz",
+        strip_prefix = "git-{version}",
+        patches = {
+            '--- a/exec-cmd.c\n+++ b/exec-cmd.c\n@@ -143,7 +143,8 @@\n \t\ttrace_printf(\n \t\t\t"trace: resolved executable path from Darwin stack: %s\\n",\n \t\t\tpath);\n-\t\tstrbuf_addstr(buf, path);\n+\t\tif (!strbuf_realpath(buf, path, 0))\n+\t\t\treturn -1;\n \t\treturn 0;\n \t}\n \treturn -1;\n',
+        },
+    },
     build = {
         backend = "custom",
-        dependencies = { "curl@8.22.0", "expat@2.8.4", "openssl@4.0.2", "zlib@1.3.2", "libiconv@1.19", "pkgconf@3.0.7" },
+        dependencies = {
+            "curl@8.22.0",
+            "expat@2.8.4",
+            "openssl@4.0.2",
+            "zlib@1.3.2",
+            "libiconv@1.19",
+            "pkgconf@3.0.7",
+        },
         steps = {
             configure = {
                 {
@@ -31,16 +44,6 @@ return {
             install = { { "make", "DESTDIR={prefix}", "install" } },
         },
     },
-    inputs = {
-        source = {
-            url = "https://www.kernel.org/pub/software/scm/git/git-{version}.tar.xz",
-            archive = "tar.xz",
-            strip_prefix = "git-{version}",
-            patches = {
-                '--- a/exec-cmd.c\n+++ b/exec-cmd.c\n@@ -143,7 +143,8 @@\n \t\ttrace_printf(\n \t\t\t"trace: resolved executable path from Darwin stack: %s\\n",\n \t\t\tpath);\n-\t\tstrbuf_addstr(buf, path);\n+\t\tif (!strbuf_realpath(buf, path, 0))\n+\t\t\treturn -1;\n \t\treturn 0;\n \t}\n \treturn -1;\n',
-            },
-        },
-    },
     outputs = {
         bins = { "git", "git-receive-pack", "git-upload-pack", "git-upload-archive" },
         checks = {
@@ -53,14 +56,19 @@ return {
             },
         },
     },
+    platforms = {
+        ["aarch64-linux"] = { default_version = "2.55.0" },
+        ["aarch64-macos"] = { default_version = "2.55.0" },
+        ["x86_64-linux"] = { default_version = "2.55.0" },
+    },
     versions = {
         ["2.55.0"] = {
-            revision = 4,
-            inputs = {
-                source = {
-                    sha256 = "457fdb04dc8728e007d4688695e6912e6f680727920f2a40bf11eacc17505357",
-                },
+            digests = {
+                ["aarch64-linux"] = "457fdb04dc8728e007d4688695e6912e6f680727920f2a40bf11eacc17505357",
+                ["aarch64-macos"] = "457fdb04dc8728e007d4688695e6912e6f680727920f2a40bf11eacc17505357",
+                ["x86_64-linux"] = "457fdb04dc8728e007d4688695e6912e6f680727920f2a40bf11eacc17505357",
             },
+            revision = 4,
         },
     },
 }

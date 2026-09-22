@@ -1,13 +1,20 @@
 return {
-    schema = 2,
     name = "libssh2",
     description = "SSH2 client library",
-    default_version = "1.11.1",
     homepage = "https://libssh2.org/",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://github.com/libssh2/libssh2/releases/download/libssh2-{version}/libssh2-{version}.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "libssh2-{version}",
+        patches = {
+            "--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -339 +339 @@\n-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\n+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\n@@ -368 +368 @@\n-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\n+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\n--- a/src/CMakeLists.txt\n+++ b/src/CMakeLists.txt\n@@ -66 +66 @@\n-  list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\n+  list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\n",
+        },
+    },
     build = {
         backend = "custom",
         dependencies = { "cmake@4.4.3", "openssl@4.0.2", "zlib@1.3.2" },
+        libraries = { "lib/libssh2.a" },
         steps = {
             configure = {
                 {
@@ -37,9 +44,7 @@ return {
                     "-DRUN_SSHD_TESTS=OFF",
                 },
             },
-            build = {
-                { "cmake", "--build", "build", "--parallel", "{jobs}" },
-            },
+            build = { { "cmake", "--build", "build", "--parallel", "{jobs}" } },
             check = {
                 {
                     "ctest",
@@ -51,47 +56,21 @@ return {
                     "{jobs}",
                 },
             },
-            install = {
-                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
-            },
+            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
         },
     },
-    inputs = {
-        source = {
-            url = "https://github.com/libssh2/libssh2/releases/download/libssh2-{version}/libssh2-{version}.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "libssh2-{version}",
-            -- Export dependency targets so CMake consumers can relocate the package.
-            patches = {
-                [[
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -339 +339 @@
--      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})
-+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)
-@@ -368 +368 @@
--      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})
-+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -66 +66 @@
--  list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})
-+  list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)
-]],
-            },
-        },
-    },
-    outputs = {
-        libraries = { "lib/libssh2.a" },
-        bins = {},
-        checks = {},
+    outputs = {},
+    platforms = {
+        ["aarch64-linux"] = { default_version = "1.11.1" },
+        ["aarch64-macos"] = { default_version = "1.11.1" },
+        ["x86_64-linux"] = { default_version = "1.11.1" },
     },
     versions = {
         ["1.11.1"] = {
-            inputs = {
-                source = {
-                    sha256 = "d9ec76cbe34db98eec3539fe2c899d26b0c837cb3eb466a56b0f109cabf658f7",
-                },
+            digests = {
+                ["aarch64-linux"] = "d9ec76cbe34db98eec3539fe2c899d26b0c837cb3eb466a56b0f109cabf658f7",
+                ["aarch64-macos"] = "d9ec76cbe34db98eec3539fe2c899d26b0c837cb3eb466a56b0f109cabf658f7",
+                ["x86_64-linux"] = "d9ec76cbe34db98eec3539fe2c899d26b0c837cb3eb466a56b0f109cabf658f7",
             },
         },
     },

@@ -1,10 +1,16 @@
 return {
-    schema = 2,
     name = "curl",
     description = "Transfer data with URLs",
-    default_version = "8.22.0",
     homepage = "https://curl.se/",
-    systems = { "aarch64-macos", "aarch64-linux", "x86_64-linux" },
+    default_license = "NOASSERTION",
+    source = {
+        url = "https://github.com/curl/curl/releases/download/curl-8_22_0/curl-{version}.tar.gz",
+        archive = "tar.gz",
+        strip_prefix = "curl-{version}",
+        patches = {
+            '--- a/CMake/curl-config.in.cmake\n+++ b/CMake/curl-config.in.cmake\n@@ -169 +169 @@\n-set(CURL_LIBRARIES_PRIVATE "@LIBCURL_PC_LIBS_PRIVATE_LIST@")\n+set(CURL_LIBRARIES_PRIVATE "@CURL_LIBS@")\n',
+        },
+    },
     build = {
         backend = "custom",
         dependencies = {
@@ -21,6 +27,7 @@ return {
             "libpsl@0.23.3",
             "libssh2@1.11.1",
         },
+        libraries = { "lib/libcurl.a" },
         steps = {
             configure = {
                 {
@@ -61,9 +68,7 @@ return {
                     "-DCURL_BUILD_EVERYTHING=ON",
                 },
             },
-            build = {
-                { "cmake", "--build", "build", "--parallel", "{jobs}" },
-            },
+            build = { { "cmake", "--build", "build", "--parallel", "{jobs}" } },
             check = {
                 {
                     "/usr/bin/env",
@@ -82,30 +87,10 @@ return {
                     'features=$(build/src/curl --version); for feature in HTTP2 HTTP3 SSL brotli zstd IDN PSL sftp https; do case "$features" in *"$feature"*) ;; *) echo "missing curl feature: $feature" >&2; exit 1;; esac; done',
                 },
             },
-            install = {
-                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
-            },
-        },
-    },
-    inputs = {
-        source = {
-            url = "https://github.com/curl/curl/releases/download/curl-8_22_0/curl-{version}.tar.gz",
-            archive = "tar.gz",
-            strip_prefix = "curl-{version}",
-            -- Export dependency targets so CMake consumers can relocate the package.
-            patches = {
-                [[
---- a/CMake/curl-config.in.cmake
-+++ b/CMake/curl-config.in.cmake
-@@ -169 +169 @@
--set(CURL_LIBRARIES_PRIVATE "@LIBCURL_PC_LIBS_PRIVATE_LIST@")
-+set(CURL_LIBRARIES_PRIVATE "@CURL_LIBS@")
-]],
-            },
+            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
         },
     },
     outputs = {
-        libraries = { "lib/libcurl.a" },
         bins = { "curl", "curl-config" },
         checks = {
             { "curl", "--version" },
@@ -114,14 +99,19 @@ return {
             { "curl-config", "--version" },
         },
     },
+    platforms = {
+        ["aarch64-linux"] = { default_version = "8.22.0" },
+        ["aarch64-macos"] = { default_version = "8.22.0" },
+        ["x86_64-linux"] = { default_version = "8.22.0" },
+    },
     versions = {
         ["8.22.0"] = {
-            revision = 2,
-            inputs = {
-                source = {
-                    sha256 = "d54dd598bf05927a726deb38df31c6a255ba83ff1de57c5d1464dac3ed8f44a1",
-                },
+            digests = {
+                ["aarch64-linux"] = "d54dd598bf05927a726deb38df31c6a255ba83ff1de57c5d1464dac3ed8f44a1",
+                ["aarch64-macos"] = "d54dd598bf05927a726deb38df31c6a255ba83ff1de57c5d1464dac3ed8f44a1",
+                ["x86_64-linux"] = "d54dd598bf05927a726deb38df31c6a255ba83ff1de57c5d1464dac3ed8f44a1",
             },
+            revision = 2,
         },
     },
 }
