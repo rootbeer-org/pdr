@@ -95,24 +95,25 @@ def retained_results(run_id):
 
 
 def retained_artifact(retained, task):
+    """The verified build a successful job retained, with the key it was built under. A builder on
+    another runner image qualified other inputs than this planner computes, so follow the job."""
     run, artifacts, jobs = retained
     expected_job = f"{os.environ['PACKAGE_RUNNER']} / {task['package']} ({task['system']}) / Build {task['package']}"
-    if not any(job['name'].endswith(expected_job) and job['conclusion'] == 'success'
-               and any(step['name'] in ('Build and check this package', 'Recover the admitted verified build')
-                       and step['conclusion'] == 'success' for step in job.get('steps', []))
-               for job in jobs):
-        return ''
-    prefix = f"package-{task['key']}-"
-    matches = [artifact for artifact in artifacts if not artifact['expired']
-               and artifact['name'].startswith(prefix)
-               and artifact['name'][len(prefix):].isdigit()
-               and 0 < int(artifact['name'][len(prefix):]) <= run['run_attempt']]
-    if matches:
-        latest = max(int(artifact['name'][len(prefix):]) for artifact in matches)
-        matches = [artifact for artifact in matches if artifact['name'] == f'{prefix}{latest}']
-    if len(matches) != 1 or not re.fullmatch(r'sha256:[a-f0-9]{64}', matches[0].get('digest', '')):
-        raise ValueError(f'{prefix}: no intact retained artifact; refusing to rebuild')
-    return str(matches[0]['id'])
+    built = [job for job in jobs if job['name'].endswith(expected_job) and job['conclusion'] == 'success'
+             and any(step['name'] in ('Build and check this package', 'Recover the admitted verified build')
+                     and step['conclusion'] == 'success' for step in job.get('steps', []))]
+    if not built:
+        return '', ''
+    job = max(built, key=lambda job: job['run_attempt'])
+    log = command('gh', 'api', '--allow-escape-sequences',
+                  f"repos/{os.environ['GITHUB_REPOSITORY']}/actions/jobs/{job['id']}/logs")
+    uploads = re.findall(r'Artifact (package-([a-f0-9]{64})-([0-9]+)) successfully finalized\. Artifact ID ([0-9]+)', log)
+    matches = [artifact for name, _, attempt, identifier in uploads for artifact in artifacts
+               if str(artifact['id']) == identifier and artifact['name'] == name and not artifact['expired']
+               and 0 < int(attempt) <= run['run_attempt']]
+    if len(uploads) != 1 or len(matches) != 1 or not re.fullmatch(r'sha256:[a-f0-9]{64}', matches[0].get('digest', '')):
+        raise ValueError(f"{task['package']} {task['system']}: no intact retained artifact; refusing to rebuild")
+    return str(matches[0]['id']), uploads[0][1]
 
 
 def check_planned(expected, tasks, planned_context, context):
@@ -158,7 +159,8 @@ def plan():
             if not is_missing(locator, task['name'], result.stderr):
                 raise RuntimeError(f'Cannot inspect {locator}: {result.stderr}')
             if retained:
-                task['artifact'] = retained_artifact(retained, task)
+                task['artifact'], key = retained_artifact(retained, task)
+                task['key'] = key or task['key']
                 task['reuse_run'] = reuse_run
             missing.append(task)
             continue
