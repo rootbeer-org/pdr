@@ -99,6 +99,25 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(selection.changed_requests(before, after, 'x86_64-linux'), [])
 
 
+class EngineChangeTests(unittest.TestCase):
+    def unreadable(self, base_engine):
+        engine = Path('package-engine-revision').read_text().strip()
+        failure = subprocess.CalledProcessError(1, 'rootbeer-forge')
+        return (patch.object(selection, 'extract'),
+                patch.object(selection, 'catalog', side_effect=failure),
+                patch.object(selection, 'command', return_value=base_engine(engine)))
+
+    def test_recipes_an_older_engine_wrote_count_as_new(self):
+        extract, catalog, command = self.unreadable(lambda engine: 'a' * 40)
+        with extract, catalog, command:
+            self.assertEqual(selection.previous_catalog('base'), {})
+
+    def test_unreadable_recipes_under_the_same_engine_still_fail(self):
+        extract, catalog, command = self.unreadable(lambda engine: engine)
+        with extract, catalog, command, self.assertRaises(subprocess.CalledProcessError):
+            selection.previous_catalog('base')
+
+
 class PlatformSelectionTests(unittest.TestCase):
     systems = ['aarch64-linux', 'aarch64-macos', 'x86_64-linux']
 
