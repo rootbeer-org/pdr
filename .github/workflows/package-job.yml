@@ -152,6 +152,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Install verified Forge
         uses: ./.github/actions/setup-engine
         with:
@@ -174,8 +175,14 @@ jobs:
           PACKAGE_REGISTRY: ${{ github.repository }}/${{ inputs.name }}
           PDR_SIGNING_KEY: ${{ secrets.PDR_SIGNING_KEY }}
           PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
+          BACKFILL_PUBLISHED: ${{ vars.BACKFILL_PUBLISHED }}
         run: |
           : "${PDR_SIGNING_KEY:?The publication environment did not provide its signing key}"
+          # Only while republishing: re-signed records keep the date their version first appeared.
+          published=()
+          if [ "$BACKFILL_PUBLISHED" = true ]; then
+            published=(--published "$(python3 .github/scripts/published-at.py "$PACKAGE_NAME" result/receipt.json)")
+          fi
           umask 077
           key="$RUNNER_TEMP/package-key.der"
           trap 'rm -f "$key"' EXIT
@@ -184,7 +191,7 @@ jobs:
           engine-bin/rootbeer-forge release --recipe "packages/$PACKAGE_NAME.lua" \
             --receipt result/receipt.json --input-key "$INPUT_KEY" \
             --registry "$PACKAGE_REGISTRY" --output release \
-            --key "$key" --public-key "$PDR_PUBLIC_KEY"
+            --key "$key" --public-key "$PDR_PUBLIC_KEY" "${published[@]}"
       - name: Store package and signed record in GHCR
         env:
           GH_TOKEN: ${{ github.token }}
