@@ -47,6 +47,27 @@ def changed_requests(before, after, system=None):
         changed = affected
 
 
+def extract(base, directory):
+    archive = subprocess.Popen(['git', 'archive', base, 'packages'], stdout=subprocess.PIPE)
+    subprocess.run(['tar', '-x', '-C', directory], stdin=archive.stdout, check=True)
+    archive.stdout.close()
+    if archive.wait():
+        raise ValueError('Could not read the previous approved recipes')
+
+
+def previous_catalog(base):
+    """The base recipes, or nothing when they predate this engine and it cannot read them."""
+    with tempfile.TemporaryDirectory() as temporary:
+        extract(base, temporary)
+        try:
+            return catalog(Path(temporary) / 'packages')
+        except subprocess.CalledProcessError:
+            engine = Path('package-engine-revision').read_text().strip()
+            if command('git', 'show', f'{base}:package-engine-revision') == engine:
+                raise
+            return {}
+
+
 def main():
     explicit = os.environ.get('PACKAGES', '').strip()
     base = os.environ.get('BASE_REVISION', '')
@@ -56,14 +77,8 @@ def main():
     if explicit:
         requests = explicit.split()
     elif base and set(base) != {'0'}:
-        with tempfile.TemporaryDirectory() as temporary:
-            archive = subprocess.Popen(['git', 'archive', base, 'packages'], stdout=subprocess.PIPE)
-            subprocess.run(['tar', '-x', '-C', temporary], stdin=archive.stdout, check=True)
-            archive.stdout.close()
-            if archive.wait():
-                raise ValueError('Could not read the previous approved recipes')
-            before = catalog(Path(temporary) / 'packages')
-            requests = changed_requests(before, after)
+        before = previous_catalog(base)
+        requests = changed_requests(before, after)
     else:
         requests = []
     platforms = []
