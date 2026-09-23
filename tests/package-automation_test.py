@@ -3,6 +3,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -19,6 +20,7 @@ selection = module('package-selection')
 jobs = module('package-jobs')
 producer = module('package-producer')
 proposals = module('propose-updates')
+published_at = module('published-at')
 
 
 class ProposalLockTests(unittest.TestCase):
@@ -243,6 +245,30 @@ class ProducerTests(unittest.TestCase):
                 if status == 'completed':
                     self.assertIn('reuse-run=123', output.read_text())
 
+
+
+class PublishedTimeTests(unittest.TestCase):
+    def commit(self, repository, recipe, time):
+        path = Path(repository) / 'packages' / 'tool.lua'
+        path.parent.mkdir(exist_ok=True)
+        path.write_text(recipe)
+        environment = dict(os.environ, GIT_AUTHOR_DATE=f'@{time}', GIT_COMMITTER_DATE=f'@{time}',
+                           GIT_AUTHOR_NAME='test', GIT_AUTHOR_EMAIL='test@example.com',
+                           GIT_COMMITTER_NAME='test', GIT_COMMITTER_EMAIL='test@example.com')
+        subprocess.run(['git', '-C', repository, 'add', '-A'], check=True, env=environment)
+        subprocess.run(['git', '-C', repository, '-c', 'commit.gpgsign=false', 'commit', '-qm', 'recipe'],
+                       check=True, env=environment)
+
+    def test_a_version_dates_from_when_it_first_appeared(self):
+        with tempfile.TemporaryDirectory() as repository:
+            subprocess.run(['git', 'init', '-q', repository], check=True)
+            self.commit(repository, 'versions = { ["1.0"] = {} }', 1_700_000_000)
+            self.commit(repository, 'versions = { ["1.0"] = {}, ["2.0"] = {} }', 1_700_100_000)
+            self.commit(repository, 'versions = { ["1.0"] = { revision = 2 }, ["2.0"] = {} }', 1_700_200_000)
+            self.assertEqual(published_at.first_appearance('tool', '1.0', repository), 1_700_000_000)
+            self.assertEqual(published_at.first_appearance('tool', '2.0', repository), 1_700_100_000)
+            with self.assertRaises(ValueError):
+                published_at.first_appearance('tool', '3.0', repository)
 
 if __name__ == '__main__':
     unittest.main()
