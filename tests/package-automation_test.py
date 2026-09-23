@@ -214,24 +214,33 @@ class RecoveryTests(unittest.TestCase):
         self.environment.start()
         self.addCleanup(self.environment.stop)
         self.task = {'package': 'tool@1', 'system': 'aarch64-macos', 'key': 'abc'}
-        self.job = {'name': 'macos-15 / tool@1 (aarch64-macos) / Build tool@1', 'conclusion': 'success',
-                    'steps': [{'name': 'Build and check this package', 'conclusion': 'success'}]}
-        self.artifact = {'name': 'package-abc-1', 'id': 123, 'expired': False, 'digest': 'sha256:' + 'a' * 64}
+        self.job = {'id': 7, 'run_attempt': 1, 'name': 'macos-15 / tool@1 (aarch64-macos) / Build tool@1',
+                    'conclusion': 'success', 'steps': [{'name': 'Build and check this package', 'conclusion': 'success'}]}
+        self.key = 'b' * 64
+        self.artifact = {'name': f'package-{self.key}-1', 'id': 123, 'expired': False, 'digest': 'sha256:' + 'a' * 64}
+        self.log = f'Artifact package-{self.key}-1 successfully finalized. Artifact ID 123'
+
+    def recover(self, artifacts, jobs_list, log=None):
+        with patch.object(jobs, 'command', return_value=self.log if log is None else log):
+            return jobs.retained_artifact(({'run_attempt': 2}, artifacts, jobs_list), self.task)
 
     def test_approval_without_started_jobs_needs_no_checkpoint(self):
-        self.assertEqual(jobs.retained_artifact(({'run_attempt': 2}, [], []), self.task), '')
+        self.assertEqual(self.recover([], []), ('', ''))
 
     def test_failed_jobs_can_run_again(self):
         self.job['conclusion'] = 'failure'
-        self.assertEqual(jobs.retained_artifact(({'run_attempt': 2}, [], [self.job]), self.task), '')
+        self.assertEqual(self.recover([], [self.job]), ('', ''))
 
-    def test_successful_build_recovers_exact_artifact(self):
-        self.assertEqual(jobs.retained_artifact(({'run_attempt': 2}, [self.artifact], [self.job]), self.task), '123')
+    def test_build_from_another_runner_image_keeps_its_own_key(self):
+        self.assertEqual(self.recover([self.artifact], [self.job]), ('123', self.key))
 
     def test_missing_or_expired_successful_build_is_not_rebuilt(self):
-        for artifacts in ([], [dict(self.artifact, expired=True)], [dict(self.artifact, digest='')]):
+        for artifacts in ([], [dict(self.artifact, expired=True)], [dict(self.artifact, digest='')],
+                          [dict(self.artifact, id=124)]):
             with self.subTest(artifacts=artifacts), self.assertRaisesRegex(ValueError, 'refusing to rebuild'):
-                jobs.retained_artifact(({'run_attempt': 2}, artifacts, [self.job]), self.task)
+                self.recover(artifacts, [self.job])
+        with self.assertRaisesRegex(ValueError, 'refusing to rebuild'):
+            self.recover([self.artifact], [self.job], log='')
 
     def test_unmerged_fork_is_not_admitted(self):
         run = {'path': '.github/workflows/package-builds.yml', 'status': 'completed', 'head_sha': 'abc',
