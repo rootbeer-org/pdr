@@ -132,18 +132,35 @@ class RegistryTests(unittest.TestCase):
             self.assertTrue(jobs.is_missing('registry/new:tag', 'new', error))
             self.assertFalse(jobs.is_missing('registry/existing:tag', 'existing', error))
 
-    def test_catalog_entry_without_records_is_still_unpublished(self):
+    def published(self, source):
+        root = {'schema': 3, 'packages': {'tool': {'document': 'a' * 64}}}
+        document = {'name': 'tool', 'versions': {'1': {'platforms': {'system': {'record': 'b' * 64}}}}}
+        record = {'record': {'artifact': {'package': {'source': {'Url': {'url': source}}}}}}
+        responses = {'packages': document, 'records': record}
+        return (patch.dict(os.environ, {'PACKAGE_REGISTRY': 'rootbeer-org/pdr'}),
+                patch.object(jobs, 'published_root', return_value=('revision', root)),
+                patch.object(jobs, 'published_json', side_effect=lambda _, path, __: responses[path]))
+
+    def test_nothing_is_published_before_the_first_v3_root(self):
         jobs.has_published_namespace.cache_clear()
-        with patch.dict(os.environ, {'PACKAGE_REGISTRY': 'tale/rootbeer-index'}), patch.object(jobs, 'approved_discovery', return_value=('revision', {'catalog': {'packages': {'new': {}}}, 'records': {}})):
+        with patch.object(jobs, 'published_root', return_value=None):
+            self.assertFalse(jobs.has_published_namespace('tool'))
+        jobs.has_published_namespace.cache_clear()
+
+    def test_a_package_the_root_does_not_list_is_unpublished(self):
+        jobs.has_published_namespace.cache_clear()
+        environment, root, documents = self.published('ghcr://rootbeer-org/pdr/tool@sha256:' + 'c' * 64)
+        with environment, root, documents:
             self.assertFalse(jobs.has_published_namespace('new'))
         jobs.has_published_namespace.cache_clear()
 
-    def test_upstream_archive_does_not_establish_a_ghcr_namespace(self):
-        jobs.has_published_namespace.cache_clear()
-        manifest = {'records': {'tool@1': {'system': {'sha256': 'a' * 64}}}}
-        record = {'record': {'artifact': {'package': {'source': {'Url': {'url': 'https://upstream.example/tool.zip'}}}}}}
-        with patch.dict(os.environ, {'PACKAGE_REGISTRY': 'tale/rootbeer-index'}), patch.object(jobs, 'approved_discovery', return_value=('revision', manifest)), patch.object(jobs, 'command', return_value=json.dumps(record)):
-            self.assertFalse(jobs.has_published_namespace('tool'))
+    def test_only_a_ghcr_record_establishes_the_namespace(self):
+        for source, expected in [('ghcr://rootbeer-org/pdr/tool@sha256:' + 'c' * 64, True),
+                                 ('https://upstream.example/tool.zip', False)]:
+            jobs.has_published_namespace.cache_clear()
+            environment, root, documents = self.published(source)
+            with environment, root, documents:
+                self.assertEqual(jobs.has_published_namespace('tool'), expected, source)
         jobs.has_published_namespace.cache_clear()
 
     def test_outage_does_not_trigger_a_build(self):
@@ -160,7 +177,7 @@ class ProducerSelectionTests(unittest.TestCase):
 
 class RecoveryTests(unittest.TestCase):
     def setUp(self):
-        self.environment = patch.dict(os.environ, {'PACKAGE_RUNNER': 'macos-15', 'GITHUB_REPOSITORY': 'tale/rootbeer-index', 'GITHUB_RUN_ID': '20'})
+        self.environment = patch.dict(os.environ, {'PACKAGE_RUNNER': 'macos-15', 'GITHUB_REPOSITORY': 'rootbeer-org/pdr', 'GITHUB_RUN_ID': '20'})
         self.environment.start()
         self.addCleanup(self.environment.stop)
         self.task = {'package': 'tool@1', 'system': 'aarch64-macos', 'key': 'abc'}
@@ -216,7 +233,7 @@ class ProducerTests(unittest.TestCase):
             event.write_text('{}')
             output = Path(directory) / 'output'
             env = {'GITHUB_EVENT_PATH': str(event), 'GITHUB_OUTPUT': str(output), 'GITHUB_EVENT_NAME': 'push',
-                   'GITHUB_REPOSITORY': 'tale/rootbeer-index', 'GITHUB_SHA': 'merge', 'REUSE_RUN': ''}
+                   'GITHUB_REPOSITORY': 'rootbeer-org/pdr', 'GITHUB_SHA': 'merge', 'REUSE_RUN': ''}
             pulls = [{'merged_at': 'now', 'base': {'ref': 'main'}, 'head': {'sha': 'head'}}]
             for status, waiting in [('in_progress', 'true'), ('completed', 'false')]:
                 output.write_text('')

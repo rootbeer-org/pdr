@@ -10,7 +10,7 @@ def command(*args):
 
 
 def catalog(directory):
-    return json.loads(command('engine-bin/rootbeer-forge', '--catalog', str(directory), 'index'))['packages']
+    return json.loads(command('engine-bin/rootbeer-forge', '--catalog', str(directory), 'catalog'))['packages']
 
 
 def platform_recipe(recipe, system):

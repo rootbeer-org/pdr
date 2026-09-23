@@ -2,7 +2,7 @@ name: Build and publish one package
 on:
   workflow_call:
     secrets:
-      INDEX_SIGNING_KEY:
+      PDR_SIGNING_KEY:
         description: Supplied by the package-publishing environment in the publisher job
         required: false
     inputs:
@@ -92,7 +92,7 @@ jobs:
           BUILD_CONTEXT: ${{ inputs.context }}
           EXPECTED_KEY: ${{ inputs.key }}
           PACKAGE_REGISTRY: ${{ github.repository }}
-          PACKAGE_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
+          PACKAGE_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
           RECORD_DIRECTORY: discovery-records
           GH_TOKEN: ${{ github.token }}
           PACKAGE_RUNNER: ${{ inputs.runner }}
@@ -139,7 +139,7 @@ jobs:
   publish:
     name: Sign and publish
     needs: build
-    if: needs.build.outputs.artifact != '' && github.ref == 'refs/heads/main' && inputs.publish && vars.PUBLISH_INDEX == 'true'
+    if: needs.build.outputs.artifact != '' && github.ref == 'refs/heads/main' && inputs.publish && vars.PUBLISH_PDR == 'true'
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 15
     environment: package-publishing
@@ -172,26 +172,26 @@ jobs:
           PACKAGE_NAME: ${{ inputs.name }}
           INPUT_KEY: ${{ inputs.key }}
           PACKAGE_REGISTRY: ${{ github.repository }}/${{ inputs.name }}
-          INDEX_SIGNING_KEY: ${{ secrets.INDEX_SIGNING_KEY }}
-          INDEX_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
+          PDR_SIGNING_KEY: ${{ secrets.PDR_SIGNING_KEY }}
+          PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
         run: |
-          : "${INDEX_SIGNING_KEY:?The publication environment did not provide its signing key}"
+          : "${PDR_SIGNING_KEY:?The publication environment did not provide its signing key}"
           umask 077
           key="$RUNNER_TEMP/package-key.der"
           trap 'rm -f "$key"' EXIT
-          printf '%s' "$INDEX_SIGNING_KEY" | base64 --decode > "$key"
-          unset INDEX_SIGNING_KEY
+          printf '%s' "$PDR_SIGNING_KEY" | base64 --decode > "$key"
+          unset PDR_SIGNING_KEY
           engine-bin/rootbeer-forge release --recipe "packages/$PACKAGE_NAME.lua" \
             --receipt result/receipt.json --input-key "$INPUT_KEY" \
             --registry "$PACKAGE_REGISTRY" --output release \
-            --key "$key" --public-key "$INDEX_PUBLIC_KEY"
+            --key "$key" --public-key "$PDR_PUBLIC_KEY"
       - name: Store package and signed record in GHCR
         env:
           GH_TOKEN: ${{ github.token }}
-          INDEX_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
+          PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
         run: |
           printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
-          engine-bin/rootbeer-forge push release --public-key "$INDEX_PUBLIC_KEY" | tee publication.txt
+          engine-bin/rootbeer-forge push release --public-key "$PDR_PUBLIC_KEY" | tee publication.txt
           cat publication.txt >> "$GITHUB_STEP_SUMMARY"
           mkdir discovery-records
           cp release/package.json "discovery-records/${{ inputs.key }}.json"

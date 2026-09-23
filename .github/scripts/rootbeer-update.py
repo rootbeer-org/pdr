@@ -127,7 +127,7 @@ def main():
         manifest = tar.extractfile(f'rootbeer-{revision}/crates/rootbeer-cli/Cargo.toml')
         version = tomllib.loads(manifest.read().decode())['package']['version']
     catalog = json.loads(subprocess.check_output([
-        'engine-bin/rootbeer-forge', '--catalog', 'packages', 'index']))
+        'engine-bin/rootbeer-forge', '--catalog', 'packages', 'catalog']))
     build, systems = default_build(catalog['packages']['rootbeer'])
     updated = update_recipe(source, systems, revision, version, hashlib.sha256(archive).hexdigest(),
                             head['commit']['committer']['date'], build)
@@ -135,6 +135,7 @@ def main():
     if not any(destination.glob('*.lua')):
         shutil.copytree('packages', destination, dirs_exist_ok=True)
     (destination / 'rootbeer.lua').write_text(updated)
+    subprocess.run(['engine-bin/rootbeer-forge', '--catalog', str(destination), 'format'], check=True)
     report_path = Path('candidates/report.json')
     report = json.loads(report_path.read_text())
     report['updated'] = sorted(set(report['updated']) | {'rootbeer'})
