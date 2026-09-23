@@ -43,7 +43,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build and check
+    name: Build ${{ inputs.package }}
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 60
     permissions:
@@ -51,6 +51,7 @@ jobs:
       actions: read
     outputs:
       artifact: ${{ steps.retain.outputs.artifact-id }}
+      key: ${{ steps.reuse.outputs.key || inputs.key }}
     steps:
       - name: Report unsupported package inputs
         if: inputs.error != ''
@@ -73,12 +74,6 @@ jobs:
         if: inputs.artifact == ''
         uses: ./.github/actions/setup-package-tools
         id: tools
-      - name: Require the planned runner image
-        if: inputs.artifact == ''
-        env:
-          EXPECTED: ${{ inputs.context }}
-          ACTUAL: ${{ steps.tools.outputs.context }}
-        run: test "$EXPECTED" = "$ACTUAL"
       - name: Install registry client
         if: inputs.artifact == ''
         uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d
@@ -89,7 +84,8 @@ jobs:
         id: reuse
         env:
           PACKAGES: ${{ inputs.package }}
-          BUILD_CONTEXT: ${{ inputs.context }}
+          BUILD_CONTEXT: ${{ steps.tools.outputs.context }}
+          PLANNED_CONTEXT: ${{ inputs.context }}
           EXPECTED_KEY: ${{ inputs.key }}
           PACKAGE_REGISTRY: ${{ github.repository }}
           PACKAGE_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
@@ -101,16 +97,16 @@ jobs:
         if: inputs.artifact == ''
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: published-records-reuse-${{ inputs.key }}-${{ github.run_attempt }}
+          name: published-records-reuse-${{ steps.reuse.outputs.key }}-${{ github.run_attempt }}
           path: discovery-records/*.json
           if-no-files-found: ignore
       - name: Build and check this package
         if: steps.reuse.outputs.has-work == 'true' && inputs.artifact == ''
         env:
           PACKAGE: ${{ inputs.package }}
-          INPUT_KEY: ${{ inputs.key }}
+          INPUT_KEY: ${{ steps.reuse.outputs.key }}
           GITHUB_TOKEN: ${{ github.token }}
-          BUILD_CONTEXT: ${{ inputs.context }}
+          BUILD_CONTEXT: ${{ steps.tools.outputs.context }}
         run: |
           engine-bin/rootbeer-forge --catalog packages prepare "$PACKAGE" \
             --input-key "$INPUT_KEY" --output result \
@@ -129,7 +125,7 @@ jobs:
         id: retain
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: package-${{ inputs.key }}-${{ github.run_attempt }}
+          name: package-${{ steps.reuse.outputs.key || inputs.key }}-${{ github.run_attempt }}
           path: |
             result/package.tar.gz
             result/receipt.json
@@ -137,7 +133,7 @@ jobs:
           retention-days: 14
 
   publish:
-    name: Sign and publish
+    name: Publish ${{ inputs.package }}
     needs: build
     if: needs.build.outputs.artifact != '' && github.ref == 'refs/heads/main' && inputs.publish && vars.PUBLISH_PDR == 'true'
     runs-on: ${{ inputs.runner }}
@@ -171,7 +167,7 @@ jobs:
       - name: Approve these exact inputs and sign this package
         env:
           PACKAGE_NAME: ${{ inputs.name }}
-          INPUT_KEY: ${{ inputs.key }}
+          INPUT_KEY: ${{ needs.build.outputs.key }}
           PACKAGE_REGISTRY: ${{ github.repository }}/${{ inputs.name }}
           PDR_SIGNING_KEY: ${{ secrets.PDR_SIGNING_KEY }}
           PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
@@ -188,7 +184,7 @@ jobs:
           trap 'rm -f "$key"' EXIT
           printf '%s' "$PDR_SIGNING_KEY" | base64 --decode > "$key"
           unset PDR_SIGNING_KEY
-          engine-bin/rootbeer-forge release --recipe "packages/$PACKAGE_NAME.lua" \
+          engine-bin/rootbeer-forge --catalog packages release \
             --receipt result/receipt.json --input-key "$INPUT_KEY" \
             --registry "$PACKAGE_REGISTRY" --output release \
             --key "$key" --public-key "$PDR_PUBLIC_KEY" "${published[@]}"
@@ -201,10 +197,10 @@ jobs:
           engine-bin/rootbeer-forge push release --public-key "$PDR_PUBLIC_KEY" | tee publication.txt
           cat publication.txt >> "$GITHUB_STEP_SUMMARY"
           mkdir discovery-records
-          cp release/package.json "discovery-records/${{ inputs.key }}.json"
+          cp release/package.json "discovery-records/${{ needs.build.outputs.key }}.json"
       - name: Retain this published package record for discovery
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: published-records-${{ inputs.key }}-${{ github.run_attempt }}
+          name: published-records-${{ needs.build.outputs.key }}-${{ github.run_attempt }}
           path: discovery-records/*.json
           if-no-files-found: error

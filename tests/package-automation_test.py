@@ -188,6 +188,18 @@ class RegistryTests(unittest.TestCase):
         self.assertFalse(jobs.is_missing('registry/new:tag', 'new', 'TLS handshake timeout'))
 
 
+class RunnerImageTests(unittest.TestCase):
+    def test_a_builder_on_another_image_keeps_its_own_key(self):
+        tasks = [{'package': 'tool@1', 'key': 'b' * 64}]
+        jobs.check_planned('a' * 64, tasks, 'ubuntu24-20260920', 'ubuntu24-20260907')
+
+    def test_the_same_image_must_reproduce_the_planned_key(self):
+        tasks = [{'package': 'tool@1', 'key': 'b' * 64}]
+        with self.assertRaisesRegex(ValueError, 'changed after planning'):
+            jobs.check_planned('a' * 64, tasks, 'ubuntu24-20260920', 'ubuntu24-20260920')
+        jobs.check_planned('b' * 64, tasks, 'ubuntu24-20260920', 'ubuntu24-20260920')
+
+
 class ProducerSelectionTests(unittest.TestCase):
     def test_completed_verification_wins_over_unstarted_pr_run(self):
         verified = {'id': 10, 'event': 'workflow_dispatch', 'status': 'completed', 'conclusion': 'success'}
@@ -202,7 +214,7 @@ class RecoveryTests(unittest.TestCase):
         self.environment.start()
         self.addCleanup(self.environment.stop)
         self.task = {'package': 'tool@1', 'system': 'aarch64-macos', 'key': 'abc'}
-        self.job = {'name': 'macos-15 / tool@1 (aarch64-macos) / Build and check', 'conclusion': 'success',
+        self.job = {'name': 'macos-15 / tool@1 (aarch64-macos) / Build tool@1', 'conclusion': 'success',
                     'steps': [{'name': 'Build and check this package', 'conclusion': 'success'}]}
         self.artifact = {'name': 'package-abc-1', 'id': 123, 'expired': False, 'digest': 'sha256:' + 'a' * 64}
 
