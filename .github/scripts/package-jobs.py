@@ -96,7 +96,7 @@ def retained_results(run_id):
 
 def retained_artifact(retained, task):
     run, artifacts, jobs = retained
-    expected_job = f"{os.environ['PACKAGE_RUNNER']} / {task['package']} ({task['system']}) / Build and check"
+    expected_job = f"{os.environ['PACKAGE_RUNNER']} / {task['package']} ({task['system']}) / Build {task['package']}"
     if not any(job['name'].endswith(expected_job) and job['conclusion'] == 'success'
                and any(step['name'] in ('Build and check this package', 'Recover the admitted verified build')
                        and step['conclusion'] == 'success' for step in job.get('steps', []))
@@ -113,6 +113,13 @@ def retained_artifact(retained, task):
     if len(matches) != 1 or not re.fullmatch(r'sha256:[a-f0-9]{64}', matches[0].get('digest', '')):
         raise ValueError(f'{prefix}: no intact retained artifact; refusing to rebuild')
     return str(matches[0]['id'])
+
+
+def check_planned(expected, tasks, planned_context, context):
+    """A builder on another runner image than its planner has different inputs, so it keeps its own
+    key; on the same image the keys must agree, or the recipes changed after planning."""
+    if len(tasks) != 1 or (planned_context in ('', context) and tasks[0]['key'] != expected):
+        raise ValueError(f'Package inputs changed after planning: expected {expected}, resolved {json.dumps(tasks)}')
 
 
 def plan():
@@ -132,8 +139,8 @@ def plan():
             continue
         tasks.extend(json.loads(result.stdout))
     expected = os.environ.get('EXPECTED_KEY')
-    if expected and (len(tasks) != 1 or tasks[0]['key'] != expected):
-        raise ValueError(f'Package inputs changed after planning: expected {expected}, resolved {json.dumps(tasks)}')
+    if expected:
+        check_planned(expected, tasks, os.environ.get('PLANNED_CONTEXT', ''), os.environ['BUILD_CONTEXT'])
     missing = []
     reused = []
     reuse_run = os.environ.get('REUSE_RUN', '')
@@ -176,6 +183,8 @@ def plan():
     with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
         output.write(f'matrix={json.dumps({"include": missing}, separators=(",", ":"))}\n')
         output.write(f'has-work={str(bool(missing)).lower()}\n')
+        if expected:
+            output.write(f"key={tasks[0]['key']}\n")
     with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
         summary.write(f'{len(missing)} packages to build; {len(reused)} signed results reused.\n\n')
         for task in missing:
