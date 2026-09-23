@@ -4,20 +4,20 @@ return {
     homepage = "https://rootbeer.tale.me",
     default_license = "NOASSERTION",
     source = {
-        url = "https://codeload.github.com/tale/rootbeer/tar.gz/0d9c017b92b19415e28bb2785e86f21e0d30c44e",
+        url = "https://codeload.github.com/tale/rootbeer/tar.gz/267d73893532e5eaed607cef600382b5632aad3a",
         git = {
             github = "tale/rootbeer",
             branch = "main",
         },
         archive = "tar.gz",
-        strip_prefix = "rootbeer-0d9c017b92b19415e28bb2785e86f21e0d30c44e",
+        strip_prefix = "rootbeer-267d73893532e5eaed607cef600382b5632aad3a",
     },
     build = {
         backend = "rust",
         rust = {
             packages = { "rootbeer-cli", "rootbeer-forge" },
             environment = {
-                RB_BUILD_TIMESTAMP = "2026-09-23 17:32 UTC",
+                RB_BUILD_TIMESTAMP = "2026-09-23 18:39 UTC",
                 ROOTBEER_PDR_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                 ROOTBEER_PDR_URL = "https://pdr.rbpkg.com/v3/current.json",
             },
@@ -33,21 +33,21 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.1.0-main+0d9c017b92b1",
+            default_version = "0.1.0-main+267d73893532",
         },
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+0d9c017b92b1",
+            default_version = "0.1.0-main+267d73893532",
         },
         ["x86_64-linux"] = {
-            default_version = "0.1.0-main+0d9c017b92b1",
+            default_version = "0.1.0-main+267d73893532",
         },
     },
     versions = {
-        ["0.1.0-main+0d9c017b92b1"] = {
+        ["0.1.0-main+267d73893532"] = {
             digests = {
-                ["aarch64-linux"] = "cee64fc1a39060383c229cdf501c9eaf93c57ad45a71ec6475ca1bc96e8e720a",
-                ["aarch64-macos"] = "cee64fc1a39060383c229cdf501c9eaf93c57ad45a71ec6475ca1bc96e8e720a",
-                ["x86_64-linux"] = "cee64fc1a39060383c229cdf501c9eaf93c57ad45a71ec6475ca1bc96e8e720a",
+                ["aarch64-linux"] = "a2815e92a51de046e0c38c9c134614713a7f409c9595e872d480bcaac0b90165",
+                ["aarch64-macos"] = "a2815e92a51de046e0c38c9c134614713a7f409c9595e872d480bcaac0b90165",
+                ["x86_64-linux"] = "a2815e92a51de046e0c38c9c134614713a7f409c9595e872d480bcaac0b90165",
             },
         },
     },

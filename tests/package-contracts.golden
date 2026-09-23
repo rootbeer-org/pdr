@@ -361,9 +361,9 @@ raycast@2.4.1.0 aarch64-macos 89f993282e41e3ae
 ripgrep@15.2.0 aarch64-linux 91087c67e952629b
 ripgrep@15.2.0 aarch64-macos 9f47259e8459965f
 ripgrep@15.2.0 x86_64-linux 494e3de37622f7fb
-rootbeer@0.1.0-main+0d9c017b92b1 aarch64-linux 151b4bcef2a9ea6f
-rootbeer@0.1.0-main+0d9c017b92b1 aarch64-macos 151b4bcef2a9ea6f
-rootbeer@0.1.0-main+0d9c017b92b1 x86_64-linux 151b4bcef2a9ea6f
+rootbeer@0.1.0-main+267d73893532 aarch64-linux 54e0b6956ddbc895
+rootbeer@0.1.0-main+267d73893532 aarch64-macos 54e0b6956ddbc895
+rootbeer@0.1.0-main+267d73893532 x86_64-linux 54e0b6956ddbc895
 rsync@3.5.0 aarch64-linux f7ffefc490cef596
 rsync@3.5.0 aarch64-macos f7ffefc490cef596
 rsync@3.5.0 x86_64-linux f7ffefc490cef596
