@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["CleanShot X.app"] = "CleanShot X.app" } },
+    outputs = {
+        apps = {
+            ["CleanShot X.app"] = "CleanShot X.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "5.0" },
+        ["aarch64-macos"] = {
+            default_version = "5.0",
+        },
     },
     versions = {
         ["5.0"] = {

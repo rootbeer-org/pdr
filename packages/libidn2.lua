@@ -22,11 +22,23 @@ return {
         dependencies = { "libiconv@1.19", "libunistring@1.4.2" },
         libraries = { "lib/libidn2.a" },
     },
-    outputs = { bins = { "idn2" }, checks = { { "idn2", "--version" }, { "idn2", "example.com" } } },
+    outputs = {
+        bins = { "idn2" },
+        checks = {
+            { "idn2", "--version" },
+            { "idn2", "example.com" },
+        },
+    },
     platforms = {
-        ["aarch64-linux"] = { default_version = "2.3.8" },
-        ["aarch64-macos"] = { default_version = "2.3.8" },
-        ["x86_64-linux"] = { default_version = "2.3.8" },
+        ["aarch64-linux"] = {
+            default_version = "2.3.8",
+        },
+        ["aarch64-macos"] = {
+            default_version = "2.3.8",
+        },
+        ["x86_64-linux"] = {
+            default_version = "2.3.8",
+        },
     },
     versions = {
         ["2.3.8"] = {

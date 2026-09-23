@@ -3,23 +3,35 @@ return {
     description = "Review GitHub pull requests in the terminal",
     homepage = "https://github.com/tale/prtui",
     default_license = "MIT",
-    prebuilt = { github = "tale/prtui", tag = "v{version}", asset = "prtui-{tag}-{target}.tar.gz" },
-    outputs = { bins = { "prtui" }, checks = { { "prtui", "--version" }, { "prtui", "--help" } } },
+    upstream = {
+        github = "tale/prtui",
+        repository_id = 1333872697,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "tale/prtui",
+        tag = "v{version}",
+        asset = "prtui-{tag}-{target}.tar.gz",
+    },
+    outputs = {
+        bins = { "prtui" },
+        checks = {
+            { "prtui", "--version" },
+            { "prtui", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-gnu",
             default_version = "0.4.0",
-            upstream = { github = "tale/prtui", repository_id = 1333872697, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.4.0",
-            upstream = { github = "tale/prtui", repository_id = 1333872697, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-gnu",
             default_version = "0.4.0",
-            upstream = { github = "tale/prtui", repository_id = 1333872697, tag_prefix = "v" },
         },
     },
     versions = {

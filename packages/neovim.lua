@@ -4,7 +4,17 @@ return {
     description = "Edit text with Neovim",
     homepage = "https://github.com/neovim/neovim",
     default_license = "NOASSERTION",
-    prebuilt = { github = "neovim/neovim", tag = "v{version}", asset = "nvim-{target}.tar.gz" },
+    upstream = {
+        github = "neovim/neovim",
+        repository_id = 16408992,
+        tag = "v{version}",
+        exclude_tags = { "stable" },
+    },
+    prebuilt = {
+        github = "neovim/neovim",
+        tag = "v{version}",
+        asset = "nvim-{target}.tar.gz",
+    },
     outputs = {
         bins = { "nvim" },
         checks = {
@@ -28,32 +38,14 @@ return {
         ["aarch64-linux"] = {
             target = "linux-arm64",
             default_version = "0.12.5",
-            upstream = {
-                github = "neovim/neovim",
-                repository_id = 16408992,
-                tag_prefix = "v",
-                exclude_tags = { "stable" },
-            },
         },
         ["aarch64-macos"] = {
             target = "macos-arm64",
             default_version = "0.12.5",
-            upstream = {
-                github = "neovim/neovim",
-                repository_id = 16408992,
-                tag_prefix = "v",
-                exclude_tags = { "stable" },
-            },
         },
         ["x86_64-linux"] = {
             target = "linux-x86_64",
             default_version = "0.12.5",
-            upstream = {
-                github = "neovim/neovim",
-                repository_id = 16408992,
-                tag_prefix = "v",
-                exclude_tags = { "stable" },
-            },
         },
     },
     versions = {

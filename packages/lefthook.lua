@@ -3,40 +3,41 @@ return {
     description = "Run Git hooks",
     homepage = "https://github.com/evilmartians/lefthook",
     default_license = "MIT",
+    upstream = {
+        github = "evilmartians/lefthook",
+        repository_id = 169250119,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/evilmartians/lefthook/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
         strip_prefix = "lefthook-{version}",
     },
-    build = { backend = "go", go = { binaries = { lefthook = "." }, tags = { "no_self_update" } } },
+    build = {
+        backend = "go",
+        go = {
+            binaries = {
+                lefthook = ".",
+            },
+            tags = { "no_self_update" },
+        },
+    },
     outputs = {
         bins = { "lefthook" },
-        checks = { { "lefthook", "version" }, { "lefthook", "help" } },
+        checks = {
+            { "lefthook", "version" },
+            { "lefthook", "help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "2.1.14",
-            upstream = {
-                github = "evilmartians/lefthook",
-                repository_id = 169250119,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "2.1.14",
-            upstream = {
-                github = "evilmartians/lefthook",
-                repository_id = 169250119,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "2.1.14",
-            upstream = {
-                github = "evilmartians/lefthook",
-                repository_id = 169250119,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

@@ -3,6 +3,11 @@ return {
     description = "Manage Docker containers in a terminal interface",
     homepage = "https://github.com/jesseduffield/lazydocker",
     default_license = "MIT",
+    upstream = {
+        github = "jesseduffield/lazydocker",
+        repository_id = 187335810,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/jesseduffield/lazydocker/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,35 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { lazydocker = "." },
-            variables = { ["main.buildSource"] = "Rootbeer", ["main.version"] = "{version}" },
+            binaries = {
+                lazydocker = ".",
+            },
+            variables = {
+                ["main.buildSource"] = "Rootbeer",
+                ["main.version"] = "{version}",
+            },
         },
     },
-    outputs = { bins = { "lazydocker" }, checks = { { "lazydocker", "--version" } } },
+    outputs = {
+        bins = { "lazydocker" },
+        checks = {
+            { "lazydocker", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "0.25.2",
-            upstream = {
-                github = "jesseduffield/lazydocker",
-                repository_id = 187335810,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "0.25.2",
-            upstream = {
-                github = "jesseduffield/lazydocker",
-                repository_id = 187335810,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "0.25.2",
-            upstream = {
-                github = "jesseduffield/lazydocker",
-                repository_id = 187335810,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

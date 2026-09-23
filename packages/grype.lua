@@ -3,6 +3,11 @@ return {
     description = "Find vulnerabilities in images and filesystems",
     homepage = "https://github.com/anchore/grype",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "anchore/grype",
+        repository_id = 267054247,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/anchore/grype/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,23 +16,29 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { grype = "./cmd/grype" },
-            variables = { ["main.version"] = "{version}" },
+            binaries = {
+                grype = "./cmd/grype",
+            },
+            variables = {
+                ["main.version"] = "{version}",
+            },
         },
     },
-    outputs = { bins = { "grype" }, checks = { { "grype", "version" } } },
+    outputs = {
+        bins = { "grype" },
+        checks = {
+            { "grype", "version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "0.119.0",
-            upstream = { github = "anchore/grype", repository_id = 267054247, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "0.119.0",
-            upstream = { github = "anchore/grype", repository_id = 267054247, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "0.119.0",
-            upstream = { github = "anchore/grype", repository_id = 267054247, tag_prefix = "v" },
         },
     },
     versions = {

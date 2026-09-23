@@ -3,6 +3,11 @@ return {
     description = "Build interactive shell scripts",
     homepage = "https://github.com/charmbracelet/gum",
     default_license = "MIT",
+    upstream = {
+        github = "charmbracelet/gum",
+        repository_id = 502193049,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/charmbracelet/gum/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -10,24 +15,31 @@ return {
     },
     build = {
         backend = "go",
-        go = { binaries = { gum = "." }, variables = { ["main.Version"] = "{version}" } },
+        go = {
+            binaries = {
+                gum = ".",
+            },
+            variables = {
+                ["main.Version"] = "{version}",
+            },
+        },
     },
     outputs = {
         bins = { "gum" },
-        checks = { { "gum", "--version" }, { "gum", "format", "hello" } },
+        checks = {
+            { "gum", "--version" },
+            { "gum", "format", "hello" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "2.0.1",
-            upstream = { github = "charmbracelet/gum", repository_id = 502193049, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "2.0.1",
-            upstream = { github = "charmbracelet/gum", repository_id = 502193049, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "2.0.1",
-            upstream = { github = "charmbracelet/gum", repository_id = 502193049, tag_prefix = "v" },
         },
     },
     versions = {

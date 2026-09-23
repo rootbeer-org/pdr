@@ -3,27 +3,34 @@ return {
     description = "Benchmark command execution",
     homepage = "https://github.com/sharkdp/hyperfine",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "sharkdp/hyperfine",
+        repository_id = 117356231,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "sharkdp/hyperfine",
         tag = "v{version}",
         asset = "hyperfine-{tag}-{target}.tar.gz",
     },
-    outputs = { bins = { "hyperfine" }, checks = { { "hyperfine", "--version" } } },
+    outputs = {
+        bins = { "hyperfine" },
+        checks = {
+            { "hyperfine", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-gnu",
             default_version = "1.20.0",
-            upstream = { github = "sharkdp/hyperfine", repository_id = 117356231, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "1.20.0",
-            upstream = { github = "sharkdp/hyperfine", repository_id = 117356231, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "1.20.0",
-            upstream = { github = "sharkdp/hyperfine", repository_id = 117356231, tag_prefix = "v" },
         },
     },
     versions = {

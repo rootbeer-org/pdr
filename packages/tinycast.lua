@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["Tinycast.app"] = "Tinycast.app" } },
+    outputs = {
+        apps = {
+            ["Tinycast.app"] = "Tinycast.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "0.10.23" },
+        ["aarch64-macos"] = {
+            default_version = "0.10.23",
+        },
     },
     versions = {
         ["0.10.23"] = {

@@ -3,23 +3,35 @@ return {
     description = "Convert terminal recordings to animated GIFs",
     homepage = "https://github.com/asciinema/agg",
     default_license = "GPL-3.0",
-    prebuilt = { github = "asciinema/agg", tag = "v{version}", asset = "agg-{target}" },
-    outputs = { bins = { "agg" }, checks = { { "agg", "--version" }, { "agg", "--help" } } },
+    upstream = {
+        github = "asciinema/agg",
+        repository_id = 519132476,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "asciinema/agg",
+        tag = "v{version}",
+        asset = "agg-{target}",
+    },
+    outputs = {
+        bins = { "agg" },
+        checks = {
+            { "agg", "--version" },
+            { "agg", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-gnu",
             default_version = "1.9.0",
-            upstream = { github = "asciinema/agg", repository_id = 519132476, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "1.9.0",
-            upstream = { github = "asciinema/agg", repository_id = 519132476, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "1.9.0",
-            upstream = { github = "asciinema/agg", repository_id = 519132476, tag_prefix = "v" },
         },
     },
     versions = {

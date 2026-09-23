@@ -3,27 +3,34 @@ return {
     description = "Display readable diffs",
     homepage = "https://github.com/dandavison/delta",
     default_license = "MIT",
+    upstream = {
+        github = "dandavison/delta",
+        repository_id = 193526915,
+        tag = "{version}",
+    },
     prebuilt = {
         github = "dandavison/delta",
         tag = "{version}",
         asset = "delta-{tag}-{target}.tar.gz",
     },
-    outputs = { bins = { "delta" }, checks = { { "delta", "--version" } } },
+    outputs = {
+        bins = { "delta" },
+        checks = {
+            { "delta", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-gnu",
             default_version = "0.19.2",
-            upstream = { github = "dandavison/delta", repository_id = 193526915, tag_prefix = "" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.19.2",
-            upstream = { github = "dandavison/delta", repository_id = 193526915, tag_prefix = "" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.19.2",
-            upstream = { github = "dandavison/delta", repository_id = 193526915, tag_prefix = "" },
         },
     },
     versions = {

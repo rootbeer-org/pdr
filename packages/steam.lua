@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["Steam.app"] = "Steam.app" } },
+    outputs = {
+        apps = {
+            ["Steam.app"] = "Steam.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "6.0" },
+        ["aarch64-macos"] = {
+            default_version = "6.0",
+        },
     },
     versions = {
         ["6.0"] = {

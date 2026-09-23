@@ -3,6 +3,11 @@ return {
     description = "Run Go linters",
     homepage = "https://github.com/golangci/golangci-lint",
     default_license = "GPL-3.0",
+    upstream = {
+        github = "golangci/golangci-lint",
+        repository_id = 132145189,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/golangci/golangci-lint/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,38 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { ["golangci-lint"] = "./cmd/golangci-lint" },
-            variables = { ["main.version"] = "{version}" },
+            binaries = {
+                ["golangci-lint"] = "./cmd/golangci-lint",
+            },
+            variables = {
+                ["main.version"] = "{version}",
+            },
         },
     },
     outputs = {
         bins = { "golangci-lint" },
-        checks = { { "golangci-lint", "version" }, { "golangci-lint", "help", "linters" } },
+        checks = {
+            { "golangci-lint", "version" },
+            { "golangci-lint", "help", "linters" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "2.13.2",
-            upstream = {
-                github = "golangci/golangci-lint",
-                repository_id = 132145189,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "2.13.2",
-            upstream = {
-                github = "golangci/golangci-lint",
-                repository_id = 132145189,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "2.13.2",
-            upstream = {
-                github = "golangci/golangci-lint",
-                repository_id = 132145189,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

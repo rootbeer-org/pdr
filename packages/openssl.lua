@@ -23,9 +23,15 @@ return {
                     "no-module",
                 },
             },
-            build = { { "make", "-j{jobs}" } },
-            check = { { "/usr/bin/env", "HARNESS_JOBS={jobs}", "make", "test" } },
-            install = { { "make", "DESTDIR={prefix}", "install_sw" } },
+            build = {
+                { "make", "-j{jobs}" },
+            },
+            check = {
+                { "/usr/bin/env", "HARNESS_JOBS={jobs}", "make", "test" },
+            },
+            install = {
+                { "make", "DESTDIR={prefix}", "install_sw" },
+            },
         },
     },
     outputs = {
@@ -37,9 +43,15 @@ return {
         },
     },
     platforms = {
-        ["aarch64-linux"] = { default_version = "4.0.2" },
-        ["aarch64-macos"] = { default_version = "4.0.2" },
-        ["x86_64-linux"] = { default_version = "4.0.2" },
+        ["aarch64-linux"] = {
+            default_version = "4.0.2",
+        },
+        ["aarch64-macos"] = {
+            default_version = "4.0.2",
+        },
+        ["x86_64-linux"] = {
+            default_version = "4.0.2",
+        },
     },
     versions = {
         ["4.0.2"] = {

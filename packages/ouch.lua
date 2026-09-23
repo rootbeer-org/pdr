@@ -3,23 +3,35 @@ return {
     description = "Compress and extract archives",
     homepage = "https://github.com/ouch-org/ouch",
     default_license = "NOASSERTION",
-    prebuilt = { github = "ouch-org/ouch", tag = "{version}", asset = "ouch-{target}.tar.gz" },
-    outputs = { bins = { "ouch" }, checks = { { "ouch", "--version" }, { "ouch", "--help" } } },
+    upstream = {
+        github = "ouch-org/ouch",
+        repository_id = 349334268,
+        tag = "{version}",
+    },
+    prebuilt = {
+        github = "ouch-org/ouch",
+        tag = "{version}",
+        asset = "ouch-{target}.tar.gz",
+    },
+    outputs = {
+        bins = { "ouch" },
+        checks = {
+            { "ouch", "--version" },
+            { "ouch", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.8.3",
-            upstream = { github = "ouch-org/ouch", repository_id = 349334268, tag_prefix = "" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.8.3",
-            upstream = { github = "ouch-org/ouch", repository_id = 349334268, tag_prefix = "" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.8.3",
-            upstream = { github = "ouch-org/ouch", repository_id = 349334268, tag_prefix = "" },
         },
     },
     versions = {

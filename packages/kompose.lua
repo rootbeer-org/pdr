@@ -3,28 +3,40 @@ return {
     description = "Convert Docker Compose files to Kubernetes resources",
     homepage = "https://github.com/kubernetes/kompose",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "kubernetes/kompose",
+        repository_id = 62088377,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/kubernetes/kompose/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
         strip_prefix = "kompose-{version}",
     },
-    build = { backend = "go", go = { binaries = { kompose = "." } } },
+    build = {
+        backend = "go",
+        go = {
+            binaries = {
+                kompose = ".",
+            },
+        },
+    },
     outputs = {
         bins = { "kompose" },
-        checks = { { "kompose", "version" }, { "kompose", "convert", "--help" } },
+        checks = {
+            { "kompose", "version" },
+            { "kompose", "convert", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.38.0",
-            upstream = { github = "kubernetes/kompose", repository_id = 62088377, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.38.0",
-            upstream = { github = "kubernetes/kompose", repository_id = 62088377, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.38.0",
-            upstream = { github = "kubernetes/kompose", repository_id = 62088377, tag_prefix = "v" },
         },
     },
     versions = {

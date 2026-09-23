@@ -3,27 +3,34 @@ return {
     description = "Find bugs in shell scripts",
     homepage = "https://github.com/koalaman/shellcheck",
     default_license = "GPL-3.0",
+    upstream = {
+        github = "koalaman/shellcheck",
+        repository_id = 6731432,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "koalaman/shellcheck",
         tag = "v{version}",
         asset = "shellcheck-{tag}.{target}.tar.gz",
     },
-    outputs = { bins = { "shellcheck" }, checks = { { "shellcheck", "--version" } } },
+    outputs = {
+        bins = { "shellcheck" },
+        checks = {
+            { "shellcheck", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux.aarch64",
             default_version = "0.11.0",
-            upstream = { github = "koalaman/shellcheck", repository_id = 6731432, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "darwin.aarch64",
             default_version = "0.11.0",
-            upstream = { github = "koalaman/shellcheck", repository_id = 6731432, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux.x86_64",
             default_version = "0.11.0",
-            upstream = { github = "koalaman/shellcheck", repository_id = 6731432, tag_prefix = "v" },
         },
     },
     versions = {

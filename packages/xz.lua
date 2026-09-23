@@ -29,9 +29,15 @@ return {
         },
     },
     platforms = {
-        ["aarch64-linux"] = { default_version = "5.8.3" },
-        ["aarch64-macos"] = { default_version = "5.8.3" },
-        ["x86_64-linux"] = { default_version = "5.8.3" },
+        ["aarch64-linux"] = {
+            default_version = "5.8.3",
+        },
+        ["aarch64-macos"] = {
+            default_version = "5.8.3",
+        },
+        ["x86_64-linux"] = {
+            default_version = "5.8.3",
+        },
     },
     versions = {
         ["5.8.3"] = {

@@ -3,54 +3,35 @@ return {
     description = "Inspect directory disk usage",
     homepage = "https://github.com/bootandy/dust",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "bootandy/dust",
+        repository_id = 125563061,
+        tag = "v{version}",
+        exclude_tags = { "v0.8.1-alpha.2", "v0.8.1-alpha.1", "untagged-1499119fdec1dec70238" },
+    },
     prebuilt = {
         github = "bootandy/dust",
         tag = "v{version}",
         asset = "dust-{tag}-{target}.tar.gz",
     },
-    outputs = { bins = { "dust" }, checks = { { "dust", "--version" } } },
+    outputs = {
+        bins = { "dust" },
+        checks = {
+            { "dust", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "1.2.6",
-            upstream = {
-                github = "bootandy/dust",
-                repository_id = 125563061,
-                tag_prefix = "v",
-                exclude_tags = {
-                    "v0.8.1-alpha.2",
-                    "v0.8.1-alpha.1",
-                    "untagged-1499119fdec1dec70238",
-                },
-            },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "1.2.6",
-            upstream = {
-                github = "bootandy/dust",
-                repository_id = 125563061,
-                tag_prefix = "v",
-                exclude_tags = {
-                    "v0.8.1-alpha.2",
-                    "v0.8.1-alpha.1",
-                    "untagged-1499119fdec1dec70238",
-                },
-            },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "1.2.6",
-            upstream = {
-                github = "bootandy/dust",
-                repository_id = 125563061,
-                tag_prefix = "v",
-                exclude_tags = {
-                    "v0.8.1-alpha.2",
-                    "v0.8.1-alpha.1",
-                    "untagged-1499119fdec1dec70238",
-                },
-            },
         },
     },
     versions = {

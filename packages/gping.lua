@@ -3,23 +3,35 @@ return {
     description = "Graph ping response times",
     homepage = "https://github.com/orf/gping",
     default_license = "MIT",
-    prebuilt = { github = "orf/gping", tag = "gping-v{version}", asset = "gping-{target}.tar.gz" },
-    outputs = { bins = { "gping" }, checks = { { "gping", "--version" }, { "gping", "--help" } } },
+    upstream = {
+        github = "orf/gping",
+        repository_id = 44440501,
+        tag = "gping-v{version}",
+    },
+    prebuilt = {
+        github = "orf/gping",
+        tag = "gping-v{version}",
+        asset = "gping-{target}.tar.gz",
+    },
+    outputs = {
+        bins = { "gping" },
+        checks = {
+            { "gping", "--version" },
+            { "gping", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "Linux-musl-arm64",
             default_version = "1.21.0",
-            upstream = { github = "orf/gping", repository_id = 44440501, tag_prefix = "gping-v" },
         },
         ["aarch64-macos"] = {
             target = "macOS-arm64",
             default_version = "1.21.0",
-            upstream = { github = "orf/gping", repository_id = 44440501, tag_prefix = "gping-v" },
         },
         ["x86_64-linux"] = {
             target = "Linux-musl-x86_64",
             default_version = "1.21.0",
-            upstream = { github = "orf/gping", repository_id = 44440501, tag_prefix = "gping-v" },
         },
     },
     versions = {

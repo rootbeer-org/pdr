@@ -3,23 +3,34 @@ return {
     description = "Find and replace text",
     homepage = "https://github.com/chmln/sd",
     default_license = "MIT",
-    prebuilt = { github = "chmln/sd", tag = "v{version}", asset = "sd-{tag}-{target}.tar.gz" },
-    outputs = { bins = { "sd" }, checks = { { "sd", "--version" } } },
+    upstream = {
+        github = "chmln/sd",
+        repository_id = 162863623,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "chmln/sd",
+        tag = "v{version}",
+        asset = "sd-{tag}-{target}.tar.gz",
+    },
+    outputs = {
+        bins = { "sd" },
+        checks = {
+            { "sd", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "1.1.0",
-            upstream = { github = "chmln/sd", repository_id = 162863623, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "1.1.0",
-            upstream = { github = "chmln/sd", repository_id = 162863623, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "1.1.0",
-            upstream = { github = "chmln/sd", repository_id = 162863623, tag_prefix = "v" },
         },
     },
     versions = {

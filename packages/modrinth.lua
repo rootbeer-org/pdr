@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["Modrinth App.app"] = "Modrinth App.app" } },
+    outputs = {
+        apps = {
+            ["Modrinth App.app"] = "Modrinth App.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "0.21.4" },
+        ["aarch64-macos"] = {
+            default_version = "0.21.4",
+        },
     },
     versions = {
         ["0.21.4"] = {

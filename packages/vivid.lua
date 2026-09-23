@@ -3,6 +3,11 @@ return {
     description = "Generate color themes for file listings",
     homepage = "https://github.com/sharkdp/vivid",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "sharkdp/vivid",
+        repository_id = 158295285,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "sharkdp/vivid",
         tag = "v{version}",
@@ -10,23 +15,23 @@ return {
     },
     outputs = {
         bins = { "vivid" },
-        checks = { { "vivid", "--version" }, { "vivid", "generate", "molokai" } },
+        checks = {
+            { "vivid", "--version" },
+            { "vivid", "generate", "molokai" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-gnu",
             default_version = "0.11.1",
-            upstream = { github = "sharkdp/vivid", repository_id = 158295285, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.11.1",
-            upstream = { github = "sharkdp/vivid", repository_id = 158295285, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.11.1",
-            upstream = { github = "sharkdp/vivid", repository_id = 158295285, tag_prefix = "v" },
         },
     },
     versions = {

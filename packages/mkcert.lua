@@ -3,6 +3,11 @@ return {
     description = "Create locally trusted development certificates",
     homepage = "https://github.com/FiloSottile/mkcert",
     default_license = "BSD-3-Clause",
+    upstream = {
+        github = "FiloSottile/mkcert",
+        repository_id = 138547797,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/FiloSottile/mkcert/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -10,33 +15,30 @@ return {
     },
     build = {
         backend = "go",
-        go = { binaries = { mkcert = "." }, variables = { ["main.Version"] = "v{version}" } },
+        go = {
+            binaries = {
+                mkcert = ".",
+            },
+            variables = {
+                ["main.Version"] = "v{version}",
+            },
+        },
     },
-    outputs = { bins = { "mkcert" }, checks = { { "mkcert", "--version" } } },
+    outputs = {
+        bins = { "mkcert" },
+        checks = {
+            { "mkcert", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.4.4",
-            upstream = {
-                github = "FiloSottile/mkcert",
-                repository_id = 138547797,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "1.4.4",
-            upstream = {
-                github = "FiloSottile/mkcert",
-                repository_id = 138547797,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "1.4.4",
-            upstream = {
-                github = "FiloSottile/mkcert",
-                repository_id = 138547797,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

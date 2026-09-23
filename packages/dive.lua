@@ -3,6 +3,11 @@ return {
     description = "Explore container image layers",
     homepage = "https://github.com/wagoodman/dive",
     default_license = "MIT",
+    upstream = {
+        github = "wagoodman/dive",
+        repository_id = 133251103,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/wagoodman/dive/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -10,21 +15,31 @@ return {
     },
     build = {
         backend = "go",
-        go = { binaries = { dive = "." }, variables = { ["main.version"] = "{version}" } },
+        go = {
+            binaries = {
+                dive = ".",
+            },
+            variables = {
+                ["main.version"] = "{version}",
+            },
+        },
     },
-    outputs = { bins = { "dive" }, checks = { { "dive", "--version" }, { "dive", "--help" } } },
+    outputs = {
+        bins = { "dive" },
+        checks = {
+            { "dive", "--version" },
+            { "dive", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "0.13.1",
-            upstream = { github = "wagoodman/dive", repository_id = 133251103, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "0.13.1",
-            upstream = { github = "wagoodman/dive", repository_id = 133251103, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "0.13.1",
-            upstream = { github = "wagoodman/dive", repository_id = 133251103, tag_prefix = "v" },
         },
     },
     versions = {

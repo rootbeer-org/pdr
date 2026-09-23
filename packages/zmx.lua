@@ -3,27 +3,34 @@ return {
     description = "Persist terminal sessions",
     homepage = "https://github.com/neurosnap/zmx",
     default_license = "MIT",
+    upstream = {
+        github = "neurosnap/zmx",
+        repository_id = 1073900202,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "neurosnap/zmx",
         tag = "v{version}",
         asset = "zmx-{version}-{target}.tar.gz",
     },
-    outputs = { bins = { "zmx" }, checks = { { "zmx", "version" } } },
+    outputs = {
+        bins = { "zmx" },
+        checks = {
+            { "zmx", "version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-aarch64",
             default_version = "0.8.1",
-            upstream = { github = "neurosnap/zmx", repository_id = 1073900202, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "macos-aarch64",
             default_version = "0.8.1",
-            upstream = { github = "neurosnap/zmx", repository_id = 1073900202, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux-x86_64",
             default_version = "0.8.1",
-            upstream = { github = "neurosnap/zmx", repository_id = 1073900202, tag_prefix = "v" },
         },
     },
     versions = {

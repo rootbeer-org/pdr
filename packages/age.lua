@@ -3,6 +3,11 @@ return {
     description = "File encryption with explicit recipients",
     homepage = "https://age-encryption.org/",
     default_license = "BSD-3-Clause",
+    upstream = {
+        github = "FiloSottile/age",
+        repository_id = 187403699,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/FiloSottile/age/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,26 +16,31 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { age = "./cmd/age", ["age-keygen"] = "./cmd/age-keygen" },
-            variables = { ["main.Version"] = "v{version}" },
+            binaries = {
+                age = "./cmd/age",
+                ["age-keygen"] = "./cmd/age-keygen",
+            },
+            variables = {
+                ["main.Version"] = "v{version}",
+            },
         },
     },
     outputs = {
         bins = { "age", "age-keygen" },
-        checks = { { "age", "--version" }, { "age-keygen", "--version" } },
+        checks = {
+            { "age", "--version" },
+            { "age-keygen", "--version" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.3.2",
-            upstream = { github = "FiloSottile/age", repository_id = 187403699, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.3.2",
-            upstream = { github = "FiloSottile/age", repository_id = 187403699, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.3.2",
-            upstream = { github = "FiloSottile/age", repository_id = 187403699, tag_prefix = "v" },
         },
     },
     versions = {

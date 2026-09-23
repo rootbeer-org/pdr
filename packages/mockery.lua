@@ -3,6 +3,11 @@ return {
     description = "Generate Go interface mocks",
     homepage = "https://github.com/vektra/mockery",
     default_license = "BSD-3-Clause",
+    upstream = {
+        github = "vektra/mockery",
+        repository_id = 23586998,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/vektra/mockery/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,26 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { mockery = "." },
-            variables = { ["github.com/vektra/mockery/v3/internal/logging.SemVer"] = "v{version}" },
+            binaries = {
+                mockery = ".",
+            },
+            variables = {
+                ["github.com/vektra/mockery/v3/internal/logging.SemVer"] = "v{version}",
+            },
         },
     },
     outputs = {
         bins = { "mockery" },
-        checks = { { "mockery", "version" }, { "mockery", "--help" } },
+        checks = {
+            { "mockery", "version" },
+            { "mockery", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "3.8.0",
-            upstream = { github = "vektra/mockery", repository_id = 23586998, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "3.8.0",
-            upstream = { github = "vektra/mockery", repository_id = 23586998, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "3.8.0",
-            upstream = { github = "vektra/mockery", repository_id = 23586998, tag_prefix = "v" },
         },
     },
     versions = {

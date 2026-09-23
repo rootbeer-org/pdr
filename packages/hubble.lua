@@ -3,6 +3,11 @@ return {
     description = "Inspect Kubernetes network traffic with Cilium",
     homepage = "https://github.com/cilium/hubble",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "cilium/hubble",
+        repository_id = 222612062,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/cilium/hubble/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,26 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { hubble = "." },
-            variables = { ["github.com/cilium/cilium/hubble/pkg.Version"] = "{version}" },
+            binaries = {
+                hubble = ".",
+            },
+            variables = {
+                ["github.com/cilium/cilium/hubble/pkg.Version"] = "{version}",
+            },
         },
     },
     outputs = {
         bins = { "hubble" },
-        checks = { { "hubble", "version" }, { "hubble", "observe", "--help" } },
+        checks = {
+            { "hubble", "version" },
+            { "hubble", "observe", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.19.4",
-            upstream = { github = "cilium/hubble", repository_id = 222612062, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.19.4",
-            upstream = { github = "cilium/hubble", repository_id = 222612062, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.19.4",
-            upstream = { github = "cilium/hubble", repository_id = 222612062, tag_prefix = "v" },
         },
     },
     versions = {

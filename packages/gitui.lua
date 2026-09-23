@@ -3,23 +3,34 @@ return {
     description = "Browse and manage Git repositories in the terminal",
     homepage = "https://github.com/gitui-org/gitui",
     default_license = "MIT",
-    prebuilt = { github = "gitui-org/gitui", tag = "v{version}", asset = "gitui-{target}.tar.gz" },
-    outputs = { bins = { "gitui" }, checks = { { "gitui", "--version" } } },
+    upstream = {
+        github = "gitui-org/gitui",
+        repository_id = 247725846,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "gitui-org/gitui",
+        tag = "v{version}",
+        asset = "gitui-{target}.tar.gz",
+    },
+    outputs = {
+        bins = { "gitui" },
+        checks = {
+            { "gitui", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-aarch64",
             default_version = "0.28.1",
-            upstream = { github = "gitui-org/gitui", repository_id = 247725846, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "mac",
             default_version = "0.28.1",
-            upstream = { github = "gitui-org/gitui", repository_id = 247725846, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux-x86_64",
             default_version = "0.28.1",
-            upstream = { github = "gitui-org/gitui", repository_id = 247725846, tag_prefix = "v" },
         },
     },
     versions = {

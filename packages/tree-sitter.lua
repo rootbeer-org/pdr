@@ -3,6 +3,11 @@ return {
     description = "Generate parsers and inspect syntax trees",
     homepage = "https://github.com/tree-sitter/tree-sitter",
     default_license = "MIT",
+    upstream = {
+        github = "tree-sitter/tree-sitter",
+        repository_id = 14164618,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "tree-sitter/tree-sitter",
         tag = "v{version}",
@@ -10,35 +15,23 @@ return {
     },
     outputs = {
         bins = { "tree-sitter" },
-        checks = { { "tree-sitter", "--version" }, { "tree-sitter", "query", "--help" } },
+        checks = {
+            { "tree-sitter", "--version" },
+            { "tree-sitter", "query", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-arm64",
             default_version = "0.27.0",
-            upstream = {
-                github = "tree-sitter/tree-sitter",
-                repository_id = 14164618,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             target = "macos-arm64",
             default_version = "0.27.0",
-            upstream = {
-                github = "tree-sitter/tree-sitter",
-                repository_id = 14164618,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             target = "linux-x64",
             default_version = "0.27.0",
-            upstream = {
-                github = "tree-sitter/tree-sitter",
-                repository_id = 14164618,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

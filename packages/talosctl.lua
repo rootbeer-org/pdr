@@ -3,23 +3,34 @@ return {
     description = "Manage Talos Linux clusters",
     homepage = "https://www.talos.dev",
     default_license = "MPL-2.0",
-    prebuilt = { github = "siderolabs/talos", tag = "v{version}", asset = "talosctl-{target}" },
-    outputs = { bins = { "talosctl" }, checks = { { "talosctl", "version", "--client" } } },
+    upstream = {
+        github = "siderolabs/talos",
+        repository_id = 109451092,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "siderolabs/talos",
+        tag = "v{version}",
+        asset = "talosctl-{target}",
+    },
+    outputs = {
+        bins = { "talosctl" },
+        checks = {
+            { "talosctl", "version", "--client" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-arm64",
             default_version = "1.14.1",
-            upstream = { github = "siderolabs/talos", repository_id = 109451092, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "darwin-arm64",
             default_version = "1.14.1",
-            upstream = { github = "siderolabs/talos", repository_id = 109451092, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux-amd64",
             default_version = "1.14.1",
-            upstream = { github = "siderolabs/talos", repository_id = 109451092, tag_prefix = "v" },
         },
     },
     versions = {

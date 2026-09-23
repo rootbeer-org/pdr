@@ -3,38 +3,35 @@ return {
     description = "Select fields and ranges from text",
     homepage = "https://github.com/theryangeary/choose",
     default_license = "GPL-3.0",
-    prebuilt = { github = "theryangeary/choose", tag = "v{version}", asset = "choose-{target}" },
+    upstream = {
+        github = "theryangeary/choose",
+        repository_id = 207951619,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "theryangeary/choose",
+        tag = "v{version}",
+        asset = "choose-{target}",
+    },
     outputs = {
         bins = { "choose" },
-        checks = { { "choose", "--version" }, { "choose", "--help" } },
+        checks = {
+            { "choose", "--version" },
+            { "choose", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-gnu",
             default_version = "1.3.7",
-            upstream = {
-                github = "theryangeary/choose",
-                repository_id = 207951619,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "1.3.7",
-            upstream = {
-                github = "theryangeary/choose",
-                repository_id = 207951619,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "1.3.7",
-            upstream = {
-                github = "theryangeary/choose",
-                repository_id = 207951619,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

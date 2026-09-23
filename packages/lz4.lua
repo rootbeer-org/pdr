@@ -23,9 +23,15 @@ return {
                     "tests/test-lz4-list.py",
                 },
             },
-            build = { { "make", "-j{jobs}", "BUILD_SHARED=no", "PREFIX=/" } },
-            check = { { "make", "BUILD_SHARED=no", "PREFIX=/", "test" } },
-            install = { { "make", "BUILD_SHARED=no", "PREFIX=/", "DESTDIR={prefix}", "install" } },
+            build = {
+                { "make", "-j{jobs}", "BUILD_SHARED=no", "PREFIX=/" },
+            },
+            check = {
+                { "make", "BUILD_SHARED=no", "PREFIX=/", "test" },
+            },
+            install = {
+                { "make", "BUILD_SHARED=no", "PREFIX=/", "DESTDIR={prefix}", "install" },
+            },
         },
     },
     outputs = {
@@ -38,9 +44,15 @@ return {
         },
     },
     platforms = {
-        ["aarch64-linux"] = { default_version = "1.10.0" },
-        ["aarch64-macos"] = { default_version = "1.10.0" },
-        ["x86_64-linux"] = { default_version = "1.10.0" },
+        ["aarch64-linux"] = {
+            default_version = "1.10.0",
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.10.0",
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.10.0",
+        },
     },
     versions = {
         ["1.10.0"] = {

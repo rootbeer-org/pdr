@@ -3,6 +3,11 @@ return {
     description = "Manage dotfiles across machines",
     homepage = "https://github.com/twpayne/chezmoi",
     default_license = "MIT",
+    upstream = {
+        github = "twpayne/chezmoi",
+        repository_id = 157245200,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/twpayne/chezmoi/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -10,21 +15,30 @@ return {
     },
     build = {
         backend = "go",
-        go = { binaries = { chezmoi = "." }, variables = { ["main.version"] = "{version}" } },
+        go = {
+            binaries = {
+                chezmoi = ".",
+            },
+            variables = {
+                ["main.version"] = "{version}",
+            },
+        },
     },
-    outputs = { bins = { "chezmoi" }, checks = { { "chezmoi", "--version" } } },
+    outputs = {
+        bins = { "chezmoi" },
+        checks = {
+            { "chezmoi", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "2.72.2",
-            upstream = { github = "twpayne/chezmoi", repository_id = 157245200, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "2.72.2",
-            upstream = { github = "twpayne/chezmoi", repository_id = 157245200, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "2.72.2",
-            upstream = { github = "twpayne/chezmoi", repository_id = 157245200, tag_prefix = "v" },
         },
     },
     versions = {

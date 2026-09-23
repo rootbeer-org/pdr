@@ -3,6 +3,11 @@ return {
     description = "Reload Go applications during development",
     homepage = "https://github.com/air-verse/air",
     default_license = "GPL-3.0",
+    upstream = {
+        github = "air-verse/air",
+        repository_id = 106704041,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/air-verse/air/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -10,21 +15,31 @@ return {
     },
     build = {
         backend = "go",
-        go = { binaries = { air = "." }, variables = { ["main.airVersion"] = "{version}" } },
+        go = {
+            binaries = {
+                air = ".",
+            },
+            variables = {
+                ["main.airVersion"] = "{version}",
+            },
+        },
     },
-    outputs = { bins = { "air" }, checks = { { "air", "-v" }, { "air", "-h" } } },
+    outputs = {
+        bins = { "air" },
+        checks = {
+            { "air", "-v" },
+            { "air", "-h" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.67.4",
-            upstream = { github = "air-verse/air", repository_id = 106704041, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.67.4",
-            upstream = { github = "air-verse/air", repository_id = 106704041, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.67.4",
-            upstream = { github = "air-verse/air", repository_id = 106704041, tag_prefix = "v" },
         },
     },
     versions = {

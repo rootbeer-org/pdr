@@ -3,6 +3,11 @@ return {
     description = "Generate software bills of materials",
     homepage = "https://github.com/anchore/syft",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "anchore/syft",
+        repository_id = 262126497,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/anchore/syft/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -10,21 +15,30 @@ return {
     },
     build = {
         backend = "go",
-        go = { binaries = { syft = "./cmd/syft" }, variables = { ["main.version"] = "{version}" } },
+        go = {
+            binaries = {
+                syft = "./cmd/syft",
+            },
+            variables = {
+                ["main.version"] = "{version}",
+            },
+        },
     },
-    outputs = { bins = { "syft" }, checks = { { "syft", "version" } } },
+    outputs = {
+        bins = { "syft" },
+        checks = {
+            { "syft", "version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.52.0",
-            upstream = { github = "anchore/syft", repository_id = 262126497, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.52.0",
-            upstream = { github = "anchore/syft", repository_id = 262126497, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.52.0",
-            upstream = { github = "anchore/syft", repository_id = 262126497, tag_prefix = "v" },
         },
     },
     versions = {

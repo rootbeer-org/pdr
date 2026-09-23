@@ -3,6 +3,11 @@ return {
     description = "Manage Ghostty terminal sessions",
     homepage = "https://github.com/nicosuave/gmx",
     default_license = "NOASSERTION",
+    upstream = {
+        github = "nicosuave/gmx",
+        repository_id = 1183476144,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "nicosuave/gmx",
         tag = "v{version}",
@@ -10,12 +15,14 @@ return {
     },
     outputs = {
         bins = { "gmx" },
-        checks = { { "gmx", "--help" }, { "gmx", "completions", "zsh" } },
+        checks = {
+            { "gmx", "--help" },
+            { "gmx", "completions", "zsh" },
+        },
     },
     platforms = {
         ["aarch64-macos"] = {
             default_version = "0.1.10",
-            upstream = { github = "nicosuave/gmx", repository_id = 1183476144, tag_prefix = "v" },
         },
     },
     versions = {

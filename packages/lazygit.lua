@@ -3,6 +3,11 @@ return {
     description = "Manage Git repositories in a terminal",
     homepage = "https://github.com/jesseduffield/lazygit",
     default_license = "MIT",
+    upstream = {
+        github = "jesseduffield/lazygit",
+        repository_id = 134017286,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/jesseduffield/lazygit/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,35 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { lazygit = "." },
-            variables = { ["main.buildSource"] = "Rootbeer", ["main.version"] = "{version}" },
+            binaries = {
+                lazygit = ".",
+            },
+            variables = {
+                ["main.buildSource"] = "Rootbeer",
+                ["main.version"] = "{version}",
+            },
         },
     },
-    outputs = { bins = { "lazygit" }, checks = { { "lazygit", "--version" } } },
+    outputs = {
+        bins = { "lazygit" },
+        checks = {
+            { "lazygit", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "0.65.1",
-            upstream = {
-                github = "jesseduffield/lazygit",
-                repository_id = 134017286,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "0.65.1",
-            upstream = {
-                github = "jesseduffield/lazygit",
-                repository_id = 134017286,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "0.65.1",
-            upstream = {
-                github = "jesseduffield/lazygit",
-                repository_id = 134017286,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

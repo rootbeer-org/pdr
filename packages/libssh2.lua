@@ -8,7 +8,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "libssh2-{version}",
         patches = {
-            "--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -339 +339 @@\n-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\n+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\n@@ -368 +368 @@\n-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\n+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\n--- a/src/CMakeLists.txt\n+++ b/src/CMakeLists.txt\n@@ -66 +66 @@\n-  list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\n+  list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\n",
+            "--- a/CMakeLists.txt\010+++ b/CMakeLists.txt\010@@ -339 +339 @@\010-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\010+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\010@@ -368 +368 @@\010-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\010+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\010--- a/src/CMakeLists.txt\010+++ b/src/CMakeLists.txt\010@@ -66 +66 @@\010-  list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\010+  list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\010",
         },
     },
     build = {
@@ -44,7 +44,9 @@ return {
                     "-DRUN_SSHD_TESTS=OFF",
                 },
             },
-            build = { { "cmake", "--build", "build", "--parallel", "{jobs}" } },
+            build = {
+                { "cmake", "--build", "build", "--parallel", "{jobs}" },
+            },
             check = {
                 {
                     "ctest",
@@ -56,14 +58,22 @@ return {
                     "{jobs}",
                 },
             },
-            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
+            install = {
+                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+            },
         },
     },
     outputs = {},
     platforms = {
-        ["aarch64-linux"] = { default_version = "1.11.1" },
-        ["aarch64-macos"] = { default_version = "1.11.1" },
-        ["x86_64-linux"] = { default_version = "1.11.1" },
+        ["aarch64-linux"] = {
+            default_version = "1.11.1",
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.11.1",
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.11.1",
+        },
     },
     versions = {
         ["1.11.1"] = {

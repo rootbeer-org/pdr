@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["UTM.app"] = "UTM.app" } },
+    outputs = {
+        apps = {
+            ["UTM.app"] = "UTM.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "4.7.5" },
+        ["aarch64-macos"] = {
+            default_version = "4.7.5",
+        },
     },
     versions = {
         ["4.7.5"] = {

@@ -8,7 +8,10 @@ return {
         ["aarch64-linux"] = {
             target = "arm64",
             default_version = "0.17.2.1",
-            upstream = { github = "imputnet/helium-linux", repository_id = 1043354934 },
+            upstream = {
+                github = "imputnet/helium-linux",
+                repository_id = 1043354934,
+            },
             prebuilt = {
                 github = "imputnet/helium-linux",
                 tag = "{version}",
@@ -24,19 +27,29 @@ return {
         },
         ["aarch64-macos"] = {
             default_version = "0.17.2.1",
-            upstream = { github = "imputnet/helium-macos", repository_id = 933200785 },
+            upstream = {
+                github = "imputnet/helium-macos",
+                repository_id = 933200785,
+            },
             prebuilt = {
                 github = "imputnet/helium-macos",
                 tag = "{version}",
                 asset = "helium_{version}_arm64-macos.dmg",
                 mirror = true,
             },
-            outputs = { apps = { ["Helium.app"] = "Helium.app" } },
+            outputs = {
+                apps = {
+                    ["Helium.app"] = "Helium.app",
+                },
+            },
         },
         ["x86_64-linux"] = {
             target = "x86_64",
             default_version = "0.17.2.1",
-            upstream = { github = "imputnet/helium-linux", repository_id = 1043354934 },
+            upstream = {
+                github = "imputnet/helium-linux",
+                repository_id = 1043354934,
+            },
             prebuilt = {
                 github = "imputnet/helium-linux",
                 tag = "{version}",

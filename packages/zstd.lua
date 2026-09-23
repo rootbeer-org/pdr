@@ -44,7 +44,9 @@ return {
                     "-DCMAKE_INSTALL_INCLUDEDIR=/include",
                 },
             },
-            build = { { "cmake", "--build", "output", "--parallel", "{jobs}" } },
+            build = {
+                { "cmake", "--build", "output", "--parallel", "{jobs}" },
+            },
             check = {
                 {
                     "ctest",
@@ -56,7 +58,9 @@ return {
                     "{jobs}",
                 },
             },
-            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "output" } },
+            install = {
+                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "output" },
+            },
         },
     },
     outputs = {
@@ -70,9 +74,15 @@ return {
         },
     },
     platforms = {
-        ["aarch64-linux"] = { default_version = "1.5.7" },
-        ["aarch64-macos"] = { default_version = "1.5.7" },
-        ["x86_64-linux"] = { default_version = "1.5.7" },
+        ["aarch64-linux"] = {
+            default_version = "1.5.7",
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.5.7",
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.5.7",
+        },
     },
     versions = {
         ["1.5.7"] = {

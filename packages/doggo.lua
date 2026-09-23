@@ -3,6 +3,11 @@ return {
     description = "Look up DNS records from the terminal",
     homepage = "https://github.com/mr-karan/doggo",
     default_license = "GPL-3.0",
+    upstream = {
+        github = "mr-karan/doggo",
+        repository_id = 319848237,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/mr-karan/doggo/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,23 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { doggo = "./cmd/doggo" },
-            variables = { ["main.buildVersion"] = "v{version}" },
+            binaries = {
+                doggo = "./cmd/doggo",
+            },
+            variables = {
+                ["main.buildVersion"] = "v{version}",
+            },
         },
     },
-    outputs = { bins = { "doggo" }, checks = { { "doggo", "--version" }, { "doggo", "--help" } } },
+    outputs = {
+        bins = { "doggo" },
+        checks = {
+            { "doggo", "--version" },
+            { "doggo", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.4.0",
-            upstream = { github = "mr-karan/doggo", repository_id = 319848237, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.4.0",
-            upstream = { github = "mr-karan/doggo", repository_id = 319848237, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.4.0",
-            upstream = { github = "mr-karan/doggo", repository_id = 319848237, tag_prefix = "v" },
         },
     },
     versions = {

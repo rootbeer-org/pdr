@@ -3,28 +3,40 @@ return {
     description = "Generate typed code from SQL",
     homepage = "https://github.com/sqlc-dev/sqlc",
     default_license = "MIT",
+    upstream = {
+        github = "sqlc-dev/sqlc",
+        repository_id = 193160679,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/sqlc-dev/sqlc/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
         strip_prefix = "sqlc-{version}",
     },
-    build = { backend = "go", go = { binaries = { sqlc = "./cmd/sqlc" } } },
+    build = {
+        backend = "go",
+        go = {
+            binaries = {
+                sqlc = "./cmd/sqlc",
+            },
+        },
+    },
     outputs = {
         bins = { "sqlc" },
-        checks = { { "sqlc", "version" }, { "sqlc", "generate", "--help" } },
+        checks = {
+            { "sqlc", "version" },
+            { "sqlc", "generate", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.31.1",
-            upstream = { github = "sqlc-dev/sqlc", repository_id = 193160679, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.31.1",
-            upstream = { github = "sqlc-dev/sqlc", repository_id = 193160679, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.31.1",
-            upstream = { github = "sqlc-dev/sqlc", repository_id = 193160679, tag_prefix = "v" },
         },
     },
     versions = {

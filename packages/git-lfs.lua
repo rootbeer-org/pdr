@@ -3,46 +3,44 @@ return {
     description = "Store large files in Git repositories",
     homepage = "https://github.com/git-lfs/git-lfs",
     default_license = "NOASSERTION",
+    upstream = {
+        github = "git-lfs/git-lfs",
+        repository_id = 13021798,
+        tag = "v{version}",
+        exclude_tags = { "v0.5.4-homebrew" },
+    },
     source = {
         url = "https://codeload.github.com/git-lfs/git-lfs/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
         strip_prefix = "git-lfs-{version}",
         patches = {
-            "--- a/git-lfs.go\n+++ b/git-lfs.go\n@@ -11,7 +11,7 @@\n )\n \n func main() {\n-\tc := make(chan os.Signal)\n+\tc := make(chan os.Signal, 1)\n \tsignal.Notify(c, os.Interrupt, os.Kill)\n \n \tgo func() {\n",
+            "--- a/git-lfs.go\010+++ b/git-lfs.go\010@@ -11,7 +11,7 @@\010 )\010 \010 func main() {\010-\009c := make(chan os.Signal)\010+\009c := make(chan os.Signal, 1)\010 \009signal.Notify(c, os.Interrupt, os.Kill)\010 \010 \009go func() {\010",
         },
     },
     build = {
         backend = "go",
-        go = { binaries = { ["git-lfs"] = "." }, generate = { "./commands" } },
+        go = {
+            binaries = {
+                ["git-lfs"] = ".",
+            },
+            generate = { "./commands" },
+        },
     },
-    outputs = { bins = { "git-lfs" }, checks = { { "git-lfs", "version" } } },
+    outputs = {
+        bins = { "git-lfs" },
+        checks = {
+            { "git-lfs", "version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "3.8.0",
-            upstream = {
-                github = "git-lfs/git-lfs",
-                repository_id = 13021798,
-                tag_prefix = "v",
-                exclude_tags = { "v0.5.4-homebrew" },
-            },
         },
         ["aarch64-macos"] = {
             default_version = "3.8.0",
-            upstream = {
-                github = "git-lfs/git-lfs",
-                repository_id = 13021798,
-                tag_prefix = "v",
-                exclude_tags = { "v0.5.4-homebrew" },
-            },
         },
         ["x86_64-linux"] = {
             default_version = "3.8.0",
-            upstream = {
-                github = "git-lfs/git-lfs",
-                repository_id = 13021798,
-                tag_prefix = "v",
-                exclude_tags = { "v0.5.4-homebrew" },
-            },
         },
     },
     versions = {

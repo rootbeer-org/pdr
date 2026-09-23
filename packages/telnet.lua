@@ -24,12 +24,21 @@ return {
     },
     outputs = {
         bins = { "telnet" },
-        checks = { { "telnet", "--version" }, { "telnet", "--help" } },
+        checks = {
+            { "telnet", "--version" },
+            { "telnet", "--help" },
+        },
     },
     platforms = {
-        ["aarch64-linux"] = { default_version = "2.8" },
-        ["aarch64-macos"] = { default_version = "2.8" },
-        ["x86_64-linux"] = { default_version = "2.8" },
+        ["aarch64-linux"] = {
+            default_version = "2.8",
+        },
+        ["aarch64-macos"] = {
+            default_version = "2.8",
+        },
+        ["x86_64-linux"] = {
+            default_version = "2.8",
+        },
     },
     versions = {
         ["2.8"] = {

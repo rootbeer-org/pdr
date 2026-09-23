@@ -3,19 +3,30 @@ return {
     description = "QUIC transport library with OpenSSL support",
     homepage = "https://github.com/ngtcp2/ngtcp2",
     default_license = "MIT",
+    upstream = {
+        github = "ngtcp2/ngtcp2",
+        repository_id = 95347622,
+        tag = "v{version}",
+    },
     source = {
         url = "https://github.com/ngtcp2/ngtcp2/releases/download/v{version}/ngtcp2-{version}.tar.gz",
         archive = "tar.gz",
         strip_prefix = "ngtcp2-{version}",
         patches = {
-            '--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -380,2 +380,2 @@\n-set(libdir          "${CMAKE_INSTALL_FULL_LIBDIR}")\n-set(includedir      "${CMAKE_INSTALL_FULL_INCLUDEDIR}")\n+set(libdir          "\\${prefix}/${CMAKE_INSTALL_LIBDIR}")\n+set(includedir      "\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")\n',
+            "--- a/CMakeLists.txt\010+++ b/CMakeLists.txt\010@@ -380,2 +380,2 @@\010-set(libdir          \"${CMAKE_INSTALL_FULL_LIBDIR}\")\010-set(includedir      \"${CMAKE_INSTALL_FULL_INCLUDEDIR}\")\010+set(libdir          \"\\${prefix}/${CMAKE_INSTALL_LIBDIR}\")\010+set(includedir      \"\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}\")\010",
         },
     },
     build = {
         backend = "custom",
         dependencies = {
-            { kind = "build", package = "cmake@4.4.3" },
-            { kind = "link", package = "openssl@4.0.2" },
+            {
+                package = "cmake@4.4.3",
+                kind = "build",
+            },
+            {
+                package = "openssl@4.0.2",
+                kind = "link",
+            },
         },
         libraries = { "lib/libngtcp2.a", "lib/libngtcp2_crypto_ossl.a" },
         steps = {
@@ -42,7 +53,9 @@ return {
                     "-DCMAKE_PREFIX_PATH={dependencies}",
                 },
             },
-            build = { { "cmake", "--build", "build", "--parallel", "{jobs}" } },
+            build = {
+                { "cmake", "--build", "build", "--parallel", "{jobs}" },
+            },
             check = {
                 { "cmake", "--build", "build", "--target", "main", "--parallel", "{jobs}" },
                 {
@@ -55,22 +68,21 @@ return {
                     "{jobs}",
                 },
             },
-            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
+            install = {
+                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+            },
         },
     },
     outputs = {},
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.25.0",
-            upstream = { github = "ngtcp2/ngtcp2", repository_id = 95347622, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.25.0",
-            upstream = { github = "ngtcp2/ngtcp2", repository_id = 95347622, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.25.0",
-            upstream = { github = "ngtcp2/ngtcp2", repository_id = 95347622, tag_prefix = "v" },
         },
     },
     versions = {

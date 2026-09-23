@@ -3,50 +3,47 @@ return {
     description = "Find vulnerabilities and configuration issues",
     homepage = "https://github.com/aquasecurity/trivy",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "aquasecurity/trivy",
+        repository_id = 180687624,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/aquasecurity/trivy/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
         strip_prefix = "trivy-{version}",
         patches = {
-            '--- a/pkg/x/json/json.go\n+++ b/pkg/x/json/json.go\n@@ -2,6 +2,7 @@\n \n import (\n \t"bytes"\n+\t"errors"\n \t"encoding/json/jsontext"\n \t"encoding/json/v2"\n \t"io"\n@@ -106,7 +107,7 @@\n \n \t\t// Check visited set to avoid infinity loops\n \t\tif visited.Contains(start) {\n-\t\t\treturn json.SkipFunc\n+\t\t\treturn errors.ErrUnsupported\n \t\t}\n \t\tvisited.Append(start)\n \n--- a/pkg/iac/scanners/cloudformation/parser/parameter.go\n+++ b/pkg/iac/scanners/cloudformation/parser/parameter.go\n@@ -54,7 +54,7 @@\n \t\t}\n \t\treturn nil\n \t}\n-\treturn json.SkipFunc\n+\treturn errors.ErrUnsupported\n }\n \n func (p *Parameter) Type() cftypes.CfType {\n--- a/go.mod\n+++ b/go.mod\n@@ -1,6 +1,6 @@\n module github.com/aquasecurity/trivy\n \n-go 1.26.3\n+go 1.27.0\n \n require (\n \tgithub.com/Azure/azure-sdk-for-go/sdk/azcore v1.22.0\n',
+            "--- a/pkg/x/json/json.go\010+++ b/pkg/x/json/json.go\010@@ -2,6 +2,7 @@\010 \010 import (\010 \009\"bytes\"\010+\009\"errors\"\010 \009\"encoding/json/jsontext\"\010 \009\"encoding/json/v2\"\010 \009\"io\"\010@@ -106,7 +107,7 @@\010 \010 \009\009// Check visited set to avoid infinity loops\010 \009\009if visited.Contains(start) {\010-\009\009\009return json.SkipFunc\010+\009\009\009return errors.ErrUnsupported\010 \009\009}\010 \009\009visited.Append(start)\010 \010--- a/pkg/iac/scanners/cloudformation/parser/parameter.go\010+++ b/pkg/iac/scanners/cloudformation/parser/parameter.go\010@@ -54,7 +54,7 @@\010 \009\009}\010 \009\009return nil\010 \009}\010-\009return json.SkipFunc\010+\009return errors.ErrUnsupported\010 }\010 \010 func (p *Parameter) Type() cftypes.CfType {\010--- a/go.mod\010+++ b/go.mod\010@@ -1,6 +1,6 @@\010 module github.com/aquasecurity/trivy\010 \010-go 1.26.3\010+go 1.27.0\010 \010 require (\010 \009github.com/Azure/azure-sdk-for-go/sdk/azcore v1.22.0\010",
         },
     },
     build = {
         backend = "go",
         go = {
-            binaries = { trivy = "./cmd/trivy" },
+            binaries = {
+                trivy = "./cmd/trivy",
+            },
             experiments = { "jsonv2" },
-            variables = { ["github.com/aquasecurity/trivy/pkg/version/app.ver"] = "{version}" },
+            variables = {
+                ["github.com/aquasecurity/trivy/pkg/version/app.ver"] = "{version}",
+            },
         },
     },
     outputs = {
         bins = { "trivy" },
-        checks = { { "trivy", "--version" }, { "trivy", "filesystem", "--help" } },
+        checks = {
+            { "trivy", "--version" },
+            { "trivy", "filesystem", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "0.74.0",
-            upstream = {
-                github = "aquasecurity/trivy",
-                repository_id = 180687624,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "0.74.0",
-            upstream = {
-                github = "aquasecurity/trivy",
-                repository_id = 180687624,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "0.74.0",
-            upstream = {
-                github = "aquasecurity/trivy",
-                repository_id = 180687624,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

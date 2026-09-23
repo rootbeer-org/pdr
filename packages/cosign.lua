@@ -3,6 +3,11 @@ return {
     description = "Sign and verify container images and files",
     homepage = "https://github.com/sigstore/cosign",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "sigstore/cosign",
+        repository_id = 335952417,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/sigstore/cosign/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,26 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { cosign = "./cmd/cosign" },
-            variables = { ["sigs.k8s.io/release-utils/version.gitVersion"] = "v{version}" },
+            binaries = {
+                cosign = "./cmd/cosign",
+            },
+            variables = {
+                ["sigs.k8s.io/release-utils/version.gitVersion"] = "v{version}",
+            },
         },
     },
     outputs = {
         bins = { "cosign" },
-        checks = { { "cosign", "version" }, { "cosign", "verify", "--help" } },
+        checks = {
+            { "cosign", "version" },
+            { "cosign", "verify", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "3.1.3",
-            upstream = { github = "sigstore/cosign", repository_id = 335952417, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "3.1.3",
-            upstream = { github = "sigstore/cosign", repository_id = 335952417, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "3.1.3",
-            upstream = { github = "sigstore/cosign", repository_id = 335952417, tag_prefix = "v" },
         },
     },
     versions = {

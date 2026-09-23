@@ -3,39 +3,34 @@ return {
     description = "Format Lua and Luau source code",
     homepage = "https://github.com/JohnnyMorganz/StyLua",
     default_license = "MPL-2.0",
+    upstream = {
+        github = "JohnnyMorganz/StyLua",
+        repository_id = 321792527,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "JohnnyMorganz/StyLua",
         tag = "v{version}",
         asset = "stylua-{target}.zip",
     },
-    outputs = { bins = { "stylua" }, checks = { { "stylua", "--version" } } },
+    outputs = {
+        bins = { "stylua" },
+        checks = {
+            { "stylua", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-aarch64-musl",
             default_version = "2.5.2",
-            upstream = {
-                github = "JohnnyMorganz/StyLua",
-                repository_id = 321792527,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             target = "macos-aarch64",
             default_version = "2.5.2",
-            upstream = {
-                github = "JohnnyMorganz/StyLua",
-                repository_id = 321792527,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             target = "linux-x86_64-musl",
             default_version = "2.5.2",
-            upstream = {
-                github = "JohnnyMorganz/StyLua",
-                repository_id = 321792527,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

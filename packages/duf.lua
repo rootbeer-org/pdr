@@ -3,6 +3,11 @@ return {
     description = "Inspect filesystem disk usage",
     homepage = "https://github.com/muesli/duf",
     default_license = "NOASSERTION",
+    upstream = {
+        github = "muesli/duf",
+        repository_id = 297165998,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/muesli/duf/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -10,21 +15,30 @@ return {
     },
     build = {
         backend = "go",
-        go = { binaries = { duf = "." }, variables = { ["main.Version"] = "{version}" } },
+        go = {
+            binaries = {
+                duf = ".",
+            },
+            variables = {
+                ["main.Version"] = "{version}",
+            },
+        },
     },
-    outputs = { bins = { "duf" }, checks = { { "duf", "--version" } } },
+    outputs = {
+        bins = { "duf" },
+        checks = {
+            { "duf", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "0.9.1",
-            upstream = { github = "muesli/duf", repository_id = 297165998, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "0.9.1",
-            upstream = { github = "muesli/duf", repository_id = 297165998, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "0.9.1",
-            upstream = { github = "muesli/duf", repository_id = 297165998, tag_prefix = "v" },
         },
     },
     versions = {

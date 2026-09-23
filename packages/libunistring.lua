@@ -21,9 +21,15 @@ return {
     },
     outputs = {},
     platforms = {
-        ["aarch64-linux"] = { default_version = "1.4.2" },
-        ["aarch64-macos"] = { default_version = "1.4.2" },
-        ["x86_64-linux"] = { default_version = "1.4.2" },
+        ["aarch64-linux"] = {
+            default_version = "1.4.2",
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.4.2",
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.4.2",
+        },
     },
     versions = {
         ["1.4.2"] = {

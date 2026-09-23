@@ -10,12 +10,21 @@ return {
         mirror = true,
     },
     outputs = {
-        bins = { bobrwm = "Bobrwm.app/Contents/MacOS/bobrwm-cli" },
-        apps = { ["Bobrwm.app"] = "Bobrwm.app" },
-        checks = { { "bobrwm", "--version" }, { "bobrwm", "--help" } },
+        bins = {
+            bobrwm = "Bobrwm.app/Contents/MacOS/bobrwm-cli",
+        },
+        apps = {
+            ["Bobrwm.app"] = "Bobrwm.app",
+        },
+        checks = {
+            { "bobrwm", "--version" },
+            { "bobrwm", "--help" },
+        },
     },
     platforms = {
-        ["aarch64-macos"] = { default_version = "0.1.0-main+572265d" },
+        ["aarch64-macos"] = {
+            default_version = "0.1.0-main+572265d",
+        },
     },
     versions = {
         ["0.1.0-main+572265d"] = {

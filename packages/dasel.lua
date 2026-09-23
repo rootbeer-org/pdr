@@ -3,6 +3,11 @@ return {
     description = "Query and transform structured data",
     homepage = "https://github.com/TomWright/dasel",
     default_license = "MIT",
+    upstream = {
+        github = "TomWright/dasel",
+        repository_id = 297615696,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/TomWright/dasel/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,23 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { dasel = "./cmd/dasel" },
-            variables = { ["github.com/tomwright/dasel/v3/internal.Version"] = "v{version}" },
+            binaries = {
+                dasel = "./cmd/dasel",
+            },
+            variables = {
+                ["github.com/tomwright/dasel/v3/internal.Version"] = "v{version}",
+            },
         },
     },
-    outputs = { bins = { "dasel" }, checks = { { "dasel", "version" }, { "dasel", "--help" } } },
+    outputs = {
+        bins = { "dasel" },
+        checks = {
+            { "dasel", "version" },
+            { "dasel", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "3.11.2",
-            upstream = { github = "TomWright/dasel", repository_id = 297615696, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "3.11.2",
-            upstream = { github = "TomWright/dasel", repository_id = 297615696, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "3.11.2",
-            upstream = { github = "TomWright/dasel", repository_id = 297615696, tag_prefix = "v" },
         },
     },
     versions = {

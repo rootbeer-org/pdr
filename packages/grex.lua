@@ -3,27 +3,35 @@ return {
     description = "Generate regular expressions from examples",
     homepage = "https://github.com/pemistahl/grex",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "pemistahl/grex",
+        repository_id = 213043312,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "pemistahl/grex",
         tag = "v{version}",
         asset = "grex-{tag}-{target}.tar.gz",
     },
-    outputs = { bins = { "grex" }, checks = { { "grex", "--version" }, { "grex", "abc", "abd" } } },
+    outputs = {
+        bins = { "grex" },
+        checks = {
+            { "grex", "--version" },
+            { "grex", "abc", "abd" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "1.4.6",
-            upstream = { github = "pemistahl/grex", repository_id = 213043312, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "1.4.6",
-            upstream = { github = "pemistahl/grex", repository_id = 213043312, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "1.4.6",
-            upstream = { github = "pemistahl/grex", repository_id = 213043312, tag_prefix = "v" },
         },
     },
     versions = {

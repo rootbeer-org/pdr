@@ -3,12 +3,17 @@ return {
     description = "HTTP/2 C library",
     homepage = "https://nghttp2.org/",
     default_license = "NOASSERTION",
+    upstream = {
+        github = "nghttp2/nghttp2",
+        repository_id = 11452676,
+        tag = "v{version}",
+    },
     source = {
         url = "https://github.com/nghttp2/nghttp2/releases/download/v{version}/nghttp2-{version}.tar.gz",
         archive = "tar.gz",
         strip_prefix = "nghttp2-{version}",
         patches = {
-            '--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -445,8 +445,8 @@\n # libnghttp2.pc (pkg-config file)\n set(prefix          "${CMAKE_INSTALL_PREFIX}")\n set(exec_prefix     "${CMAKE_INSTALL_PREFIX}")\n-set(libdir          "${CMAKE_INSTALL_FULL_LIBDIR}")\n-set(includedir      "${CMAKE_INSTALL_FULL_INCLUDEDIR}")\n+set(libdir          "\\${prefix}/${CMAKE_INSTALL_LIBDIR}")\n+set(includedir      "\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")\n set(VERSION         "${PACKAGE_VERSION}")\n # For init scripts and systemd service file (in contrib/)\n set(bindir          "${CMAKE_INSTALL_FULL_BINDIR}")\n',
+            "--- a/CMakeLists.txt\010+++ b/CMakeLists.txt\010@@ -445,8 +445,8 @@\010 # libnghttp2.pc (pkg-config file)\010 set(prefix          \"${CMAKE_INSTALL_PREFIX}\")\010 set(exec_prefix     \"${CMAKE_INSTALL_PREFIX}\")\010-set(libdir          \"${CMAKE_INSTALL_FULL_LIBDIR}\")\010-set(includedir      \"${CMAKE_INSTALL_FULL_INCLUDEDIR}\")\010+set(libdir          \"\\${prefix}/${CMAKE_INSTALL_LIBDIR}\")\010+set(includedir      \"\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}\")\010 set(VERSION         \"${PACKAGE_VERSION}\")\010 # For init scripts and systemd service file (in contrib/)\010 set(bindir          \"${CMAKE_INSTALL_FULL_BINDIR}\")\010",
         },
     },
     build = {
@@ -36,7 +41,9 @@ return {
                     "-DENABLE_DOC=OFF",
                 },
             },
-            build = { { "cmake", "--build", "build", "--parallel", "{jobs}" } },
+            build = {
+                { "cmake", "--build", "build", "--parallel", "{jobs}" },
+            },
             check = {
                 {
                     "cmake",
@@ -58,22 +65,21 @@ return {
                     "{jobs}",
                 },
             },
-            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
+            install = {
+                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+            },
         },
     },
     outputs = {},
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.70.0",
-            upstream = { github = "nghttp2/nghttp2", repository_id = 11452676, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.70.0",
-            upstream = { github = "nghttp2/nghttp2", repository_id = 11452676, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.70.0",
-            upstream = { github = "nghttp2/nghttp2", repository_id = 11452676, tag_prefix = "v" },
         },
     },
     versions = {

@@ -3,23 +3,35 @@ return {
     description = "Format source files with configurable plugins",
     homepage = "https://github.com/dprint/dprint",
     default_license = "MIT",
-    prebuilt = { github = "dprint/dprint", tag = "{version}", asset = "dprint-{target}.zip" },
-    outputs = { bins = { "dprint" }, checks = { { "dprint", "--version" }, { "dprint", "help" } } },
+    upstream = {
+        github = "dprint/dprint",
+        repository_id = 192136193,
+        tag = "{version}",
+    },
+    prebuilt = {
+        github = "dprint/dprint",
+        tag = "{version}",
+        asset = "dprint-{target}.zip",
+    },
+    outputs = {
+        bins = { "dprint" },
+        checks = {
+            { "dprint", "--version" },
+            { "dprint", "help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.57.4",
-            upstream = { github = "dprint/dprint", repository_id = 192136193, tag_prefix = "" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.57.4",
-            upstream = { github = "dprint/dprint", repository_id = 192136193, tag_prefix = "" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.57.4",
-            upstream = { github = "dprint/dprint", repository_id = 192136193, tag_prefix = "" },
         },
     },
     versions = {

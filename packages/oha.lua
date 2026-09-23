@@ -3,23 +3,35 @@ return {
     description = "Load test HTTP services",
     homepage = "https://github.com/hatoo/oha",
     default_license = "MIT",
-    prebuilt = { github = "hatoo/oha", tag = "v{version}", asset = "oha-{target}" },
-    outputs = { bins = { "oha" }, checks = { { "oha", "--version" }, { "oha", "--help" } } },
+    upstream = {
+        github = "hatoo/oha",
+        repository_id = 244377430,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "hatoo/oha",
+        tag = "v{version}",
+        asset = "oha-{target}",
+    },
+    outputs = {
+        bins = { "oha" },
+        checks = {
+            { "oha", "--version" },
+            { "oha", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-arm64",
             default_version = "1.16.0",
-            upstream = { github = "hatoo/oha", repository_id = 244377430, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "macos-arm64",
             default_version = "1.16.0",
-            upstream = { github = "hatoo/oha", repository_id = 244377430, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux-amd64",
             default_version = "1.16.0",
-            upstream = { github = "hatoo/oha", repository_id = 244377430, tag_prefix = "v" },
         },
     },
     versions = {

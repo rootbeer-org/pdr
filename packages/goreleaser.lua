@@ -3,6 +3,11 @@ return {
     description = "Build and package software releases",
     homepage = "https://github.com/goreleaser/goreleaser",
     default_license = "MIT",
+    upstream = {
+        github = "goreleaser/goreleaser",
+        repository_id = 77071454,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/goreleaser/goreleaser/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,38 +16,31 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { goreleaser = "." },
-            variables = { ["main.builtBy"] = "Rootbeer", ["main.version"] = "{version}" },
+            binaries = {
+                goreleaser = ".",
+            },
+            variables = {
+                ["main.builtBy"] = "Rootbeer",
+                ["main.version"] = "{version}",
+            },
         },
     },
     outputs = {
         bins = { "goreleaser" },
-        checks = { { "goreleaser", "--version" }, { "goreleaser", "build", "--help" } },
+        checks = {
+            { "goreleaser", "--version" },
+            { "goreleaser", "build", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "2.18.2",
-            upstream = {
-                github = "goreleaser/goreleaser",
-                repository_id = 77071454,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "2.18.2",
-            upstream = {
-                github = "goreleaser/goreleaser",
-                repository_id = 77071454,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "2.18.2",
-            upstream = {
-                github = "goreleaser/goreleaser",
-                repository_id = 77071454,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

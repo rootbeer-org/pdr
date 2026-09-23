@@ -3,39 +3,35 @@ return {
     description = "Monitor processes and system resources",
     homepage = "https://github.com/ClementTsang/bottom",
     default_license = "MIT",
+    upstream = {
+        github = "ClementTsang/bottom",
+        repository_id = 205042455,
+        tag = "{version}",
+    },
     prebuilt = {
         github = "ClementTsang/bottom",
         tag = "{version}",
         asset = "bottom_{target}.tar.gz",
     },
-    outputs = { bins = { "btm" }, checks = { { "btm", "--version" }, { "btm", "--help" } } },
+    outputs = {
+        bins = { "btm" },
+        checks = {
+            { "btm", "--version" },
+            { "btm", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.14.9",
-            upstream = {
-                github = "ClementTsang/bottom",
-                repository_id = 205042455,
-                tag_prefix = "",
-            },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.14.9",
-            upstream = {
-                github = "ClementTsang/bottom",
-                repository_id = 205042455,
-                tag_prefix = "",
-            },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.14.9",
-            upstream = {
-                github = "ClementTsang/bottom",
-                repository_id = 205042455,
-                tag_prefix = "",
-            },
         },
     },
     versions = {

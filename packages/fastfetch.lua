@@ -3,39 +3,34 @@ return {
     description = "Display system information",
     homepage = "https://github.com/fastfetch-cli/fastfetch",
     default_license = "MIT",
+    upstream = {
+        github = "fastfetch-cli/fastfetch",
+        repository_id = 340181518,
+        tag = "{version}",
+    },
     prebuilt = {
         github = "fastfetch-cli/fastfetch",
         tag = "{version}",
         asset = "fastfetch-{target}.tar.gz",
     },
-    outputs = { bins = { "fastfetch" }, checks = { { "fastfetch", "--version" } } },
+    outputs = {
+        bins = { "fastfetch" },
+        checks = {
+            { "fastfetch", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-aarch64",
             default_version = "2.68.1",
-            upstream = {
-                github = "fastfetch-cli/fastfetch",
-                repository_id = 340181518,
-                tag_prefix = "",
-            },
         },
         ["aarch64-macos"] = {
             target = "macos-aarch64",
             default_version = "2.68.1",
-            upstream = {
-                github = "fastfetch-cli/fastfetch",
-                repository_id = 340181518,
-                tag_prefix = "",
-            },
         },
         ["x86_64-linux"] = {
             target = "linux-amd64",
             default_version = "2.68.1",
-            upstream = {
-                github = "fastfetch-cli/fastfetch",
-                repository_id = 340181518,
-                tag_prefix = "",
-            },
         },
     },
     versions = {

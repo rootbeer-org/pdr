@@ -29,24 +29,38 @@ return {
                     "--with-terminfo-dirs=/etc/terminfo:/lib/terminfo:/usr/share/terminfo",
                 },
             },
-            build = { { "make", "-j{jobs}" } },
+            build = {
+                { "make", "-j{jobs}" },
+            },
             check = {
                 { "make", "-C", "include", "check" },
                 { "make", "-C", "test", "check" },
                 { "progs/tic", "-x", "-o", "test-terminfo", "misc/terminfo.src" },
                 { "progs/infocmp", "-A", "test-terminfo", "xterm-256color" },
             },
-            install = { { "make", "DESTDIR={prefix}", "install" } },
+            install = {
+                { "make", "DESTDIR={prefix}", "install" },
+            },
         },
     },
     outputs = {
         bins = { "tic", "infocmp", "tput" },
-        checks = { { "tic", "-V" }, { "infocmp", "-V" }, { "tput", "-V" } },
+        checks = {
+            { "tic", "-V" },
+            { "infocmp", "-V" },
+            { "tput", "-V" },
+        },
     },
     platforms = {
-        ["aarch64-linux"] = { default_version = "6.6" },
-        ["aarch64-macos"] = { default_version = "6.6" },
-        ["x86_64-linux"] = { default_version = "6.6" },
+        ["aarch64-linux"] = {
+            default_version = "6.6",
+        },
+        ["aarch64-macos"] = {
+            default_version = "6.6",
+        },
+        ["x86_64-linux"] = {
+            default_version = "6.6",
+        },
     },
     versions = {
         ["6.6"] = {

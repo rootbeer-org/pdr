@@ -3,6 +3,11 @@ return {
     description = "Apply database schema migrations",
     homepage = "https://github.com/golang-migrate/migrate",
     default_license = "NOASSERTION",
+    upstream = {
+        github = "golang-migrate/migrate",
+        repository_id = 118105436,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/golang-migrate/migrate/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,7 +16,9 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { migrate = "./cmd/migrate" },
+            binaries = {
+                migrate = "./cmd/migrate",
+            },
             tags = {
                 "file",
                 "go_bindata",
@@ -38,37 +45,27 @@ return {
                 "pgx5",
                 "rqlite",
             },
-            variables = { ["main.Version"] = "{version}" },
+            variables = {
+                ["main.Version"] = "{version}",
+            },
         },
     },
     outputs = {
         bins = { "migrate" },
-        checks = { { "migrate", "-version" }, { "migrate", "-help" } },
+        checks = {
+            { "migrate", "-version" },
+            { "migrate", "-help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "4.20.1",
-            upstream = {
-                github = "golang-migrate/migrate",
-                repository_id = 118105436,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "4.20.1",
-            upstream = {
-                github = "golang-migrate/migrate",
-                repository_id = 118105436,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "4.20.1",
-            upstream = {
-                github = "golang-migrate/migrate",
-                repository_id = 118105436,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

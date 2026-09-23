@@ -3,26 +3,35 @@ return {
     description = "Build command-line interfaces for shell scripts",
     homepage = "https://github.com/sigoden/argc",
     default_license = "Apache-2.0",
-    prebuilt = { github = "sigoden/argc", tag = "v{version}", asset = "argc-{tag}-{target}.tar.gz" },
+    upstream = {
+        github = "sigoden/argc",
+        repository_id = 461504676,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "sigoden/argc",
+        tag = "v{version}",
+        asset = "argc-{tag}-{target}.tar.gz",
+    },
     outputs = {
         bins = { "argc" },
-        checks = { { "argc", "--argc-version" }, { "argc", "--argc-help" } },
+        checks = {
+            { "argc", "--argc-version" },
+            { "argc", "--argc-help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "1.24.0",
-            upstream = { github = "sigoden/argc", repository_id = 461504676, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "1.24.0",
-            upstream = { github = "sigoden/argc", repository_id = 461504676, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "1.24.0",
-            upstream = { github = "sigoden/argc", repository_id = 461504676, tag_prefix = "v" },
         },
     },
     versions = {
