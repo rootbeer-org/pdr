@@ -65,7 +65,7 @@ class RecipeTests(unittest.TestCase):
     def test_expanded_catalog_preserves_all_retained_inputs(self):
         engine = str(Path(os.environ['ROOTBEER_FORGE']).resolve())
         packages = Path(__file__).resolve().parents[1] / 'packages'
-        before = json.loads(subprocess.check_output([engine, '--catalog', str(packages), 'index']))
+        before = json.loads(subprocess.check_output([engine, '--catalog', str(packages), 'catalog']))
         package = before['packages']['rootbeer']
         build, systems = updates.default_build(package)
         with tempfile.TemporaryDirectory() as directory:
@@ -73,7 +73,7 @@ class RecipeTests(unittest.TestCase):
             recipe = Path(directory) / 'rootbeer.lua'
             recipe.write_text(updates.update_recipe(recipe.read_text(), systems, 'f' * 40, '99.0.0',
                               'c' * 64, '2026-09-18T12:00:00Z', build))
-            after = json.loads(subprocess.check_output([engine, '--catalog', directory, 'index']))
+            after = json.loads(subprocess.check_output([engine, '--catalog', directory, 'catalog']))
         updated = after['packages']['rootbeer']
         self.assertEqual(set(updated['default_versions'].values()), {'99.0.0-main+ffffffffffff'})
         new = updated['versions'].pop('99.0.0-main+ffffffffffff')

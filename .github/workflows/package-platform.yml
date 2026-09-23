@@ -2,7 +2,7 @@ name: Plan platform packages
 on:
   workflow_call:
     secrets:
-      INDEX_SIGNING_KEY:
+      PDR_SIGNING_KEY:
         required: false
     inputs:
       runner:
@@ -57,7 +57,7 @@ jobs:
           PACKAGES: ${{ inputs.packages }}
           BUILD_CONTEXT: ${{ steps.tools.outputs.context }}
           PACKAGE_REGISTRY: ${{ github.repository }}
-          PACKAGE_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
+          PACKAGE_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
           GH_TOKEN: ${{ github.token }}
           REUSE_RUN: ${{ inputs.reuse-run }}
           PACKAGE_RUNNER: ${{ inputs.runner }}
@@ -85,7 +85,7 @@ jobs:
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     uses: ./.github/workflows/package-job.yml
     secrets:
-      INDEX_SIGNING_KEY: ${{ inputs.publish && secrets.INDEX_SIGNING_KEY || '' }}
+      PDR_SIGNING_KEY: ${{ inputs.publish && secrets.PDR_SIGNING_KEY || '' }}
     permissions:
       contents: read
       actions: read

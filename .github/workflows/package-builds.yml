@@ -9,7 +9,7 @@ on:
     paths: ["packages/**"]
   workflow_call:
     secrets:
-      INDEX_SIGNING_KEY:
+      PDR_SIGNING_KEY:
         required: false
   workflow_dispatch:
     inputs:
@@ -60,6 +60,9 @@ jobs:
         with:
           runner: ubuntu-24.04
           revision-file: package-engine-revision
+      - name: Check recipes use the layout discovery writes
+        if: steps.producer.outputs.waiting != 'true'
+        run: engine-bin/rootbeer-forge --catalog packages format --check
       - name: Compare expanded package inputs
         if: steps.producer.outputs.waiting != 'true'
         id: select
@@ -77,7 +80,7 @@ jobs:
       matrix: ${{ fromJSON(needs.select.outputs.platforms) }}
     uses: ./.github/workflows/package-platform.yml
     secrets:
-      INDEX_SIGNING_KEY: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && secrets.INDEX_SIGNING_KEY || '' }}
+      PDR_SIGNING_KEY: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && secrets.PDR_SIGNING_KEY || '' }}
     permissions:
       contents: read
       actions: read
@@ -89,9 +92,9 @@ jobs:
       publish: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
 
   discovery:
-    name: Publish package discovery
+    name: Publish the PDR root
     needs: [select, platform]
-    if: always() && !cancelled() && needs.select.result == 'success' && needs.select.outputs.waiting != 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.PUBLISH_INDEX == 'true'
+    if: always() && !cancelled() && needs.select.result == 'success' && needs.select.outputs.waiting != 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.PUBLISH_PDR == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: package-publishing
@@ -123,36 +126,36 @@ jobs:
           mkdir -p discovery-records
           git -C site config user.name 'github-actions[bot]'
           git -C site config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-      - name: Merge signed records into discovery
+      - name: Merge signed records into the PDR
         env:
           GH_TOKEN: ${{ github.token }}
-          INDEX_SIGNING_KEY: ${{ secrets.INDEX_SIGNING_KEY }}
-          INDEX_PUBLIC_KEY: ${{ vars.INDEX_PUBLIC_KEY }}
-          INDEX_URL: ${{ vars.INDEX_URL }}
+          PDR_SIGNING_KEY: ${{ secrets.PDR_SIGNING_KEY }}
+          PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
         run: |
-          : "${INDEX_SIGNING_KEY:?The publication environment did not provide its signing key}"
+          : "${PDR_SIGNING_KEY:?The publication environment did not provide its signing key}"
           umask 077
           key="$RUNNER_TEMP/discovery-key.der"
           trap 'rm -f "$key"' EXIT
-          printf '%s' "$INDEX_SIGNING_KEY" | base64 --decode > "$key"
-          unset INDEX_SIGNING_KEY
+          printf '%s' "$PDR_SIGNING_KEY" | base64 --decode > "$key"
+          unset PDR_SIGNING_KEY
           for attempt in 1 2 3 4 5; do
             git -C site fetch --depth=1 origin gh-pages
             git -C site reset --hard FETCH_HEAD
+            # v3 lives under /v3/; the frozen v2 files beside it are never rewritten.
             engine-bin/rootbeer-forge --catalog packages publish-records \
-              --records discovery-records --site site/public --site-url "$INDEX_URL" \
-              --key "$key" --public-key "$INDEX_PUBLIC_KEY"
+              --records discovery-records --site site/public/v3 \
+              --key "$key" --public-key "$PDR_PUBLIC_KEY"
             test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"
             git -C site add public
-            git -C site commit -m "publish package discovery $GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT"
+            git -C site commit -m "publish the PDR $GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT"
             if git -C site push origin HEAD:gh-pages; then exit 0; fi
             echo "Retrying discovery merge ($attempt/5)" >&2
           done
-          echo 'Discovery changed concurrently; retry this metadata job.' >&2
+          echo 'The PDR changed concurrently; retry this metadata job.' >&2
           exit 1
 
   deploy:
-    name: Deploy latest discovery
+    name: Deploy the PDR site
     needs: discovery
     if: always() && needs.discovery.result == 'success'
     concurrency:
@@ -172,9 +175,9 @@ jobs:
           ref: gh-pages
           path: site
           persist-credentials: false
-      - name: Upload discovery site
+      - name: Upload the PDR site
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
         with:
           path: site/public
-      - name: Deploy discovery site
+      - name: Deploy the PDR site
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346

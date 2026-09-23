@@ -11,27 +11,39 @@ def command(*arguments):
 
 
 @lru_cache(maxsize=1)
-def approved_discovery():
+def published_root():
+    """The deployed v3 root and the gh-pages revision it came from, or None before the first."""
     command('git', 'fetch', '--depth=1', '--no-tags', 'origin', 'gh-pages')
     revision = command('git', 'rev-parse', 'FETCH_HEAD')
-    manifest = json.loads(command('git', 'show', f'{revision}:public/current.json'))
-    if manifest.get('schema') != 2:
-        raise ValueError('Expected deployed package discovery before planning new namespaces')
-    return revision, manifest
+    try:
+        root = json.loads(command('git', 'show', f'{revision}:public/v3/current.json'))
+    except subprocess.CalledProcessError:
+        return None
+    if root.get('schema') != 3:
+        raise ValueError('Expected a v3 PDR root before planning new namespaces')
+    return revision, root
+
+
+def published_json(revision, path, digest):
+    if not re.fullmatch(r'[a-f0-9]{64}', digest):
+        raise ValueError(f'Invalid published digest in {path}')
+    return json.loads(command('git', 'show', f'{revision}:public/v3/{path}/{digest}.json'))
 
 
 @lru_cache(maxsize=None)
 def has_published_namespace(name):
-    revision, manifest = approved_discovery()
+    published = published_root()
+    if published is None:
+        return False
+    revision, root = published
+    package = root['packages'].get(name)
+    if package is None:
+        return False
     prefix = f"ghcr://{os.environ['PACKAGE_REGISTRY']}/{name}@"
-    for package, systems in manifest['records'].items():
-        if package.split('@')[0] != name:
-            continue
-        for pointer in systems.values():
-            digest = pointer['sha256']
-            if not re.fullmatch(r'[a-f0-9]{64}', digest):
-                raise ValueError('Invalid published record digest')
-            signed = json.loads(command('git', 'show', f'{revision}:public/records/{digest}.json'))
+    document = published_json(revision, 'packages', package['document'])
+    for version in document['versions'].values():
+        for platform in version['platforms'].values():
+            signed = published_json(revision, 'records', platform['record'])
             source = signed['record']['artifact']['package']['source']
             if source.get('Url', {}).get('url', '').startswith(prefix):
                 return True
