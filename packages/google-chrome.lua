@@ -15,13 +15,13 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "153.0.8010.53",
+            default_version = "154.0.8037.58",
         },
     },
     versions = {
-        ["153.0.8010.53"] = {
+        ["154.0.8037.58"] = {
             digests = {
-                ["aarch64-macos"] = "f111c12348ff6e184db296071567d81f9da2cb5acc7257d999f9fccc67abea1a",
+                ["aarch64-macos"] = "0aea98069829154bfcb6a50220feb063ab57c064da9ab75693f1fdb468a6def4",
             },
         },
     },
