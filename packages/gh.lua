@@ -3,6 +3,11 @@ return {
     description = "Work with GitHub from the command line",
     homepage = "https://github.com/cli/cli",
     default_license = "MIT",
+    upstream = {
+        github = "cli/cli",
+        repository_id = 212613049,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/cli/cli/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,23 +16,29 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { gh = "./cmd/gh" },
-            variables = { ["github.com/cli/cli/v2/internal/build.Version"] = "{version}" },
+            binaries = {
+                gh = "./cmd/gh",
+            },
+            variables = {
+                ["github.com/cli/cli/v2/internal/build.Version"] = "{version}",
+            },
         },
     },
-    outputs = { bins = { "gh" }, checks = { { "gh", "--version" } } },
+    outputs = {
+        bins = { "gh" },
+        checks = {
+            { "gh", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "2.101.0",
-            upstream = { github = "cli/cli", repository_id = 212613049, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "2.101.0",
-            upstream = { github = "cli/cli", repository_id = 212613049, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "2.101.0",
-            upstream = { github = "cli/cli", repository_id = 212613049, tag_prefix = "v" },
         },
     },
     versions = {

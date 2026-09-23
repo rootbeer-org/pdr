@@ -4,35 +4,34 @@ return {
     description = "Read concise command-line usage examples",
     homepage = "https://docs.tealdeer.org",
     default_license = "Apache-2.0",
-    prebuilt = { github = "tealdeer-rs/tealdeer", tag = "v{version}", asset = "tealdeer-{target}" },
-    outputs = { bins = { "tldr" }, checks = { { "tldr", "--version" } } },
+    upstream = {
+        github = "tealdeer-rs/tealdeer",
+        repository_id = 48739367,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "tealdeer-rs/tealdeer",
+        tag = "v{version}",
+        asset = "tealdeer-{target}",
+    },
+    outputs = {
+        bins = { "tldr" },
+        checks = {
+            { "tldr", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-aarch64-musl",
             default_version = "1.9.0",
-            upstream = {
-                github = "tealdeer-rs/tealdeer",
-                repository_id = 48739367,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             target = "macos-aarch64",
             default_version = "1.9.0",
-            upstream = {
-                github = "tealdeer-rs/tealdeer",
-                repository_id = 48739367,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             target = "linux-x86_64-musl",
             default_version = "1.9.0",
-            upstream = {
-                github = "tealdeer-rs/tealdeer",
-                repository_id = 48739367,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

@@ -3,17 +3,27 @@ return {
     description = "HTTP/3 C library",
     homepage = "https://github.com/ngtcp2/nghttp3",
     default_license = "MIT",
+    upstream = {
+        github = "ngtcp2/nghttp3",
+        repository_id = 156868263,
+        tag = "v{version}",
+    },
     source = {
         url = "https://github.com/ngtcp2/nghttp3/releases/download/v{version}/nghttp3-{version}.tar.gz",
         archive = "tar.gz",
         strip_prefix = "nghttp3-{version}",
         patches = {
-            '--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -178,2 +178,2 @@\n-set(libdir          "${CMAKE_INSTALL_FULL_LIBDIR}")\n-set(includedir      "${CMAKE_INSTALL_FULL_INCLUDEDIR}")\n+set(libdir          "\\${prefix}/${CMAKE_INSTALL_LIBDIR}")\n+set(includedir      "\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")\n',
+            "--- a/CMakeLists.txt\010+++ b/CMakeLists.txt\010@@ -178,2 +178,2 @@\010-set(libdir          \"${CMAKE_INSTALL_FULL_LIBDIR}\")\010-set(includedir      \"${CMAKE_INSTALL_FULL_INCLUDEDIR}\")\010+set(libdir          \"\\${prefix}/${CMAKE_INSTALL_LIBDIR}\")\010+set(includedir      \"\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}\")\010",
         },
     },
     build = {
         backend = "custom",
-        dependencies = { { kind = "build", package = "cmake@4.4.3" } },
+        dependencies = {
+            {
+                package = "cmake@4.4.3",
+                kind = "build",
+            },
+        },
         libraries = { "lib/libnghttp3.a" },
         steps = {
             configure = {
@@ -35,7 +45,9 @@ return {
                     "-DBUILD_TESTING=ON",
                 },
             },
-            build = { { "cmake", "--build", "build", "--parallel", "{jobs}" } },
+            build = {
+                { "cmake", "--build", "build", "--parallel", "{jobs}" },
+            },
             check = {
                 { "cmake", "--build", "build", "--target", "main", "--parallel", "{jobs}" },
                 {
@@ -48,22 +60,21 @@ return {
                     "{jobs}",
                 },
             },
-            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
+            install = {
+                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+            },
         },
     },
     outputs = {},
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.18.0",
-            upstream = { github = "ngtcp2/nghttp3", repository_id = 156868263, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.18.0",
-            upstream = { github = "ngtcp2/nghttp3", repository_id = 156868263, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.18.0",
-            upstream = { github = "ngtcp2/nghttp3", repository_id = 156868263, tag_prefix = "v" },
         },
     },
     versions = {

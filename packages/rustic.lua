@@ -3,6 +3,11 @@ return {
     description = "Back up files with deduplication and encryption",
     homepage = "https://github.com/rustic-rs/rustic",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "rustic-rs/rustic",
+        repository_id = 469809167,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "rustic-rs/rustic",
         tag = "v{version}",
@@ -10,23 +15,23 @@ return {
     },
     outputs = {
         bins = { "rustic" },
-        checks = { { "rustic", "--version" }, { "rustic", "backup", "--help" } },
+        checks = {
+            { "rustic", "--version" },
+            { "rustic", "backup", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.11.4",
-            upstream = { github = "rustic-rs/rustic", repository_id = 469809167, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.11.4",
-            upstream = { github = "rustic-rs/rustic", repository_id = 469809167, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.11.4",
-            upstream = { github = "rustic-rs/rustic", repository_id = 469809167, tag_prefix = "v" },
         },
     },
     versions = {

@@ -3,27 +3,35 @@ return {
     description = "View binary files in hexadecimal",
     homepage = "https://github.com/sharkdp/hexyl",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "sharkdp/hexyl",
+        repository_id = 156294298,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "sharkdp/hexyl",
         tag = "v{version}",
         asset = "hexyl-{tag}-{target}.tar.gz",
     },
-    outputs = { bins = { "hexyl" }, checks = { { "hexyl", "--version" }, { "hexyl", "--help" } } },
+    outputs = {
+        bins = { "hexyl" },
+        checks = {
+            { "hexyl", "--version" },
+            { "hexyl", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-gnu",
             default_version = "0.17.0",
-            upstream = { github = "sharkdp/hexyl", repository_id = 156294298, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.17.0",
-            upstream = { github = "sharkdp/hexyl", repository_id = 156294298, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.17.0",
-            upstream = { github = "sharkdp/hexyl", repository_id = 156294298, tag_prefix = "v" },
         },
     },
     versions = {

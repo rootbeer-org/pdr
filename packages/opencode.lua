@@ -3,35 +3,34 @@ return {
     description = "Work with coding agents in the terminal",
     homepage = "https://github.com/anomalyco/opencode",
     default_license = "MIT",
-    prebuilt = { github = "anomalyco/opencode", tag = "v{version}", asset = "opencode-{target}" },
-    outputs = { bins = { "opencode" }, checks = { { "opencode", "--version" } } },
+    upstream = {
+        github = "anomalyco/opencode",
+        repository_id = 975734319,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "anomalyco/opencode",
+        tag = "v{version}",
+        asset = "opencode-{target}",
+    },
+    outputs = {
+        bins = { "opencode" },
+        checks = {
+            { "opencode", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-arm64.tar.gz",
             default_version = "1.18.31",
-            upstream = {
-                github = "anomalyco/opencode",
-                repository_id = 975734319,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             target = "darwin-arm64.zip",
             default_version = "1.18.31",
-            upstream = {
-                github = "anomalyco/opencode",
-                repository_id = 975734319,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             target = "linux-x64-baseline.tar.gz",
             default_version = "1.18.31",
-            upstream = {
-                github = "anomalyco/opencode",
-                repository_id = 975734319,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

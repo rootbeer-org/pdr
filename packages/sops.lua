@@ -3,23 +3,35 @@ return {
     description = "Edit encrypted files with support for multiple key providers",
     homepage = "https://getsops.io",
     default_license = "MPL-2.0",
-    prebuilt = { github = "getsops/sops", tag = "v{version}", asset = "sops-{tag}.{target}" },
-    outputs = { bins = { "sops" }, checks = { { "sops", "--version" }, { "sops", "--help" } } },
+    upstream = {
+        github = "getsops/sops",
+        repository_id = 40684033,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "getsops/sops",
+        tag = "v{version}",
+        asset = "sops-{tag}.{target}",
+    },
+    outputs = {
+        bins = { "sops" },
+        checks = {
+            { "sops", "--version" },
+            { "sops", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux.arm64",
             default_version = "3.13.3",
-            upstream = { github = "getsops/sops", repository_id = 40684033, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "darwin.arm64",
             default_version = "3.13.3",
-            upstream = { github = "getsops/sops", repository_id = 40684033, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux.amd64",
             default_version = "3.13.3",
-            upstream = { github = "getsops/sops", repository_id = 40684033, tag_prefix = "v" },
         },
     },
     versions = {

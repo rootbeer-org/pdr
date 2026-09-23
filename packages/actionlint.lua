@@ -3,6 +3,11 @@ return {
     description = "Check GitHub Actions workflows",
     homepage = "https://github.com/rhysd/actionlint",
     default_license = "MIT",
+    upstream = {
+        github = "rhysd/actionlint",
+        repository_id = 370668507,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/rhysd/actionlint/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,26 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { actionlint = "./cmd/actionlint" },
+            binaries = {
+                actionlint = "./cmd/actionlint",
+            },
             variables = {
                 ["github.com/rhysd/actionlint.installedFrom"] = "built by Rootbeer",
                 ["github.com/rhysd/actionlint.version"] = "{version}",
             },
         },
     },
-    outputs = { bins = { "actionlint" }, checks = { { "actionlint", "-version" } } },
+    outputs = {
+        bins = { "actionlint" },
+        checks = {
+            { "actionlint", "-version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.7.12",
-            upstream = { github = "rhysd/actionlint", repository_id = 370668507, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.7.12",
-            upstream = { github = "rhysd/actionlint", repository_id = 370668507, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.7.12",
-            upstream = { github = "rhysd/actionlint", repository_id = 370668507, tag_prefix = "v" },
         },
     },
     versions = {

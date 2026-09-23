@@ -21,7 +21,9 @@ return {
                     "--with-pkg-config-dir=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig",
                 },
             },
-            build = { { "make", "-j{jobs}" } },
+            build = {
+                { "make", "-j{jobs}" },
+            },
             check = {
                 {
                     "/usr/bin/env",
@@ -50,9 +52,15 @@ return {
         },
     },
     platforms = {
-        ["aarch64-linux"] = { default_version = "3.0.7" },
-        ["aarch64-macos"] = { default_version = "3.0.7" },
-        ["x86_64-linux"] = { default_version = "3.0.7" },
+        ["aarch64-linux"] = {
+            default_version = "3.0.7",
+        },
+        ["aarch64-macos"] = {
+            default_version = "3.0.7",
+        },
+        ["x86_64-linux"] = {
+            default_version = "3.0.7",
+        },
     },
     versions = {
         ["3.0.7"] = {

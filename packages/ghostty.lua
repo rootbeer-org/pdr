@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["Ghostty.app"] = "Ghostty.app" } },
+    outputs = {
+        apps = {
+            ["Ghostty.app"] = "Ghostty.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "1.3.1" },
+        ["aarch64-macos"] = {
+            default_version = "1.3.1",
+        },
     },
     versions = {
         ["1.3.1"] = {

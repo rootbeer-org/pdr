@@ -3,6 +3,11 @@ return {
     description = "Fast non-cryptographic hashing library and checksum tool",
     homepage = "https://xxhash.com/",
     default_license = "NOASSERTION",
+    upstream = {
+        github = "Cyan4973/xxHash",
+        repository_id = 19330466,
+        tag = "v{version}",
+    },
     source = {
         url = "https://github.com/Cyan4973/xxHash/archive/refs/tags/v{version}.tar.gz",
         archive = "tar.gz",
@@ -12,8 +17,12 @@ return {
         backend = "custom",
         libraries = { "lib/libxxhash.a" },
         steps = {
-            build = { { "make", "-j{jobs}", "libxxhash.a", "xxhsum" } },
-            check = { { "make", "check" } },
+            build = {
+                { "make", "-j{jobs}", "libxxhash.a", "xxhsum" },
+            },
+            check = {
+                { "make", "check" },
+            },
             install = {
                 {
                     "make",
@@ -28,19 +37,21 @@ return {
             },
         },
     },
-    outputs = { bins = { "xxhsum" }, checks = { { "xxhsum", "--version" } } },
+    outputs = {
+        bins = { "xxhsum" },
+        checks = {
+            { "xxhsum", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "0.8.4",
-            upstream = { github = "Cyan4973/xxHash", repository_id = 19330466, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "0.8.4",
-            upstream = { github = "Cyan4973/xxHash", repository_id = 19330466, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "0.8.4",
-            upstream = { github = "Cyan4973/xxHash", repository_id = 19330466, tag_prefix = "v" },
         },
     },
     versions = {

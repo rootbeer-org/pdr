@@ -3,6 +3,11 @@ return {
     description = "Follow logs from multiple Kubernetes pods",
     homepage = "https://github.com/stern/stern",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "stern/stern",
+        repository_id = 306013800,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/stern/stern/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,23 +16,29 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { stern = "." },
-            variables = { ["github.com/stern/stern/cmd.version"] = "{version}" },
+            binaries = {
+                stern = ".",
+            },
+            variables = {
+                ["github.com/stern/stern/cmd.version"] = "{version}",
+            },
         },
     },
-    outputs = { bins = { "stern" }, checks = { { "stern", "--version" } } },
+    outputs = {
+        bins = { "stern" },
+        checks = {
+            { "stern", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.34.0",
-            upstream = { github = "stern/stern", repository_id = 306013800, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.34.0",
-            upstream = { github = "stern/stern", repository_id = 306013800, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.34.0",
-            upstream = { github = "stern/stern", repository_id = 306013800, tag_prefix = "v" },
         },
     },
     versions = {

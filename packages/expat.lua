@@ -18,11 +18,22 @@ return {
         },
         libraries = { "lib/libexpat.a" },
     },
-    outputs = { bins = { "xmlwf" }, checks = { { "xmlwf", "-v" } } },
+    outputs = {
+        bins = { "xmlwf" },
+        checks = {
+            { "xmlwf", "-v" },
+        },
+    },
     platforms = {
-        ["aarch64-linux"] = { default_version = "2.8.4" },
-        ["aarch64-macos"] = { default_version = "2.8.4" },
-        ["x86_64-linux"] = { default_version = "2.8.4" },
+        ["aarch64-linux"] = {
+            default_version = "2.8.4",
+        },
+        ["aarch64-macos"] = {
+            default_version = "2.8.4",
+        },
+        ["x86_64-linux"] = {
+            default_version = "2.8.4",
+        },
     },
     versions = {
         ["2.8.4"] = {

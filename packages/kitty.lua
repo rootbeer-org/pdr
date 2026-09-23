@@ -3,24 +3,33 @@ return {
     description = "Use a fast, feature-rich, GPU-based terminal emulator",
     homepage = "https://sw.kovidgoyal.net/kitty/",
     default_license = "GPL-3.0",
+    upstream = {
+        github = "kovidgoyal/kitty",
+        repository_id = 71056775,
+        tag = "v{version}",
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "arm64",
             default_version = "0.48.2",
-            upstream = { github = "kovidgoyal/kitty", repository_id = 71056775, tag_prefix = "v" },
             prebuilt = {
                 github = "kovidgoyal/kitty",
                 tag = "v{version}",
                 asset = "kitty-{version}-{target}.txz",
             },
             outputs = {
-                bins = { kitten = "bin/kitten", kitty = "bin/kitty" },
-                checks = { { "kitty", "--version" }, { "kitten", "--version" } },
+                bins = {
+                    kitten = "bin/kitten",
+                    kitty = "bin/kitty",
+                },
+                checks = {
+                    { "kitty", "--version" },
+                    { "kitten", "--version" },
+                },
             },
         },
         ["aarch64-macos"] = {
             default_version = "0.48.2",
-            upstream = { github = "kovidgoyal/kitty", repository_id = 71056775, tag_prefix = "v" },
             prebuilt = {
                 github = "kovidgoyal/kitty",
                 tag = "v{version}",
@@ -32,22 +41,32 @@ return {
                     kitten = "kitty.app/Contents/MacOS/kitten",
                     kitty = "kitty.app/Contents/MacOS/kitty",
                 },
-                apps = { ["kitty.app"] = "kitty.app" },
-                checks = { { "kitty", "--version" }, { "kitten", "--version" } },
+                apps = {
+                    ["kitty.app"] = "kitty.app",
+                },
+                checks = {
+                    { "kitty", "--version" },
+                    { "kitten", "--version" },
+                },
             },
         },
         ["x86_64-linux"] = {
             target = "x86_64",
             default_version = "0.48.2",
-            upstream = { github = "kovidgoyal/kitty", repository_id = 71056775, tag_prefix = "v" },
             prebuilt = {
                 github = "kovidgoyal/kitty",
                 tag = "v{version}",
                 asset = "kitty-{version}-{target}.txz",
             },
             outputs = {
-                bins = { kitten = "bin/kitten", kitty = "bin/kitty" },
-                checks = { { "kitty", "--version" }, { "kitten", "--version" } },
+                bins = {
+                    kitten = "bin/kitten",
+                    kitty = "bin/kitty",
+                },
+                checks = {
+                    { "kitty", "--version" },
+                    { "kitten", "--version" },
+                },
             },
         },
     },

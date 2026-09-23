@@ -3,26 +3,35 @@ return {
     description = "Create documents with the Typst typesetting system",
     homepage = "https://github.com/typst/typst",
     default_license = "Apache-2.0",
-    prebuilt = { github = "typst/typst", tag = "v{version}", asset = "typst-{target}.tar.xz" },
+    upstream = {
+        github = "typst/typst",
+        repository_id = 210702427,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "typst/typst",
+        tag = "v{version}",
+        asset = "typst-{target}.tar.xz",
+    },
     outputs = {
         bins = { "typst" },
-        checks = { { "typst", "--version" }, { "typst", "fonts", "--ignore-system-fonts" } },
+        checks = {
+            { "typst", "--version" },
+            { "typst", "fonts", "--ignore-system-fonts" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.15.1",
-            upstream = { github = "typst/typst", repository_id = 210702427, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.15.1",
-            upstream = { github = "typst/typst", repository_id = 210702427, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.15.1",
-            upstream = { github = "typst/typst", repository_id = 210702427, tag_prefix = "v" },
         },
     },
     versions = {

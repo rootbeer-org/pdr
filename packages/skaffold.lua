@@ -3,6 +3,11 @@ return {
     description = "Build and deploy applications during Kubernetes development",
     homepage = "https://github.com/GoogleContainerTools/skaffold",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "GoogleContainerTools/skaffold",
+        repository_id = 118654121,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/GoogleContainerTools/skaffold/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,39 +16,31 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { skaffold = "./cmd/skaffold" },
-            cgo = true,
+            binaries = {
+                skaffold = "./cmd/skaffold",
+            },
             tags = { "timetzdata", "release" },
             variables = {
                 ["github.com/GoogleContainerTools/skaffold/v2/pkg/skaffold/version.version"] = "v{version}",
             },
+            cgo = true,
         },
     },
-    outputs = { bins = { "skaffold" }, checks = { { "skaffold", "version" } } },
+    outputs = {
+        bins = { "skaffold" },
+        checks = {
+            { "skaffold", "version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "2.25.0",
-            upstream = {
-                github = "GoogleContainerTools/skaffold",
-                repository_id = 118654121,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "2.25.0",
-            upstream = {
-                github = "GoogleContainerTools/skaffold",
-                repository_id = 118654121,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "2.25.0",
-            upstream = {
-                github = "GoogleContainerTools/skaffold",
-                repository_id = 118654121,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

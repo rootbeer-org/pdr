@@ -5,29 +5,42 @@ return {
     default_license = "NOASSERTION",
     source = {
         url = "https://codeload.github.com/tale/rootbeer/tar.gz/323434417bc302fa0fc180430d1ce74e595ba254",
+        git = {
+            github = "tale/rootbeer",
+            branch = "main",
+        },
         archive = "tar.gz",
         strip_prefix = "rootbeer-323434417bc302fa0fc180430d1ce74e595ba254",
-        git = { branch = "main", github = "tale/rootbeer" },
     },
     build = {
         backend = "rust",
         rust = {
+            packages = { "rootbeer-cli", "rootbeer-forge" },
             environment = {
                 RB_BUILD_TIMESTAMP = "2026-09-17 01:36 UTC",
                 ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                 ROOTBEER_INDEX_URL = "https://tale.github.io/rootbeer-index/current.json",
             },
-            packages = { "rootbeer-cli", "rootbeer-forge" },
         },
     },
     outputs = {
         bins = { "rb", "rootbeer-forge" },
-        checks = { { "rb", "--version" }, { "rb", "--help" }, { "rootbeer-forge", "--help" } },
+        checks = {
+            { "rb", "--version" },
+            { "rb", "--help" },
+            { "rootbeer-forge", "--help" },
+        },
     },
     platforms = {
-        ["aarch64-linux"] = { default_version = "0.1.0-main+e5ddb4debb87" },
-        ["aarch64-macos"] = { default_version = "0.1.0-main+e5ddb4debb87" },
-        ["x86_64-linux"] = { default_version = "0.1.0-main+e5ddb4debb87" },
+        ["aarch64-linux"] = {
+            default_version = "0.1.0-main+e5ddb4debb87",
+        },
+        ["aarch64-macos"] = {
+            default_version = "0.1.0-main+e5ddb4debb87",
+        },
+        ["x86_64-linux"] = {
+            default_version = "0.1.0-main+e5ddb4debb87",
+        },
     },
     versions = {
         ["0.1.0-main+0e9c7425918c"] = {
@@ -38,20 +51,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/0e9c7425918cbb68c88a61d418c0275a3aec76d4",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-0e9c7425918cbb68c88a61d418c0275a3aec76d4",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-19 19:11 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://tale.github.io/rootbeer-index/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -63,20 +78,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/1857a470d1f9c271feeb7d3a8817f331805ec0fa",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-1857a470d1f9c271feeb7d3a8817f331805ec0fa",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-20 18:48 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://pdr.rbpkg.com/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -88,20 +105,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/1c4ae91fbd739b4e4ecd97124ee0a33a689d7346",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-1c4ae91fbd739b4e4ecd97124ee0a33a689d7346",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-20 13:27 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://pdr.rbpkg.com/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -120,20 +139,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/5024c18768d156de175c90229728aafe3561b994",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-5024c18768d156de175c90229728aafe3561b994",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-20 20:10 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://pdr.rbpkg.com/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -146,20 +167,22 @@ return {
             revision = 2,
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/5e21534858896917f6d703d4ff3c9cffbfefd989",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-5e21534858896917f6d703d4ff3c9cffbfefd989",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-20 10:29 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://pdr.rbpkg.com/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -171,20 +194,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/64c18d5414f4268ae254c9db008664b62efab093",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-64c18d5414f4268ae254c9db008664b62efab093",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-18 17:32 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://tale.github.io/rootbeer-index/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -196,20 +221,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/7b15f9e2828ebee00263c1a9356140a0a72c5fcb",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-7b15f9e2828ebee00263c1a9356140a0a72c5fcb",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-21 01:43 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://pdr.rbpkg.com/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -221,20 +248,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/7e6f55977be8609efd37db42f4cd1b0628e53307",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-7e6f55977be8609efd37db42f4cd1b0628e53307",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-20 05:15 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://tale.github.io/rootbeer-index/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -246,20 +275,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/a0de7c07581fafbc393524536a274d0981b97f34",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-a0de7c07581fafbc393524536a274d0981b97f34",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-20 20:54 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://pdr.rbpkg.com/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -271,20 +302,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/acdc3c816323b541609abbf52b338c76e0e47260",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-acdc3c816323b541609abbf52b338c76e0e47260",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-18 23:09 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://tale.github.io/rootbeer-index/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },
@@ -296,20 +329,22 @@ return {
             },
             source = {
                 url = "https://codeload.github.com/tale/rootbeer/tar.gz/e5ddb4debb87679ff2a83d080e9651a61cc27489",
+                git = {
+                    github = "tale/rootbeer",
+                    branch = "main",
+                },
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-e5ddb4debb87679ff2a83d080e9651a61cc27489",
-                git = { branch = "main", github = "tale/rootbeer" },
             },
             build = {
                 backend = "rust",
                 rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
                         RB_BUILD_TIMESTAMP = "2026-09-21 02:47 UTC",
                         ROOTBEER_INDEX_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_INDEX_URL = "https://pdr.rbpkg.com/current.json",
                     },
-                    no_default_features = false,
-                    packages = { "rootbeer-cli", "rootbeer-forge" },
                 },
             },
         },

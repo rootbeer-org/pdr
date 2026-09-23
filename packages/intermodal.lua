@@ -3,27 +3,35 @@ return {
     description = "Create and inspect BitTorrent files",
     homepage = "https://github.com/casey/intermodal",
     default_license = "CC0-1.0",
+    upstream = {
+        github = "casey/intermodal",
+        repository_id = 187931998,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "casey/intermodal",
         tag = "v{version}",
         asset = "imdl-{tag}-{target}.tar.gz",
     },
-    outputs = { bins = { "imdl" }, checks = { { "imdl", "--version" }, { "imdl", "--help" } } },
+    outputs = {
+        bins = { "imdl" },
+        checks = {
+            { "imdl", "--version" },
+            { "imdl", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.1.16",
-            upstream = { github = "casey/intermodal", repository_id = 187931998, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.1.16",
-            upstream = { github = "casey/intermodal", repository_id = 187931998, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.1.16",
-            upstream = { github = "casey/intermodal", repository_id = 187931998, tag_prefix = "v" },
         },
     },
     versions = {

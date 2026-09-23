@@ -45,7 +45,9 @@ return {
                     "-DCMAKE_INSTALL_INCLUDEDIR=/include",
                 },
             },
-            build = { { "cmake", "--build", "build", "--parallel", "{jobs}" } },
+            build = {
+                { "cmake", "--build", "build", "--parallel", "{jobs}" },
+            },
             check = {
                 {
                     "ctest",
@@ -57,14 +59,27 @@ return {
                     "{jobs}",
                 },
             },
-            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
+            install = {
+                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+            },
         },
     },
-    outputs = { bins = { "brotli" }, checks = { { "brotli", "--version" } } },
+    outputs = {
+        bins = { "brotli" },
+        checks = {
+            { "brotli", "--version" },
+        },
+    },
     platforms = {
-        ["aarch64-linux"] = { default_version = "1.2.0" },
-        ["aarch64-macos"] = { default_version = "1.2.0" },
-        ["x86_64-linux"] = { default_version = "1.2.0" },
+        ["aarch64-linux"] = {
+            default_version = "1.2.0",
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.2.0",
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.2.0",
+        },
     },
     versions = {
         ["1.2.0"] = {

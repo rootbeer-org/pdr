@@ -3,6 +3,11 @@ return {
     description = "Monitor network usage by process",
     homepage = "https://github.com/imsnif/bandwhich",
     default_license = "MIT",
+    upstream = {
+        github = "imsnif/bandwhich",
+        repository_id = 206874323,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "imsnif/bandwhich",
         tag = "v{version}",
@@ -10,23 +15,23 @@ return {
     },
     outputs = {
         bins = { "bandwhich" },
-        checks = { { "bandwhich", "--version" }, { "bandwhich", "--help" } },
+        checks = {
+            { "bandwhich", "--version" },
+            { "bandwhich", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.23.1",
-            upstream = { github = "imsnif/bandwhich", repository_id = 206874323, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.23.1",
-            upstream = { github = "imsnif/bandwhich", repository_id = 206874323, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.23.1",
-            upstream = { github = "imsnif/bandwhich", repository_id = 206874323, tag_prefix = "v" },
         },
     },
     versions = {

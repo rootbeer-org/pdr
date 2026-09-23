@@ -8,7 +8,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "libpsl-{version}",
         patches = {
-            '--- a/configure\n+++ b/configure\n@@ -17475,7 +17475,7 @@\n   e)\n     acl_saved_LIBS="$LIBS"\n                                 case " $LIBUNISTRING" in\n-      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;\n+      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;\n       *)       LIBS="$LIBUNISTRING $LIBS" ;;\n     esac\n     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n@@ -18063,7 +18063,7 @@\n   e)\n     acl_saved_LIBS="$LIBS"\n                                 case " $LIBUNISTRING" in\n-      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;\n+      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;\n       *)       LIBS="$LIBUNISTRING $LIBS" ;;\n     esac\n     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n@@ -18654,7 +18654,7 @@\n   e)\n     acl_saved_LIBS="$LIBS"\n                                 case " $LIBUNISTRING" in\n-      *" -l"*) LIBS="$LIBS $LIBUNISTRING" ;;\n+      *" -l"*) LIBS="$LIBUNISTRING $LIBS" ;;\n       *)       LIBS="$LIBUNISTRING $LIBS" ;;\n     esac\n     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\n',
+            "--- a/configure\010+++ b/configure\010@@ -17475,7 +17475,7 @@\010   e)\010     acl_saved_LIBS=\"$LIBS\"\010                                 case \" $LIBUNISTRING\" in\010-      *\" -l\"*) LIBS=\"$LIBS $LIBUNISTRING\" ;;\010+      *\" -l\"*) LIBS=\"$LIBUNISTRING $LIBS\" ;;\010       *)       LIBS=\"$LIBUNISTRING $LIBS\" ;;\010     esac\010     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\010@@ -18063,7 +18063,7 @@\010   e)\010     acl_saved_LIBS=\"$LIBS\"\010                                 case \" $LIBUNISTRING\" in\010-      *\" -l\"*) LIBS=\"$LIBS $LIBUNISTRING\" ;;\010+      *\" -l\"*) LIBS=\"$LIBUNISTRING $LIBS\" ;;\010       *)       LIBS=\"$LIBUNISTRING $LIBS\" ;;\010     esac\010     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\010@@ -18654,7 +18654,7 @@\010   e)\010     acl_saved_LIBS=\"$LIBS\"\010                                 case \" $LIBUNISTRING\" in\010-      *\" -l\"*) LIBS=\"$LIBS $LIBUNISTRING\" ;;\010+      *\" -l\"*) LIBS=\"$LIBUNISTRING $LIBS\" ;;\010       *)       LIBS=\"$LIBUNISTRING $LIBS\" ;;\010     esac\010     cat confdefs.h - <<_ACEOF >conftest.$ac_ext\010",
         },
     },
     build = {
@@ -26,11 +26,22 @@ return {
         dependencies = { "libiconv@1.19", "libidn2@2.3.8", "libunistring@1.4.2", "pkgconf@3.0.7" },
         libraries = { "lib/libpsl.a" },
     },
-    outputs = { bins = { "psl" }, checks = { { "psl", "--version" } } },
+    outputs = {
+        bins = { "psl" },
+        checks = {
+            { "psl", "--version" },
+        },
+    },
     platforms = {
-        ["aarch64-linux"] = { default_version = "0.23.3" },
-        ["aarch64-macos"] = { default_version = "0.23.3" },
-        ["x86_64-linux"] = { default_version = "0.23.3" },
+        ["aarch64-linux"] = {
+            default_version = "0.23.3",
+        },
+        ["aarch64-macos"] = {
+            default_version = "0.23.3",
+        },
+        ["x86_64-linux"] = {
+            default_version = "0.23.3",
+        },
     },
     versions = {
         ["0.23.3"] = {

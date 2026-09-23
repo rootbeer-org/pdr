@@ -3,26 +3,35 @@ return {
     description = "Encrypt files using the age format",
     homepage = "https://github.com/str4d/rage",
     default_license = "Apache-2.0",
-    prebuilt = { github = "str4d/rage", tag = "v{version}", asset = "rage-{tag}-{target}.tar.gz" },
+    upstream = {
+        github = "str4d/rage",
+        repository_id = 213749542,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "str4d/rage",
+        tag = "v{version}",
+        asset = "rage-{tag}-{target}.tar.gz",
+    },
     outputs = {
         bins = { "rage", "rage-keygen" },
-        checks = { { "rage", "--version" }, { "rage-keygen", "--version" } },
+        checks = {
+            { "rage", "--version" },
+            { "rage-keygen", "--version" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "arm64-linux",
             default_version = "0.12.1",
-            upstream = { github = "str4d/rage", repository_id = 213749542, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "arm64-darwin",
             default_version = "0.12.1",
-            upstream = { github = "str4d/rage", repository_id = 213749542, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-linux",
             default_version = "0.12.1",
-            upstream = { github = "str4d/rage", repository_id = 213749542, tag_prefix = "v" },
         },
     },
     versions = {

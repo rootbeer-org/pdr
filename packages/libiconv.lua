@@ -13,11 +13,22 @@ return {
         configure = { "--disable-shared", "--enable-static", "--disable-rpath", "--disable-nls" },
         libraries = { "lib/libiconv.a", "lib/libcharset.a" },
     },
-    outputs = { bins = { "iconv" }, checks = { { "iconv", "--version" } } },
+    outputs = {
+        bins = { "iconv" },
+        checks = {
+            { "iconv", "--version" },
+        },
+    },
     platforms = {
-        ["aarch64-linux"] = { default_version = "1.19" },
-        ["aarch64-macos"] = { default_version = "1.19" },
-        ["x86_64-linux"] = { default_version = "1.19" },
+        ["aarch64-linux"] = {
+            default_version = "1.19",
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.19",
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.19",
+        },
     },
     versions = {
         ["1.19"] = {

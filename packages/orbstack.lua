@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["OrbStack.app"] = "OrbStack.app" } },
+    outputs = {
+        apps = {
+            ["OrbStack.app"] = "OrbStack.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "2.2.3+20963" },
+        ["aarch64-macos"] = {
+            default_version = "2.2.3+20963",
+        },
     },
     versions = {
         ["2.2.3+20963"] = {

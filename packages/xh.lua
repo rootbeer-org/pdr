@@ -3,26 +3,35 @@ return {
     description = "Send HTTP requests from the terminal",
     homepage = "https://github.com/ducaale/xh",
     default_license = "MIT",
-    prebuilt = { github = "ducaale/xh", tag = "v{version}", asset = "xh-{tag}-{target}.tar.gz" },
+    upstream = {
+        github = "ducaale/xh",
+        repository_id = 294521053,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "ducaale/xh",
+        tag = "v{version}",
+        asset = "xh-{tag}-{target}.tar.gz",
+    },
     outputs = {
         bins = { "xh" },
-        checks = { { "xh", "--version" }, { "xh", "--offline", "GET", "https://example.com" } },
+        checks = {
+            { "xh", "--version" },
+            { "xh", "--offline", "GET", "https://example.com" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.26.2",
-            upstream = { github = "ducaale/xh", repository_id = 294521053, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.26.2",
-            upstream = { github = "ducaale/xh", repository_id = 294521053, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.26.2",
-            upstream = { github = "ducaale/xh", repository_id = 294521053, tag_prefix = "v" },
         },
     },
     versions = {

@@ -3,6 +3,11 @@ return {
     description = "Find and select text interactively",
     homepage = "https://github.com/junegunn/fzf",
     default_license = "MIT",
+    upstream = {
+        github = "junegunn/fzf",
+        repository_id = 13807606,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/junegunn/fzf/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -10,21 +15,31 @@ return {
     },
     build = {
         backend = "go",
-        go = { binaries = { fzf = "." }, variables = { ["main.version"] = "{version}" } },
+        go = {
+            binaries = {
+                fzf = ".",
+            },
+            variables = {
+                ["main.version"] = "{version}",
+            },
+        },
     },
-    outputs = { bins = { "fzf" }, checks = { { "fzf", "--version" }, { "fzf", "--bash" } } },
+    outputs = {
+        bins = { "fzf" },
+        checks = {
+            { "fzf", "--version" },
+            { "fzf", "--bash" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "0.74.4",
-            upstream = { github = "junegunn/fzf", repository_id = 13807606, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "0.74.4",
-            upstream = { github = "junegunn/fzf", repository_id = 13807606, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "0.74.4",
-            upstream = { github = "junegunn/fzf", repository_id = 13807606, tag_prefix = "v" },
         },
     },
     versions = {

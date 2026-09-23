@@ -3,6 +3,11 @@ return {
     description = "Manage terminal workspaces and sessions",
     homepage = "https://github.com/zellij-org/zellij",
     default_license = "MIT",
+    upstream = {
+        github = "zellij-org/zellij",
+        repository_id = 292014229,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "zellij-org/zellij",
         tag = "v{version}",
@@ -10,23 +15,23 @@ return {
     },
     outputs = {
         bins = { "zellij" },
-        checks = { { "zellij", "--version" }, { "zellij", "--help" } },
+        checks = {
+            { "zellij", "--version" },
+            { "zellij", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.45.1",
-            upstream = { github = "zellij-org/zellij", repository_id = 292014229, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.45.1",
-            upstream = { github = "zellij-org/zellij", repository_id = 292014229, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.45.1",
-            upstream = { github = "zellij-org/zellij", repository_id = 292014229, tag_prefix = "v" },
         },
     },
     versions = {

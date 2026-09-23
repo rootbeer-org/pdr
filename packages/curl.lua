@@ -8,7 +8,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "curl-{version}",
         patches = {
-            '--- a/CMake/curl-config.in.cmake\n+++ b/CMake/curl-config.in.cmake\n@@ -169 +169 @@\n-set(CURL_LIBRARIES_PRIVATE "@LIBCURL_PC_LIBS_PRIVATE_LIST@")\n+set(CURL_LIBRARIES_PRIVATE "@CURL_LIBS@")\n',
+            "--- a/CMake/curl-config.in.cmake\010+++ b/CMake/curl-config.in.cmake\010@@ -169 +169 @@\010-set(CURL_LIBRARIES_PRIVATE \"@LIBCURL_PC_LIBS_PRIVATE_LIST@\")\010+set(CURL_LIBRARIES_PRIVATE \"@CURL_LIBS@\")\010",
         },
     },
     build = {
@@ -68,7 +68,9 @@ return {
                     "-DCURL_BUILD_EVERYTHING=ON",
                 },
             },
-            build = { { "cmake", "--build", "build", "--parallel", "{jobs}" } },
+            build = {
+                { "cmake", "--build", "build", "--parallel", "{jobs}" },
+            },
             check = {
                 {
                     "/usr/bin/env",
@@ -84,10 +86,12 @@ return {
                 {
                     "/bin/sh",
                     "-ec",
-                    'features=$(build/src/curl --version); for feature in HTTP2 HTTP3 SSL brotli zstd IDN PSL sftp https; do case "$features" in *"$feature"*) ;; *) echo "missing curl feature: $feature" >&2; exit 1;; esac; done',
+                    "features=$(build/src/curl --version); for feature in HTTP2 HTTP3 SSL brotli zstd IDN PSL sftp https; do case \"$features\" in *\"$feature\"*) ;; *) echo \"missing curl feature: $feature\" >&2; exit 1;; esac; done",
                 },
             },
-            install = { { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" } },
+            install = {
+                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+            },
         },
     },
     outputs = {
@@ -100,9 +104,15 @@ return {
         },
     },
     platforms = {
-        ["aarch64-linux"] = { default_version = "8.22.0" },
-        ["aarch64-macos"] = { default_version = "8.22.0" },
-        ["x86_64-linux"] = { default_version = "8.22.0" },
+        ["aarch64-linux"] = {
+            default_version = "8.22.0",
+        },
+        ["aarch64-macos"] = {
+            default_version = "8.22.0",
+        },
+        ["x86_64-linux"] = {
+            default_version = "8.22.0",
+        },
     },
     versions = {
         ["8.22.0"] = {

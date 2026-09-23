@@ -5,13 +5,32 @@ return {
     default_license = "NOASSERTION",
     prebuilt = {
         url = "https://ziglang.org/download/{version}/zig-{target}-{version}.tar.xz",
-        install = { Archive = { format = "TarXz" } },
+        install = {
+            Archive = {
+                format = "TarXz",
+                strip_prefix = nil,
+            },
+        },
     },
-    outputs = { bins = { "zig" }, checks = { { "zig", "version" } } },
+    outputs = {
+        bins = { "zig" },
+        checks = {
+            { "zig", "version" },
+        },
+    },
     platforms = {
-        ["aarch64-linux"] = { target = "aarch64-linux", default_version = "0.16.0" },
-        ["aarch64-macos"] = { target = "aarch64-macos", default_version = "0.16.0" },
-        ["x86_64-linux"] = { target = "x86_64-linux", default_version = "0.16.0" },
+        ["aarch64-linux"] = {
+            target = "aarch64-linux",
+            default_version = "0.16.0",
+        },
+        ["aarch64-macos"] = {
+            target = "aarch64-macos",
+            default_version = "0.16.0",
+        },
+        ["x86_64-linux"] = {
+            target = "x86_64-linux",
+            default_version = "0.16.0",
+        },
     },
     versions = {
         ["0.16.0"] = {

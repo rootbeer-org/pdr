@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["AlDente.app"] = "AlDente.app" } },
+    outputs = {
+        apps = {
+            ["AlDente.app"] = "AlDente.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "1.39.3" },
+        ["aarch64-macos"] = {
+            default_version = "1.39.3",
+        },
     },
     versions = {
         ["1.39.3"] = {

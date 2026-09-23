@@ -3,28 +3,40 @@ return {
     description = "Query and transform structured data",
     homepage = "https://mikefarah.gitbook.io/yq/",
     default_license = "MIT",
+    upstream = {
+        github = "mikefarah/yq",
+        repository_id = 43225113,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/mikefarah/yq/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
         strip_prefix = "yq-{version}",
     },
-    build = { backend = "go", go = { binaries = { yq = "." } } },
+    build = {
+        backend = "go",
+        go = {
+            binaries = {
+                yq = ".",
+            },
+        },
+    },
     outputs = {
         bins = { "yq" },
-        checks = { { "yq", "--version" }, { "yq", "--null-input", "--exit-status", "1 + 2 == 3" } },
+        checks = {
+            { "yq", "--version" },
+            { "yq", "--null-input", "--exit-status", "1 + 2 == 3" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "4.53.6",
-            upstream = { github = "mikefarah/yq", repository_id = 43225113, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "4.53.6",
-            upstream = { github = "mikefarah/yq", repository_id = 43225113, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "4.53.6",
-            upstream = { github = "mikefarah/yq", repository_id = 43225113, tag_prefix = "v" },
         },
     },
     versions = {

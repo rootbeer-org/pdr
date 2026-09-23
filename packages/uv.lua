@@ -3,7 +3,16 @@ return {
     description = "Manage Python projects, tools, and environments",
     homepage = "https://github.com/astral-sh/uv",
     default_license = "Apache-2.0",
-    prebuilt = { github = "astral-sh/uv", tag = "{version}", asset = "uv-{target}.tar.gz" },
+    upstream = {
+        github = "astral-sh/uv",
+        repository_id = 699532645,
+        tag = "{version}",
+    },
+    prebuilt = {
+        github = "astral-sh/uv",
+        tag = "{version}",
+        asset = "uv-{target}.tar.gz",
+    },
     outputs = {
         bins = { "uv", "uvx" },
         checks = {
@@ -16,17 +25,14 @@ return {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.12.17",
-            upstream = { github = "astral-sh/uv", repository_id = 699532645, tag_prefix = "" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.12.17",
-            upstream = { github = "astral-sh/uv", repository_id = 699532645, tag_prefix = "" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.12.17",
-            upstream = { github = "astral-sh/uv", repository_id = 699532645, tag_prefix = "" },
         },
     },
     versions = {

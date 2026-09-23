@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["Google Chrome.app"] = "Google Chrome.app" } },
+    outputs = {
+        apps = {
+            ["Google Chrome.app"] = "Google Chrome.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "153.0.8010.53" },
+        ["aarch64-macos"] = {
+            default_version = "153.0.8010.53",
+        },
     },
     versions = {
         ["153.0.8010.53"] = {

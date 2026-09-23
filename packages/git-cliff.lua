@@ -3,27 +3,34 @@ return {
     description = "Generate changelogs from Git history",
     homepage = "https://github.com/orhun/git-cliff",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "orhun/git-cliff",
+        repository_id = 372193147,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "orhun/git-cliff",
         tag = "v{version}",
         asset = "git-cliff-{version}-{target}.tar.gz",
     },
-    outputs = { bins = { "git-cliff" }, checks = { { "git-cliff", "--version" } } },
+    outputs = {
+        bins = { "git-cliff" },
+        checks = {
+            { "git-cliff", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "2.14.2",
-            upstream = { github = "orhun/git-cliff", repository_id = 372193147, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "2.14.2",
-            upstream = { github = "orhun/git-cliff", repository_id = 372193147, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "2.14.2",
-            upstream = { github = "orhun/git-cliff", repository_id = 372193147, tag_prefix = "v" },
         },
     },
     versions = {

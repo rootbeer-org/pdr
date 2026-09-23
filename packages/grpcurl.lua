@@ -3,6 +3,11 @@ return {
     description = "Call gRPC services from the command line",
     homepage = "https://github.com/fullstorydev/grpcurl",
     default_license = "MIT",
+    upstream = {
+        github = "fullstorydev/grpcurl",
+        repository_id = 111431261,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/fullstorydev/grpcurl/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,35 +16,29 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { grpcurl = "./cmd/grpcurl" },
-            variables = { ["main.version"] = "v{version}" },
+            binaries = {
+                grpcurl = "./cmd/grpcurl",
+            },
+            variables = {
+                ["main.version"] = "v{version}",
+            },
         },
     },
-    outputs = { bins = { "grpcurl" }, checks = { { "grpcurl", "-version" } } },
+    outputs = {
+        bins = { "grpcurl" },
+        checks = {
+            { "grpcurl", "-version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.9.4",
-            upstream = {
-                github = "fullstorydev/grpcurl",
-                repository_id = 111431261,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "1.9.4",
-            upstream = {
-                github = "fullstorydev/grpcurl",
-                repository_id = 111431261,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "1.9.4",
-            upstream = {
-                github = "fullstorydev/grpcurl",
-                repository_id = 111431261,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

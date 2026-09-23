@@ -3,6 +3,11 @@ return {
     description = "Develop applications in Kubernetes",
     homepage = "https://github.com/devspace-sh/devspace",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "devspace-sh/devspace",
+        repository_id = 145153231,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/devspace-sh/devspace/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -10,33 +15,30 @@ return {
     },
     build = {
         backend = "go",
-        go = { binaries = { devspace = "." }, variables = { ["main.version"] = "{version}" } },
+        go = {
+            binaries = {
+                devspace = ".",
+            },
+            variables = {
+                ["main.version"] = "{version}",
+            },
+        },
     },
-    outputs = { bins = { "devspace" }, checks = { { "devspace", "version" } } },
+    outputs = {
+        bins = { "devspace" },
+        checks = {
+            { "devspace", "version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "6.3.21",
-            upstream = {
-                github = "devspace-sh/devspace",
-                repository_id = 145153231,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "6.3.21",
-            upstream = {
-                github = "devspace-sh/devspace",
-                repository_id = 145153231,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "6.3.21",
-            upstream = {
-                github = "devspace-sh/devspace",
-                repository_id = 145153231,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

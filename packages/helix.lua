@@ -4,27 +4,34 @@ return {
     description = "Edit text with Helix",
     homepage = "https://helix-editor.com",
     default_license = "MPL-2.0",
+    upstream = {
+        github = "helix-editor/helix",
+        repository_id = 268424739,
+    },
     prebuilt = {
         github = "helix-editor/helix",
         tag = "{version}",
         asset = "helix-{tag}-{target}.tar.xz",
     },
-    outputs = { bins = { "hx" }, checks = { { "hx", "--version" }, { "hx", "--health", "toml" } } },
+    outputs = {
+        bins = { "hx" },
+        checks = {
+            { "hx", "--version" },
+            { "hx", "--health", "toml" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-linux",
             default_version = "25.07.1",
-            upstream = { github = "helix-editor/helix", repository_id = 268424739 },
         },
         ["aarch64-macos"] = {
             target = "aarch64-macos",
             default_version = "25.07.1",
-            upstream = { github = "helix-editor/helix", repository_id = 268424739 },
         },
         ["x86_64-linux"] = {
             target = "x86_64-linux",
             default_version = "25.07.1",
-            upstream = { github = "helix-editor/helix", repository_id = 268424739 },
         },
     },
     versions = {

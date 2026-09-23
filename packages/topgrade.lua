@@ -3,6 +3,11 @@ return {
     description = "Update installed tools and packages",
     homepage = "https://github.com/topgrade-rs/topgrade",
     default_license = "GPL-3.0",
+    upstream = {
+        github = "topgrade-rs/topgrade",
+        repository_id = 549714010,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "topgrade-rs/topgrade",
         tag = "v{version}",
@@ -10,35 +15,23 @@ return {
     },
     outputs = {
         bins = { "topgrade" },
-        checks = { { "topgrade", "--version" }, { "topgrade", "--help" } },
+        checks = {
+            { "topgrade", "--version" },
+            { "topgrade", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "17.12.0",
-            upstream = {
-                github = "topgrade-rs/topgrade",
-                repository_id = 549714010,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "17.12.0",
-            upstream = {
-                github = "topgrade-rs/topgrade",
-                repository_id = 549714010,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "17.12.0",
-            upstream = {
-                github = "topgrade-rs/topgrade",
-                repository_id = 549714010,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

@@ -3,6 +3,11 @@ return {
     description = "Serve a directory over HTTP",
     homepage = "https://github.com/svenstaro/miniserve",
     default_license = "MIT",
+    upstream = {
+        github = "svenstaro/miniserve",
+        repository_id = 131135585,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "svenstaro/miniserve",
         tag = "v{version}",
@@ -10,35 +15,23 @@ return {
     },
     outputs = {
         bins = { "miniserve" },
-        checks = { { "miniserve", "--version" }, { "miniserve", "--help" } },
+        checks = {
+            { "miniserve", "--version" },
+            { "miniserve", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.35.0",
-            upstream = {
-                github = "svenstaro/miniserve",
-                repository_id = 131135585,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.35.0",
-            upstream = {
-                github = "svenstaro/miniserve",
-                repository_id = 131135585,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.35.0",
-            upstream = {
-                github = "svenstaro/miniserve",
-                repository_id = 131135585,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

@@ -5,13 +5,33 @@ return {
     default_license = "NOASSERTION",
     prebuilt = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v{version}/op_{target}_v{version}.zip",
-        install = { Archive = { format = "Zip" } },
+        install = {
+            Archive = {
+                format = "Zip",
+                strip_prefix = nil,
+            },
+        },
     },
-    outputs = { bins = { "op" }, checks = { { "op", "--version" }, { "op", "--help" } } },
+    outputs = {
+        bins = { "op" },
+        checks = {
+            { "op", "--version" },
+            { "op", "--help" },
+        },
+    },
     platforms = {
-        ["aarch64-linux"] = { target = "linux_arm64", default_version = "2.39.0" },
-        ["aarch64-macos"] = { target = "darwin_arm64", default_version = "2.39.0" },
-        ["x86_64-linux"] = { target = "linux_amd64", default_version = "2.39.0" },
+        ["aarch64-linux"] = {
+            target = "linux_arm64",
+            default_version = "2.39.0",
+        },
+        ["aarch64-macos"] = {
+            target = "darwin_arm64",
+            default_version = "2.39.0",
+        },
+        ["x86_64-linux"] = {
+            target = "linux_amd64",
+            default_version = "2.39.0",
+        },
     },
     versions = {
         ["2.39.0"] = {

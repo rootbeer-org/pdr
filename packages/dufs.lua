@@ -3,23 +3,35 @@ return {
     description = "Serve and share files over HTTP",
     homepage = "https://github.com/sigoden/dufs",
     default_license = "Apache-2.0",
-    prebuilt = { github = "sigoden/dufs", tag = "v{version}", asset = "dufs-{tag}-{target}.tar.gz" },
-    outputs = { bins = { "dufs" }, checks = { { "dufs", "--version" }, { "dufs", "--help" } } },
+    upstream = {
+        github = "sigoden/dufs",
+        repository_id = 496605552,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "sigoden/dufs",
+        tag = "v{version}",
+        asset = "dufs-{tag}-{target}.tar.gz",
+    },
+    outputs = {
+        bins = { "dufs" },
+        checks = {
+            { "dufs", "--version" },
+            { "dufs", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.46.0",
-            upstream = { github = "sigoden/dufs", repository_id = 496605552, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.46.0",
-            upstream = { github = "sigoden/dufs", repository_id = 496605552, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.46.0",
-            upstream = { github = "sigoden/dufs", repository_id = 496605552, tag_prefix = "v" },
         },
     },
     versions = {

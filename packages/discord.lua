@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["Discord.app"] = "Discord.app" } },
+    outputs = {
+        apps = {
+            ["Discord.app"] = "Discord.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "0.0.412" },
+        ["aarch64-macos"] = {
+            default_version = "0.0.412",
+        },
     },
     versions = {
         ["0.0.412"] = {

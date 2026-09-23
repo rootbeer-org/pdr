@@ -3,7 +3,16 @@ return {
     description = "Query and transform JSON",
     homepage = "https://github.com/jqlang/jq",
     default_license = "NOASSERTION",
-    prebuilt = { github = "jqlang/jq", tag = "jq-{version}", asset = "jq-{target}" },
+    upstream = {
+        github = "jqlang/jq",
+        repository_id = 5101141,
+        tag = "jq-{version}",
+    },
+    prebuilt = {
+        github = "jqlang/jq",
+        tag = "jq-{version}",
+        asset = "jq-{target}",
+    },
     outputs = {
         bins = { "jq" },
         checks = {
@@ -15,17 +24,14 @@ return {
         ["aarch64-linux"] = {
             target = "linux-arm64",
             default_version = "1.8.2",
-            upstream = { github = "jqlang/jq", repository_id = 5101141, tag_prefix = "jq-" },
         },
         ["aarch64-macos"] = {
             target = "macos-arm64",
             default_version = "1.8.2",
-            upstream = { github = "jqlang/jq", repository_id = 5101141, tag_prefix = "jq-" },
         },
         ["x86_64-linux"] = {
             target = "linux-amd64",
             default_version = "1.8.2",
-            upstream = { github = "jqlang/jq", repository_id = 5101141, tag_prefix = "jq-" },
         },
     },
     versions = {

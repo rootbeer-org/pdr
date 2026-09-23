@@ -3,6 +3,11 @@ return {
     description = "Define and run multi-container Docker applications",
     homepage = "https://docs.docker.com/compose/",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "docker/compose",
+        repository_id = 15045751,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/docker/compose/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,26 +16,29 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { ["docker-compose"] = "./cmd" },
-            variables = { ["github.com/docker/compose/v5/internal.Version"] = "v{version}" },
+            binaries = {
+                ["docker-compose"] = "./cmd",
+            },
+            variables = {
+                ["github.com/docker/compose/v5/internal.Version"] = "v{version}",
+            },
         },
     },
     outputs = {
         bins = { "docker-compose" },
-        checks = { { "docker-compose", "version", "--short" } },
+        checks = {
+            { "docker-compose", "version", "--short" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "5.5.1",
-            upstream = { github = "docker/compose", repository_id = 15045751, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "5.5.1",
-            upstream = { github = "docker/compose", repository_id = 15045751, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "5.5.1",
-            upstream = { github = "docker/compose", repository_id = 15045751, tag_prefix = "v" },
         },
     },
     versions = {

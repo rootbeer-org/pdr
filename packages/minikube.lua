@@ -3,6 +3,11 @@ return {
     description = "Run Kubernetes locally",
     homepage = "https://github.com/kubernetes/minikube",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "kubernetes/minikube",
+        repository_id = 56353740,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/kubernetes/minikube/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,41 +16,33 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { minikube = "./cmd/minikube" },
-            cgo = true,
+            binaries = {
+                minikube = "./cmd/minikube",
+            },
             tags = { "libvirt_dlopen" },
             variables = {
                 ["k8s.io/minikube/pkg/version.isoVersion"] = "v1.39.0",
                 ["k8s.io/minikube/pkg/version.storageProvisionerVersion"] = "v5",
                 ["k8s.io/minikube/pkg/version.version"] = "v{version}",
             },
+            cgo = true,
         },
     },
-    outputs = { bins = { "minikube" }, checks = { { "minikube", "version" } } },
+    outputs = {
+        bins = { "minikube" },
+        checks = {
+            { "minikube", "version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.39.0",
-            upstream = {
-                github = "kubernetes/minikube",
-                repository_id = 56353740,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "1.39.0",
-            upstream = {
-                github = "kubernetes/minikube",
-                repository_id = 56353740,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "1.39.0",
-            upstream = {
-                github = "kubernetes/minikube",
-                repository_id = 56353740,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

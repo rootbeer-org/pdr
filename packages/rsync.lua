@@ -8,33 +8,54 @@ return {
         archive = "tar.gz",
         strip_prefix = "rsync-{version}",
         patches = {
-            "--- a/testsuite/chmod-setid_test.py\n+++ b/testsuite/chmod-setid_test.py\n@@ -8,6 +8,9 @@\n from rsyncfns import SCRATCHDIR, run_rsync, test_fail\n \n base = SCRATCHDIR / 'chmod_setid'\n+base.mkdir(parents=True, exist_ok=True)\n+# macOS clears setgid when the inherited directory group is not ours.\n+os.chown(base, -1, os.getgid())\n src = base / 'src'\n dst = base / 'dst'\n src.mkdir(parents=True, exist_ok=True)\n",
+            "--- a/testsuite/chmod-setid_test.py\010+++ b/testsuite/chmod-setid_test.py\010@@ -8,6 +8,9 @@\010 from rsyncfns import SCRATCHDIR, run_rsync, test_fail\010 \010 base = SCRATCHDIR / 'chmod_setid'\010+base.mkdir(parents=True, exist_ok=True)\010+# macOS clears setgid when the inherited directory group is not ours.\010+os.chown(base, -1, os.getgid())\010 src = base / 'src'\010 dst = base / 'dst'\010 src.mkdir(parents=True, exist_ok=True)\010",
         },
     },
     build = {
         backend = "custom",
-        dependencies = { "openssl@4.0.2", "xxhash@0.8.3", "zstd@1.5.7", "lz4@1.10.0", "zlib@1.3.2" },
+        dependencies = {
+            "openssl@4.0.2",
+            "xxhash@0.8.3",
+            "zstd@1.5.7",
+            "lz4@1.10.0",
+            "zlib@1.3.2",
+        },
         steps = {
             configure = {
                 { "sh", "./configure", "--prefix=/", "--disable-debug", "--disable-md2man" },
             },
-            build = { { "make", "-j{jobs}" } },
+            build = {
+                { "make", "-j{jobs}" },
+            },
             check = {
                 { "make", "check" },
                 {
                     "/bin/sh",
                     "-ec",
-                    'PATH="$PWD:$PATH"; export PATH; directory=$(mktemp -d); trap \'rm -rf "$directory"\' EXIT; mkdir "$directory/source" "$directory/destination"; printf rootbeer-rsync > "$directory/source/file"; rsync -a --checksum "$directory/source/" "$directory/destination/"; cmp "$directory/source/file" "$directory/destination/file"; rm "$directory/source/file"; rsync -a --delete "$directory/source/" "$directory/destination/"; test ! -e "$directory/destination/file"',
+                    "PATH=\"$PWD:$PATH\"; export PATH; directory=$(mktemp -d); trap 'rm -rf \"$directory\"' EXIT; mkdir \"$directory/source\" \"$directory/destination\"; printf rootbeer-rsync > \"$directory/source/file\"; rsync -a --checksum \"$directory/source/\" \"$directory/destination/\"; cmp \"$directory/source/file\" \"$directory/destination/file\"; rm \"$directory/source/file\"; rsync -a --delete \"$directory/source/\" \"$directory/destination/\"; test ! -e \"$directory/destination/file\"",
                 },
             },
-            install = { { "make", "DESTDIR={prefix}", "install" } },
+            install = {
+                { "make", "DESTDIR={prefix}", "install" },
+            },
         },
     },
-    outputs = { bins = { "rsync" }, checks = { { "rsync", "--version" } } },
+    outputs = {
+        bins = { "rsync" },
+        checks = {
+            { "rsync", "--version" },
+        },
+    },
     platforms = {
-        ["aarch64-linux"] = { default_version = "3.5.0" },
-        ["aarch64-macos"] = { default_version = "3.5.0" },
-        ["x86_64-linux"] = { default_version = "3.5.0" },
+        ["aarch64-linux"] = {
+            default_version = "3.5.0",
+        },
+        ["aarch64-macos"] = {
+            default_version = "3.5.0",
+        },
+        ["x86_64-linux"] = {
+            default_version = "3.5.0",
+        },
     },
     versions = {
         ["3.5.0"] = {

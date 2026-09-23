@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["Copilot.app"] = "Copilot.app" } },
+    outputs = {
+        apps = {
+            ["Copilot.app"] = "Copilot.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "6.4.4+332-80a7fa78" },
+        ["aarch64-macos"] = {
+            default_version = "6.4.4+332-80a7fa78",
+        },
     },
     versions = {
         ["6.4.4+332-80a7fa78"] = {

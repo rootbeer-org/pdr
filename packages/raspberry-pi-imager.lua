@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["Raspberry Pi Imager.app"] = "Raspberry Pi Imager.app" } },
+    outputs = {
+        apps = {
+            ["Raspberry Pi Imager.app"] = "Raspberry Pi Imager.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "2.0.11.1" },
+        ["aarch64-macos"] = {
+            default_version = "2.0.11.1",
+        },
     },
     versions = {
         ["2.0.11.1"] = {

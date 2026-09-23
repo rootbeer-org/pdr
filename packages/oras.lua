@@ -3,6 +3,11 @@ return {
     description = "Push and pull OCI registry artifacts",
     homepage = "https://github.com/oras-project/oras",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "oras-project/oras",
+        repository_id = 162945532,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/oras-project/oras/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,7 +16,9 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { oras = "./cmd/oras" },
+            binaries = {
+                oras = "./cmd/oras",
+            },
             variables = {
                 ["oras.land/oras/internal/version.BuildMetadata"] = "",
                 ["oras.land/oras/internal/version.Version"] = "{version}",
@@ -20,20 +27,20 @@ return {
     },
     outputs = {
         bins = { "oras" },
-        checks = { { "oras", "version" }, { "oras", "manifest", "--help" } },
+        checks = {
+            { "oras", "version" },
+            { "oras", "manifest", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.3.4",
-            upstream = { github = "oras-project/oras", repository_id = 162945532, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "1.3.4",
-            upstream = { github = "oras-project/oras", repository_id = 162945532, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "1.3.4",
-            upstream = { github = "oras-project/oras", repository_id = 162945532, tag_prefix = "v" },
         },
     },
     versions = {

@@ -3,6 +3,11 @@ return {
     description = "Navigate frequently used directories",
     homepage = "https://crates.io/crates/zoxide",
     default_license = "MIT",
+    upstream = {
+        github = "ajeetdsouza/zoxide",
+        repository_id = 245166720,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "ajeetdsouza/zoxide",
         tag = "v{version}",
@@ -10,35 +15,23 @@ return {
     },
     outputs = {
         bins = { "zoxide" },
-        checks = { { "zoxide", "--version" }, { "zoxide", "init", "zsh" } },
+        checks = {
+            { "zoxide", "--version" },
+            { "zoxide", "init", "zsh" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "0.10.0",
-            upstream = {
-                github = "ajeetdsouza/zoxide",
-                repository_id = 245166720,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "0.10.0",
-            upstream = {
-                github = "ajeetdsouza/zoxide",
-                repository_id = 245166720,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "0.10.0",
-            upstream = {
-                github = "ajeetdsouza/zoxide",
-                repository_id = 245166720,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

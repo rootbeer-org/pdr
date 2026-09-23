@@ -3,27 +3,34 @@ return {
     description = "Manage GitOps deployments with Flux",
     homepage = "https://github.com/fluxcd/flux2",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "fluxcd/flux2",
+        repository_id = 258469100,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "fluxcd/flux2",
         tag = "v{version}",
         asset = "flux_{version}_{target}.tar.gz",
     },
-    outputs = { bins = { "flux" }, checks = { { "flux", "version", "--client" } } },
+    outputs = {
+        bins = { "flux" },
+        checks = {
+            { "flux", "version", "--client" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux_arm64",
             default_version = "2.9.5",
-            upstream = { github = "fluxcd/flux2", repository_id = 258469100, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "darwin_arm64",
             default_version = "2.9.5",
-            upstream = { github = "fluxcd/flux2", repository_id = 258469100, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux_amd64",
             default_version = "2.9.5",
-            upstream = { github = "fluxcd/flux2", repository_id = 258469100, tag_prefix = "v" },
         },
     },
     versions = {

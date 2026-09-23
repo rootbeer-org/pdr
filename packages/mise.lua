@@ -3,23 +3,34 @@ return {
     description = "Manage development tools and tasks",
     homepage = "https://github.com/jdx/mise",
     default_license = "MIT",
-    prebuilt = { github = "jdx/mise", tag = "v{version}", asset = "mise-{tag}-{target}.tar.gz" },
-    outputs = { bins = { "mise" }, checks = { { "mise", "--version" } } },
+    upstream = {
+        github = "jdx/mise",
+        repository_id = 586920414,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "jdx/mise",
+        tag = "v{version}",
+        asset = "mise-{tag}-{target}.tar.gz",
+    },
+    outputs = {
+        bins = { "mise" },
+        checks = {
+            { "mise", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-arm64-musl",
             default_version = "2026.9.12",
-            upstream = { github = "jdx/mise", repository_id = 586920414, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "macos-arm64",
             default_version = "2026.9.12",
-            upstream = { github = "jdx/mise", repository_id = 586920414, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux-x64-musl",
             default_version = "2026.9.12",
-            upstream = { github = "jdx/mise", repository_id = 586920414, tag_prefix = "v" },
         },
     },
     versions = {

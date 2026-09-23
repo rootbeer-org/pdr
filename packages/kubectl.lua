@@ -3,6 +3,11 @@ return {
     description = "Control Kubernetes clusters",
     homepage = "https://kubernetes.io/docs/reference/kubectl/",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "kubernetes/kubernetes",
+        repository_id = 20580498,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/kubernetes/kubernetes/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,7 +16,9 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { kubectl = "./cmd/kubectl" },
+            binaries = {
+                kubectl = "./cmd/kubectl",
+            },
             variables = {
                 ["k8s.io/component-base/version.gitCommit"] = "f54c212e3a2f75d674b717a9b29052b20b60aefc",
                 ["k8s.io/component-base/version.gitMajor"] = "1",
@@ -21,31 +28,21 @@ return {
             },
         },
     },
-    outputs = { bins = { "kubectl" }, checks = { { "kubectl", "version", "--client=true" } } },
+    outputs = {
+        bins = { "kubectl" },
+        checks = {
+            { "kubectl", "version", "--client=true" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "1.37.0",
-            upstream = {
-                github = "kubernetes/kubernetes",
-                repository_id = 20580498,
-                tag_prefix = "v",
-            },
         },
         ["aarch64-macos"] = {
             default_version = "1.37.0",
-            upstream = {
-                github = "kubernetes/kubernetes",
-                repository_id = 20580498,
-                tag_prefix = "v",
-            },
         },
         ["x86_64-linux"] = {
             default_version = "1.37.0",
-            upstream = {
-                github = "kubernetes/kubernetes",
-                repository_id = 20580498,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

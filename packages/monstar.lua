@@ -3,6 +3,11 @@ return {
     description = "Run a CPU-rendered Wayland terminal",
     homepage = "https://github.com/rockorager/monstar",
     default_license = "MIT",
+    upstream = {
+        github = "rockorager/monstar",
+        repository_id = 1287637631,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "rockorager/monstar",
         tag = "v{version}",
@@ -10,16 +15,15 @@ return {
     },
     outputs = {
         bins = { "monstar" },
-        checks = { { "monstar", "--version" }, { "monstar", "--help" }, { "monstar", "--bench" } },
+        checks = {
+            { "monstar", "--version" },
+            { "monstar", "--help" },
+            { "monstar", "--bench" },
+        },
     },
     platforms = {
         ["x86_64-linux"] = {
             default_version = "1.0.1",
-            upstream = {
-                github = "rockorager/monstar",
-                repository_id = 1287637631,
-                tag_prefix = "v",
-            },
         },
     },
     versions = {

@@ -3,6 +3,11 @@ return {
     description = "Run database migrations",
     homepage = "https://github.com/pressly/goose",
     default_license = "NOASSERTION",
+    upstream = {
+        github = "pressly/goose",
+        repository_id = 52555254,
+        tag = "v{version}",
+    },
     source = {
         url = "https://codeload.github.com/pressly/goose/tar.gz/refs/tags/{tag}",
         archive = "tar.gz",
@@ -11,23 +16,30 @@ return {
     build = {
         backend = "go",
         go = {
-            binaries = { goose = "./cmd/goose" },
-            variables = { ["main.version"] = "v{version}" },
+            binaries = {
+                goose = "./cmd/goose",
+            },
+            variables = {
+                ["main.version"] = "v{version}",
+            },
         },
     },
-    outputs = { bins = { "goose" }, checks = { { "goose", "-version" }, { "goose", "-h" } } },
+    outputs = {
+        bins = { "goose" },
+        checks = {
+            { "goose", "-version" },
+            { "goose", "-h" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             default_version = "3.28.0",
-            upstream = { github = "pressly/goose", repository_id = 52555254, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "3.28.0",
-            upstream = { github = "pressly/goose", repository_id = 52555254, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "3.28.0",
-            upstream = { github = "pressly/goose", repository_id = 52555254, tag_prefix = "v" },
         },
     },
     versions = {

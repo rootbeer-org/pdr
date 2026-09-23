@@ -8,9 +8,15 @@ return {
         install = "Dmg",
         mirror = true,
     },
-    outputs = { apps = { ["Raycast.app"] = "Raycast.app" } },
+    outputs = {
+        apps = {
+            ["Raycast.app"] = "Raycast.app",
+        },
+    },
     platforms = {
-        ["aarch64-macos"] = { default_version = "2.4.1.0" },
+        ["aarch64-macos"] = {
+            default_version = "2.4.1.0",
+        },
     },
     versions = {
         ["2.4.1.0"] = {

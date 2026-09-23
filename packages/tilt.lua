@@ -3,27 +3,34 @@ return {
     description = "Develop applications running in Kubernetes",
     homepage = "https://github.com/tilt-dev/tilt",
     default_license = "Apache-2.0",
+    upstream = {
+        github = "tilt-dev/tilt",
+        repository_id = 143896900,
+        tag = "v{version}",
+    },
     prebuilt = {
         github = "tilt-dev/tilt",
         tag = "v{version}",
         asset = "tilt.{version}.{target}.tar.gz",
     },
-    outputs = { bins = { "tilt" }, checks = { { "tilt", "version" } } },
+    outputs = {
+        bins = { "tilt" },
+        checks = {
+            { "tilt", "version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux.arm64",
             default_version = "0.37.7",
-            upstream = { github = "tilt-dev/tilt", repository_id = 143896900, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "mac.arm64",
             default_version = "0.37.7",
-            upstream = { github = "tilt-dev/tilt", repository_id = 143896900, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux.x86_64",
             default_version = "0.37.7",
-            upstream = { github = "tilt-dev/tilt", repository_id = 143896900, tag_prefix = "v" },
         },
     },
     versions = {

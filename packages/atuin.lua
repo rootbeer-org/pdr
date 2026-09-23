@@ -3,23 +3,35 @@ return {
     description = "Search and sync shell history",
     homepage = "https://github.com/atuinsh/atuin",
     default_license = "MIT",
-    prebuilt = { github = "atuinsh/atuin", tag = "v{version}", asset = "atuin-{target}.tar.gz" },
-    outputs = { bins = { "atuin" }, checks = { { "atuin", "--version" }, { "atuin", "--help" } } },
+    upstream = {
+        github = "atuinsh/atuin",
+        repository_id = 301244405,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "atuinsh/atuin",
+        tag = "v{version}",
+        asset = "atuin-{target}.tar.gz",
+    },
+    outputs = {
+        bins = { "atuin" },
+        checks = {
+            { "atuin", "--version" },
+            { "atuin", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "18.22.0",
-            upstream = { github = "atuinsh/atuin", repository_id = 301244405, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "18.22.0",
-            upstream = { github = "atuinsh/atuin", repository_id = 301244405, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "18.22.0",
-            upstream = { github = "atuinsh/atuin", repository_id = 301244405, tag_prefix = "v" },
         },
     },
     versions = {

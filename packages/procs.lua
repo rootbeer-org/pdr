@@ -3,23 +3,35 @@ return {
     description = "View and search running processes",
     homepage = "https://github.com/dalance/procs",
     default_license = "MIT",
-    prebuilt = { github = "dalance/procs", tag = "v{version}", asset = "procs-{tag}-{target}.zip" },
-    outputs = { bins = { "procs" }, checks = { { "procs", "--version" }, { "procs", "--help" } } },
+    upstream = {
+        github = "dalance/procs",
+        repository_id = 167957539,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "dalance/procs",
+        tag = "v{version}",
+        asset = "procs-{tag}-{target}.zip",
+    },
+    outputs = {
+        bins = { "procs" },
+        checks = {
+            { "procs", "--version" },
+            { "procs", "--help" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-linux",
             default_version = "0.14.12",
-            upstream = { github = "dalance/procs", repository_id = 167957539, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-mac",
             default_version = "0.14.12",
-            upstream = { github = "dalance/procs", repository_id = 167957539, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-linux",
             default_version = "0.14.12",
-            upstream = { github = "dalance/procs", repository_id = 167957539, tag_prefix = "v" },
         },
     },
     versions = {

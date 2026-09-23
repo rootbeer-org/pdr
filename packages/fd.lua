@@ -3,23 +3,34 @@ return {
     description = "Find files by name",
     homepage = "https://github.com/sharkdp/fd",
     default_license = "Apache-2.0",
-    prebuilt = { github = "sharkdp/fd", tag = "v{version}", asset = "fd-{tag}-{target}.tar.gz" },
-    outputs = { bins = { "fd" }, checks = { { "fd", "--version" } } },
+    upstream = {
+        github = "sharkdp/fd",
+        repository_id = 90793418,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "sharkdp/fd",
+        tag = "v{version}",
+        asset = "fd-{tag}-{target}.tar.gz",
+    },
+    outputs = {
+        bins = { "fd" },
+        checks = {
+            { "fd", "--version" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
             default_version = "10.5.0",
-            upstream = { github = "sharkdp/fd", repository_id = 90793418, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "10.5.0",
-            upstream = { github = "sharkdp/fd", repository_id = 90793418, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "10.5.0",
-            upstream = { github = "sharkdp/fd", repository_id = 90793418, tag_prefix = "v" },
         },
     },
     versions = {

@@ -3,26 +3,35 @@ return {
     description = "Record and replay terminal sessions",
     homepage = "https://github.com/asciinema/asciinema",
     default_license = "GPL-3.0",
-    prebuilt = { github = "asciinema/asciinema", tag = "v{version}", asset = "asciinema-{target}" },
+    upstream = {
+        github = "asciinema/asciinema",
+        repository_id = 2823326,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "asciinema/asciinema",
+        tag = "v{version}",
+        asset = "asciinema-{target}",
+    },
     outputs = {
         bins = { "asciinema" },
-        checks = { { "asciinema", "--version" }, { "asciinema", "rec", "--help" } },
+        checks = {
+            { "asciinema", "--version" },
+            { "asciinema", "rec", "--help" },
+        },
     },
     platforms = {
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-gnu",
             default_version = "3.2.1",
-            upstream = { github = "asciinema/asciinema", repository_id = 2823326, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "3.2.1",
-            upstream = { github = "asciinema/asciinema", repository_id = 2823326, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
             default_version = "3.2.1",
-            upstream = { github = "asciinema/asciinema", repository_id = 2823326, tag_prefix = "v" },
         },
     },
     versions = {

@@ -3,6 +3,11 @@ return {
     description = "Configure, build, test, and package software",
     homepage = "https://cmake.org/",
     default_license = "BSD-3-Clause",
+    upstream = {
+        github = "Kitware/CMake",
+        repository_id = 537699,
+        tag = "v{version}",
+    },
     source = {
         url = "https://github.com/Kitware/CMake/releases/download/v{version}/cmake-{version}.tar.gz",
         archive = "tar.gz",
@@ -26,7 +31,9 @@ return {
                     "-DOPENSSL_USE_STATIC_LIBS=ON",
                 },
             },
-            build = { { "make", "-j{jobs}" } },
+            build = {
+                { "make", "-j{jobs}" },
+            },
             check = {
                 {
                     "./bin/ctest",
@@ -38,7 +45,9 @@ return {
                     "^CMakeLib[.]",
                 },
             },
-            install = { { "make", "DESTDIR={prefix}", "install" } },
+            install = {
+                { "make", "DESTDIR={prefix}", "install" },
+            },
         },
     },
     outputs = {
@@ -54,15 +63,12 @@ return {
     platforms = {
         ["aarch64-linux"] = {
             default_version = "4.4.3",
-            upstream = { github = "Kitware/CMake", repository_id = 537699, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             default_version = "4.4.3",
-            upstream = { github = "Kitware/CMake", repository_id = 537699, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             default_version = "4.4.3",
-            upstream = { github = "Kitware/CMake", repository_id = 537699, tag_prefix = "v" },
         },
     },
     versions = {

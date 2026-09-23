@@ -3,23 +3,34 @@ return {
     description = "Manage Argo CD applications and deployments",
     homepage = "https://argo-cd.readthedocs.io",
     default_license = "Apache-2.0",
-    prebuilt = { github = "argoproj/argo-cd", tag = "v{version}", asset = "argocd-{target}" },
-    outputs = { bins = { "argocd" }, checks = { { "argocd", "version", "--client", "--short" } } },
+    upstream = {
+        github = "argoproj/argo-cd",
+        repository_id = 120896210,
+        tag = "v{version}",
+    },
+    prebuilt = {
+        github = "argoproj/argo-cd",
+        tag = "v{version}",
+        asset = "argocd-{target}",
+    },
+    outputs = {
+        bins = { "argocd" },
+        checks = {
+            { "argocd", "version", "--client", "--short" },
+        },
+    },
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-arm64",
             default_version = "3.5.3",
-            upstream = { github = "argoproj/argo-cd", repository_id = 120896210, tag_prefix = "v" },
         },
         ["aarch64-macos"] = {
             target = "darwin-arm64",
             default_version = "3.5.3",
-            upstream = { github = "argoproj/argo-cd", repository_id = 120896210, tag_prefix = "v" },
         },
         ["x86_64-linux"] = {
             target = "linux-amd64",
             default_version = "3.5.3",
-            upstream = { github = "argoproj/argo-cd", repository_id = 120896210, tag_prefix = "v" },
         },
     },
     versions = {
