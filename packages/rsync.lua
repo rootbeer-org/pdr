@@ -15,6 +15,7 @@ return {
         strip_prefix = "rsync-{version}",
         patches = {
             "--- a/testsuite/chmod-setid_test.py\010+++ b/testsuite/chmod-setid_test.py\010@@ -8,6 +8,9 @@\010 from rsyncfns import SCRATCHDIR, run_rsync, test_fail\010 \010 base = SCRATCHDIR / 'chmod_setid'\010+base.mkdir(parents=True, exist_ok=True)\010+# macOS clears setgid when the inherited directory group is not ours.\010+os.chown(base, -1, os.getgid())\010 src = base / 'src'\010 dst = base / 'dst'\010 src.mkdir(parents=True, exist_ok=True)\010",
+            "--- a/testsuite/install-strip_test.py\010+++ b/testsuite/install-strip_test.py\010@@ -91,7 +91,8 @@\010         test_fail(f'install-strip did not install {installed}')\010     if not strip_log.is_file():\010         test_fail(f'install-strip did not call {strip_name}')\010-    if strip_log.read_text().splitlines() != [str(installed)]:\010+    # A prefix of / makes the Makefile pass //bin/rsync, the same file.\010+    if [os.path.normpath(line) for line in strip_log.read_text().splitlines()] != [str(installed)]:\010         test_fail(f'{strip_name} was not called with {installed}')\010     if not filecmp.cmp(source_rsync, installed, shallow=False):\010         test_fail(f'{strip_name} unexpectedly changed the installed test binary')\010",
         },
     },
     build = {
@@ -25,10 +26,18 @@ return {
             "zstd@1.5.7",
             "lz4@1.10.0",
             "zlib@1.3.2",
+            "libidn2@2.3.8",
         },
         steps = {
             configure = {
-                { "sh", "./configure", "--prefix=/", "--disable-debug", "--disable-md2man" },
+                {
+                    "sh",
+                    "./configure",
+                    "--prefix=/",
+                    "--disable-debug",
+                    "--disable-md2man",
+                    "LIBS=-lunistring -liconv",
+                },
             },
             build = {
                 { "make", "-j{jobs}" },
@@ -69,6 +78,14 @@ return {
                 ["aarch64-linux"] = "c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33",
                 ["aarch64-macos"] = "c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33",
                 ["x86_64-linux"] = "c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33",
+            },
+            source = {
+                url = "https://download.samba.org/pub/rsync/src/rsync-{version}.tar.gz",
+                archive = "tar.gz",
+                strip_prefix = "rsync-{version}",
+                patches = {
+                    "--- a/testsuite/chmod-setid_test.py\010+++ b/testsuite/chmod-setid_test.py\010@@ -8,6 +8,9 @@\010 from rsyncfns import SCRATCHDIR, run_rsync, test_fail\010 \010 base = SCRATCHDIR / 'chmod_setid'\010+base.mkdir(parents=True, exist_ok=True)\010+# macOS clears setgid when the inherited directory group is not ours.\010+os.chown(base, -1, os.getgid())\010 src = base / 'src'\010 dst = base / 'dst'\010 src.mkdir(parents=True, exist_ok=True)\010",
+                },
             },
         },
         ["3.5.1"] = {
