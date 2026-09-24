@@ -29,12 +29,19 @@ def dependencies(recipe, system):
             for item in platform.get('build', {}).get('dependencies', [])}
 
 
+def build_inputs(recipe, system):
+    """What a build depends on; a license is published metadata, so publication keeps the
+    existing record when only the license changes."""
+    recipe = platform_recipe(recipe, system)
+    return recipe if recipe is None else {key: value for key, value in recipe.items() if key != 'license'}
+
+
 def changed_requests(before, after, system=None):
     changed = set()
     for name, package in after.items():
         old = before.get(name, {}).get('versions', {})
         for version, recipe in package['versions'].items():
-            if platform_recipe(old.get(version), system) != platform_recipe(recipe, system):
+            if build_inputs(old.get(version), system) != build_inputs(recipe, system):
                 changed.add(f'{name}@{version}')
     while True:
         affected = set(changed)

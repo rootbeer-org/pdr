@@ -84,7 +84,9 @@ class SelectionTests(unittest.TestCase):
                   'app': {'versions': {'3': version(**{linux: {'build': {'dependencies': [{'package': 'tool@2', 'kind': 'build'}]}}})}}}
         after = copy.deepcopy(before)
         after['lib']['description'] = 'new'
+        after['lib']['versions']['1']['license'] = 'Apache-2.0'
         self.assertEqual(selection.changed_requests(before, after), [])
+        self.assertEqual(selection.changed_requests(before, after, linux), [])
         after['lib']['versions']['1']['revision'] = 2
         self.assertEqual(selection.changed_requests(before, after), ['app@3', 'lib@1', 'tool@2'])
         self.assertEqual(selection.changed_requests(before, after, linux), ['app@3', 'lib@1', 'tool@2'])
