@@ -121,10 +121,19 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
-      contents: write
-      pull-requests: write
-      actions: write
+      contents: read
+      actions: read
     steps:
+      # A PR the workflow token opens only runs CI once someone approves it; the App's does.
+      - name: Mint a Rootbeer Bot token
+        id: app
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.ROOTBEER_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.ROOTBEER_BOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-actions: write
       - name: Read approved automation
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -136,6 +145,7 @@ jobs:
           path: candidates
       - name: Propose updates and start package verification
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          APP_SLUG: ${{ steps.app.outputs.app-slug }}
           PACKAGES: ${{ needs.discover.outputs.packages }}
         run: python3 .github/scripts/propose-updates.py

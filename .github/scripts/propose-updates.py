@@ -70,8 +70,10 @@ def main():
         command('git', 'switch', '-c', branch)
     for name in names:
         shutil.copyfile(f'candidates/packages/{name}.lua', f'packages/{name}.lua')
-    command('git', 'config', 'user.name', 'github-actions[bot]')
-    command('git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com')
+    bot = f"{os.environ['APP_SLUG']}[bot]"
+    bot_id = command('gh', 'api', f'users/{bot}', '--jq', '.id')
+    command('git', 'config', 'user.name', bot)
+    command('git', 'config', 'user.email', f'{bot_id}+{bot}@users.noreply.github.com')
     command('git', 'add', '--', *[f'packages/{name}.lua' for name in names])
     if not command('git', 'status', '--porcelain'):
         with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
