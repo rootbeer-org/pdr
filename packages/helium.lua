@@ -26,7 +26,7 @@ return {
             },
         },
         ["aarch64-macos"] = {
-            default_version = "0.17.2.1",
+            default_version = "0.17.2.2",
             upstream = {
                 github = "imputnet/helium-macos",
                 repository_id = 933200785,
@@ -70,6 +70,11 @@ return {
                 ["aarch64-linux"] = "167a3f7698179b9cd2e5218c3aad16ec9c13d4159b1a31dc1d4b2791785f3028",
                 ["aarch64-macos"] = "f1a3fecde3c08254f1b1eec30e36ecd25f98cf3799644427fbcefd6e6beafacf",
                 ["x86_64-linux"] = "0c5caa2ba9eb8d986c7353a876eaae2444de07256779683a075f326c861693b4",
+            },
+        },
+        ["0.17.2.2"] = {
+            digests = {
+                ["aarch64-macos"] = "0986391cdcc2aa5ef02c1f248c4d624d1a26a0eea486606c3b9eb33617a10958",
             },
         },
     },
