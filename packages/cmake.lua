@@ -2,6 +2,7 @@ return {
     name = "cmake",
     description = "Configure, build, test, and package software",
     homepage = "https://cmake.org/",
+    recipe_maintainers = { "tale" },
     default_license = "BSD-3-Clause",
     upstream = {
         github = "Kitware/CMake",

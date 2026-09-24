@@ -1,10 +1,11 @@
 return {
     name = "ghostty",
-    description = "Terminal emulator that uses platform-native UI and GPU acceleration",
+    description = "Run a GPU-accelerated terminal with native UI",
     homepage = "https://ghostty.org/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     prebuilt = {
-        url = "https://release.files.ghostty.org/1.3.1/Ghostty.dmg",
+        url = "https://release.files.ghostty.org/{version}/Ghostty.dmg",
         install = "Dmg",
         mirror = true,
     },

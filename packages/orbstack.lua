@@ -1,8 +1,9 @@
 return {
     name = "orbstack",
-    description = "Replacement for Docker Desktop",
+    description = "Run Docker containers and Linux machines on macOS",
     homepage = "https://orbstack.dev/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
         url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v2.2.3_20963_arm64.dmg",
         install = "Dmg",

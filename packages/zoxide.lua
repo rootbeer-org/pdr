@@ -1,7 +1,8 @@
 return {
     name = "zoxide",
     description = "Navigate frequently used directories",
-    homepage = "https://crates.io/crates/zoxide",
+    homepage = "https://github.com/ajeetdsouza/zoxide",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "ajeetdsouza/zoxide",

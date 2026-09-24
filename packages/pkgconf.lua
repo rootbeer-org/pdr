@@ -1,12 +1,19 @@
 return {
     name = "pkgconf",
+    aliases = { "pkg-config" },
     description = "Resolve compiler and linker flags for library dependencies",
     homepage = "https://github.com/pkgconf/pkgconf",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "pkgconf",
+    upstream = {
+        github = "pkgconf/pkgconf",
+        repository_id = 4180110,
+        tag = "pkgconf-{version}",
+    },
     source = {
-        url = "https://distfiles.ariadne.space/pkgconf/pkgconf-3.0.7.tar.xz",
+        url = "https://distfiles.ariadne.space/pkgconf/pkgconf-{version}.tar.xz",
         archive = "tar.xz",
-        strip_prefix = "pkgconf-3.0.7",
+        strip_prefix = "pkgconf-{version}",
     },
     build = {
         backend = "custom",
@@ -48,7 +55,7 @@ return {
         checks = {
             { "pkgconf", "--version" },
             { "pkg-config", "--version" },
-            { "pkg-config", "--atleast-pkgconfig-version=3.0.7" },
+            { "pkg-config", "--atleast-pkgconfig-version={version}" },
         },
     },
     platforms = {

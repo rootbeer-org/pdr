@@ -1,8 +1,9 @@
 return {
     name = "jq",
     description = "Query and transform JSON",
-    homepage = "https://github.com/jqlang/jq",
-    default_license = "NOASSERTION",
+    homepage = "https://jqlang.org",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     upstream = {
         github = "jqlang/jq",
         repository_id = 5101141,

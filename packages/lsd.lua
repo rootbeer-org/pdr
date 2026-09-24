@@ -1,7 +1,8 @@
 return {
     name = "lsd",
-    description = "List directory contents",
+    description = "List directory contents with colors and icons",
     homepage = "https://github.com/lsd-rs/lsd",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "lsd-rs/lsd",

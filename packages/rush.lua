@@ -2,7 +2,8 @@ return {
     name = "rush",
     description = "Run a POSIX shell with interactive editing and completions",
     homepage = "https://rush.horse",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     source = {
         url = "https://codeload.github.com/rockorager/rush/tar.gz/294212ebd35f5b755062186a66bcfd6436d3627a",
         archive = "tar.gz",

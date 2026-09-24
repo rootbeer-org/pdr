@@ -1,7 +1,8 @@
 return {
     name = "nghttp3",
     description = "HTTP/3 C library",
-    homepage = "https://github.com/ngtcp2/nghttp3",
+    homepage = "https://nghttp2.org/nghttp3/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "ngtcp2/nghttp3",

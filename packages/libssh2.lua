@@ -2,7 +2,13 @@ return {
     name = "libssh2",
     description = "SSH2 client library",
     homepage = "https://libssh2.org/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "BSD-3-Clause",
+    upstream = {
+        github = "libssh2/libssh2",
+        repository_id = 31701703,
+        tag = "libssh2-{version}",
+    },
     source = {
         url = "https://github.com/libssh2/libssh2/releases/download/libssh2-{version}/libssh2-{version}.tar.gz",
         archive = "tar.gz",

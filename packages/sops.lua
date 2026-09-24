@@ -2,6 +2,7 @@ return {
     name = "sops",
     description = "Edit encrypted files with support for multiple key providers",
     homepage = "https://getsops.io",
+    recipe_maintainers = { "tale" },
     default_license = "MPL-2.0",
     upstream = {
         github = "getsops/sops",

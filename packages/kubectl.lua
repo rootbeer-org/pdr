@@ -2,6 +2,7 @@ return {
     name = "kubectl",
     description = "Control Kubernetes clusters",
     homepage = "https://kubernetes.io/docs/reference/kubectl/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "kubernetes/kubernetes",
@@ -20,9 +21,9 @@ return {
                 kubectl = "./cmd/kubectl",
             },
             variables = {
-                ["k8s.io/component-base/version.gitCommit"] = "f54c212e3a2f75d674b717a9b29052b20b60aefc",
-                ["k8s.io/component-base/version.gitMajor"] = "1",
-                ["k8s.io/component-base/version.gitMinor"] = "37",
+                ["k8s.io/component-base/version.gitCommit"] = "{commit}",
+                ["k8s.io/component-base/version.gitMajor"] = "{major}",
+                ["k8s.io/component-base/version.gitMinor"] = "{minor}",
                 ["k8s.io/component-base/version.gitTreeState"] = "clean",
                 ["k8s.io/component-base/version.gitVersion"] = "v{version}",
             },
@@ -52,6 +53,7 @@ return {
                 ["aarch64-macos"] = "956ddae3b12acc08a715aea0411a168a36d5989b3e7185deeb6bf46b7dac19cf",
                 ["x86_64-linux"] = "956ddae3b12acc08a715aea0411a168a36d5989b3e7185deeb6bf46b7dac19cf",
             },
+            commit = "f54c212e3a2f75d674b717a9b29052b20b60aefc",
         },
     },
 }

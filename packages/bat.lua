@@ -2,6 +2,7 @@ return {
     name = "bat",
     description = "View files with syntax highlighting",
     homepage = "https://github.com/sharkdp/bat",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "sharkdp/bat",

@@ -1,7 +1,8 @@
 return {
     name = "atuin",
     description = "Search and sync shell history",
-    homepage = "https://github.com/atuinsh/atuin",
+    homepage = "https://atuin.sh/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "atuinsh/atuin",

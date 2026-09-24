@@ -1,10 +1,11 @@
 return {
     name = "betterdisplay",
-    description = "Display management tool",
+    description = "Control display scaling, brightness, and virtual screens",
     homepage = "https://betterdisplay.pro/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
-        url = "https://github.com/waydabber/BetterDisplay/releases/download/v5.0.5/BetterDisplay-v5.0.5.dmg",
+        url = "https://github.com/waydabber/BetterDisplay/releases/download/v{version}/BetterDisplay-v{version}.dmg",
         install = "Dmg",
         mirror = true,
     },

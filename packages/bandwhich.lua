@@ -2,6 +2,7 @@ return {
     name = "bandwhich",
     description = "Monitor network usage by process",
     homepage = "https://github.com/imsnif/bandwhich",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "imsnif/bandwhich",

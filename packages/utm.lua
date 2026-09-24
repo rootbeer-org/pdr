@@ -1,10 +1,11 @@
 return {
     name = "utm",
-    description = "Virtual machines UI using QEMU",
+    description = "Run virtual machines on macOS",
     homepage = "https://mac.getutm.app/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "Apache-2.0",
     prebuilt = {
-        url = "https://github.com/utmapp/UTM/releases/download/v4.7.5/UTM.dmg",
+        url = "https://github.com/utmapp/UTM/releases/download/v{version}/UTM.dmg",
         install = "Dmg",
         mirror = true,
     },

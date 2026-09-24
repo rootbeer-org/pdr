@@ -2,7 +2,8 @@ return {
     name = "libiconv",
     description = "Character set conversion library",
     homepage = "https://www.gnu.org/software/libiconv/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LGPL-2.1-or-later AND GPL-3.0-or-later",
     source = {
         url = "https://ftp.gnu.org/gnu/libiconv/libiconv-{version}.tar.gz",
         archive = "tar.gz",

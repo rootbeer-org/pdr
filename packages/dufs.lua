@@ -2,7 +2,8 @@ return {
     name = "dufs",
     description = "Serve and share files over HTTP",
     homepage = "https://github.com/sigoden/dufs",
-    default_license = "Apache-2.0",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT OR Apache-2.0",
     upstream = {
         github = "sigoden/dufs",
         repository_id = 496605552,

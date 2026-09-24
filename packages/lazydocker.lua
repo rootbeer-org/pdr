@@ -2,6 +2,7 @@ return {
     name = "lazydocker",
     description = "Manage Docker containers in a terminal interface",
     homepage = "https://github.com/jesseduffield/lazydocker",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "jesseduffield/lazydocker",

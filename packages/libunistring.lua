@@ -2,7 +2,8 @@ return {
     name = "libunistring",
     description = "Unicode string processing library",
     homepage = "https://www.gnu.org/software/libunistring/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LGPL-3.0-or-later OR GPL-2.0-or-later",
     source = {
         url = "https://ftp.gnu.org/gnu/libunistring/libunistring-{version}.tar.gz",
         archive = "tar.gz",

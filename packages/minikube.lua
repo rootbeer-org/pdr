@@ -1,7 +1,8 @@
 return {
     name = "minikube",
     description = "Run Kubernetes locally",
-    homepage = "https://github.com/kubernetes/minikube",
+    homepage = "https://minikube.sigs.k8s.io/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "kubernetes/minikube",
@@ -21,7 +22,7 @@ return {
             },
             tags = { "libvirt_dlopen" },
             variables = {
-                ["k8s.io/minikube/pkg/version.isoVersion"] = "v1.39.0",
+                ["k8s.io/minikube/pkg/version.isoVersion"] = "v{version}",
                 ["k8s.io/minikube/pkg/version.storageProvisionerVersion"] = "v5",
                 ["k8s.io/minikube/pkg/version.version"] = "v{version}",
             },

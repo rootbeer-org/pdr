@@ -2,6 +2,7 @@ return {
     name = "gitui",
     description = "Browse and manage Git repositories in the terminal",
     homepage = "https://github.com/gitui-org/gitui",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "gitui-org/gitui",

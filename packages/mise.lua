@@ -1,7 +1,8 @@
 return {
     name = "mise",
     description = "Manage development tools and tasks",
-    homepage = "https://github.com/jdx/mise",
+    homepage = "https://mise.jdx.dev",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "jdx/mise",

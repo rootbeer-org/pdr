@@ -2,7 +2,13 @@ return {
     name = "rsync",
     description = "Synchronize files with incremental transfers",
     homepage = "https://rsync.samba.org/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-or-later",
+    upstream = {
+        github = "RsyncProject/rsync",
+        repository_id = 266877886,
+        tag = "v{version}",
+    },
     source = {
         url = "https://download.samba.org/pub/rsync/src/rsync-{version}.tar.gz",
         archive = "tar.gz",

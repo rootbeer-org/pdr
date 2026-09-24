@@ -1,8 +1,9 @@
 return {
     name = "agg",
     description = "Convert terminal recordings to animated GIFs",
-    homepage = "https://github.com/asciinema/agg",
-    default_license = "GPL-3.0",
+    homepage = "https://docs.asciinema.org/manual/agg/",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-or-later",
     upstream = {
         github = "asciinema/agg",
         repository_id = 519132476,

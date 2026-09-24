@@ -1,10 +1,11 @@
 return {
     name = "discord",
-    description = "Voice and text chat software",
+    description = "Chat with voice, video, and text",
     homepage = "https://discord.com/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
-        url = "https://dl.discordapp.net/apps/osx/0.0.412/Discord.dmg",
+        url = "https://dl.discordapp.net/apps/osx/{version}/Discord.dmg",
         install = "Dmg",
         mirror = true,
     },

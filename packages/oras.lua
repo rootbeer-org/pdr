@@ -1,7 +1,8 @@
 return {
     name = "oras",
     description = "Push and pull OCI registry artifacts",
-    homepage = "https://github.com/oras-project/oras",
+    homepage = "https://oras.land",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "oras-project/oras",

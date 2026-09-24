@@ -1,10 +1,11 @@
 return {
     name = "aldente",
-    description = "Menu bar tool to limit maximum charging percentage",
+    description = "Limit MacBook battery charging",
     homepage = "https://apphousekitchen.com/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
-        url = "https://apphousekitchen.com/aldente/AlDente1.39.3.dmg",
+        url = "https://apphousekitchen.com/aldente/AlDente{version}.dmg",
         install = "Dmg",
         mirror = true,
     },

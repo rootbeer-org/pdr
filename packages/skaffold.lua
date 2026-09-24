@@ -1,7 +1,8 @@
 return {
     name = "skaffold",
     description = "Build and deploy applications during Kubernetes development",
-    homepage = "https://github.com/GoogleContainerTools/skaffold",
+    homepage = "https://skaffold.dev/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "GoogleContainerTools/skaffold",

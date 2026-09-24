@@ -1,8 +1,9 @@
 return {
     name = "doggo",
     description = "Look up DNS records from the terminal",
-    homepage = "https://github.com/mr-karan/doggo",
-    default_license = "GPL-3.0",
+    homepage = "https://doggo.mrkaran.dev/",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-only",
     upstream = {
         github = "mr-karan/doggo",
         repository_id = 319848237,

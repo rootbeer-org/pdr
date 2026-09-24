@@ -1,7 +1,8 @@
 return {
     name = "zellij",
     description = "Manage terminal workspaces and sessions",
-    homepage = "https://github.com/zellij-org/zellij",
+    homepage = "https://zellij.dev",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "zellij-org/zellij",

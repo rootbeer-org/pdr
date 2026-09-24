@@ -2,6 +2,7 @@ return {
     name = "stern",
     description = "Follow logs from multiple Kubernetes pods",
     homepage = "https://github.com/stern/stern",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "stern/stern",

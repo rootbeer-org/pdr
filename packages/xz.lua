@@ -1,8 +1,15 @@
 return {
     name = "xz",
+    aliases = { "xz-utils" },
     description = "Compress and decompress XZ streams",
     homepage = "https://tukaani.org/xz/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "0BSD",
+    upstream = {
+        github = "tukaani-project/xz",
+        repository_id = 553665726,
+        tag = "v{version}",
+    },
     source = {
         url = "https://github.com/tukaani-project/xz/releases/download/v{version}/xz-{version}.tar.gz",
         archive = "tar.gz",

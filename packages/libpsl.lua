@@ -2,7 +2,13 @@ return {
     name = "libpsl",
     description = "Public suffix list library and tools",
     homepage = "https://github.com/rockdaboot/libpsl",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
+    upstream = {
+        github = "rockdaboot/libpsl",
+        repository_id = 17948072,
+        tag = "{version}",
+    },
     source = {
         url = "https://github.com/rockdaboot/libpsl/releases/download/{version}/libpsl-{version}.tar.gz",
         archive = "tar.gz",

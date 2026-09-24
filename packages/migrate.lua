@@ -1,8 +1,10 @@
 return {
     name = "migrate",
+    aliases = { "golang-migrate" },
     description = "Apply database schema migrations",
     homepage = "https://github.com/golang-migrate/migrate",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     upstream = {
         github = "golang-migrate/migrate",
         repository_id = 118105436,

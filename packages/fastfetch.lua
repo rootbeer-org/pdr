@@ -2,6 +2,7 @@ return {
     name = "fastfetch",
     description = "Display system information",
     homepage = "https://github.com/fastfetch-cli/fastfetch",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "fastfetch-cli/fastfetch",

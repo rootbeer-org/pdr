@@ -3,7 +3,8 @@ return {
     aliases = { "helium-browser" },
     description = "Browse the web with a private Chromium-based browser",
     homepage = "https://helium.computer",
-    default_license = "GPL-3.0",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-only",
     platforms = {
         ["aarch64-linux"] = {
             target = "arm64",

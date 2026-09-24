@@ -1,7 +1,8 @@
 return {
     name = "lefthook",
-    description = "Run Git hooks",
-    homepage = "https://github.com/evilmartians/lefthook",
+    description = "Manage Git hooks",
+    homepage = "https://lefthook.dev",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "evilmartians/lefthook",

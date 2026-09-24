@@ -1,8 +1,9 @@
 return {
     name = "asciinema",
     description = "Record and replay terminal sessions",
-    homepage = "https://github.com/asciinema/asciinema",
-    default_license = "GPL-3.0",
+    homepage = "https://docs.asciinema.org/manual/cli/",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-or-later",
     upstream = {
         github = "asciinema/asciinema",
         repository_id = 2823326,

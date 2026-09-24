@@ -2,7 +2,8 @@ return {
     name = "air",
     description = "Reload Go applications during development",
     homepage = "https://github.com/air-verse/air",
-    default_license = "GPL-3.0",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-only",
     upstream = {
         github = "air-verse/air",
         repository_id = 106704041,

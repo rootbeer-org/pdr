@@ -3,6 +3,7 @@ return {
     aliases = { "rg" },
     description = "Search file contents with regular expressions",
     homepage = "https://github.com/BurntSushi/ripgrep",
+    recipe_maintainers = { "tale" },
     default_license = "Unlicense",
     upstream = {
         github = "BurntSushi/ripgrep",

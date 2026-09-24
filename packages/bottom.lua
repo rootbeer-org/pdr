@@ -1,7 +1,9 @@
 return {
     name = "bottom",
+    aliases = { "btm" },
     description = "Monitor processes and system resources",
-    homepage = "https://github.com/ClementTsang/bottom",
+    homepage = "https://bottom.pages.dev/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "ClementTsang/bottom",

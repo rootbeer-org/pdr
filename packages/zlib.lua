@@ -2,14 +2,20 @@ return {
     name = "zlib",
     description = "Deflate compression library",
     homepage = "https://zlib.net/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "Zlib",
+    upstream = {
+        github = "madler/zlib",
+        repository_id = 2359378,
+        tag = "v{version}",
+    },
     source = {
-        url = "https://github.com/madler/zlib/releases/download/v1.3.2/zlib-1.3.2.tar.gz",
+        url = "https://github.com/madler/zlib/releases/download/{tag}/zlib-{version}.tar.gz",
         git = {
             github = "madler/zlib",
         },
         archive = "tar.gz",
-        strip_prefix = "zlib-1.3.2",
+        strip_prefix = "zlib-{version}",
     },
     build = {
         backend = "custom",

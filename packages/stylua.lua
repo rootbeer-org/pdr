@@ -2,6 +2,7 @@ return {
     name = "stylua",
     description = "Format Lua and Luau source code",
     homepage = "https://github.com/JohnnyMorganz/StyLua",
+    recipe_maintainers = { "tale" },
     default_license = "MPL-2.0",
     upstream = {
         github = "JohnnyMorganz/StyLua",

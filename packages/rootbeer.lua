@@ -1,8 +1,10 @@
 return {
     name = "rootbeer",
+    aliases = { "rb" },
     description = "Declarative system configuration and package tooling in Lua",
-    homepage = "https://rootbeer.tale.me",
-    default_license = "NOASSERTION",
+    homepage = "https://rbpkg.com",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     source = {
         url = "https://codeload.github.com/tale/rootbeer/tar.gz/267d73893532e5eaed607cef600382b5632aad3a",
         git = {

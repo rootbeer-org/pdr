@@ -2,7 +2,8 @@ return {
     name = "telnet",
     description = "Connect to remote hosts using the Telnet protocol",
     homepage = "https://www.gnu.org/software/inetutils/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-or-later",
     source = {
         url = "https://ftp.gnu.org/gnu/inetutils/inetutils-{version}.tar.gz",
         archive = "tar.gz",

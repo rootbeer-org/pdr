@@ -2,7 +2,8 @@ return {
     name = "wget",
     description = "Retrieve files over HTTP, HTTPS, and FTP",
     homepage = "https://www.gnu.org/software/wget/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-or-later",
     source = {
         url = "https://ftp.gnu.org/gnu/wget/wget-{version}.tar.gz",
         archive = "tar.gz",

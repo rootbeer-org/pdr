@@ -1,7 +1,9 @@
 return {
     name = "dust",
+    aliases = { "du-dust" },
     description = "Inspect directory disk usage",
     homepage = "https://github.com/bootandy/dust",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "bootandy/dust",

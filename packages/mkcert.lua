@@ -2,6 +2,7 @@ return {
     name = "mkcert",
     description = "Create locally trusted development certificates",
     homepage = "https://github.com/FiloSottile/mkcert",
+    recipe_maintainers = { "tale" },
     default_license = "BSD-3-Clause",
     upstream = {
         github = "FiloSottile/mkcert",

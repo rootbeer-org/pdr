@@ -1,7 +1,8 @@
 return {
     name = "gmx",
-    description = "Manage Ghostty terminal sessions",
+    description = "Multiplex persistent terminal sessions in Ghostty",
     homepage = "https://github.com/nicosuave/gmx",
+    recipe_maintainers = { "tale" },
     default_license = "NOASSERTION",
     upstream = {
         github = "nicosuave/gmx",

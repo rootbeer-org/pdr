@@ -1,7 +1,8 @@
 return {
     name = "watchexec",
     description = "Run commands when files change",
-    homepage = "https://github.com/watchexec/watchexec",
+    homepage = "https://watchexec.github.io",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "watchexec/watchexec",

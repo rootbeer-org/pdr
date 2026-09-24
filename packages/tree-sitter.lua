@@ -1,7 +1,9 @@
 return {
     name = "tree-sitter",
+    aliases = { "tree-sitter-cli" },
     description = "Generate parsers and inspect syntax trees",
-    homepage = "https://github.com/tree-sitter/tree-sitter",
+    homepage = "https://tree-sitter.github.io/tree-sitter/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "tree-sitter/tree-sitter",

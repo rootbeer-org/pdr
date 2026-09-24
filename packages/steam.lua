@@ -1,8 +1,9 @@
 return {
     name = "steam",
-    description = "Video game digital distribution service",
+    description = "Buy, download, and play PC games",
     homepage = "https://store.steampowered.com/about/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
         url = "https://cdn.cloudflare.steamstatic.com/client/installer/steam.dmg",
         install = "Dmg",

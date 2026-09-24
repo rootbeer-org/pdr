@@ -1,7 +1,9 @@
 return {
     name = "intermodal",
+    aliases = { "imdl" },
     description = "Create and inspect BitTorrent files",
-    homepage = "https://github.com/casey/intermodal",
+    homepage = "https://imdl.io",
+    recipe_maintainers = { "tale" },
     default_license = "CC0-1.0",
     upstream = {
         github = "casey/intermodal",

@@ -1,7 +1,8 @@
 return {
     name = "yq",
-    description = "Query and transform structured data",
+    description = "Query and transform YAML, JSON, and XML",
     homepage = "https://mikefarah.gitbook.io/yq/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "mikefarah/yq",

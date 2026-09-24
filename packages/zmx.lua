@@ -1,7 +1,8 @@
 return {
     name = "zmx",
     description = "Persist terminal sessions",
-    homepage = "https://github.com/neurosnap/zmx",
+    homepage = "https://zmx.sh",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "neurosnap/zmx",

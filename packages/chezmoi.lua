@@ -1,7 +1,8 @@
 return {
     name = "chezmoi",
     description = "Manage dotfiles across machines",
-    homepage = "https://github.com/twpayne/chezmoi",
+    homepage = "https://www.chezmoi.io/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "twpayne/chezmoi",

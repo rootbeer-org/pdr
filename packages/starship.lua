@@ -1,7 +1,8 @@
 return {
     name = "starship",
-    description = "Configure shell prompts",
+    description = "Render a customizable prompt for any shell",
     homepage = "https://starship.rs",
+    recipe_maintainers = { "tale" },
     default_license = "ISC",
     upstream = {
         github = "starship/starship",

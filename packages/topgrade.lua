@@ -2,7 +2,8 @@ return {
     name = "topgrade",
     description = "Update installed tools and packages",
     homepage = "https://github.com/topgrade-rs/topgrade",
-    default_license = "GPL-3.0",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-or-later",
     upstream = {
         github = "topgrade-rs/topgrade",
         repository_id = 549714010,

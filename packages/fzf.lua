@@ -1,7 +1,8 @@
 return {
     name = "fzf",
     description = "Find and select text interactively",
-    homepage = "https://github.com/junegunn/fzf",
+    homepage = "https://junegunn.github.io/fzf/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "junegunn/fzf",

@@ -1,7 +1,9 @@
 return {
     name = "gh",
+    aliases = { "github-cli" },
     description = "Work with GitHub from the command line",
-    homepage = "https://github.com/cli/cli",
+    homepage = "https://cli.github.com/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "cli/cli",

@@ -2,11 +2,17 @@ return {
     name = "lz4",
     description = "Fast compression library and command-line tools",
     homepage = "https://lz4.org/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "BSD-2-Clause AND GPL-2.0-or-later",
+    upstream = {
+        github = "lz4/lz4",
+        repository_id = 18106269,
+        tag = "v{version}",
+    },
     source = {
-        url = "https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz",
+        url = "https://github.com/lz4/lz4/releases/download/{tag}/lz4-{version}.tar.gz",
         archive = "tar.gz",
-        strip_prefix = "lz4-1.10.0",
+        strip_prefix = "lz4-{version}",
     },
     build = {
         backend = "custom",

@@ -1,7 +1,8 @@
 return {
     name = "yazi",
     description = "Browse and manage files in the terminal",
-    homepage = "https://github.com/sxyazi/yazi",
+    homepage = "https://yazi-rs.github.io",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "sxyazi/yazi",

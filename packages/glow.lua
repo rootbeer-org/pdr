@@ -2,6 +2,7 @@ return {
     name = "glow",
     description = "Read Markdown in the terminal",
     homepage = "https://github.com/charmbracelet/glow",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "charmbracelet/glow",

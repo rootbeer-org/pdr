@@ -2,11 +2,17 @@ return {
     name = "zstd",
     description = "Zstandard compression library and tools",
     homepage = "https://facebook.github.io/zstd/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "BSD-3-Clause OR GPL-2.0-only",
+    upstream = {
+        github = "facebook/zstd",
+        repository_id = 29759715,
+        tag = "v{version}",
+    },
     source = {
-        url = "https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz",
+        url = "https://github.com/facebook/zstd/releases/download/{tag}/zstd-{version}.tar.gz",
         archive = "tar.gz",
-        strip_prefix = "zstd-1.5.7",
+        strip_prefix = "zstd-{version}",
     },
     build = {
         backend = "custom",

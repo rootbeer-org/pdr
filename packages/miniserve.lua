@@ -2,6 +2,7 @@ return {
     name = "miniserve",
     description = "Serve a directory over HTTP",
     homepage = "https://github.com/svenstaro/miniserve",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "svenstaro/miniserve",

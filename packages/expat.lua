@@ -1,10 +1,18 @@
 return {
     name = "expat",
-    description = "Parse XML with the Expat library",
+    aliases = { "libexpat" },
+    description = "Parse XML with a stream-oriented C library",
     homepage = "https://libexpat.github.io/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
+    upstream = {
+        github = "libexpat/libexpat",
+        repository_id = 80314213,
+        tag = "R_{version}",
+        separator = "_",
+    },
     source = {
-        url = "https://github.com/libexpat/libexpat/releases/download/R_2_8_4/expat-{version}.tar.xz",
+        url = "https://github.com/libexpat/libexpat/releases/download/{tag}/expat-{version}.tar.xz",
         archive = "tar.xz",
         strip_prefix = "expat-{version}",
     },

@@ -1,7 +1,8 @@
 return {
     name = "dasel",
     description = "Query and transform structured data",
-    homepage = "https://github.com/TomWright/dasel",
+    homepage = "https://daseldocs.tomwright.me/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "TomWright/dasel",

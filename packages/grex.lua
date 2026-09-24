@@ -2,6 +2,7 @@ return {
     name = "grex",
     description = "Generate regular expressions from examples",
     homepage = "https://github.com/pemistahl/grex",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "pemistahl/grex",

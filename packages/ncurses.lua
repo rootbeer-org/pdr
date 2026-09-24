@@ -2,7 +2,8 @@ return {
     name = "ncurses",
     description = "Terminal handling and terminfo library",
     homepage = "https://invisible-island.net/ncurses/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "X11-distribute-modifications-variant",
     source = {
         url = "https://ftp.gnu.org/gnu/ncurses/ncurses-{version}.tar.gz",
         archive = "tar.gz",

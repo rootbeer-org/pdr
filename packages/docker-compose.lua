@@ -2,6 +2,7 @@ return {
     name = "docker-compose",
     description = "Define and run multi-container Docker applications",
     homepage = "https://docs.docker.com/compose/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "docker/compose",

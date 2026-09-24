@@ -2,6 +2,7 @@ return {
     name = "xh",
     description = "Send HTTP requests from the terminal",
     homepage = "https://github.com/ducaale/xh",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "ducaale/xh",

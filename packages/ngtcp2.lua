@@ -1,7 +1,8 @@
 return {
     name = "ngtcp2",
     description = "QUIC transport library with OpenSSL support",
-    homepage = "https://github.com/ngtcp2/ngtcp2",
+    homepage = "https://nghttp2.org/ngtcp2/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "ngtcp2/ngtcp2",

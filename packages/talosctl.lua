@@ -1,7 +1,8 @@
 return {
     name = "talosctl",
     description = "Manage Talos Linux clusters",
-    homepage = "https://www.talos.dev",
+    homepage = "https://www.siderolabs.com/talos-linux",
+    recipe_maintainers = { "tale" },
     default_license = "MPL-2.0",
     upstream = {
         github = "siderolabs/talos",

@@ -1,8 +1,9 @@
 return {
     name = "datagrip",
-    description = "Databases and SQL IDE",
+    description = "Query and manage databases in a JetBrains IDE",
     homepage = "https://www.jetbrains.com/datagrip/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
         url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.5-aarch64.dmg",
         install = "Dmg",

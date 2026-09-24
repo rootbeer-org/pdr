@@ -1,7 +1,8 @@
 return {
     name = "cosign",
     description = "Sign and verify container images and files",
-    homepage = "https://github.com/sigstore/cosign",
+    homepage = "https://docs.sigstore.dev/cosign/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "sigstore/cosign",

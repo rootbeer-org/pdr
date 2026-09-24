@@ -1,7 +1,8 @@
 return {
     name = "lazygit",
-    description = "Manage Git repositories in a terminal",
+    description = "Manage Git repositories in a terminal interface",
     homepage = "https://github.com/jesseduffield/lazygit",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "jesseduffield/lazygit",

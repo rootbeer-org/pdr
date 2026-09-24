@@ -1,8 +1,9 @@
 return {
     name = "git-lfs",
     description = "Store large files in Git repositories",
-    homepage = "https://github.com/git-lfs/git-lfs",
-    default_license = "NOASSERTION",
+    homepage = "https://git-lfs.com/",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT AND BSD-3-Clause",
     upstream = {
         github = "git-lfs/git-lfs",
         repository_id = 13021798,

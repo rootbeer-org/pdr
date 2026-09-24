@@ -1,7 +1,8 @@
 return {
     name = "tilt",
     description = "Develop applications running in Kubernetes",
-    homepage = "https://github.com/tilt-dev/tilt",
+    homepage = "https://tilt.dev",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "tilt-dev/tilt",

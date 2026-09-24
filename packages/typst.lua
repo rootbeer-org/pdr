@@ -1,7 +1,8 @@
 return {
     name = "typst",
-    description = "Create documents with the Typst typesetting system",
-    homepage = "https://github.com/typst/typst",
+    description = "Typeset documents with a markup-based language",
+    homepage = "https://typst.app",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "typst/typst",

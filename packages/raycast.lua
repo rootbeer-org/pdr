@@ -1,10 +1,11 @@
 return {
     name = "raycast",
-    description = "Control your tools with a few keystrokes",
-    homepage = "https://raycast.com/",
-    default_license = "NOASSERTION",
+    description = "Launch apps and run extensions from a command bar",
+    homepage = "https://www.raycast.com/",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
-        url = "https://x.raycast-releases.com/download?platform=macos&architecture=arm64&version=2.4.1.0",
+        url = "https://x.raycast-releases.com/download?platform=macos&architecture=arm64&version={version}",
         install = "Dmg",
         mirror = true,
     },

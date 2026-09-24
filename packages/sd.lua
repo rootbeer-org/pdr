@@ -2,6 +2,7 @@ return {
     name = "sd",
     description = "Find and replace text",
     homepage = "https://github.com/chmln/sd",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "chmln/sd",

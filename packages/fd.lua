@@ -1,8 +1,10 @@
 return {
     name = "fd",
+    aliases = { "fd-find" },
     description = "Find files by name",
     homepage = "https://github.com/sharkdp/fd",
-    default_license = "Apache-2.0",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT OR Apache-2.0",
     upstream = {
         github = "sharkdp/fd",
         repository_id = 90793418,

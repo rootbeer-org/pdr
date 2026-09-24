@@ -1,7 +1,8 @@
 return {
     name = "opencode",
-    description = "Work with coding agents in the terminal",
-    homepage = "https://github.com/anomalyco/opencode",
+    description = "Run an AI coding agent in the terminal",
+    homepage = "https://opencode.ai",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "anomalyco/opencode",

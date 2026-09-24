@@ -2,6 +2,7 @@ return {
     name = "syft",
     description = "Generate software bills of materials",
     homepage = "https://github.com/anchore/syft",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "anchore/syft",

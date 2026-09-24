@@ -2,7 +2,13 @@ return {
     name = "git",
     description = "Distributed version control system",
     homepage = "https://git-scm.com/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-2.0-only",
+    upstream = {
+        github = "git/git",
+        repository_id = 36502,
+        tag = "v{version}",
+    },
     source = {
         url = "https://www.kernel.org/pub/software/scm/git/git-{version}.tar.xz",
         archive = "tar.xz",

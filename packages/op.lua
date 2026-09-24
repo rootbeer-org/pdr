@@ -1,8 +1,9 @@
 return {
     name = "op",
     description = "Access 1Password from the command line",
-    homepage = "https://developer.1password.com/docs/cli/",
-    default_license = "NOASSERTION",
+    homepage = "https://www.1password.dev/cli",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v{version}/op_{target}_v{version}.zip",
         install = {
