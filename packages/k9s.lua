@@ -1,7 +1,8 @@
 return {
     name = "k9s",
     description = "Manage Kubernetes clusters in a terminal interface",
-    homepage = "https://github.com/derailed/k9s",
+    homepage = "https://k9scli.io",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "derailed/k9s",

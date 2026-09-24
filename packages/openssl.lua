@@ -2,11 +2,17 @@ return {
     name = "openssl",
     description = "TLS and cryptography libraries and tools",
     homepage = "https://openssl-library.org/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "Apache-2.0",
+    upstream = {
+        github = "openssl/openssl",
+        repository_id = 7634677,
+        tag = "openssl-{version}",
+    },
     source = {
-        url = "https://github.com/openssl/openssl/releases/download/openssl-4.0.2/openssl-4.0.2.tar.gz",
+        url = "https://github.com/openssl/openssl/releases/download/openssl-{version}/openssl-{version}.tar.gz",
         archive = "tar.gz",
-        strip_prefix = "openssl-4.0.2",
+        strip_prefix = "openssl-{version}",
     },
     build = {
         backend = "custom",

@@ -2,6 +2,7 @@ return {
     name = "nats",
     description = "Manage and inspect NATS services",
     homepage = "https://github.com/nats-io/natscli",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "nats-io/natscli",

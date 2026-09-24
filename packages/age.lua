@@ -1,7 +1,8 @@
 return {
     name = "age",
-    description = "File encryption with explicit recipients",
+    description = "Encrypt files with small explicit keys",
     homepage = "https://age-encryption.org/",
+    recipe_maintainers = { "tale" },
     default_license = "BSD-3-Clause",
     upstream = {
         github = "FiloSottile/age",

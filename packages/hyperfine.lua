@@ -2,6 +2,7 @@ return {
     name = "hyperfine",
     description = "Benchmark command execution",
     homepage = "https://github.com/sharkdp/hyperfine",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "sharkdp/hyperfine",

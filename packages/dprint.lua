@@ -1,7 +1,8 @@
 return {
     name = "dprint",
     description = "Format source files with configurable plugins",
-    homepage = "https://github.com/dprint/dprint",
+    homepage = "https://dprint.dev/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "dprint/dprint",

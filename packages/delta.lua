@@ -1,7 +1,9 @@
 return {
     name = "delta",
-    description = "Display readable diffs",
-    homepage = "https://github.com/dandavison/delta",
+    aliases = { "git-delta" },
+    description = "View git and diff output with syntax highlighting",
+    homepage = "https://dandavison.github.io/delta/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "dandavison/delta",

@@ -2,6 +2,7 @@ return {
     name = "prtui",
     description = "Review GitHub pull requests in the terminal",
     homepage = "https://github.com/tale/prtui",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "tale/prtui",

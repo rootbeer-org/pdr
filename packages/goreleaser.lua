@@ -1,7 +1,8 @@
 return {
     name = "goreleaser",
     description = "Build and package software releases",
-    homepage = "https://github.com/goreleaser/goreleaser",
+    homepage = "https://goreleaser.com/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "goreleaser/goreleaser",

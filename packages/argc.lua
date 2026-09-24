@@ -2,6 +2,7 @@ return {
     name = "argc",
     description = "Build command-line interfaces for shell scripts",
     homepage = "https://github.com/sigoden/argc",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "sigoden/argc",

@@ -1,7 +1,8 @@
 return {
     name = "rustic",
     description = "Back up files with deduplication and encryption",
-    homepage = "https://github.com/rustic-rs/rustic",
+    homepage = "https://rustic.cli.rs",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "rustic-rs/rustic",

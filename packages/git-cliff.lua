@@ -1,8 +1,9 @@
 return {
     name = "git-cliff",
     description = "Generate changelogs from Git history",
-    homepage = "https://github.com/orhun/git-cliff",
-    default_license = "Apache-2.0",
+    homepage = "https://git-cliff.org/",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT OR Apache-2.0",
     upstream = {
         github = "orhun/git-cliff",
         repository_id = 372193147,

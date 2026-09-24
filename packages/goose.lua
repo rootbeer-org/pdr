@@ -1,8 +1,9 @@
 return {
     name = "goose",
     description = "Run database migrations",
-    homepage = "https://github.com/pressly/goose",
-    default_license = "NOASSERTION",
+    homepage = "https://pressly.github.io/goose/",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     upstream = {
         github = "pressly/goose",
         repository_id = 52555254,

@@ -1,7 +1,8 @@
 return {
     name = "caddy",
     description = "Serve HTTP with automatic HTTPS",
-    homepage = "https://github.com/caddyserver/caddy",
+    homepage = "https://caddyserver.com/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "caddyserver/caddy",

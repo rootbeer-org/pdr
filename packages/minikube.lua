@@ -1,7 +1,8 @@
 return {
     name = "minikube",
     description = "Run Kubernetes locally",
-    homepage = "https://github.com/kubernetes/minikube",
+    homepage = "https://minikube.sigs.k8s.io/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "kubernetes/minikube",

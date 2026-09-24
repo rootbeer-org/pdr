@@ -1,12 +1,18 @@
 return {
     name = "brotli",
-    description = "Brotli compression library and command-line tool",
-    homepage = "https://github.com/google/brotli",
-    default_license = "NOASSERTION",
+    description = "Compress data with the Brotli algorithm",
+    homepage = "https://brotli.org/",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
+    upstream = {
+        github = "google/brotli",
+        repository_id = 24993138,
+        tag = "v{version}",
+    },
     source = {
-        url = "https://github.com/google/brotli/archive/refs/tags/v1.2.0.tar.gz",
+        url = "https://github.com/google/brotli/archive/refs/tags/{tag}.tar.gz",
         archive = "tar.gz",
-        strip_prefix = "brotli-1.2.0",
+        strip_prefix = "brotli-{version}",
     },
     build = {
         backend = "custom",

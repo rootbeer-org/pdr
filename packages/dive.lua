@@ -2,6 +2,7 @@ return {
     name = "dive",
     description = "Explore container image layers",
     homepage = "https://github.com/wagoodman/dive",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "wagoodman/dive",

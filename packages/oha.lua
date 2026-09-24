@@ -2,6 +2,7 @@ return {
     name = "oha",
     description = "Load test HTTP services",
     homepage = "https://github.com/hatoo/oha",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "hatoo/oha",

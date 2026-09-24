@@ -1,8 +1,9 @@
 return {
     name = "libidn2",
-    description = "Internationalized domain name processing",
+    description = "Internationalized domain name library and tools",
     homepage = "https://www.gnu.org/software/libidn/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "(LGPL-3.0-or-later OR GPL-2.0-or-later) AND GPL-3.0-or-later",
     source = {
         url = "https://ftp.gnu.org/gnu/libidn/libidn2-{version}.tar.gz",
         archive = "tar.gz",

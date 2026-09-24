@@ -1,8 +1,9 @@
 return {
     name = "zig",
-    description = "Build software with the Zig programming language and toolchain",
+    description = "Build software with the Zig toolchain",
     homepage = "https://ziglang.org",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     prebuilt = {
         url = "https://ziglang.org/download/{version}/zig-{target}-{version}.tar.xz",
         install = {

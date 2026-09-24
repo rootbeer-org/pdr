@@ -2,7 +2,8 @@ return {
     name = "ouch",
     description = "Compress and extract archives",
     homepage = "https://github.com/ouch-org/ouch",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     upstream = {
         github = "ouch-org/ouch",
         repository_id = 349334268,

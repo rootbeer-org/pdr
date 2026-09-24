@@ -2,6 +2,7 @@ return {
     name = "just",
     description = "Run project commands",
     homepage = "https://just.systems",
+    recipe_maintainers = { "tale" },
     default_license = "CC0-1.0",
     upstream = {
         github = "casey/just",

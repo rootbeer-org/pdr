@@ -2,9 +2,16 @@ return {
     name = "curl",
     description = "Transfer data with URLs",
     homepage = "https://curl.se/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "curl",
+    upstream = {
+        github = "curl/curl",
+        repository_id = 569041,
+        tag = "curl-{version}",
+        separator = "_",
+    },
     source = {
-        url = "https://github.com/curl/curl/releases/download/curl-8_22_0/curl-{version}.tar.gz",
+        url = "https://github.com/curl/curl/releases/download/{tag}/curl-{version}.tar.gz",
         archive = "tar.gz",
         strip_prefix = "curl-{version}",
         patches = {

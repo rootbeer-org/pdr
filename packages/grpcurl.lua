@@ -2,6 +2,7 @@ return {
     name = "grpcurl",
     description = "Call gRPC services from the command line",
     homepage = "https://github.com/fullstorydev/grpcurl",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "fullstorydev/grpcurl",

@@ -1,7 +1,9 @@
 return {
     name = "flux",
-    description = "Manage GitOps deployments with Flux",
-    homepage = "https://github.com/fluxcd/flux2",
+    aliases = { "fluxcd" },
+    description = "Manage Kubernetes deployments with GitOps",
+    homepage = "https://fluxcd.io/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "fluxcd/flux2",

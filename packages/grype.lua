@@ -2,6 +2,7 @@ return {
     name = "grype",
     description = "Find vulnerabilities in images and filesystems",
     homepage = "https://github.com/anchore/grype",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "anchore/grype",

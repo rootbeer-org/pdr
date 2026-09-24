@@ -2,6 +2,7 @@ return {
     name = "shfmt",
     description = "Format shell scripts",
     homepage = "https://github.com/mvdan/sh",
+    recipe_maintainers = { "tale" },
     default_license = "BSD-3-Clause",
     upstream = {
         github = "mvdan/sh",

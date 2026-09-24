@@ -1,7 +1,8 @@
 return {
     name = "kind",
     description = "Run local Kubernetes clusters in containers",
-    homepage = "https://github.com/kubernetes-sigs/kind",
+    homepage = "https://kind.sigs.k8s.io/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "kubernetes-sigs/kind",

@@ -2,6 +2,7 @@ return {
     name = "procs",
     description = "View and search running processes",
     homepage = "https://github.com/dalance/procs",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "dalance/procs",

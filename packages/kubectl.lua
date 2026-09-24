@@ -2,6 +2,7 @@ return {
     name = "kubectl",
     description = "Control Kubernetes clusters",
     homepage = "https://kubernetes.io/docs/reference/kubectl/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "kubernetes/kubernetes",

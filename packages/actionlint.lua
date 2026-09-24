@@ -2,6 +2,7 @@ return {
     name = "actionlint",
     description = "Check GitHub Actions workflows",
     homepage = "https://github.com/rhysd/actionlint",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "rhysd/actionlint",

@@ -1,10 +1,11 @@
 return {
     name = "cleanshot",
-    description = "Screen capturing tool",
+    description = "Capture screenshots and screen recordings",
     homepage = "https://cleanshot.com/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
-        url = "https://updates.getcleanshot.com/v3/CleanShot-X-5.0.dmg",
+        url = "https://updates.getcleanshot.com/v3/CleanShot-X-{version}.dmg",
         install = "Dmg",
         mirror = true,
     },

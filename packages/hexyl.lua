@@ -2,7 +2,8 @@ return {
     name = "hexyl",
     description = "View binary files in hexadecimal",
     homepage = "https://github.com/sharkdp/hexyl",
-    default_license = "Apache-2.0",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT OR Apache-2.0",
     upstream = {
         github = "sharkdp/hexyl",
         repository_id = 156294298,

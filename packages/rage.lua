@@ -2,6 +2,7 @@ return {
     name = "rage",
     description = "Encrypt files using the age format",
     homepage = "https://github.com/str4d/rage",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "str4d/rage",

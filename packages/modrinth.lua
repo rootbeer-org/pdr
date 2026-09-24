@@ -1,10 +1,11 @@
 return {
     name = "modrinth",
-    description = "Minecraft modding platform",
-    homepage = "https://modrinth.com/",
-    default_license = "NOASSERTION",
+    description = "Launch Minecraft and manage mods",
+    homepage = "https://modrinth.com/app",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-only",
     prebuilt = {
-        url = "https://launcher-files.modrinth.com/versions/0.21.4/macos/Modrinth%20App_0.21.4_universal.dmg",
+        url = "https://launcher-files.modrinth.com/versions/{version}/macos/Modrinth%20App_{version}_universal.dmg",
         install = "Dmg",
         mirror = true,
     },

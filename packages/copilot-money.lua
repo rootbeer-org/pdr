@@ -1,8 +1,9 @@
 return {
     name = "copilot-money",
-    description = "Track and budget money",
-    homepage = "https://copilot.money/",
-    default_license = "NOASSERTION",
+    description = "Track personal finances and budgets",
+    homepage = "https://www.copilot.money/",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
         url = "https://storage.googleapis.com/copilot-mac-releases/images/Copilot-6.4.4-332-80a7fa78.dmg",
         install = "Dmg",

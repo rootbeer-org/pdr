@@ -1,8 +1,9 @@
 return {
     name = "golangci-lint",
     description = "Run Go linters",
-    homepage = "https://github.com/golangci/golangci-lint",
-    default_license = "GPL-3.0",
+    homepage = "https://golangci-lint.run/",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-only",
     upstream = {
         github = "golangci/golangci-lint",
         repository_id = 132145189,

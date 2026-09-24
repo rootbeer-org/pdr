@@ -1,7 +1,8 @@
 return {
     name = "sqlc",
     description = "Generate typed code from SQL",
-    homepage = "https://github.com/sqlc-dev/sqlc",
+    homepage = "https://sqlc.dev",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "sqlc-dev/sqlc",

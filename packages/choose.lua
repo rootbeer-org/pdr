@@ -2,7 +2,8 @@ return {
     name = "choose",
     description = "Select fields and ranges from text",
     homepage = "https://github.com/theryangeary/choose",
-    default_license = "GPL-3.0",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-or-later",
     upstream = {
         github = "theryangeary/choose",
         repository_id = 207951619,

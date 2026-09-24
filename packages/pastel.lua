@@ -2,6 +2,7 @@ return {
     name = "pastel",
     description = "Generate and transform colors",
     homepage = "https://github.com/sharkdp/pastel",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "sharkdp/pastel",

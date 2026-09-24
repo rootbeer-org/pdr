@@ -2,7 +2,8 @@ return {
     name = "vivid",
     description = "Generate color themes for file listings",
     homepage = "https://github.com/sharkdp/vivid",
-    default_license = "Apache-2.0",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT OR Apache-2.0",
     upstream = {
         github = "sharkdp/vivid",
         repository_id = 158295285,

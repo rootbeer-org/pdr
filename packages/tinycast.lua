@@ -1,10 +1,11 @@
 return {
     name = "tinycast",
-    description = "Tiny, fully native launcher, hotkeys, and clipboard history",
-    homepage = "https://github.com/abue-ammar/tinycast",
-    default_license = "NOASSERTION",
+    description = "Launch apps, bind hotkeys, and browse clipboard history",
+    homepage = "https://tinycast.dev",
+    recipe_maintainers = { "tale" },
+    default_license = "AGPL-3.0-or-later",
     prebuilt = {
-        url = "https://github.com/abue-ammar/tinycast/releases/download/v0.10.23/Tinycast-0.10.23.dmg",
+        url = "https://github.com/abue-ammar/tinycast/releases/download/v{version}/Tinycast-{version}.dmg",
         install = "Dmg",
         mirror = true,
     },

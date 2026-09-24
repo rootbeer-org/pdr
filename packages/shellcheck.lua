@@ -1,8 +1,9 @@
 return {
     name = "shellcheck",
     description = "Find bugs in shell scripts",
-    homepage = "https://github.com/koalaman/shellcheck",
-    default_license = "GPL-3.0",
+    homepage = "https://www.shellcheck.net",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-or-later",
     upstream = {
         github = "koalaman/shellcheck",
         repository_id = 6731432,

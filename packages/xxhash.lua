@@ -1,8 +1,10 @@
 return {
     name = "xxhash",
-    description = "Fast non-cryptographic hashing library and checksum tool",
+    aliases = { "xxhsum" },
+    description = "Compute non-cryptographic hashes and checksums",
     homepage = "https://xxhash.com/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "BSD-2-Clause AND GPL-2.0-or-later",
     upstream = {
         github = "Cyan4973/xxHash",
         repository_id = 19330466,

@@ -1,8 +1,10 @@
 return {
     name = "google-chrome",
-    description = "Web browser",
+    aliases = { "chrome" },
+    description = "Browse the web with Google's Chromium-based browser",
     homepage = "https://www.google.com/chrome/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "LicenseRef-Proprietary",
     prebuilt = {
         url = "https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg",
         install = "Dmg",

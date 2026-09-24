@@ -1,7 +1,8 @@
 return {
     name = "buf",
     description = "Build and check Protocol Buffer schemas",
-    homepage = "https://github.com/bufbuild/buf",
+    homepage = "https://buf.build/docs/cli/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "bufbuild/buf",

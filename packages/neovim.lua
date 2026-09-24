@@ -1,9 +1,10 @@
 return {
     name = "neovim",
     aliases = { "nvim" },
-    description = "Edit text with Neovim",
-    homepage = "https://github.com/neovim/neovim",
-    default_license = "NOASSERTION",
+    description = "Edit text with an extensible Vim-based editor",
+    homepage = "https://neovim.io",
+    recipe_maintainers = { "tale" },
+    default_license = "Apache-2.0 AND Vim",
     upstream = {
         github = "neovim/neovim",
         repository_id = 16408992,

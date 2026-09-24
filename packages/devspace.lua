@@ -1,7 +1,8 @@
 return {
     name = "devspace",
     description = "Develop applications in Kubernetes",
-    homepage = "https://github.com/devspace-sh/devspace",
+    homepage = "https://www.devspace.sh/",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "devspace-sh/devspace",

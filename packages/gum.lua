@@ -2,6 +2,7 @@ return {
     name = "gum",
     description = "Build interactive shell scripts",
     homepage = "https://github.com/charmbracelet/gum",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "charmbracelet/gum",

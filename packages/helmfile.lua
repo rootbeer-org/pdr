@@ -1,7 +1,8 @@
 return {
     name = "helmfile",
     description = "Manage Helm releases from configuration files",
-    homepage = "https://github.com/helmfile/helmfile",
+    homepage = "https://helmfile.readthedocs.io/",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "helmfile/helmfile",

@@ -2,6 +2,7 @@ return {
     name = "monstar",
     description = "Run a CPU-rendered Wayland terminal",
     homepage = "https://github.com/rockorager/monstar",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "rockorager/monstar",

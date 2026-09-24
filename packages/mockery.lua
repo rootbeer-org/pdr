@@ -1,7 +1,8 @@
 return {
     name = "mockery",
     description = "Generate Go interface mocks",
-    homepage = "https://github.com/vektra/mockery",
+    homepage = "https://vektra.github.io/mockery/",
+    recipe_maintainers = { "tale" },
     default_license = "BSD-3-Clause",
     upstream = {
         github = "vektra/mockery",

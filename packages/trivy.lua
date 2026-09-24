@@ -1,7 +1,8 @@
 return {
     name = "trivy",
     description = "Find vulnerabilities and configuration issues",
-    homepage = "https://github.com/aquasecurity/trivy",
+    homepage = "https://trivy.dev",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "aquasecurity/trivy",

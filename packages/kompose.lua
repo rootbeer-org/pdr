@@ -1,7 +1,8 @@
 return {
     name = "kompose",
     description = "Convert Docker Compose files to Kubernetes resources",
-    homepage = "https://github.com/kubernetes/kompose",
+    homepage = "https://kompose.io",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "kubernetes/kompose",

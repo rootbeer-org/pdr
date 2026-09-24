@@ -1,7 +1,9 @@
 return {
     name = "task",
+    aliases = { "go-task" },
     description = "Run commands from Taskfiles",
-    homepage = "https://github.com/go-task/task",
+    homepage = "https://taskfile.dev",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "go-task/task",

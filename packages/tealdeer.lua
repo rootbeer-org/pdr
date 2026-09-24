@@ -3,7 +3,8 @@ return {
     aliases = { "tldr" },
     description = "Read concise command-line usage examples",
     homepage = "https://docs.tealdeer.org",
-    default_license = "Apache-2.0",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT OR Apache-2.0",
     upstream = {
         github = "tealdeer-rs/tealdeer",
         repository_id = 48739367,

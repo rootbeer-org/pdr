@@ -2,6 +2,7 @@ return {
     name = "bobrwm",
     description = "Tiling window manager for macOS",
     homepage = "https://github.com/bobrwm/bobrwm",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     prebuilt = {
         github = "bobrwm/bobrwm",

@@ -2,7 +2,8 @@ return {
     name = "duf",
     description = "Inspect filesystem disk usage",
     homepage = "https://github.com/muesli/duf",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     upstream = {
         github = "muesli/duf",
         repository_id = 297165998,

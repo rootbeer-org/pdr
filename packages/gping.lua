@@ -2,6 +2,7 @@ return {
     name = "gping",
     description = "Graph ping response times",
     homepage = "https://github.com/orf/gping",
+    recipe_maintainers = { "tale" },
     default_license = "MIT",
     upstream = {
         github = "orf/gping",

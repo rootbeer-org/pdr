@@ -2,6 +2,7 @@ return {
     name = "hubble",
     description = "Inspect Kubernetes network traffic with Cilium",
     homepage = "https://github.com/cilium/hubble",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "cilium/hubble",

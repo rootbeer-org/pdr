@@ -2,6 +2,7 @@ return {
     name = "argocd",
     description = "Manage Argo CD applications and deployments",
     homepage = "https://argo-cd.readthedocs.io",
+    recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",
     upstream = {
         github = "argoproj/argo-cd",

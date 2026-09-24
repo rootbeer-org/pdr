@@ -1,8 +1,9 @@
 return {
     name = "helix",
     aliases = { "hx" },
-    description = "Edit text with Helix",
+    description = "Edit text with a modal terminal editor",
     homepage = "https://helix-editor.com",
+    recipe_maintainers = { "tale" },
     default_license = "MPL-2.0",
     upstream = {
         github = "helix-editor/helix",

@@ -1,8 +1,9 @@
 return {
     name = "uv",
     description = "Manage Python projects, tools, and environments",
-    homepage = "https://github.com/astral-sh/uv",
-    default_license = "Apache-2.0",
+    homepage = "https://docs.astral.sh/uv/",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT OR Apache-2.0",
     upstream = {
         github = "astral-sh/uv",
         repository_id = 699532645,

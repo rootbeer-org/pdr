@@ -1,10 +1,12 @@
 return {
     name = "raspberry-pi-imager",
-    description = "Imaging utility to install operating systems to a microSD card",
+    aliases = { "rpi-imager" },
+    description = "Write operating system images to SD cards and USB drives",
     homepage = "https://www.raspberrypi.com/software/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "Apache-2.0",
     prebuilt = {
-        url = "https://github.com/raspberrypi/rpi-imager/releases/download/v2.0.11.1/rpi-imager-v2.0.11.1.dmg",
+        url = "https://github.com/raspberrypi/rpi-imager/releases/download/v{version}/rpi-imager-v{version}.dmg",
         install = "Dmg",
         mirror = true,
     },

@@ -1,8 +1,9 @@
 return {
     name = "kitty",
-    description = "Use a fast, feature-rich, GPU-based terminal emulator",
+    description = "Run a GPU-accelerated terminal emulator",
     homepage = "https://sw.kovidgoyal.net/kitty/",
-    default_license = "GPL-3.0",
+    recipe_maintainers = { "tale" },
+    default_license = "GPL-3.0-only",
     upstream = {
         github = "kovidgoyal/kitty",
         repository_id = 71056775,

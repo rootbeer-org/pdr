@@ -2,7 +2,8 @@ return {
     name = "nghttp2",
     description = "HTTP/2 C library",
     homepage = "https://nghttp2.org/",
-    default_license = "NOASSERTION",
+    recipe_maintainers = { "tale" },
+    default_license = "MIT",
     upstream = {
         github = "nghttp2/nghttp2",
         repository_id = 11452676,
