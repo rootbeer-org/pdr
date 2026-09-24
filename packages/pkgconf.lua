@@ -55,7 +55,7 @@ return {
         checks = {
             { "pkgconf", "--version" },
             { "pkg-config", "--version" },
-            { "pkg-config", "--atleast-pkgconfig-version=3.0.7" },
+            { "pkg-config", "--atleast-pkgconfig-version={version}" },
         },
     },
     platforms = {

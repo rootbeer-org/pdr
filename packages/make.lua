@@ -24,7 +24,7 @@ return {
                 "make",
                 "--no-builtin-rules",
                 "--file=/dev/null",
-                "--eval=all:;@test '$(MAKE_VERSION)' = 4.4.1",
+                "--eval=all:;@test '$(MAKE_VERSION)' = {version}",
                 "all",
             },
             {
