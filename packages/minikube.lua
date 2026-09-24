@@ -22,7 +22,7 @@ return {
             },
             tags = { "libvirt_dlopen" },
             variables = {
-                ["k8s.io/minikube/pkg/version.isoVersion"] = "v1.39.0",
+                ["k8s.io/minikube/pkg/version.isoVersion"] = "v{version}",
                 ["k8s.io/minikube/pkg/version.storageProvisionerVersion"] = "v5",
                 ["k8s.io/minikube/pkg/version.version"] = "v{version}",
             },
