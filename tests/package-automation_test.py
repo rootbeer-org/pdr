@@ -202,6 +202,17 @@ class RunnerImageTests(unittest.TestCase):
         jobs.check_planned('b' * 64, tasks, 'ubuntu24-20260920', 'ubuntu24-20260920')
 
 
+class PublishedDependencyTests(unittest.TestCase):
+    def test_a_builder_plans_against_its_planners_root(self):
+        environment = {'PDR_URL': 'https://pdr.example/v3/current.json', 'PACKAGE_PUBLIC_KEY': 'k'}
+        with patch.dict(os.environ, environment, clear=False):
+            os.environ.pop('PDR_ROOT', None)
+            self.assertEqual(jobs.published_dependencies(),
+                             ['--pdr', environment['PDR_URL'], '--pdr-public-key', 'k'])
+            with patch.dict(os.environ, {'PDR_ROOT': 'a' * 64}):
+                self.assertEqual(jobs.published_dependencies()[-2:], ['--pdr-root', 'a' * 64])
+
+
 class ProducerSelectionTests(unittest.TestCase):
     def test_completed_verification_wins_over_unstarted_pr_run(self):
         verified = {'id': 10, 'event': 'workflow_dispatch', 'status': 'completed', 'conclusion': 'success'}

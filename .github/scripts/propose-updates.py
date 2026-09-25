@@ -91,8 +91,6 @@ def main():
         else:
             url = command('gh', 'pr', 'create', '--repo', repository, '--base', 'main', '--head', branch,
                           '--title', 'chore(packages): update available packages', '--body-file', str(body))
-    command('gh', 'workflow', 'run', 'package-builds.yml', '--repo', repository, '--ref', branch,
-            '-f', 'packages=' + ' '.join(requests))
     with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
         summary.write(f'Recipe changes and per-package checks: {url}\n')
 
