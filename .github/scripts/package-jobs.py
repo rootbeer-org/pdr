@@ -116,6 +116,15 @@ def retained_artifact(retained, task):
     return str(matches[0]['id']), uploads[0][1]
 
 
+def published_dependencies():
+    """Planning flags that key dependencies as their published builds; a builder reads the root its
+    planner used, so a publication in between cannot change its key."""
+    flags = ['--pdr', os.environ['PDR_URL'], '--pdr-public-key', os.environ['PACKAGE_PUBLIC_KEY']]
+    if os.environ.get('PDR_ROOT'):
+        flags += ['--pdr-root', os.environ['PDR_ROOT']]
+    return flags
+
+
 def check_planned(expected, tasks, planned_context, context):
     """A builder on another runner image than its planner has different inputs, so it keeps its own
     key; on the same image the keys must agree, or the recipes changed after planning."""
@@ -133,7 +142,8 @@ def plan():
               'macos-15': 'aarch64-macos'}[os.environ['PACKAGE_RUNNER']]
     for request in requests:
         result = subprocess.run([engine, '--catalog', os.environ.get('CATALOG', 'packages'), 'package-plan',
-                                 '--context', os.environ['BUILD_CONTEXT'], request], text=True, capture_output=True)
+                                 '--context', os.environ['BUILD_CONTEXT'], *published_dependencies(), request],
+                                text=True, capture_output=True)
         if result.returncode:
             tasks.append({'package': request, 'name': request.split('@')[0], 'system': system,
                           'error': result.stderr.strip(), 'key': ''})

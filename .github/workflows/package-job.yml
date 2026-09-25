@@ -33,6 +33,10 @@ on:
       reuse-run:
         type: string
         default: ""
+      pdr-root:
+        description: The PDR root whose published dependencies the planned key names
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -92,6 +96,8 @@ jobs:
           RECORD_DIRECTORY: discovery-records
           GH_TOKEN: ${{ github.token }}
           PACKAGE_RUNNER: ${{ inputs.runner }}
+          PDR_ROOT: ${{ inputs.pdr-root }}
+          PDR_URL: ${{ vars.PDR_URL }}
         run: python3 .github/scripts/package-jobs.py
       - name: Retain concurrently published package records
         if: inputs.artifact == ''
@@ -107,10 +113,18 @@ jobs:
           INPUT_KEY: ${{ steps.reuse.outputs.key }}
           GITHUB_TOKEN: ${{ github.token }}
           BUILD_CONTEXT: ${{ steps.tools.outputs.context }}
+          PDR_URL: ${{ vars.PDR_URL }}
+          PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
+          PDR_ROOT: ${{ inputs.pdr-root }}
         run: |
+          # Dependencies the PDR already published are installed from it rather than compiled.
+          published=()
+          if [ -n "$PDR_ROOT" ]; then
+            published=(--pdr "$PDR_URL" --pdr-public-key "$PDR_PUBLIC_KEY" --pdr-root "$PDR_ROOT")
+          fi
           engine-bin/rootbeer-forge --catalog packages prepare "$PACKAGE" \
             --input-key "$INPUT_KEY" --output result \
-            --cache "$RUNNER_TEMP/package-cache" --cache-context "$BUILD_CONTEXT"
+            --cache "$RUNNER_TEMP/package-cache" --cache-context "$BUILD_CONTEXT" "${published[@]}"
       - name: Recover the admitted verified build
         if: inputs.artifact != ''
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
