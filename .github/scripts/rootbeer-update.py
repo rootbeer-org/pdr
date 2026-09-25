@@ -56,10 +56,10 @@ def update_recipe(source, systems, revision, version, digest, timestamp, build):
             digests = {{{digests}
             }},
             source = {{
-                url = "https://codeload.github.com/tale/rootbeer/tar.gz/{revision}",
+                url = "https://codeload.github.com/rootbeer-org/rootbeer/tar.gz/{revision}",
                 archive = "tar.gz",
                 strip_prefix = "rootbeer-{revision}",
-                git = {{ branch = "main", github = "tale/rootbeer" }},
+                git = {{ branch = "main", github = "rootbeer-org/rootbeer" }},
             }},
             build = {lua_value(build)},
         }},'''
@@ -92,7 +92,7 @@ def default_build(package):
 
 
 def main():
-    repository = 'tale/rootbeer'
+    repository = 'rootbeer-org/rootbeer'
     head = api(f'repos/{repository}/commits/main')
     revision = head['sha']
     if not re.fullmatch(r'[0-9a-f]{40}', revision):

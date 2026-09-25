@@ -36,10 +36,10 @@ runs:
         directory=$(mktemp -d)
         trap 'rm -rf "$directory"' EXIT
         binary="$directory/rootbeer-forge-$target"
-        gh release download "forge-$revision" --repo tale/rootbeer \
+        gh release download "forge-$revision" --repo rootbeer-org/rootbeer \
           --pattern "rootbeer-forge-$target" --dir "$directory"
-        gh attestation verify "$binary" --repo tale/rootbeer \
-          --signer-workflow tale/rootbeer/.github/workflows/build.yml \
+        gh attestation verify "$binary" --repo rootbeer-org/rootbeer \
+          --signer-workflow rootbeer-org/rootbeer/.github/workflows/build.yml \
           --source-ref refs/heads/main --source-digest "$revision" --deny-self-hosted-runners
         mkdir -p engine-bin
         install -m 0755 "$binary" engine-bin/rootbeer-forge
