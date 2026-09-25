@@ -1,9 +1,9 @@
 name: Packages
 run-name: ${{ github.event.pull_request.title || inputs.packages || 'Package updates' }}
 on:
+  # Every PR runs, so the required Package checks never wait on a run that was filtered out.
   pull_request:
     branches: [main]
-    paths: ["packages/**"]
   push:
     branches: [main]
     paths: ["packages/**"]
@@ -89,6 +89,18 @@ jobs:
       packages: ${{ matrix.packages }}
       reuse-run: ${{ needs.select.outputs.reuse-run }}
       publish: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+
+  checks:
+    name: Package checks
+    needs: [select, platform]
+    if: always() && github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require every selected package to build and check
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: jq -e 'all(. == "success" or . == "skipped")' <<<"$RESULTS"
 
   discovery:
     name: Publish the PDR root
