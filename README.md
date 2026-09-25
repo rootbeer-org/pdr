@@ -101,9 +101,9 @@ PRs. Rootbeer source updates require successful upstream engine CI.
 
 ## Report a problem
 
-For a missing tool, broken package, or outdated version, [open an issue here](https://github.com/tale/rootbeer-index/issues).
+For a missing tool, broken package, or outdated version, [open an issue here](https://github.com/rootbeer-org/rootbeer-index/issues).
 Include the package, requested version, platform, and error output when applicable.
-For problems with `rb` itself, use the [Rootbeer repository](https://github.com/tale/rootbeer/issues).
+For problems with `rb` itself, use the [Rootbeer repository](https://github.com/rootbeer-org/rootbeer/issues).
 
 ## Source alternatives
 
