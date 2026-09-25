@@ -14,6 +14,7 @@ outputs:
 runs:
   using: composite
   steps:
+    - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d # v2.0.1
     - name: Install attested Forge binary
       id: install
       shell: bash
@@ -36,8 +37,7 @@ runs:
         directory=$(mktemp -d)
         trap 'rm -rf "$directory"' EXIT
         binary="$directory/rootbeer-forge-$target"
-        gh release download "forge-$revision" --repo rootbeer-org/rootbeer \
-          --pattern "rootbeer-forge-$target" --dir "$directory"
+        oras pull "ghcr.io/rootbeer-org/rootbeer-forge:$revision-$target" --output "$directory"
         gh attestation verify "$binary" --repo rootbeer-org/rootbeer \
           --signer-workflow rootbeer-org/rootbeer/.github/workflows/build.yml \
           --source-ref refs/heads/main --source-digest "$revision" --deny-self-hosted-runners
