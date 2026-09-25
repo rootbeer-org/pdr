@@ -58,6 +58,7 @@ jobs:
           BUILD_CONTEXT: ${{ steps.tools.outputs.context }}
           PACKAGE_REGISTRY: ${{ github.repository }}
           PACKAGE_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
+          PDR_URL: ${{ vars.PDR_URL }}
           GH_TOKEN: ${{ github.token }}
           REUSE_RUN: ${{ inputs.reuse-run }}
           PACKAGE_RUNNER: ${{ inputs.runner }}
@@ -99,4 +100,5 @@ jobs:
       context: ${{ needs.plan.outputs.context }}
       artifact: ${{ matrix.artifact || '' }}
       reuse-run: ${{ matrix.reuse_run || inputs.reuse-run }}
+      pdr-root: ${{ matrix.pdr_root || '' }}
       publish: ${{ inputs.publish }}
