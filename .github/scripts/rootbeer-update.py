@@ -1,5 +1,4 @@
 import copy
-import datetime
 import hashlib
 import io
 import json
@@ -27,7 +26,7 @@ def lua_value(value):
     raise ValueError('unsupported Rust build setting')
 
 
-def update_recipe(source, systems, revision, version, digest, timestamp, build):
+def update_recipe(source, systems, revision, version, digest, build):
     if not re.fullmatch(r'[0-9a-f]{40}', revision):
         raise ValueError('invalid source revision')
     if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
@@ -46,10 +45,11 @@ def update_recipe(source, systems, revision, version, digest, timestamp, build):
     if f'["{version}"]' in source:
         raise ValueError('refusing to move back to a retained version')
 
-    timestamp = datetime.datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-    timestamp = timestamp.astimezone(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
+    # `rb --version` names the commit it was built from; a clock would make builds differ.
     build = copy.deepcopy(build)
-    build['rust'].setdefault('environment', {})['RB_BUILD_TIMESTAMP'] = timestamp
+    environment = build['rust'].setdefault('environment', {})
+    environment.pop('RB_BUILD_TIMESTAMP', None)
+    environment['RB_SOURCE_REVISION'] = revision
     digests = ''.join(f'\n                ["{system}"] = "{digest}",' for system in sorted(systems))
     entry = f'''versions = {{
         ["{version}"] = {{
@@ -129,8 +129,7 @@ def main():
     catalog = json.loads(subprocess.check_output([
         'engine-bin/rootbeer-forge', '--catalog', 'packages', 'catalog']))
     build, systems = default_build(catalog['packages']['rootbeer'])
-    updated = update_recipe(source, systems, revision, version, hashlib.sha256(archive).hexdigest(),
-                            head['commit']['committer']['date'], build)
+    updated = update_recipe(source, systems, revision, version, hashlib.sha256(archive).hexdigest(), build)
     destination = Path('candidates/packages')
     if not any(destination.glob('*.lua')):
         shutil.copytree('packages', destination, dirs_exist_ok=True)
