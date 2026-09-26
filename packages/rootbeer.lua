@@ -35,13 +35,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.1.0-main+51990cf50e5f",
+            default_version = "0.1.0-main+2db3cf924746",
         },
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+51990cf50e5f",
+            default_version = "0.1.0-main+2db3cf924746",
         },
         ["x86_64-linux"] = {
-            default_version = "0.1.0-main+51990cf50e5f",
+            default_version = "0.1.0-main+2db3cf924746",
         },
     },
     versions = {
@@ -79,27 +79,27 @@ return {
                 ["x86_64-linux"] = "a2815e92a51de046e0c38c9c134614713a7f409c9595e872d480bcaac0b90165",
             },
         },
-        ["0.1.0-main+51990cf50e5f"] = {
+        ["0.1.0-main+2db3cf924746"] = {
             digests = {
-                ["aarch64-linux"] = "e451f1b21eecb54dfb5f5d4abb5e997a6e6aca1ab7f6c2a68d6ae5354c65de3c",
-                ["aarch64-macos"] = "e451f1b21eecb54dfb5f5d4abb5e997a6e6aca1ab7f6c2a68d6ae5354c65de3c",
-                ["x86_64-linux"] = "e451f1b21eecb54dfb5f5d4abb5e997a6e6aca1ab7f6c2a68d6ae5354c65de3c",
+                ["aarch64-linux"] = "8e408feee4545e21079b2253fcbcdd337dedda39c72f7f34a09987ada85b4e5a",
+                ["aarch64-macos"] = "8e408feee4545e21079b2253fcbcdd337dedda39c72f7f34a09987ada85b4e5a",
+                ["x86_64-linux"] = "8e408feee4545e21079b2253fcbcdd337dedda39c72f7f34a09987ada85b4e5a",
             },
             source = {
-                url = "https://codeload.github.com/rootbeer-org/rootbeer/tar.gz/51990cf50e5f2d43391996177fc3dd974ea781db",
+                url = "https://codeload.github.com/rootbeer-org/rootbeer/tar.gz/2db3cf92474652f3a7b4c2f508eda79ac7f98ccc",
                 git = {
                     github = "rootbeer-org/rootbeer",
                     branch = "main",
                 },
                 archive = "tar.gz",
-                strip_prefix = "rootbeer-51990cf50e5f2d43391996177fc3dd974ea781db",
+                strip_prefix = "rootbeer-2db3cf92474652f3a7b4c2f508eda79ac7f98ccc",
             },
             build = {
                 backend = "rust",
                 rust = {
                     packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
-                        RB_BUILD_TIMESTAMP = "2026-09-25 18:24 UTC",
+                        RB_BUILD_TIMESTAMP = "2026-09-26 02:16 UTC",
                         ROOTBEER_PDR_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_PDR_URL = "https://pdr.rbpkg.com/v3/current.json",
                     },
