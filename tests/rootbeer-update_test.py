@@ -25,10 +25,11 @@ class RecipeTests(unittest.TestCase):
     },
 }'''
     systems = ['aarch64-macos', 'x86_64-linux']
-    build = {'backend': 'rust', 'rust': {'packages': ['tool'], 'environment': {'KEEP': 'value'}}}
+    build = {'backend': 'rust', 'rust': {'packages': ['tool'],
+                                        'environment': {'KEEP': 'value', 'RB_BUILD_TIMESTAMP': 'stale'}}}
 
     def update(self, source, revision='b' * 40):
-        return updates.update_recipe(source, self.systems, revision, '0.1.0', 'c' * 64, '2026-09-18T12:00:00Z', self.build)
+        return updates.update_recipe(source, self.systems, revision, '0.1.0', 'c' * 64, self.build)
 
     def test_update_advances_every_platform_and_is_idempotent(self):
         result = self.update(self.source)
@@ -37,7 +38,8 @@ class RecipeTests(unittest.TestCase):
         self.assertIn('source = { url = "old" }', result)
         for system in self.systems:
             self.assertIn(f'["{system}"] = "{"c" * 64}"', result)
-        self.assertIn('["RB_BUILD_TIMESTAMP"] = "2026-09-18 12:00 UTC"', result)
+        self.assertIn(f'["RB_SOURCE_REVISION"] = "{"b" * 40}"', result)
+        self.assertNotIn('RB_BUILD_TIMESTAMP', result)
         self.assertIn('["KEEP"] = "value"', result)
         self.assertIn('["packages"] = { "tool" }', result)
         self.assertEqual(result, self.update(result))
@@ -72,7 +74,7 @@ class RecipeTests(unittest.TestCase):
             shutil.copytree(packages, directory, dirs_exist_ok=True)
             recipe = Path(directory) / 'rootbeer.lua'
             recipe.write_text(updates.update_recipe(recipe.read_text(), systems, 'f' * 40, '99.0.0',
-                              'c' * 64, '2026-09-18T12:00:00Z', build))
+                              'c' * 64, build))
             after = json.loads(subprocess.check_output([engine, '--catalog', directory, 'catalog']))
         updated = after['packages']['rootbeer']
         self.assertEqual(set(updated['default_versions'].values()), {'99.0.0-main+ffffffffffff'})
@@ -83,10 +85,12 @@ class RecipeTests(unittest.TestCase):
         for system, contract in new['platforms'].items():
             self.assertEqual(contract['build']['sha256'], 'c' * 64)
             environment = contract['build']['rust']['environment']
-            self.assertEqual(environment.pop('RB_BUILD_TIMESTAMP'), '2026-09-18 12:00 UTC')
+            self.assertEqual(environment.pop('RB_SOURCE_REVISION'), 'f' * 40)
+            self.assertNotIn('RB_BUILD_TIMESTAMP', environment)
             expected = package['versions'][package['default_versions'][system]]['platforms'][system]['build']['rust']
             expected = copy.deepcopy(expected)
-            del expected['environment']['RB_BUILD_TIMESTAMP']
+            expected['environment'].pop('RB_BUILD_TIMESTAMP', None)
+            expected['environment'].pop('RB_SOURCE_REVISION', None)
             self.assertEqual(expected, contract['build']['rust'])
 
 if __name__ == '__main__':
