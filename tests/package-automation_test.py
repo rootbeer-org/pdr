@@ -46,6 +46,12 @@ class ProposalLockTests(unittest.TestCase):
         self.assertEqual(proposals.lane(['kitty']), 'packages')
         self.assertEqual(proposals.lane(['kitty', 'rootbeer']), 'packages')
 
+    def test_rootbeer_always_proposes_on_its_own_lane(self):
+        self.assertEqual(proposals.split_lanes(['kitty@0.49.0', 'rootbeer@0.1.0-main+a248a77d983a', 'zoxide@1.0']),
+                         {'packages': ['kitty@0.49.0', 'zoxide@1.0'],
+                          'engine': ['rootbeer@0.1.0-main+a248a77d983a']})
+        self.assertEqual(proposals.split_lanes(['kitty@0.49.0']), {'packages': ['kitty@0.49.0']})
+
     def test_open_lane_proposal_is_reused(self):
         open_pulls = [self.pull('updates/packages-1', 'packages/kitty.lua'),
                       self.pull('updates/engine-2', 'packages/rootbeer.lua')]
