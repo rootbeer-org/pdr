@@ -57,6 +57,18 @@ def is_missing(locator, name, error):
     return 'denied: requested access to the resource is denied' in error and not has_published_namespace(name)
 
 
+def signed_result(repository, task):
+    """The first published result for the task's key, then for reviewed predecessor engines' keys."""
+    for key in [task['key'], *task.get('compatible_keys', [])]:
+        locator = f"ghcr.io/{repository}:inputs-{key}"
+        result = subprocess.run(['oras', 'manifest', 'fetch', locator], text=True, capture_output=True)
+        if not result.returncode:
+            return key, locator, json.loads(result.stdout)
+        if not is_missing(locator, task['name'], result.stderr):
+            raise RuntimeError(f'Cannot inspect {locator}: {result.stderr}')
+    return None
+
+
 def retained_results(run_id):
     if not re.fullmatch(r'[1-9][0-9]*', run_id):
         raise ValueError('Reuse requires a workflow run ID')
@@ -163,18 +175,15 @@ def plan():
             missing.append(task)
             continue
         repository = f"{os.environ['PACKAGE_REGISTRY']}/{task['name']}"
-        locator = f"ghcr.io/{repository}:inputs-{task['key']}"
-        result = subprocess.run(['oras', 'manifest', 'fetch', locator], text=True, capture_output=True)
-        if result.returncode:
-            if not is_missing(locator, task['name'], result.stderr):
-                raise RuntimeError(f'Cannot inspect {locator}: {result.stderr}')
+        found = signed_result(repository, task)
+        if found is None:
             if retained:
                 task['artifact'], key = retained_artifact(retained, task)
                 task['key'] = key or task['key']
                 task['reuse_run'] = reuse_run
             missing.append(task)
             continue
-        manifest = json.loads(result.stdout)
+        key, locator, manifest = found
         layers = [layer for layer in manifest.get('layers', [])
                   if layer.get('mediaType') == 'application/vnd.rootbeer.package.record.v1+json']
         if len(layers) != 1 or not re.fullmatch(r'sha256:[a-f0-9]{64}', layers[0]['digest']):
@@ -184,12 +193,12 @@ def plan():
         if os.environ.get('RECORD_DIRECTORY'):
             directory = Path(os.environ['RECORD_DIRECTORY'])
             directory.mkdir(parents=True, exist_ok=True)
-            output = ['--output', str(directory / f"{task['key']}.json")]
+            output = ['--output', str(directory / f"{key}.json")]
         command(engine, 'verify-record', reference, '--package', task['package'],
-                '--system', task['system'], '--input-key', task['key'],
+                '--system', task['system'], '--input-key', key,
                 '--public-key', os.environ['PACKAGE_PUBLIC_KEY'], *output)
-        reused.append((task, reference))
-    Path('package-plan.json').write_text(json.dumps({'tasks': tasks, 'reused': [task['key'] for task, _ in reused]}))
+        reused.append((task, reference, key))
+    Path('package-plan.json').write_text(json.dumps({'tasks': tasks, 'reused': [key for _, _, key in reused]}))
     if len(missing) > 256:
         raise ValueError('GitHub permits 256 jobs per matrix; submit smaller package selections')
     with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
@@ -202,7 +211,7 @@ def plan():
         for task in missing:
             action = 'Recover verified build' if task.get('artifact') else 'Build'
             summary.write(f"- {action} `{task['package']}` for `{task['system']}`\n")
-        for task, reference in reused:
+        for task, reference, _ in reused:
             summary.write(f"- Reuse `{task['package']}`: `{reference}`\n")
 
 

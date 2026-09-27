@@ -195,6 +195,35 @@ class RegistryTests(unittest.TestCase):
     def test_outage_does_not_trigger_a_build(self):
         self.assertFalse(jobs.is_missing('registry/new:tag', 'new', 'TLS handshake timeout'))
 
+    def fetch(self, published):
+        def run(arguments, **_):
+            locator = arguments[-1]
+            if locator in published:
+                return subprocess.CompletedProcess(arguments, 0, json.dumps(published[locator]), '')
+            return subprocess.CompletedProcess(arguments, 1, '', f'Error: {locator}: not found')
+        return patch.object(jobs.subprocess, 'run', side_effect=run)
+
+    def test_a_reviewed_predecessor_key_reuses_its_result(self):
+        task = {'name': 'tool', 'key': 'a' * 64, 'compatible_keys': ['b' * 64, 'c' * 64]}
+        manifest = {'layers': []}
+        with self.fetch({f"ghcr.io/registry/tool:inputs-{'c' * 64}": manifest}):
+            self.assertEqual(jobs.signed_result('registry/tool', task),
+                             ('c' * 64, f"ghcr.io/registry/tool:inputs-{'c' * 64}", manifest))
+        with self.fetch({f"ghcr.io/registry/tool:inputs-{'a' * 64}": manifest,
+                         f"ghcr.io/registry/tool:inputs-{'b' * 64}": {'layers': ['older']}}):
+            self.assertEqual(jobs.signed_result('registry/tool', task)[0], 'a' * 64)
+        with self.fetch({}):
+            self.assertIsNone(jobs.signed_result('registry/tool', task))
+            self.assertIsNone(jobs.signed_result('registry/tool', {'name': 'tool', 'key': 'a' * 64}))
+
+    def test_an_unreadable_predecessor_is_not_treated_as_missing(self):
+        task = {'name': 'tool', 'key': 'a' * 64, 'compatible_keys': ['b' * 64]}
+        outage = subprocess.CompletedProcess([], 1, '', 'TLS handshake timeout')
+        missing = subprocess.CompletedProcess([], 1, '', f"Error: ghcr.io/registry/tool:inputs-{'a' * 64}: not found")
+        with patch.object(jobs.subprocess, 'run', side_effect=[missing, outage]):
+            with self.assertRaises(RuntimeError):
+                jobs.signed_result('registry/tool', task)
+
 
 class RunnerImageTests(unittest.TestCase):
     def test_a_builder_on_another_image_keeps_its_own_key(self):
