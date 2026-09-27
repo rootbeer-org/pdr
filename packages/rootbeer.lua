@@ -36,13 +36,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.1.0-main+54e26834aae0",
+            default_version = "0.1.0-main+56884cb5aad3",
         },
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+54e26834aae0",
+            default_version = "0.1.0-main+56884cb5aad3",
         },
         ["x86_64-linux"] = {
-            default_version = "0.1.0-main+54e26834aae0",
+            default_version = "0.1.0-main+56884cb5aad3",
         },
     },
     versions = {
@@ -171,6 +171,33 @@ return {
                     packages = { "rootbeer-cli", "rootbeer-forge", "rootbeer-store" },
                     environment = {
                         RB_SOURCE_REVISION = "54e26834aae0d8dd4d6d42c43b3178708e1a3732",
+                        ROOTBEER_PDR_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
+                        ROOTBEER_PDR_URL = "https://pdr.rbpkg.com/v3/current.json",
+                    },
+                },
+            },
+        },
+        ["0.1.0-main+56884cb5aad3"] = {
+            digests = {
+                ["aarch64-linux"] = "06a5e0857b55dc7516b7d4f379642f6050585ce69b17b30d40309288150aaa2f",
+                ["aarch64-macos"] = "06a5e0857b55dc7516b7d4f379642f6050585ce69b17b30d40309288150aaa2f",
+                ["x86_64-linux"] = "06a5e0857b55dc7516b7d4f379642f6050585ce69b17b30d40309288150aaa2f",
+            },
+            source = {
+                url = "https://codeload.github.com/rootbeer-org/rootbeer/tar.gz/56884cb5aad35e80ec02b2050a18f35257b9d0bc",
+                git = {
+                    github = "rootbeer-org/rootbeer",
+                    branch = "main",
+                },
+                archive = "tar.gz",
+                strip_prefix = "rootbeer-56884cb5aad35e80ec02b2050a18f35257b9d0bc",
+            },
+            build = {
+                backend = "rust",
+                rust = {
+                    packages = { "rootbeer-cli", "rootbeer-forge", "rootbeer-store" },
+                    environment = {
+                        RB_SOURCE_REVISION = "56884cb5aad35e80ec02b2050a18f35257b9d0bc",
                         ROOTBEER_PDR_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
                         ROOTBEER_PDR_URL = "https://pdr.rbpkg.com/v3/current.json",
                     },
