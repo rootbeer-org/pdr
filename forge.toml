@@ -14,7 +14,7 @@ trusted = [
     "package-engine-revision",
     ".github/workflows/package-builds.yml",
     ".github/workflows/package-platform.yml",
-    ".github/workflows/package-job.yml",
+    ".github/workflows/package-level.yml",
     ".github/actions/setup-engine",
     ".github/actions/setup-package-tools",
 ]

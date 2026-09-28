@@ -1,4 +1,4 @@
-name: Plan platform packages
+name: Build packages on one runner
 on:
   workflow_call:
     secrets:
@@ -23,23 +23,16 @@ permissions:
 
 jobs:
   plan:
-    name: Plan this runner's work
+    name: Plan
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 15
     permissions:
       contents: read
       actions: read
     outputs:
-      level_0: ${{ steps.plan.outputs.level_0 }}
-      level_1: ${{ steps.plan.outputs.level_1 }}
-      level_2: ${{ steps.plan.outputs.level_2 }}
-      level_3: ${{ steps.plan.outputs.level_3 }}
-      level_4: ${{ steps.plan.outputs.level_4 }}
-      level_5: ${{ steps.plan.outputs.level_5 }}
-      level_6: ${{ steps.plan.outputs.level_6 }}
-      level_7: ${{ steps.plan.outputs.level_7 }}
-      depth: ${{ steps.plan.outputs.depth }}
-      has-work: ${{ steps.plan.outputs.has-work }}
+      builds: ${{ steps.plan.outputs.builds }}
+      has-builds: ${{ steps.plan.outputs.has-builds }}
+      has-publish: ${{ steps.plan.outputs.has-publish }}
       plan: ${{ steps.retain.outputs.artifact-id }}
     steps:
       - name: Read approved recipes
@@ -77,113 +70,88 @@ jobs:
           path: discovery-records/*.json
           if-no-files-found: ignore
 
-  # Builds run in dependency levels: each level installs the builds earlier levels made in this
-  # run instead of compiling them again. Empty levels are skipped.
-  level-0:
-    name: ${{ matrix.package }} (${{ matrix.system }})
+  # One entry per dependency level that has builds, run one after another, so each level
+  # installs the builds earlier levels made instead of compiling them again.
+  build:
+    name: Build
     needs: plan
-    if: needs.plan.outputs.has-work == 'true'
+    if: needs.plan.outputs.has-builds == 'true'
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.plan.outputs.level_0) }}
-    uses: ./.github/workflows/package-job.yml
-    secrets: &secrets
-      PDR_SIGNING_KEY: ${{ inputs.publish && secrets.PDR_SIGNING_KEY || '' }}
-    permissions: &permissions
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.plan.outputs.builds) }}
+    uses: ./.github/workflows/package-level.yml
+    permissions:
+      contents: read
+      actions: read
+    with:
+      runner: ${{ inputs.runner }}
+      plan: ${{ needs.plan.outputs.plan }}
+      tasks: ${{ toJSON(matrix.tasks) }}
+
+  publish:
+    name: Publish
+    needs: [plan, build]
+    if: >-
+      !cancelled() && inputs.publish && needs.plan.result == 'success' && needs.plan.outputs.has-publish == 'true'
+      && github.ref == 'refs/heads/main' && vars.PUBLISH_PDR == 'true'
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 30
+    environment: package-publishing
+    permissions:
       contents: read
       actions: read
       packages: write
-    with: &package
-      runner: ${{ inputs.runner }}
-      package: ${{ matrix.package }}
-      name: ${{ matrix.name }}
-      key: ${{ matrix.key }}
-      plan: ${{ needs.plan.outputs.plan }}
-      error: ${{ matrix.error || '' }}
-      artifact: ${{ matrix.artifact || '' }}
-      reuse-run: ${{ matrix.reuse_run || inputs.reuse-run }}
-      publish: ${{ inputs.publish }}
-
-  level-1:
-    name: ${{ matrix.package }} (${{ matrix.system }})
-    needs: [plan, level-0]
-    if: ${{ !cancelled() && needs.plan.result == 'success' && fromJSON(needs.plan.outputs.depth) > 1 }}
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.plan.outputs.level_1) }}
-    uses: ./.github/workflows/package-job.yml
-    secrets: *secrets
-    permissions: *permissions
-    with: *package
-
-  level-2:
-    name: ${{ matrix.package }} (${{ matrix.system }})
-    needs: [plan, level-1]
-    if: ${{ !cancelled() && needs.plan.result == 'success' && fromJSON(needs.plan.outputs.depth) > 2 }}
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.plan.outputs.level_2) }}
-    uses: ./.github/workflows/package-job.yml
-    secrets: *secrets
-    permissions: *permissions
-    with: *package
-
-  level-3:
-    name: ${{ matrix.package }} (${{ matrix.system }})
-    needs: [plan, level-2]
-    if: ${{ !cancelled() && needs.plan.result == 'success' && fromJSON(needs.plan.outputs.depth) > 3 }}
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.plan.outputs.level_3) }}
-    uses: ./.github/workflows/package-job.yml
-    secrets: *secrets
-    permissions: *permissions
-    with: *package
-
-  level-4:
-    name: ${{ matrix.package }} (${{ matrix.system }})
-    needs: [plan, level-3]
-    if: ${{ !cancelled() && needs.plan.result == 'success' && fromJSON(needs.plan.outputs.depth) > 4 }}
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.plan.outputs.level_4) }}
-    uses: ./.github/workflows/package-job.yml
-    secrets: *secrets
-    permissions: *permissions
-    with: *package
-
-  level-5:
-    name: ${{ matrix.package }} (${{ matrix.system }})
-    needs: [plan, level-4]
-    if: ${{ !cancelled() && needs.plan.result == 'success' && fromJSON(needs.plan.outputs.depth) > 5 }}
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.plan.outputs.level_5) }}
-    uses: ./.github/workflows/package-job.yml
-    secrets: *secrets
-    permissions: *permissions
-    with: *package
-
-  level-6:
-    name: ${{ matrix.package }} (${{ matrix.system }})
-    needs: [plan, level-5]
-    if: ${{ !cancelled() && needs.plan.result == 'success' && fromJSON(needs.plan.outputs.depth) > 6 }}
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.plan.outputs.level_6) }}
-    uses: ./.github/workflows/package-job.yml
-    secrets: *secrets
-    permissions: *permissions
-    with: *package
-
-  level-7:
-    name: ${{ matrix.package }} (${{ matrix.system }})
-    needs: [plan, level-6]
-    if: ${{ !cancelled() && needs.plan.result == 'success' && fromJSON(needs.plan.outputs.depth) > 7 }}
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.plan.outputs.level_7) }}
-    uses: ./.github/workflows/package-job.yml
-    secrets: *secrets
-    permissions: *permissions
-    with: *package
+    steps:
+      - name: Read approved recipes and publisher
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Install verified Forge
+        uses: ./.github/actions/setup-engine
+        with:
+          runner: ${{ inputs.runner }}
+          revision-file: package-engine-revision
+      - name: Read the work plan
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ needs.plan.outputs.plan }}
+          path: work
+          merge-multiple: true
+      - name: Find the builds to publish
+        id: builds
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: engine-bin/rootbeer-forge ci builds work/plan.json
+      - name: Download this run's builds
+        if: steps.builds.outputs.ids != ''
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ steps.builds.outputs.ids }}
+          path: builds/current
+      - name: Download recovered builds
+        if: steps.builds.outputs.recovered-ids != ''
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ steps.builds.outputs.recovered-ids }}
+          run-id: ${{ steps.builds.outputs.recovered-run }}
+          github-token: ${{ github.token }}
+          path: builds/recovered
+      - name: Install registry client
+        uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d
+        with:
+          version: 1.3.0
+      - name: Sign and push each build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PDR_SIGNING_KEY: ${{ secrets.PDR_SIGNING_KEY }}
+        run: |
+          printf '%s' "$GH_TOKEN" | oras login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          engine-bin/rootbeer-forge ci publish work/plan.json builds
+      - name: Retain published records for discovery
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: published-records-${{ inputs.runner }}-${{ github.run_attempt }}
+          path: discovery-records/*.json
+          if-no-files-found: ignore

@@ -1,0 +1,108 @@
+name: Build one dependency level
+on:
+  workflow_call:
+    inputs:
+      runner:
+        type: string
+        required: true
+      plan:
+        description: Artifact ID of the work plan these builds belong to
+        type: string
+        required: true
+      tasks:
+        description: This level's builds, as a matrix of the plan's tasks
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.package }}
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(inputs.tasks) }}
+    concurrency:
+      group: package-${{ github.event_name }}-${{ github.ref }}-${{ matrix.package }}-${{ matrix.key }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Report unsupported package inputs
+        if: matrix.error != ''
+        env:
+          PACKAGE_ERROR: ${{ matrix.error }}
+        run: |
+          printf '%s\n' "$PACKAGE_ERROR" >&2
+          exit 1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Install verified Forge
+        uses: ./.github/actions/setup-engine
+        with:
+          runner: ${{ inputs.runner }}
+          revision-file: package-engine-revision
+      - name: Prepare build toolchains
+        uses: ./.github/actions/setup-package-tools
+      - name: Read the work plan
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ inputs.plan }}
+          path: work
+          merge-multiple: true
+      - name: Find the dependency builds this package installs
+        id: dependencies
+        env:
+          PACKAGE: ${{ matrix.package }}
+          GH_TOKEN: ${{ github.token }}
+        run: engine-bin/rootbeer-forge ci dependencies work/plan.json "$PACKAGE"
+      - name: Download dependency builds from this run
+        if: steps.dependencies.outputs.ids != ''
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ steps.dependencies.outputs.ids }}
+          path: dependency-builds/current
+      - name: Download recovered dependency builds
+        if: steps.dependencies.outputs.recovered-ids != ''
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ steps.dependencies.outputs.recovered-ids }}
+          run-id: ${{ steps.dependencies.outputs.recovered-run }}
+          github-token: ${{ github.token }}
+          path: dependency-builds/recovered
+      - name: Build and check this package
+        id: build
+        env:
+          PACKAGE: ${{ matrix.package }}
+        run: |
+          engine-bin/rootbeer-forge build work/plan.json "$PACKAGE"
+          # A result published while this job was queued is kept instead of a second build.
+          jq -r '"key=\(.built.key // .reused.key)", "built=\(has("built"))"' result/build.json >> "$GITHUB_OUTPUT"
+      - name: Keep the record published while this job was queued
+        if: steps.build.outputs.built == 'false'
+        env:
+          KEY: ${{ steps.build.outputs.key }}
+        run: mkdir discovery-records && cp result/record.json "discovery-records/$KEY.json"
+      - name: Retain the record published while this job was queued
+        if: steps.build.outputs.built == 'false'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: published-records-reuse-${{ steps.build.outputs.key }}-${{ github.run_attempt }}
+          path: discovery-records/*.json
+          if-no-files-found: error
+      - name: Retain this verified build
+        if: steps.build.outputs.built == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: package-${{ steps.build.outputs.key }}-${{ github.run_attempt }}
+          path: |
+            result/package.tar.gz
+            result/receipt.json
+            result/build.json
+          if-no-files-found: error
+          retention-days: 14
