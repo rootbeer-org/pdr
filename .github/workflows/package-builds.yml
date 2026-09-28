@@ -74,7 +74,7 @@ jobs:
   platform:
     needs: select
     if: needs.select.outputs.packages != '' && needs.select.outputs.waiting != 'true'
-    name: ${{ matrix.runner }}
+    name: ${{ matrix.system }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.select.outputs.platforms) }}
