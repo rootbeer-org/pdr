@@ -47,28 +47,29 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+      - name: Install approved package engine
+        uses: ./.github/actions/setup-engine
+        with:
+          runner: ubuntu-24.04
+          revision-file: package-engine-revision
       - name: Find completed PR verification
         id: producer
         env:
           GH_TOKEN: ${{ github.token }}
           REUSE_RUN: ${{ inputs.reuse-run }}
-        run: python3 .github/scripts/package-producer.py
-      - name: Install approved package engine
-        if: steps.producer.outputs.waiting != 'true'
-        uses: ./.github/actions/setup-engine
-        with:
-          runner: ubuntu-24.04
-          revision-file: package-engine-revision
+        run: engine-bin/rootbeer-forge ci producer --reuse-run "$REUSE_RUN"
       - name: Check recipes use the layout discovery writes
         if: steps.producer.outputs.waiting != 'true'
-        run: engine-bin/rootbeer-forge --catalog packages format --check
+        run: engine-bin/rootbeer-forge format --check
       - name: Compare expanded package inputs
         if: steps.producer.outputs.waiting != 'true'
         id: select
         env:
           PACKAGES: ${{ inputs.packages }}
           BASE_REVISION: ${{ steps.producer.outputs.base || github.event.pull_request.base.sha || github.event.before }}
-        run: python3 .github/scripts/package-selection.py
+        run: |
+          # shellcheck disable=SC2086 # PACKAGES holds exact requests separated by spaces.
+          engine-bin/rootbeer-forge ci select --base "$BASE_REVISION" $PACKAGES
 
   platform:
     needs: select

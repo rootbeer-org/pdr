@@ -1,0 +1,25 @@
+catalog = "packages"
+registry = "rootbeer-org/pdr"
+
+[pdr]
+url = "https://pdr.rbpkg.com/v3/current.json"
+public-key = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0"
+
+[ci]
+workflow = "package-builds.yml"
+engine-pin = "package-engine-revision"
+# A promoted run must have verified its builds with exactly this checkout's copies.
+trusted = [
+    "forge.toml",
+    "package-engine-revision",
+    ".github/workflows/package-builds.yml",
+    ".github/workflows/package-platform.yml",
+    ".github/workflows/package-job.yml",
+    ".github/actions/setup-engine",
+    ".github/actions/setup-package-tools",
+]
+
+[ci.runners]
+aarch64-linux = "ubuntu-24.04-arm"
+aarch64-macos = "macos-15"
+x86_64-linux = "ubuntu-24.04"

@@ -86,10 +86,9 @@ jobs:
         if: steps.engine.outcome == 'success'
         env:
           BASE_REVISION: ${{ github.sha }}
-          CATALOG: candidates/packages
         run: |
           if [ -d candidates/packages ]; then
-            python3 .github/scripts/package-selection.py
+            engine-bin/rootbeer-forge --catalog candidates/packages ci select --base "$BASE_REVISION"
           fi
       - name: Summarize candidates and exceptions
         id: report

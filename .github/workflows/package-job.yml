@@ -18,7 +18,8 @@ on:
       key:
         type: string
         required: true
-      context:
+      plan:
+        description: Artifact ID of the work plan this task belongs to
         type: string
         required: true
       artifact:
@@ -31,14 +32,6 @@ on:
         type: boolean
         default: false
       reuse-run:
-        type: string
-        default: ""
-      pdr-root:
-        description: The PDR root whose published dependencies the planned key names
-        type: string
-        default: ""
-      dependencies:
-        description: Input keys of dependency builds from earlier jobs of this run, installed instead of compiled
         type: string
         default: ""
 
@@ -59,7 +52,7 @@ jobs:
       actions: read
     outputs:
       artifact: ${{ steps.retain.outputs.artifact-id }}
-      key: ${{ steps.reuse.outputs.key || inputs.key }}
+      key: ${{ steps.build.outputs.key || inputs.key }}
     steps:
       - name: Report unsupported package inputs
         if: inputs.error != ''
@@ -71,7 +64,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-          fetch-depth: 0
       - name: Install verified Forge
         if: inputs.artifact == ''
         uses: ./.github/actions/setup-engine
@@ -81,42 +73,20 @@ jobs:
       - name: Prepare build toolchains
         if: inputs.artifact == ''
         uses: ./.github/actions/setup-package-tools
-        id: tools
-      - name: Install registry client
+      - name: Read the work plan
         if: inputs.artifact == ''
-        uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
-          version: 1.3.0
-      - name: Reuse a result published while this job was queued
-        if: inputs.artifact == ''
-        id: reuse
-        env:
-          PACKAGES: ${{ inputs.package }}
-          BUILD_CONTEXT: ${{ steps.tools.outputs.context }}
-          PLANNED_CONTEXT: ${{ inputs.context }}
-          EXPECTED_KEY: ${{ inputs.key }}
-          PACKAGE_REGISTRY: ${{ github.repository }}
-          PACKAGE_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
-          RECORD_DIRECTORY: discovery-records
-          GH_TOKEN: ${{ github.token }}
-          PACKAGE_RUNNER: ${{ inputs.runner }}
-          PDR_ROOT: ${{ inputs.pdr-root }}
-          PDR_URL: ${{ vars.PDR_URL }}
-        run: python3 .github/scripts/package-jobs.py
-      - name: Retain concurrently published package records
-        if: inputs.artifact == ''
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: published-records-reuse-${{ steps.reuse.outputs.key }}-${{ github.run_attempt }}
-          path: discovery-records/*.json
-          if-no-files-found: ignore
+          artifact-ids: ${{ inputs.plan }}
+          path: work
+          merge-multiple: true
       - name: Find dependency builds from this run
-        if: steps.reuse.outputs.has-work == 'true' && inputs.artifact == '' && inputs.dependencies != ''
+        if: inputs.artifact == ''
         id: dependencies
         env:
-          DEPENDENCIES: ${{ inputs.dependencies }}
+          PACKAGE: ${{ inputs.package }}
           GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/dependency-artifacts.py
+        run: engine-bin/rootbeer-forge ci dependencies work/plan.json "$PACKAGE"
       - name: Download dependency builds
         if: steps.dependencies.outputs.ids != ''
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
@@ -124,36 +94,24 @@ jobs:
           artifact-ids: ${{ steps.dependencies.outputs.ids }}
           path: dependency-builds
       - name: Build and check this package
-        if: steps.reuse.outputs.has-work == 'true' && inputs.artifact == ''
+        if: inputs.artifact == ''
+        id: build
         env:
           PACKAGE: ${{ inputs.package }}
-          INPUT_KEY: ${{ steps.reuse.outputs.key }}
-          GITHUB_TOKEN: ${{ github.token }}
-          BUILD_CONTEXT: ${{ steps.tools.outputs.context }}
-          PDR_URL: ${{ vars.PDR_URL }}
-          PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
-          PDR_ROOT: ${{ inputs.pdr-root }}
         run: |
-          # Dependencies the PDR already published are installed from it rather than compiled.
-          published=()
-          if [ -n "$PDR_ROOT" ]; then
-            published=(--pdr "$PDR_URL" --pdr-public-key "$PDR_PUBLIC_KEY" --pdr-root "$PDR_ROOT")
-          fi
-          # Dependencies built earlier in this run are installed from those builds; a single
-          # download is extracted in place rather than into its own directory.
-          built=()
-          shopt -s nullglob
-          if [ -f dependency-builds/receipt.json ]; then
-            built=(--dependency-artifact dependency-builds)
-          else
-            for build in dependency-builds/*/; do
-              built+=(--dependency-artifact "$build")
-            done
-          fi
-          engine-bin/rootbeer-forge --catalog packages prepare "$PACKAGE" \
-            --input-key "$INPUT_KEY" --output result \
-            --cache "$RUNNER_TEMP/package-cache" --cache-context "$BUILD_CONTEXT" \
-            "${published[@]}" "${built[@]}"
+          engine-bin/rootbeer-forge build work/plan.json "$PACKAGE"
+          # A result published while this job was queued is kept instead of a second build.
+          jq -r '"key=\(.built.key // .reused.key)", "built=\(has("built"))"' result/build.json >> "$GITHUB_OUTPUT"
+      - name: Retain concurrently published package records
+        if: steps.build.outputs.built == 'false'
+        run: mkdir discovery-records && cp result/record.json "discovery-records/${{ steps.build.outputs.key }}.json"
+      - name: Upload concurrently published package records
+        if: steps.build.outputs.built == 'false'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: published-records-reuse-${{ steps.build.outputs.key }}-${{ github.run_attempt }}
+          path: discovery-records/*.json
+          if-no-files-found: error
       - name: Recover the admitted verified build
         if: inputs.artifact != ''
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
@@ -164,11 +122,11 @@ jobs:
           path: result
           merge-multiple: true
       - name: Retain this verified build
-        if: inputs.artifact != '' || steps.reuse.outputs.has-work == 'true'
+        if: inputs.artifact != '' || steps.build.outputs.built == 'true'
         id: retain
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: package-${{ steps.reuse.outputs.key || inputs.key }}-${{ github.run_attempt }}
+          name: package-${{ steps.build.outputs.key || inputs.key }}-${{ github.run_attempt }}
           path: |
             result/package.tar.gz
             result/receipt.json
