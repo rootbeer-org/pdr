@@ -36,13 +36,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.1.0-main+5feb04139f85",
+            default_version = "0.1.0-main+26e09b92f111",
         },
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+5feb04139f85",
+            default_version = "0.1.0-main+26e09b92f111",
         },
         ["x86_64-linux"] = {
-            default_version = "0.1.0-main+5feb04139f85",
+            default_version = "0.1.0-main+26e09b92f111",
         },
     },
     versions = {
@@ -115,6 +115,14 @@ return {
                     { "rootbeer-forge", "--help" },
                 },
             },
+        },
+        ["0.1.0-main+26e09b92f111"] = {
+            digests = {
+                ["aarch64-linux"] = "347f73c72b28e65b97ac03b652f582ab03d62c1e25f7880d91cfcd5b600f2732",
+                ["aarch64-macos"] = "347f73c72b28e65b97ac03b652f582ab03d62c1e25f7880d91cfcd5b600f2732",
+                ["x86_64-linux"] = "347f73c72b28e65b97ac03b652f582ab03d62c1e25f7880d91cfcd5b600f2732",
+            },
+            commit = "26e09b92f111a5026545256562127c03ad5ebe95",
         },
         ["0.1.0-main+31ba3baa9c5e"] = {
             digests = {
