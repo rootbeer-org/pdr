@@ -34,24 +34,15 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - uses: ./.github/actions/setup-engine
+        with:
+          runner: ubuntu-24.04
+          revision-file: package-engine-revision
       - name: Check for a new CI-verified Rootbeer commit
         id: rootbeer
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/rootbeer-update.py --probe
-      - uses: ./.github/actions/setup-engine
-        if: >-
-          (github.event_name != 'repository_dispatch' && github.event.head_commit.message != 'ci(rootbeer): request update' && github.event.schedule != '*/15 * * * *' && inputs.rootbeer_only != true) || steps.rootbeer.outputs.changed == 'true'
-        id: engine
-        with:
-          runner: ubuntu-24.04
-          revision-file: package-engine-revision
-      - name: Test update automation
-        if: steps.engine.outcome == 'success'
-        env:
-          ROOTBEER_FORGE: engine-bin/rootbeer-forge
-        run: |
-          python3 tests/rootbeer-update_test.py
+        run: engine-bin/rootbeer-forge ci engine --probe
       - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         if: >-
           github.event_name != 'repository_dispatch' && github.event.head_commit.message != 'ci(rootbeer): request update' && github.event.schedule != '*/15 * * * *' && inputs.rootbeer_only != true
@@ -80,10 +71,9 @@ jobs:
         if: steps.rootbeer.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/rootbeer-update.py
+        run: engine-bin/rootbeer-forge ci engine
       - name: Select changed package inputs
         id: select
-        if: steps.engine.outcome == 'success'
         env:
           BASE_REVISION: ${{ github.sha }}
         run: |
@@ -141,9 +131,15 @@ jobs:
         with:
           name: upstream-candidates
           path: candidates
+      - uses: ./.github/actions/setup-engine
+        with:
+          runner: ubuntu-24.04
+          revision-file: package-engine-revision
       - name: Propose updates
         env:
           GH_TOKEN: ${{ steps.app.outputs.token }}
           APP_SLUG: ${{ steps.app.outputs.app-slug }}
           PACKAGES: ${{ needs.discover.outputs.packages }}
-        run: python3 .github/scripts/propose-updates.py
+        run: |
+          # shellcheck disable=SC2086 # PACKAGES holds exact requests separated by spaces.
+          engine-bin/rootbeer-forge ci propose $PACKAGES

@@ -1,17 +1,17 @@
 name: Validate CI
 on:
   pull_request:
-    paths: [".github/**", "tests/**"]
+    paths: [".github/**"]
   push:
     branches: [main]
-    paths: [".github/**", "tests/**"]
+    paths: [".github/**"]
 
 permissions:
   contents: read
 
 jobs:
   check:
-    name: Check workflows and automation
+    name: Check workflows
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -26,7 +26,3 @@ jobs:
           tar -xzf "$RUNNER_TEMP/actionlint.tar.gz" -C "$RUNNER_TEMP" actionlint
       - name: Check workflow syntax and expressions
         run: '"$RUNNER_TEMP/actionlint"'
-      - name: Check automation syntax
-        run: python3 -m compileall -q .github/scripts
-      - name: Check selection and artifact admission
-        run: python3 tests/package-automation_test.py

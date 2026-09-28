@@ -167,19 +167,12 @@ jobs:
           version: 1.3.0
       - name: Approve these exact inputs and sign this package
         env:
-          PACKAGE_NAME: ${{ inputs.name }}
           INPUT_KEY: ${{ needs.build.outputs.key }}
           PACKAGE_REGISTRY: ${{ github.repository }}/${{ inputs.name }}
           PDR_SIGNING_KEY: ${{ secrets.PDR_SIGNING_KEY }}
           PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
-          BACKFILL_PUBLISHED: ${{ vars.BACKFILL_PUBLISHED }}
         run: |
           : "${PDR_SIGNING_KEY:?The publication environment did not provide its signing key}"
-          # Only while republishing: re-signed records keep the date their version first appeared.
-          published=()
-          if [ "$BACKFILL_PUBLISHED" = true ]; then
-            published=(--published "$(python3 .github/scripts/published-at.py "$PACKAGE_NAME" result/receipt.json)")
-          fi
           umask 077
           key="$RUNNER_TEMP/package-key.der"
           trap 'rm -f "$key"' EXIT
@@ -188,7 +181,7 @@ jobs:
           engine-bin/rootbeer-forge --catalog packages release \
             --receipt result/receipt.json --input-key "$INPUT_KEY" \
             --registry "$PACKAGE_REGISTRY" --output release \
-            --key "$key" --public-key "$PDR_PUBLIC_KEY" "${published[@]}"
+            --key "$key" --public-key "$PDR_PUBLIC_KEY"
       - name: Store package and signed record in GHCR
         env:
           GH_TOKEN: ${{ github.token }}
