@@ -79,7 +79,8 @@ jobs:
     strategy:
       fail-fast: false
       max-parallel: 1
-      matrix: ${{ fromJSON(needs.plan.outputs.builds) }}
+      matrix:
+        level: ${{ fromJSON(needs.plan.outputs.builds).include.*.level }}
     uses: ./.github/workflows/package-level.yml
     permissions:
       contents: read
@@ -87,7 +88,8 @@ jobs:
     with:
       runner: ${{ inputs.runner }}
       plan: ${{ needs.plan.outputs.plan }}
-      tasks: ${{ toJSON(matrix.tasks) }}
+      # Levels with builds are contiguous from zero, so a level indexes its own entry.
+      tasks: ${{ toJSON(fromJSON(needs.plan.outputs.builds).include[matrix.level].tasks) }}
 
   publish:
     name: Publish
