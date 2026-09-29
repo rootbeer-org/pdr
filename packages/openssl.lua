@@ -16,6 +16,7 @@ return {
     },
     build = {
         backend = "custom",
+        dependencies = { "perl@5.44.0" },
         libraries = {
             "lib/libssl.a",
             "lib/libcrypto.a",
