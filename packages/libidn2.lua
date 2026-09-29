@@ -57,7 +57,7 @@ return {
                 ["aarch64-macos"] = "f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a",
                 ["x86_64-linux"] = "f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }

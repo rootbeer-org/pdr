@@ -44,7 +44,7 @@ return {
                 ["aarch64-macos"] = "e82664b170064e62331962126b259d452d53b227bb4a93ab20040d846fec01d8",
                 ["x86_64-linux"] = "e82664b170064e62331962126b259d452d53b227bb4a93ab20040d846fec01d8",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }
