@@ -16,7 +16,12 @@ return {
     },
     build = {
         backend = "custom",
-        libraries = { "lib/libssl.a", "lib/libcrypto.a" },
+        libraries = {
+            "lib/libssl.a",
+            "lib/libcrypto.a",
+            "lib/libssl.{shared_extension}",
+            "lib/libcrypto.{shared_extension}",
+        },
         steps = {
             configure = {
                 {
@@ -25,7 +30,6 @@ return {
                     "--prefix=/",
                     "--libdir=lib",
                     "--openssldir=/etc/ssl",
-                    "no-shared",
                     "no-module",
                 },
             },
@@ -66,6 +70,7 @@ return {
                 ["aarch64-macos"] = "736b467530f916737b7031310ccb21d8218c6229e61e8e160cd1d3458cd543a8",
                 ["x86_64-linux"] = "736b467530f916737b7031310ccb21d8218c6229e61e8e160cd1d3458cd543a8",
             },
+            revision = 2,
         },
     },
 }

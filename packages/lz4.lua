@@ -16,7 +16,7 @@ return {
     },
     build = {
         backend = "custom",
-        libraries = { "lib/liblz4.a" },
+        libraries = { "lib/liblz4.a", "lib/liblz4.{shared_extension}" },
         steps = {
             configure = {
                 {
@@ -30,13 +30,13 @@ return {
                 },
             },
             build = {
-                { "make", "-j{jobs}", "BUILD_SHARED=no", "PREFIX=/" },
+                { "make", "-j{jobs}", "PREFIX=/" },
             },
             check = {
-                { "make", "BUILD_SHARED=no", "PREFIX=/", "test" },
+                { "make", "PREFIX=/", "test" },
             },
             install = {
-                { "make", "BUILD_SHARED=no", "PREFIX=/", "DESTDIR={prefix}", "install" },
+                { "make", "PREFIX=/", "DESTDIR={prefix}", "install" },
             },
         },
     },
@@ -67,7 +67,7 @@ return {
                 ["aarch64-macos"] = "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
                 ["x86_64-linux"] = "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }

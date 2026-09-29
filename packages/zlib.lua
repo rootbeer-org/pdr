@@ -19,10 +19,10 @@ return {
     },
     build = {
         backend = "custom",
-        libraries = { "lib/libz.a" },
+        libraries = { "lib/libz.a", "lib/libz.{shared_extension}" },
         steps = {
             configure = {
-                { "/bin/sh", "./configure", "--prefix=/", "--static" },
+                { "/bin/sh", "./configure", "--prefix=/" },
             },
             build = {
                 { "make", "-j{jobs}" },
@@ -54,7 +54,7 @@ return {
                 ["aarch64-macos"] = "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16",
                 ["x86_64-linux"] = "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }

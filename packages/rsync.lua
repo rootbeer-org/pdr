@@ -21,12 +21,27 @@ return {
     build = {
         backend = "custom",
         dependencies = {
-            "openssl@4.0.2",
+            {
+                package = "openssl@4.0.2",
+                kind = "link_runtime",
+            },
             "xxhash@0.8.3",
-            "zstd@1.5.7",
-            "lz4@1.10.0",
-            "zlib@1.3.2",
-            "libidn2@2.3.8",
+            {
+                package = "zstd@1.5.7",
+                kind = "link_runtime",
+            },
+            {
+                package = "lz4@1.10.0",
+                kind = "link_runtime",
+            },
+            {
+                package = "zlib@1.3.2",
+                kind = "link_runtime",
+            },
+            {
+                package = "libidn2@2.3.8",
+                kind = "link_runtime",
+            },
         },
         steps = {
             configure = {
@@ -79,6 +94,7 @@ return {
                 ["aarch64-macos"] = "c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33",
                 ["x86_64-linux"] = "c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33",
             },
+            revision = 2,
             source = {
                 url = "https://download.samba.org/pub/rsync/src/rsync-{version}.tar.gz",
                 archive = "tar.gz",
@@ -94,6 +110,7 @@ return {
                 ["aarch64-macos"] = "c55f9c9dc10fb8bec397b399a0fdded53cc9a2d8e30891bb0d63724d25c37bef",
                 ["x86_64-linux"] = "c55f9c9dc10fb8bec397b399a0fdded53cc9a2d8e30891bb0d63724d25c37bef",
             },
+            revision = 2,
         },
     },
 }

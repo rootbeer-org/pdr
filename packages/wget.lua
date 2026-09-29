@@ -19,12 +19,30 @@ return {
     build = {
         backend = "custom",
         dependencies = {
-            "openssl@4.0.2",
-            "libpsl@0.23.3",
-            "libidn2@2.3.8",
-            "libiconv@1.19",
-            "libunistring@1.4.2",
-            "zlib@1.3.2",
+            {
+                package = "openssl@4.0.2",
+                kind = "link_runtime",
+            },
+            {
+                package = "libpsl@0.23.3",
+                kind = "link_runtime",
+            },
+            {
+                package = "libidn2@2.3.8",
+                kind = "link_runtime",
+            },
+            {
+                package = "libiconv@1.19",
+                kind = "link_runtime",
+            },
+            {
+                package = "libunistring@1.4.2",
+                kind = "link_runtime",
+            },
+            {
+                package = "zlib@1.3.2",
+                kind = "link_runtime",
+            },
             "pkgconf@3.0.7",
         },
         steps = {
@@ -81,7 +99,7 @@ return {
                 ["aarch64-macos"] = "766e48423e79359ea31e41db9e5c289675947a7fcf2efdcedb726ac9d0da3784",
                 ["x86_64-linux"] = "766e48423e79359ea31e41db9e5c289675947a7fcf2efdcedb726ac9d0da3784",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }

@@ -12,7 +12,7 @@ return {
     build = {
         backend = "autotools",
         configure = {
-            "--disable-shared",
+            "--enable-shared",
             "--enable-static",
             "--disable-nls",
             "--disable-doc",
@@ -20,8 +20,17 @@ return {
             "--without-libiconv-prefix",
             "--without-libunistring-prefix",
         },
-        dependencies = { "libiconv@1.19", "libunistring@1.4.2" },
-        libraries = { "lib/libidn2.a" },
+        dependencies = {
+            {
+                package = "libiconv@1.19",
+                kind = "link_runtime",
+            },
+            {
+                package = "libunistring@1.4.2",
+                kind = "link_runtime",
+            },
+        },
+        libraries = { "lib/libidn2.a", "lib/libidn2.{shared_extension}" },
     },
     outputs = {
         bins = { "idn2" },
@@ -48,6 +57,7 @@ return {
                 ["aarch64-macos"] = "f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a",
                 ["x86_64-linux"] = "f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a",
             },
+            revision = 2,
         },
     },
 }

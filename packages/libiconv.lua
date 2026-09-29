@@ -11,8 +11,13 @@ return {
     },
     build = {
         backend = "autotools",
-        configure = { "--disable-shared", "--enable-static", "--disable-rpath", "--disable-nls" },
-        libraries = { "lib/libiconv.a", "lib/libcharset.a" },
+        configure = { "--enable-shared", "--enable-static", "--disable-rpath", "--disable-nls" },
+        libraries = {
+            "lib/libiconv.a",
+            "lib/libcharset.a",
+            "lib/libiconv.{shared_extension}",
+            "lib/libcharset.{shared_extension}",
+        },
     },
     outputs = {
         bins = { "iconv" },
@@ -38,6 +43,7 @@ return {
                 ["aarch64-macos"] = "88dd96a8c0464eca144fc791ae60cd31cd8ee78321e67397e25fc095c4a19aa6",
                 ["x86_64-linux"] = "88dd96a8c0464eca144fc791ae60cd31cd8ee78321e67397e25fc095c4a19aa6",
             },
+            revision = 2,
         },
     },
 }

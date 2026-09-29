@@ -20,7 +20,7 @@ return {
     build = {
         backend = "autotools",
         configure = {
-            "--disable-shared",
+            "--enable-shared",
             "--enable-static",
             "--disable-nls",
             "--disable-rpath",
@@ -29,8 +29,22 @@ return {
             "--enable-builtin",
             "--without-libunistring-prefix",
         },
-        dependencies = { "libiconv@1.19", "libidn2@2.3.8", "libunistring@1.4.2", "pkgconf@3.0.7" },
-        libraries = { "lib/libpsl.a" },
+        dependencies = {
+            {
+                package = "libiconv@1.19",
+                kind = "link_runtime",
+            },
+            {
+                package = "libidn2@2.3.8",
+                kind = "link_runtime",
+            },
+            {
+                package = "libunistring@1.4.2",
+                kind = "link_runtime",
+            },
+            "pkgconf@3.0.7",
+        },
+        libraries = { "lib/libpsl.a", "lib/libpsl.{shared_extension}" },
     },
     outputs = {
         bins = { "psl" },
@@ -56,6 +70,7 @@ return {
                 ["aarch64-macos"] = "93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be",
                 ["x86_64-linux"] = "93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be",
             },
+            revision = 2,
         },
     },
 }

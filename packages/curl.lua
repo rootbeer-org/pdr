@@ -23,15 +23,30 @@ return {
         dependencies = {
             "cmake@4.4.3",
             "pkgconf@3.0.7",
-            "openssl@4.0.2",
-            "zlib@1.3.2",
+            {
+                package = "openssl@4.0.2",
+                kind = "link_runtime",
+            },
+            {
+                package = "zlib@1.3.2",
+                kind = "link_runtime",
+            },
             "brotli@1.2.0",
-            "zstd@1.5.7",
+            {
+                package = "zstd@1.5.7",
+                kind = "link_runtime",
+            },
             "nghttp2@1.70.0",
             "nghttp3@1.18.0",
             "ngtcp2@1.25.0",
-            "libidn2@2.3.8",
-            "libpsl@0.23.3",
+            {
+                package = "libidn2@2.3.8",
+                kind = "link_runtime",
+            },
+            {
+                package = "libpsl@0.23.3",
+                kind = "link_runtime",
+            },
             "libssh2@1.11.1",
         },
         libraries = { "lib/libcurl.a" },
@@ -55,7 +70,6 @@ return {
                     "-DBUILD_STATIC_CURL=ON",
                     "-DCURL_USE_OPENSSL=ON",
                     "-DOPENSSL_ROOT_DIR={dependencies}",
-                    "-DOPENSSL_USE_STATIC_LIBS=ON",
                     "-DCURL_USE_CMAKECONFIG=OFF",
                     "-DCURL_USE_PKGCONFIG=ON",
                     "-DPKG_CONFIG_ARGN=--static",
@@ -128,7 +142,7 @@ return {
                 ["aarch64-macos"] = "d54dd598bf05927a726deb38df31c6a255ba83ff1de57c5d1464dac3ed8f44a1",
                 ["x86_64-linux"] = "d54dd598bf05927a726deb38df31c6a255ba83ff1de57c5d1464dac3ed8f44a1",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }
