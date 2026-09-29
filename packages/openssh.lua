@@ -70,7 +70,9 @@ return {
                     "LIBS=-lncurses",
                     "--with-kerberos5={dependencies}",
                     -- Linux builds without PAM until rb owns more of the login stack; sshd checks
-                    -- /etc/shadow through the bundled libxcrypt.
+                    -- /etc/shadow through the bundled libxcrypt. Without PAM it skips session
+                    -- setup, limits, and 2FA or directory modules, so it is not yet a replacement
+                    -- for the system sshd; link the host's libpam once rb runs sshd as a service.
                     "--with-privsep-path=/run/sshd",
                 },
             },
