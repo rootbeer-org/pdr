@@ -60,7 +60,7 @@ jobs:
         env:
           PACKAGE: ${{ matrix.package }}
           GH_TOKEN: ${{ github.token }}
-        run: engine-bin/rootbeer-forge ci dependencies work/plan.json "$PACKAGE"
+        run: .github/builder/run engine-bin/rootbeer-forge ci dependencies work/plan.json "$PACKAGE"
       - name: Download dependency builds from this run
         if: steps.dependencies.outputs.ids != ''
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
@@ -80,7 +80,7 @@ jobs:
         env:
           PACKAGE: ${{ matrix.package }}
         run: |
-          engine-bin/rootbeer-forge build work/plan.json "$PACKAGE"
+          .github/builder/run engine-bin/rootbeer-forge build work/plan.json "$PACKAGE"
           # A result published while this job was queued is kept instead of a second build.
           jq -r '"key=\(.built.key // .reused.key)", "built=\(has("built"))"' result/build.json >> "$GITHUB_OUTPUT"
       - name: Retain the logs of a failed build

@@ -17,6 +17,7 @@ trusted = [
     ".github/workflows/package-level.yml",
     ".github/actions/setup-engine",
     ".github/actions/setup-package-tools",
+    ".github/builder",
 ]
 
 [ci.engine]

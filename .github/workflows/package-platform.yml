@@ -55,7 +55,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # shellcheck disable=SC2086 # PACKAGES holds exact requests separated by spaces.
-          engine-bin/rootbeer-forge ci plan $PACKAGES --reuse-run "$REUSE_RUN"
+          .github/builder/run engine-bin/rootbeer-forge ci plan $PACKAGES --reuse-run "$REUSE_RUN"
       - name: Retain the work plan
         id: retain
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
