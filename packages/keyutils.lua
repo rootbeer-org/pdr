@@ -20,6 +20,9 @@ return {
                     "make",
                     "-j{jobs}",
                     "NO_SOLIB=1",
+                    -- The archive links into krb5's shared libraries, which x86_64 requires to be
+                    -- position-independent; upstream only builds PIC objects for its own .so.
+                    "CFLAGS=-g -O2 -Wall -fPIC",
                     -- Replaces the build date upstream embeds with a fixed one, and builds only the
                     -- library and keyctl: key.dns_resolver would link the host's libresolv.
                     "VCPPFLAGS=-DPKGBUILD=\\\"1970-01-01\\\" -DPKGVERSION=\\\"keyutils-{version}\\\" -DAPIVERSION=\\\"libkeyutils-1.10\\\"",
