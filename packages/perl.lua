@@ -24,6 +24,7 @@ return {
                     "-des",
                     "-Dprefix=/",
                     "-Duserelocatableinc",
+                    "-Dlibswanted=m dl pthread util c",
                     "-Dman1dir=none",
                     "-Dman3dir=none",
                 },
