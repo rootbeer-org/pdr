@@ -8,6 +8,6 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates \
     && apt-get update --snapshot "$SNAPSHOT" \
     && apt-get install -y --no-install-recommends --snapshot "$SNAPSHOT" \
-        build-essential file netbase patch perl xz-utils bzip2 \
+        build-essential file git netbase patch perl xz-utils bzip2 \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --uid 1001 --create-home runner
