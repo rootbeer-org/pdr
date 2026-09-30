@@ -21,6 +21,13 @@ return {
                 restic = "./cmd/restic",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "restic" },
@@ -47,6 +54,7 @@ return {
                 ["aarch64-macos"] = "bb9b1a19040744d26d8a79be029d4e6b189c45ccc9d8831d7fe367d3c33df725",
                 ["x86_64-linux"] = "bb9b1a19040744d26d8a79be029d4e6b189c45ccc9d8831d7fe367d3c33df725",
             },
+            revision = 2,
         },
     },
 }

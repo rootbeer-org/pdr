@@ -21,6 +21,13 @@ return {
                 croc = ".",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "croc" },
@@ -46,6 +53,7 @@ return {
                 ["aarch64-macos"] = "16910b594704b40e9df35eb3bc637db675fe3d770a4588bd32b5a12c5ff174ff",
                 ["x86_64-linux"] = "16910b594704b40e9df35eb3bc637db675fe3d770a4588bd32b5a12c5ff174ff",
             },
+            revision = 2,
         },
     },
 }

@@ -25,6 +25,13 @@ return {
                 ["main.version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "kubectx", "kubens" },
@@ -51,6 +58,7 @@ return {
                 ["aarch64-macos"] = "1c8eb6b30c0067f89e5b2f9480865b0e3229a221fadddb644ce192d663c63907",
                 ["x86_64-linux"] = "1c8eb6b30c0067f89e5b2f9480865b0e3229a221fadddb644ce192d663c63907",
             },
+            revision = 2,
         },
     },
 }

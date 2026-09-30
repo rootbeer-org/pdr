@@ -21,6 +21,13 @@ return {
                 buf = "./cmd/buf",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "buf" },
@@ -47,7 +54,7 @@ return {
                 ["aarch64-macos"] = "5b74e94416114ccfcef2692592150a5c8459a9cb6f94088d42341ac06c389a22",
                 ["x86_64-linux"] = "5b74e94416114ccfcef2692592150a5c8459a9cb6f94088d42341ac06c389a22",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

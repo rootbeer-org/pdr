@@ -25,6 +25,13 @@ return {
                 ["github.com/cli/cli/v2/internal/build.Version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "gh" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
                 ["x86_64-linux"] = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
             },
-            revision = 3,
+            revision = 4,
         },
         ["2.101.0"] = {
             digests = {
@@ -58,7 +65,7 @@ return {
                 ["aarch64-macos"] = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
                 ["x86_64-linux"] = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }

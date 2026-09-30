@@ -24,6 +24,13 @@ return {
                 ["github.com/vektra/mockery/v3/internal/logging.SemVer"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "mockery" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "166487e34348d95057252e5a1a172d272f12eb01902c0c05c2a948567028800f",
                 ["x86_64-linux"] = "166487e34348d95057252e5a1a172d272f12eb01902c0c05c2a948567028800f",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

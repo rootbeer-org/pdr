@@ -24,6 +24,13 @@ return {
                 ["main.version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "dive" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "2a9666e9c3fddd5e2e5bad81dccda520b8102e7cea34e2888f264b4eb0506852",
                 ["x86_64-linux"] = "2a9666e9c3fddd5e2e5bad81dccda520b8102e7cea34e2888f264b4eb0506852",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

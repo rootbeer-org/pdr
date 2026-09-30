@@ -21,6 +21,13 @@ return {
                 tflint = ".",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "tflint" },
@@ -46,6 +53,7 @@ return {
                 ["aarch64-macos"] = "995a3816520ec99e2518b6cd845d003b8eddf8ca51322c2b7e9053f908326d15",
                 ["x86_64-linux"] = "995a3816520ec99e2518b6cd845d003b8eddf8ca51322c2b7e9053f908326d15",
             },
+            revision = 2,
         },
     },
 }

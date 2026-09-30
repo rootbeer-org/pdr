@@ -24,6 +24,13 @@ return {
                 ["github.com/cilium/cilium/hubble/pkg.Version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "hubble" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "82e8d062e8f2cfeecaeda19f300350d6b453d6d1584f2111f6a7763722994366",
                 ["x86_64-linux"] = "82e8d062e8f2cfeecaeda19f300350d6b453d6d1584f2111f6a7763722994366",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

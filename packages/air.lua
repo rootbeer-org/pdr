@@ -24,6 +24,13 @@ return {
                 ["main.airVersion"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "air" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "d74de50458f4f2cd744bb08a1acf84dbbcc99138ea0682176568f9a381a81887",
                 ["x86_64-linux"] = "d74de50458f4f2cd744bb08a1acf84dbbcc99138ea0682176568f9a381a81887",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

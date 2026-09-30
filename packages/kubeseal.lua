@@ -24,6 +24,13 @@ return {
                 ["main.VERSION"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "kubeseal" },
@@ -49,6 +56,7 @@ return {
                 ["aarch64-macos"] = "d80d44401f3516d2b31c3e51dcd0826ad8ae90d976c2e86010be2c665ff23d99",
                 ["x86_64-linux"] = "d80d44401f3516d2b31c3e51dcd0826ad8ae90d976c2e86010be2c665ff23d99",
             },
+            revision = 2,
         },
     },
 }

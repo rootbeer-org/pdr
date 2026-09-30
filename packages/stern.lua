@@ -24,6 +24,13 @@ return {
                 ["github.com/stern/stern/cmd.version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "stern" },
@@ -49,7 +56,7 @@ return {
                 ["aarch64-macos"] = "1cfec22cef9705e68fc46060ba85164af12bd07ede9264bafb67d11400996e71",
                 ["x86_64-linux"] = "1cfec22cef9705e68fc46060ba85164af12bd07ede9264bafb67d11400996e71",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

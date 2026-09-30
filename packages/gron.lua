@@ -24,6 +24,13 @@ return {
                 ["main.gronVersion"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "gron" },
@@ -49,6 +56,7 @@ return {
                 ["aarch64-macos"] = "1c98f2ef2ba03558864b1ab5e9c4b47a2e89d3ffaf24cfa0ac75cd38d775feb4",
                 ["x86_64-linux"] = "1c98f2ef2ba03558864b1ab5e9c4b47a2e89d3ffaf24cfa0ac75cd38d775feb4",
             },
+            revision = 2,
         },
     },
 }

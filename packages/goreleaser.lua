@@ -25,6 +25,13 @@ return {
                 ["main.version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "goreleaser" },
@@ -51,7 +58,7 @@ return {
                 ["aarch64-macos"] = "5f47712f272842b1b51f599403a266e1a304b9689cfb31da22bd279c79af5afc",
                 ["x86_64-linux"] = "5f47712f272842b1b51f599403a266e1a304b9689cfb31da22bd279c79af5afc",
             },
-            revision = 3,
+            revision = 4,
         },
         ["2.18.2"] = {
             digests = {
@@ -59,7 +66,7 @@ return {
                 ["aarch64-macos"] = "aec0dee0c28739166cee8b81ef6f970cd90c02cf51687481a0c2ccc168f247f1",
                 ["x86_64-linux"] = "aec0dee0c28739166cee8b81ef6f970cd90c02cf51687481a0c2ccc168f247f1",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }

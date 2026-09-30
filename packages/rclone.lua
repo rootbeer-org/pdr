@@ -24,6 +24,13 @@ return {
                 ["github.com/rclone/rclone/fs.Version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "rclone" },
@@ -50,6 +57,7 @@ return {
                 ["aarch64-macos"] = "fcc9351ab3976c73b4824cf7919f98f911f2442a606e2910fc2bd562111da220",
                 ["x86_64-linux"] = "fcc9351ab3976c73b4824cf7919f98f911f2442a606e2910fc2bd562111da220",
             },
+            revision = 2,
         },
     },
 }

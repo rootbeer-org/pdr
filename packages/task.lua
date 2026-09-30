@@ -22,6 +22,13 @@ return {
                 task = "./cmd/task",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "task" },
@@ -48,7 +55,7 @@ return {
                 ["aarch64-macos"] = "dd22395f4548ba58bc3adf83cb9ce33f1c5fad7e7c5f0a229bb2709af439fa9a",
                 ["x86_64-linux"] = "dd22395f4548ba58bc3adf83cb9ce33f1c5fad7e7c5f0a229bb2709af439fa9a",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

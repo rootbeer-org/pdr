@@ -26,6 +26,13 @@ return {
                 ["sigs.k8s.io/krew/internal/version.gitTag"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "kubectl-krew" },
@@ -52,6 +59,7 @@ return {
                 ["x86_64-linux"] = "2a9a751d63f67dfc21998774ec9cccf19aa5f1a22596f43226e211578f9f6469",
             },
             commit = "8a4a6fffb08d2ee04b4b013253160a50ed22139c",
+            revision = 2,
         },
     },
 }

@@ -25,6 +25,13 @@ return {
                 ["main.version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "lazydocker" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "405071220e5be9aa061c65d290e0347143b73ae0a3cc01df164f0105de2b53c4",
                 ["x86_64-linux"] = "405071220e5be9aa061c65d290e0347143b73ae0a3cc01df164f0105de2b53c4",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

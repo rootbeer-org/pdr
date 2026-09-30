@@ -24,6 +24,13 @@ return {
                 ["main.version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "grype" },
@@ -49,7 +56,7 @@ return {
                 ["aarch64-macos"] = "6963758836cd46fd019d4c5e2eb903ec26960c34814a35058ebea56971dc592c",
                 ["x86_64-linux"] = "6963758836cd46fd019d4c5e2eb903ec26960c34814a35058ebea56971dc592c",
             },
-            revision = 3,
+            revision = 4,
         },
         ["0.119.0"] = {
             digests = {
@@ -57,7 +64,7 @@ return {
                 ["aarch64-macos"] = "be9c904938d9702e432e3c24ea2288913678af33968405980d2061d6159248b2",
                 ["x86_64-linux"] = "be9c904938d9702e432e3c24ea2288913678af33968405980d2061d6159248b2",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }

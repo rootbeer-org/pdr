@@ -24,6 +24,13 @@ return {
                 ["github.com/docker/compose/v5/internal.Version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "docker-compose" },
@@ -49,7 +56,7 @@ return {
                 ["aarch64-macos"] = "311077662698fd8e34769a894f9d5240befb1730990efa8ed58e0fa8725d2d84",
                 ["x86_64-linux"] = "311077662698fd8e34769a894f9d5240befb1730990efa8ed58e0fa8725d2d84",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

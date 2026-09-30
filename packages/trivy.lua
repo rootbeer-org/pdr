@@ -28,6 +28,13 @@ return {
                 ["github.com/aquasecurity/trivy/pkg/version/app.ver"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "trivy" },
@@ -54,7 +61,7 @@ return {
                 ["aarch64-macos"] = "04268af574690b84bc3474a5f19e002cd6da3e16899fac9fd39c6e84e7843940",
                 ["x86_64-linux"] = "04268af574690b84bc3474a5f19e002cd6da3e16899fac9fd39c6e84e7843940",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

@@ -24,6 +24,13 @@ return {
                 ["github.com/zricethezav/gitleaks/v8/version.Version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "gitleaks" },
@@ -50,6 +57,7 @@ return {
                 ["aarch64-macos"] = "e90fb266d75837e75894c778bf594ab8e2787f12dce5a62651f21b893eaf9abb",
                 ["x86_64-linux"] = "e90fb266d75837e75894c778bf594ab8e2787f12dce5a62651f21b893eaf9abb",
             },
+            revision = 2,
         },
     },
 }

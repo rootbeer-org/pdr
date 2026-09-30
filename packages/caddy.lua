@@ -25,6 +25,13 @@ return {
                 ["github.com/caddyserver/caddy/v2.CustomVersion"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "caddy" },
@@ -51,7 +58,7 @@ return {
                 ["aarch64-macos"] = "2c3d02078286a6282cdb4d1d8744077788d556659dac0b64d8ed5886a7e5aeb9",
                 ["x86_64-linux"] = "2c3d02078286a6282cdb4d1d8744077788d556659dac0b64d8ed5886a7e5aeb9",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

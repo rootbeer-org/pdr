@@ -24,6 +24,13 @@ return {
                 ["go.szostok.io/version.version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "helmfile" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "acc51a53c5da30a33745c3cd0de813f2a2c9f3866ac986caac7c8b8ad01600e0",
                 ["x86_64-linux"] = "acc51a53c5da30a33745c3cd0de813f2a2c9f3866ac986caac7c8b8ad01600e0",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

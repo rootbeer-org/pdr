@@ -25,6 +25,13 @@ return {
                 ["github.com/google/go-containerregistry/pkg/v1/remote/transport.Version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "crane" },
@@ -51,6 +58,7 @@ return {
                 ["aarch64-macos"] = "a52cc7d61f8b2f043b7f0be1febecead5fceb791543c4790d699440f12d6b370",
                 ["x86_64-linux"] = "a52cc7d61f8b2f043b7f0be1febecead5fceb791543c4790d699440f12d6b370",
             },
+            revision = 2,
         },
     },
 }

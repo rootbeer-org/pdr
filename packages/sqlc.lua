@@ -21,6 +21,13 @@ return {
                 sqlc = "./cmd/sqlc",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "sqlc" },
@@ -47,7 +54,7 @@ return {
                 ["aarch64-macos"] = "de82593a200e4130dc2a0413a808f93fc30fdc7b5ecd402913ed08a8fea06c4a",
                 ["x86_64-linux"] = "de82593a200e4130dc2a0413a808f93fc30fdc7b5ecd402913ed08a8fea06c4a",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

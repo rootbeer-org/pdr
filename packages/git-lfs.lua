@@ -26,6 +26,13 @@ return {
             },
             generate = { "./commands" },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "git-lfs" },
@@ -51,7 +58,7 @@ return {
                 ["aarch64-macos"] = "a12ecfc17ebee002d1f6acca79442029d41cbf5e5b4ba9e02249ed96de20300f",
                 ["x86_64-linux"] = "a12ecfc17ebee002d1f6acca79442029d41cbf5e5b4ba9e02249ed96de20300f",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

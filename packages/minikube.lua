@@ -28,6 +28,13 @@ return {
             },
             cgo = true,
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "minikube" },
@@ -53,7 +60,7 @@ return {
                 ["aarch64-macos"] = "052b5b75f5a714a2d619be69bd9826083b42515d810cf1cac591ef0835be7fd9",
                 ["x86_64-linux"] = "052b5b75f5a714a2d619be69bd9826083b42515d810cf1cac591ef0835be7fd9",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

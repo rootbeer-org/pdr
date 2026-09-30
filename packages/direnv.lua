@@ -21,6 +21,13 @@ return {
                 direnv = ".",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "direnv" },
@@ -47,6 +54,7 @@ return {
                 ["aarch64-macos"] = "4142fbb661f3218913fac08d327c415e87b3e66bd0953185294ff8f3228ead24",
                 ["x86_64-linux"] = "4142fbb661f3218913fac08d327c415e87b3e66bd0953185294ff8f3228ead24",
             },
+            revision = 2,
         },
     },
 }

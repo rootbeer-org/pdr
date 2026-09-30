@@ -21,6 +21,13 @@ return {
                 staticcheck = "./cmd/staticcheck",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "staticcheck" },
@@ -47,6 +54,7 @@ return {
                 ["aarch64-macos"] = "8d807cd909f4481d6777f7707e5ae75dcc399e14d68ff14a3c814731826e0dfc",
                 ["x86_64-linux"] = "8d807cd909f4481d6777f7707e5ae75dcc399e14d68ff14a3c814731826e0dfc",
             },
+            revision = 2,
         },
     },
 }

@@ -24,6 +24,13 @@ return {
                 ["main.Build"] = "{commit}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "dlv" },
@@ -50,6 +57,7 @@ return {
                 ["x86_64-linux"] = "8ea5979dfc5978c9690dc1dd533a830815441dd33617f4a61bcdff7d2c3c7e90",
             },
             commit = "d116177dd925e085ba5dd340f8c644f4a1501a3b",
+            revision = 2,
         },
     },
 }

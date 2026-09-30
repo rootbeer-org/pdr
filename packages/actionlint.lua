@@ -25,6 +25,13 @@ return {
                 ["github.com/rhysd/actionlint.version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "actionlint" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "454800bd4f854592bcfe79b161f71d56e35940eb7016e48a26dd356adc9d400a",
                 ["x86_64-linux"] = "454800bd4f854592bcfe79b161f71d56e35940eb7016e48a26dd356adc9d400a",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

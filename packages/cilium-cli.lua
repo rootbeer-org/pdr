@@ -24,6 +24,13 @@ return {
                 ["github.com/cilium/cilium/cilium-cli/defaults.CLIVersion"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "cilium" },
@@ -50,6 +57,7 @@ return {
                 ["aarch64-macos"] = "3c9c6a261baa52ee3365c41e6501eef956d046133360685ab2b5fc00bad7b683",
                 ["x86_64-linux"] = "3c9c6a261baa52ee3365c41e6501eef956d046133360685ab2b5fc00bad7b683",
             },
+            revision = 2,
         },
     },
 }

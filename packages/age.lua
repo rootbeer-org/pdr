@@ -25,6 +25,13 @@ return {
                 ["main.Version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "age", "age-keygen" },
@@ -51,7 +58,7 @@ return {
                 ["aarch64-macos"] = "396007bc0bc53de253391493bda1252757ba63af1a19db86cfb60a35cb9d290a",
                 ["x86_64-linux"] = "396007bc0bc53de253391493bda1252757ba63af1a19db86cfb60a35cb9d290a",
             },
-            revision = 4,
+            revision = 5,
         },
         ["1.3.2"] = {
             digests = {
@@ -59,7 +66,7 @@ return {
                 ["aarch64-macos"] = "b07c28c6c4bdafa272073a310b75bc22c49da8904585a89c30e5ca4233e63843",
                 ["x86_64-linux"] = "b07c28c6c4bdafa272073a310b75bc22c49da8904585a89c30e5ca4233e63843",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

@@ -24,6 +24,13 @@ return {
                 ["github.com/derailed/k9s/cmd.version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "k9s" },
@@ -49,7 +56,7 @@ return {
                 ["aarch64-macos"] = "e2c3851c909b87f9cfafa262e426f4a89023ca4e745cba5cab6d0153f76e7dcd",
                 ["x86_64-linux"] = "e2c3851c909b87f9cfafa262e426f4a89023ca4e745cba5cab6d0153f76e7dcd",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

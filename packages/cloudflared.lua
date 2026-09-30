@@ -25,6 +25,13 @@ return {
                 ["main.Version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "cloudflared" },
@@ -51,6 +58,7 @@ return {
                 ["aarch64-macos"] = "f247f358f4dcc54d83a717be25b337f3e87ab4033e95e703b2d7e576bd534fef",
                 ["x86_64-linux"] = "f247f358f4dcc54d83a717be25b337f3e87ab4033e95e703b2d7e576bd534fef",
             },
+            revision = 2,
         },
     },
 }

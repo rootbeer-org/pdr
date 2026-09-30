@@ -24,6 +24,13 @@ return {
                 ["github.com/tomwright/dasel/v3/internal.Version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "dasel" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "5471fe33b28c98efed2b1a13431ed24097785f56a24dc9fb15e37b1e266446e1",
                 ["x86_64-linux"] = "5471fe33b28c98efed2b1a13431ed24097785f56a24dc9fb15e37b1e266446e1",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

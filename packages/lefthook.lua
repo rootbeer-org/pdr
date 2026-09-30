@@ -22,6 +22,13 @@ return {
             },
             tags = { "no_self_update" },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "lefthook" },
@@ -48,7 +55,7 @@ return {
                 ["aarch64-macos"] = "c2e79ff53d31aaeb5a5765d118552a7b6f6e2667647347200386615ee4e88acf",
                 ["x86_64-linux"] = "c2e79ff53d31aaeb5a5765d118552a7b6f6e2667647347200386615ee4e88acf",
             },
-            revision = 3,
+            revision = 4,
         },
         ["2.1.14"] = {
             digests = {
@@ -56,7 +63,7 @@ return {
                 ["aarch64-macos"] = "b1a99784f93339b24a24731646d4489d2f3496c4f79c9dac449aea3d92fc2be0",
                 ["x86_64-linux"] = "b1a99784f93339b24a24731646d4489d2f3496c4f79c9dac449aea3d92fc2be0",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }

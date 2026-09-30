@@ -27,6 +27,13 @@ return {
                 ["tailscale.com/version.shortStamp"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "tailscale", "tailscaled" },
@@ -54,6 +61,7 @@ return {
                 ["x86_64-linux"] = "110b0d0586e981fccb83149d0ac4e7aac3c879fd372772b0dee1818f204893bc",
             },
             commit = "5fb2a81b065b0a0bbbfc67ab20a0d9c6a1108115",
+            revision = 2,
         },
     },
 }

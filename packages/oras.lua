@@ -25,6 +25,13 @@ return {
                 ["oras.land/oras/internal/version.Version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "oras" },
@@ -51,7 +58,7 @@ return {
                 ["aarch64-macos"] = "0967062b09d82c902e7f6bdd22fc6dd4577811bf46ba63dab8791ff047c55392",
                 ["x86_64-linux"] = "0967062b09d82c902e7f6bdd22fc6dd4577811bf46ba63dab8791ff047c55392",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

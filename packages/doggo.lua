@@ -24,6 +24,13 @@ return {
                 ["main.buildVersion"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "doggo" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "e0d043aa34fb8daa44df07558fd32fe2686eba6644d5f6834edbc8a789d42e1d",
                 ["x86_64-linux"] = "e0d043aa34fb8daa44df07558fd32fe2686eba6644d5f6834edbc8a789d42e1d",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

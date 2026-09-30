@@ -24,6 +24,13 @@ return {
                 ["main.version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "grpcurl" },
@@ -49,7 +56,7 @@ return {
                 ["aarch64-macos"] = "bea899ba2f483a951bf40aa05d41e069dd2f7bfe52d2a229717abfdb5620cb7c",
                 ["x86_64-linux"] = "bea899ba2f483a951bf40aa05d41e069dd2f7bfe52d2a229717abfdb5620cb7c",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

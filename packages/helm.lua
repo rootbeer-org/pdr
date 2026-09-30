@@ -25,6 +25,13 @@ return {
                 ["helm.sh/helm/v4/internal/version.version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "helm" },
@@ -51,6 +58,7 @@ return {
                 ["aarch64-macos"] = "c9c930efa3abf03c331da421db81d61fb942218c7a7b80a8c0f0132d79fb5f62",
                 ["x86_64-linux"] = "c9c930efa3abf03c331da421db81d61fb942218c7a7b80a8c0f0132d79fb5f62",
             },
+            revision = 2,
         },
     },
 }

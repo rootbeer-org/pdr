@@ -27,6 +27,13 @@ return {
                 ["github.com/minio/mc/cmd.ReleaseTag"] = "{tag}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "mc" },
@@ -54,6 +61,7 @@ return {
                 ["x86_64-linux"] = "29db22500374169a43951c7cef09daf19e7291ea5ba00ac10f321371b0a35b32",
             },
             commit = "7394ce0dd2a80935aded936b09fa12cbb3cb8096",
+            revision = 2,
         },
     },
 }

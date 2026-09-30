@@ -24,6 +24,13 @@ return {
                 ["sigs.k8s.io/release-utils/version.gitVersion"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "cosign" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "ab8fcb8e0b4c0b8d01aefa37790cdd5ad099366b2efb8636b7a0250915b93362",
                 ["x86_64-linux"] = "ab8fcb8e0b4c0b8d01aefa37790cdd5ad099366b2efb8636b7a0250915b93362",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

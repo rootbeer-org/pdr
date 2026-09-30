@@ -24,6 +24,13 @@ return {
                 ["github.com/k3d-io/k3d/v5/version.Version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "k3d" },
@@ -50,6 +57,7 @@ return {
                 ["aarch64-macos"] = "969cce82c4871bb829be798655abe2b6709b77cc0f42f7ff69293c621dfbbab0",
                 ["x86_64-linux"] = "969cce82c4871bb829be798655abe2b6709b77cc0f42f7ff69293c621dfbbab0",
             },
+            revision = 2,
         },
     },
 }

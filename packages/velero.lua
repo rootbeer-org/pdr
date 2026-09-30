@@ -27,6 +27,13 @@ return {
                 ["github.com/vmware-tanzu/velero/pkg/buildinfo.Version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "velero" },
@@ -54,6 +61,7 @@ return {
                 ["x86_64-linux"] = "f551c797c90bc9e76f4de31e07011888666aeb63cd277991b909e4509baf9142",
             },
             commit = "4ee1e79a7aed367fd9b767b8219ec65bd0c96892",
+            revision = 2,
         },
     },
 }

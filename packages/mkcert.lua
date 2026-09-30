@@ -24,6 +24,13 @@ return {
                 ["main.Version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "mkcert" },
@@ -49,7 +56,7 @@ return {
                 ["aarch64-macos"] = "32bd5519581bf0b03f53e5b22721692b99f39ab5b161dc27532c51eafa512ca9",
                 ["x86_64-linux"] = "32bd5519581bf0b03f53e5b22721692b99f39ab5b161dc27532c51eafa512ca9",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

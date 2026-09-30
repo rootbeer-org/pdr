@@ -24,6 +24,13 @@ return {
                 ["github.com/dundee/gdu/v5/build.Version"] = "v{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "gdu" },
@@ -49,6 +56,7 @@ return {
                 ["aarch64-macos"] = "48e20d39a1bf706b3e11bbfeae550a0890610d3e6030a73952903f5fcf062347",
                 ["x86_64-linux"] = "48e20d39a1bf706b3e11bbfeae550a0890610d3e6030a73952903f5fcf062347",
             },
+            revision = 2,
         },
     },
 }

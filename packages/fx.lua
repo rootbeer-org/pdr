@@ -21,6 +21,13 @@ return {
                 fx = ".",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "fx" },
@@ -46,6 +53,7 @@ return {
                 ["aarch64-macos"] = "cdb98177f956615c961bc615fab0b30e73167295152d4f2d4cb70b16cdf47d6e",
                 ["x86_64-linux"] = "cdb98177f956615c961bc615fab0b30e73167295152d4f2d4cb70b16cdf47d6e",
             },
+            revision = 2,
         },
     },
 }

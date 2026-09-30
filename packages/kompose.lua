@@ -21,6 +21,13 @@ return {
                 kompose = ".",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "kompose" },
@@ -47,7 +54,7 @@ return {
                 ["aarch64-macos"] = "1a6eb3e9a5084d0ce6d1a81628b314686b7cfa41124bace13eb188865f7640a0",
                 ["x86_64-linux"] = "1a6eb3e9a5084d0ce6d1a81628b314686b7cfa41124bace13eb188865f7640a0",
             },
-            revision = 3,
+            revision = 4,
         },
     },
 }

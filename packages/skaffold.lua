@@ -26,6 +26,13 @@ return {
             },
             cgo = true,
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "skaffold" },
@@ -51,7 +58,7 @@ return {
                 ["aarch64-macos"] = "a8a5b2f7f291834be1fffff0f2eb1a32245c6279546b2037e0281d62d5607bb5",
                 ["x86_64-linux"] = "a8a5b2f7f291834be1fffff0f2eb1a32245c6279546b2037e0281d62d5607bb5",
             },
-            revision = 3,
+            revision = 4,
         },
         ["2.25.0"] = {
             digests = {
@@ -59,7 +66,7 @@ return {
                 ["aarch64-macos"] = "23290d3ef180391b9c248e11d15a63d5434c1522597600c843de1316507aa751",
                 ["x86_64-linux"] = "23290d3ef180391b9c248e11d15a63d5434c1522597600c843de1316507aa751",
             },
-            revision = 2,
+            revision = 3,
         },
     },
 }

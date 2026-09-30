@@ -24,6 +24,13 @@ return {
                 ["main.version"] = "{version}",
             },
         },
+        dependencies = {
+            {
+                package = "go",
+                version = "1.27.1",
+                kind = "build",
+            },
+        },
     },
     outputs = {
         bins = { "golangci-lint" },
@@ -50,7 +57,7 @@ return {
                 ["aarch64-macos"] = "a79a7a1faad9c1538e3f7f8b32843a53bbeedfa9ead45d9e8ca3bb210d55ece0",
                 ["x86_64-linux"] = "a79a7a1faad9c1538e3f7f8b32843a53bbeedfa9ead45d9e8ca3bb210d55ece0",
             },
-            revision = 3,
+            revision = 4,
         },
         ["2.14.0"] = {
             digests = {
@@ -58,6 +65,7 @@ return {
                 ["aarch64-macos"] = "f32ec6d5e9ddde780132b808a4ced3de8b5965d99d9771a2b9e68750bb5b0068",
                 ["x86_64-linux"] = "f32ec6d5e9ddde780132b808a4ced3de8b5965d99d9771a2b9e68750bb5b0068",
             },
+            revision = 2,
         },
     },
 }
