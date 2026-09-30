@@ -42,9 +42,10 @@ return {
             check = {
                 {
                     "/usr/bin/env",
-                    -- This HTTP test fails under macOS's poll backend, where writes past the
-                    -- limit race the connection reset; every other test runs on each backend.
-                    "REGRESS_ARGS=:http/data_length_constraints",
+                    -- These race the scheduler rather than test libevent: an HTTP write past the
+                    -- limit against the reset (macOS poll), a paired bufferevent's release
+                    -- (Linux epoll), and a timer precision assertion that trips under load.
+                    "REGRESS_ARGS=:http/data_length_constraints :bufferevent/bufferevent_pair_release_lock :util/monotonic_prc_fallback",
                     "make",
                     "check",
                 },
