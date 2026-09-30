@@ -36,7 +36,11 @@ return {
             configure = {
                 {
                     "sh",
-                    "./configure",
+                    "-c",
+                    -- glibc keeps b64_ntop in libresolv, which the runtime audit rejects as a host
+                    -- library; its static archive satisfies configure's first check instead.
+                    "case $(uname -s) in Linux) set -- \"$@\" LIBS=-l:libresolv.a ;; esac; exec ./configure \"$@\"",
+                    "sh",
                     "--prefix=/",
                     -- macOS would prefer utf8proc for character widths; it falls back to the
                     -- system wcwidth until the catalog packages utf8proc.

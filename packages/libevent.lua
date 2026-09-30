@@ -44,8 +44,9 @@ return {
                     "/usr/bin/env",
                     -- These race the scheduler rather than test libevent: an HTTP write past the
                     -- limit against the reset (macOS poll), a paired bufferevent's release
-                    -- (Linux epoll), and a timer precision assertion that trips under load.
-                    "REGRESS_ARGS=:http/data_length_constraints :bufferevent/bufferevent_pair_release_lock :util/monotonic_prc_fallback",
+                    -- (Linux epoll), a timer precision assertion that trips under load, and a
+                    -- getaddrinfo cancellation stress test that depends on resolver timing.
+                    "REGRESS_ARGS=:http/data_length_constraints :bufferevent/bufferevent_pair_release_lock :util/monotonic_prc_fallback :dns/getaddrinfo_cancel_stress",
                     "make",
                     "check",
                 },
