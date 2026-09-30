@@ -16,7 +16,13 @@ return {
     },
     build = {
         backend = "custom",
-        dependencies = { "openssl@4.0.2" },
+        dependencies = {
+            {
+                package = "openssl",
+                version = "4.0.2",
+                kind = "all",
+            },
+        },
         steps = {
             configure = {
                 {

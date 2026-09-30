@@ -18,7 +18,8 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "ncurses@6.6",
+                package = "ncurses",
+                version = "6.6",
                 kind = "link",
             },
         },

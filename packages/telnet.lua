@@ -25,7 +25,13 @@ return {
             "--without-libreadline-prefix",
             "--with-ncurses-include-dir={dependencies}/include",
         },
-        dependencies = { "ncurses@6.6" },
+        dependencies = {
+            {
+                package = "ncurses",
+                version = "6.6",
+                kind = "all",
+            },
+        },
     },
     outputs = {
         bins = { "telnet" },

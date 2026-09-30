@@ -18,11 +18,13 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "cmake@4.4.3",
+                package = "cmake",
+                version = "4.4.3",
                 kind = "build",
             },
             {
-                package = "cmocka@2.0.2",
+                package = "cmocka",
+                version = "2.0.2",
                 kind = "link",
             },
         },

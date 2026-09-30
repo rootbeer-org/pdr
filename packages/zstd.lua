@@ -17,14 +17,24 @@ return {
     build = {
         backend = "custom",
         dependencies = {
-            "cmake@4.4.3",
             {
-                package = "lz4@1.10.0",
+                package = "cmake",
+                version = "4.4.3",
+                kind = "all",
+            },
+            {
+                package = "lz4",
+                version = "1.10.0",
                 kind = "link_runtime",
             },
-            "xz@5.8.3",
             {
-                package = "zlib@1.3.2",
+                package = "xz",
+                version = "5.8.3",
+                kind = "all",
+            },
+            {
+                package = "zlib",
+                version = "1.3.2",
                 kind = "link_runtime",
             },
         },

@@ -24,30 +24,40 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "openssl@4.0.2",
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
-                package = "libpsl@0.23.3",
+                package = "libpsl",
+                version = "0.23.3",
                 kind = "link_runtime",
             },
             {
-                package = "libidn2@2.3.8",
+                package = "libidn2",
+                version = "2.3.8",
                 kind = "link_runtime",
             },
             {
-                package = "libiconv@1.19",
+                package = "libiconv",
+                version = "1.19",
                 kind = "link_runtime",
             },
             {
-                package = "libunistring@1.4.2",
+                package = "libunistring",
+                version = "1.4.2",
                 kind = "link_runtime",
             },
             {
-                package = "zlib@1.3.2",
+                package = "zlib",
+                version = "1.3.2",
                 kind = "link_runtime",
             },
-            "pkgconf@3.0.7",
+            {
+                package = "pkgconf",
+                version = "3.0.7",
+                kind = "all",
+            },
         },
         steps = {
             configure = {

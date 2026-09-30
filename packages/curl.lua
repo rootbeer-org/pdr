@@ -21,33 +21,66 @@ return {
     build = {
         backend = "custom",
         dependencies = {
-            "cmake@4.4.3",
-            "pkgconf@3.0.7",
             {
-                package = "openssl@4.0.2",
+                package = "cmake",
+                version = "4.4.3",
+                kind = "all",
+            },
+            {
+                package = "pkgconf",
+                version = "3.0.7",
+                kind = "all",
+            },
+            {
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
-                package = "zlib@1.3.2",
-                kind = "link_runtime",
-            },
-            "brotli@1.2.0",
-            {
-                package = "zstd@1.5.7",
-                kind = "link_runtime",
-            },
-            "nghttp2@1.70.0",
-            "nghttp3@1.18.0",
-            "ngtcp2@1.25.0",
-            {
-                package = "libidn2@2.3.8",
+                package = "zlib",
+                version = "1.3.2",
                 kind = "link_runtime",
             },
             {
-                package = "libpsl@0.23.3",
+                package = "brotli",
+                version = "1.2.0",
+                kind = "all",
+            },
+            {
+                package = "zstd",
+                version = "1.5.7",
                 kind = "link_runtime",
             },
-            "libssh2@1.11.1",
+            {
+                package = "nghttp2",
+                version = "1.70.0",
+                kind = "all",
+            },
+            {
+                package = "nghttp3",
+                version = "1.18.0",
+                kind = "all",
+            },
+            {
+                package = "ngtcp2",
+                version = "1.25.0",
+                kind = "all",
+            },
+            {
+                package = "libidn2",
+                version = "2.3.8",
+                kind = "link_runtime",
+            },
+            {
+                package = "libpsl",
+                version = "0.23.3",
+                kind = "link_runtime",
+            },
+            {
+                package = "libssh2",
+                version = "1.11.1",
+                kind = "all",
+            },
         },
         libraries = { "lib/libcurl.a" },
         steps = {

@@ -21,7 +21,13 @@ return {
             "-Ddatadir=/usr/share",
             "-Dversion=0.1.0-dev.20260909+g294212ebd35f5b755062186a66bcfd6436d3627a",
         },
-        dependencies = { "zig@0.16.0" },
+        dependencies = {
+            {
+                package = "zig",
+                version = "0.16.0",
+                kind = "all",
+            },
+        },
     },
     outputs = {
         bins = { "rush" },

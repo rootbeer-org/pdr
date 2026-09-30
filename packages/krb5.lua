@@ -18,31 +18,38 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "byacc@20260126",
+                package = "byacc",
+                version = "20260126",
                 kind = "build",
             },
             {
-                package = "pkgconf@3.0.7",
+                package = "pkgconf",
+                version = "3.0.7",
                 kind = "build",
             },
             {
-                package = "openssl@4.0.2",
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
-                package = "keyutils@1.6.3",
+                package = "keyutils",
+                version = "1.6.3",
                 kind = "link",
             },
             {
-                package = "libedit@20260512-3.1",
+                package = "libedit",
+                version = "20260512-3.1",
                 kind = "link",
             },
             {
-                package = "ncurses@6.6",
+                package = "ncurses",
+                version = "6.6",
                 kind = "link",
             },
             {
-                package = "cmocka@2.0.2",
+                package = "cmocka",
+                version = "2.0.2",
                 kind = "link",
             },
         },

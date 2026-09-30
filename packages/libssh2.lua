@@ -19,7 +19,23 @@ return {
     },
     build = {
         backend = "custom",
-        dependencies = { "cmake@4.4.3", "openssl@4.0.2", "zlib@1.3.2" },
+        dependencies = {
+            {
+                package = "cmake",
+                version = "4.4.3",
+                kind = "all",
+            },
+            {
+                package = "openssl",
+                version = "4.0.2",
+                kind = "all",
+            },
+            {
+                package = "zlib",
+                version = "1.3.2",
+                kind = "all",
+            },
+        },
         libraries = { "lib/libssh2.a" },
         steps = {
             configure = {

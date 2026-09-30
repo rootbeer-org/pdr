@@ -18,27 +18,33 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "cmake@4.4.3",
+                package = "cmake",
+                version = "4.4.3",
                 kind = "build",
             },
             {
-                package = "pkgconf@3.0.7",
+                package = "pkgconf",
+                version = "3.0.7",
                 kind = "build",
             },
             {
-                package = "gengetopt@2.23.1",
+                package = "gengetopt",
+                version = "2.23.1",
                 kind = "build",
             },
             {
-                package = "check@0.15.2",
+                package = "check",
+                version = "0.15.2",
                 kind = "link",
             },
             {
-                package = "openssl@4.0.2",
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
-                package = "zlib@1.3.2",
+                package = "zlib",
+                version = "1.3.2",
                 kind = "link_runtime",
             },
         },

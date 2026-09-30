@@ -16,7 +16,13 @@ return {
     },
     build = {
         backend = "custom",
-        dependencies = { "cmake@4.4.3" },
+        dependencies = {
+            {
+                package = "cmake",
+                version = "4.4.3",
+                kind = "all",
+            },
+        },
         libraries = { "lib/libbrotlicommon.a", "lib/libbrotlidec.a", "lib/libbrotlienc.a" },
         steps = {
             configure = {

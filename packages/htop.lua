@@ -17,11 +17,13 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "pkgconf@3.0.7",
+                package = "pkgconf",
+                version = "3.0.7",
                 kind = "build",
             },
             {
-                package = "ncurses@6.6",
+                package = "ncurses",
+                version = "6.6",
                 kind = "link",
             },
         },

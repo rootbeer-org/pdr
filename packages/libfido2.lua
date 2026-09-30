@@ -16,28 +16,34 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "cmake@4.4.3",
+                package = "cmake",
+                version = "4.4.3",
                 kind = "build",
             },
             {
-                package = "pkgconf@3.0.7",
+                package = "pkgconf",
+                version = "3.0.7",
                 kind = "build",
             },
             {
-                package = "libcbor@0.14.0",
+                package = "libcbor",
+                version = "0.14.0",
                 kind = "link",
             },
             {
-                package = "openssl@4.0.2",
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
-                package = "zlib@1.3.2",
+                package = "zlib",
+                version = "1.3.2",
                 kind = "link_runtime",
             },
             {
                 -- libudev-zero enumerates hidraw devices without udevd or systemd.
-                package = "libudev-zero@1.0.5",
+                package = "libudev-zero",
+                version = "1.0.5",
                 kind = "link",
             },
         },
@@ -105,23 +111,28 @@ return {
                 backend = "custom",
                 dependencies = {
                     {
-                        package = "cmake@4.4.3",
+                        package = "cmake",
+                        version = "4.4.3",
                         kind = "build",
                     },
                     {
-                        package = "pkgconf@3.0.7",
+                        package = "pkgconf",
+                        version = "3.0.7",
                         kind = "build",
                     },
                     {
-                        package = "libcbor@0.14.0",
+                        package = "libcbor",
+                        version = "0.14.0",
                         kind = "link",
                     },
                     {
-                        package = "openssl@4.0.2",
+                        package = "openssl",
+                        version = "4.0.2",
                         kind = "link_runtime",
                     },
                     {
-                        package = "zlib@1.3.2",
+                        package = "zlib",
+                        version = "1.3.2",
                         kind = "link_runtime",
                     },
                 },

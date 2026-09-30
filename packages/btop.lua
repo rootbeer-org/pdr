@@ -46,7 +46,8 @@ return {
                 backend = "custom",
                 dependencies = {
                     {
-                        package = "cmake@4.4.3",
+                        package = "cmake",
+                        version = "4.4.3",
                         kind = "build",
                     },
                 },

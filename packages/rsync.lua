@@ -22,24 +22,33 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "openssl@4.0.2",
-                kind = "link_runtime",
-            },
-            "xxhash@0.8.3",
-            {
-                package = "zstd@1.5.7",
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
-                package = "lz4@1.10.0",
+                package = "xxhash",
+                version = "0.8.3",
+                kind = "all",
+            },
+            {
+                package = "zstd",
+                version = "1.5.7",
                 kind = "link_runtime",
             },
             {
-                package = "zlib@1.3.2",
+                package = "lz4",
+                version = "1.10.0",
                 kind = "link_runtime",
             },
             {
-                package = "libidn2@2.3.8",
+                package = "zlib",
+                version = "1.3.2",
+                kind = "link_runtime",
+            },
+            {
+                package = "libidn2",
+                version = "2.3.8",
                 kind = "link_runtime",
             },
         },

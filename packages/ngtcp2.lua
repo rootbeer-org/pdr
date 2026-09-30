@@ -21,11 +21,13 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "cmake@4.4.3",
+                package = "cmake",
+                version = "4.4.3",
                 kind = "build",
             },
             {
-                package = "openssl@4.0.2",
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link",
             },
         },

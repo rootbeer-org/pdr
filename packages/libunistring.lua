@@ -23,7 +23,8 @@ return {
         },
         dependencies = {
             {
-                package = "libiconv@1.19",
+                package = "libiconv",
+                version = "1.19",
                 kind = "link_runtime",
             },
         },

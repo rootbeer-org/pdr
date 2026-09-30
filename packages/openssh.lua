@@ -18,39 +18,48 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "pkgconf@3.0.7",
+                package = "pkgconf",
+                version = "3.0.7",
                 kind = "build",
             },
             {
-                package = "openssl@4.0.2",
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
-                package = "zlib@1.3.2",
+                package = "zlib",
+                version = "1.3.2",
                 kind = "link_runtime",
             },
             {
-                package = "libfido2@1.17.0",
+                package = "libfido2",
+                version = "1.17.0",
                 kind = "link_runtime",
             },
             {
-                package = "ldns@1.9.2",
+                package = "ldns",
+                version = "1.9.2",
                 kind = "link_runtime",
             },
             {
-                package = "libedit@20260512-3.1",
+                package = "libedit",
+                version = "20260512-3.1",
                 kind = "link",
             },
             {
-                package = "ncurses@6.6",
+                package = "ncurses",
+                version = "6.6",
                 kind = "link",
             },
             {
-                package = "krb5@1.22.2",
+                package = "krb5",
+                version = "1.22.2",
                 kind = "link_runtime",
             },
             {
-                package = "libxcrypt@4.5.2",
+                package = "libxcrypt",
+                version = "4.5.2",
                 kind = "link",
             },
         },
@@ -142,31 +151,38 @@ return {
                 backend = "custom",
                 dependencies = {
                     {
-                        package = "pkgconf@3.0.7",
+                        package = "pkgconf",
+                        version = "3.0.7",
                         kind = "build",
                     },
                     {
-                        package = "openssl@4.0.2",
+                        package = "openssl",
+                        version = "4.0.2",
                         kind = "link_runtime",
                     },
                     {
-                        package = "zlib@1.3.2",
+                        package = "zlib",
+                        version = "1.3.2",
                         kind = "link_runtime",
                     },
                     {
-                        package = "libfido2@1.17.0",
+                        package = "libfido2",
+                        version = "1.17.0",
                         kind = "link_runtime",
                     },
                     {
-                        package = "ldns@1.9.2",
+                        package = "ldns",
+                        version = "1.9.2",
                         kind = "link_runtime",
                     },
                     {
-                        package = "libedit@20260512-3.1",
+                        package = "libedit",
+                        version = "20260512-3.1",
                         kind = "link",
                     },
                     {
-                        package = "ncurses@6.6",
+                        package = "ncurses",
+                        version = "6.6",
                         kind = "link",
                     },
                 },

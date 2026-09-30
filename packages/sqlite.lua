@@ -9,11 +9,13 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "libedit@20260512-3.1",
+                package = "libedit",
+                version = "20260512-3.1",
                 kind = "link",
             },
             {
-                package = "ncurses@6.6",
+                package = "ncurses",
+                version = "6.6",
                 kind = "link",
             },
         },

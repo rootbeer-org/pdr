@@ -17,7 +17,8 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "openssl@4.0.2",
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link_runtime",
             },
         },

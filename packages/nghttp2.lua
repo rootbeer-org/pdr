@@ -19,7 +19,13 @@ return {
     },
     build = {
         backend = "custom",
-        dependencies = { "cmake@4.4.3" },
+        dependencies = {
+            {
+                package = "cmake",
+                version = "4.4.3",
+                kind = "all",
+            },
+        },
         libraries = { "lib/libnghttp2.a" },
         steps = {
             configure = {

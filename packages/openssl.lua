@@ -16,7 +16,13 @@ return {
     },
     build = {
         backend = "custom",
-        dependencies = { "perl@5.44.0" },
+        dependencies = {
+            {
+                package = "perl",
+                version = "5.44.0",
+                kind = "all",
+            },
+        },
         libraries = {
             "lib/libssl.a",
             "lib/libcrypto.a",
@@ -61,7 +67,13 @@ return {
             default_version = "4.0.2",
             build = {
                 backend = "custom",
-                dependencies = { "perl@5.44.0" },
+                dependencies = {
+                    {
+                        package = "perl",
+                        version = "5.44.0",
+                        kind = "all",
+                    },
+                },
                 libraries = {
                     "lib/libssl.a",
                     "lib/libcrypto.a",

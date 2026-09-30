@@ -20,21 +20,36 @@ return {
     build = {
         backend = "custom",
         dependencies = {
-            "curl@8.22.0",
-            "expat@2.8.4",
             {
-                package = "openssl@4.0.2",
+                package = "curl",
+                version = "8.22.0",
+                kind = "all",
+            },
+            {
+                package = "expat",
+                version = "2.8.4",
+                kind = "all",
+            },
+            {
+                package = "openssl",
+                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
-                package = "zlib@1.3.2",
+                package = "zlib",
+                version = "1.3.2",
                 kind = "link_runtime",
             },
             {
-                package = "libiconv@1.19",
+                package = "libiconv",
+                version = "1.19",
                 kind = "link_runtime",
             },
-            "pkgconf@3.0.7",
+            {
+                package = "pkgconf",
+                version = "3.0.7",
+                kind = "all",
+            },
         },
         steps = {
             configure = {
