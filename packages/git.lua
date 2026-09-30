@@ -22,9 +22,18 @@ return {
         dependencies = {
             "curl@8.22.0",
             "expat@2.8.4",
-            "openssl@4.0.2",
-            "zlib@1.3.2",
-            "libiconv@1.19",
+            {
+                package = "openssl@4.0.2",
+                kind = "link_runtime",
+            },
+            {
+                package = "zlib@1.3.2",
+                kind = "link_runtime",
+            },
+            {
+                package = "libiconv@1.19",
+                kind = "link_runtime",
+            },
             "pkgconf@3.0.7",
         },
         steps = {
@@ -32,7 +41,7 @@ return {
                 {
                     "/bin/sh",
                     "-ec",
-                    "printf '%s' \"$1\" > config.mak; printf \"CURL_LDFLAGS = %s\\nCURL_CFLAGS = %s\\n\" \"$(pkg-config --static --libs libcurl)\" \"$(pkg-config --cflags libcurl)\" >> config.mak",
+                    "printf '%s' \"$1\" > config.mak; printf \"CURL_LDFLAGS = %s\\nCURL_CFLAGS = %s\\n\" \"$(pkg-config --static --libs libcurl)\" \"$(pkg-config --cflags libcurl)\" >> config.mak; printf \"LDFLAGS += %s\\n\" \"${LDFLAGS-}\" >> config.mak",
                     "rootbeer-git",
                     "prefix = /\010RUNTIME_PREFIX = YesPlease\010INSTALL_SYMLINKS = YesPlease\010NO_GETTEXT = YesPlease\010NEEDS_LIBICONV = YesPlease\010NO_RUST = YesPlease\010NO_TCLTK = YesPlease\010PERL_PATH = /usr/bin/perl\010PYTHON_PATH = /usr/bin/python3\010USE_LIBPCRE =\010",
                 },
@@ -68,13 +77,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "2.55.0",
+            default_version = "2.56.0",
         },
         ["aarch64-macos"] = {
-            default_version = "2.55.0",
+            default_version = "2.56.0",
         },
         ["x86_64-linux"] = {
-            default_version = "2.55.0",
+            default_version = "2.56.0",
         },
     },
     versions = {
@@ -84,7 +93,14 @@ return {
                 ["aarch64-macos"] = "457fdb04dc8728e007d4688695e6912e6f680727920f2a40bf11eacc17505357",
                 ["x86_64-linux"] = "457fdb04dc8728e007d4688695e6912e6f680727920f2a40bf11eacc17505357",
             },
-            revision = 4,
+            revision = 5,
+        },
+        ["2.56.0"] = {
+            digests = {
+                ["aarch64-linux"] = "26c56c296b38c0695b26fa95f475f1d01704d2d38e73465ca30b0b2f5dc789d3",
+                ["aarch64-macos"] = "26c56c296b38c0695b26fa95f475f1d01704d2d38e73465ca30b0b2f5dc789d3",
+                ["x86_64-linux"] = "26c56c296b38c0695b26fa95f475f1d01704d2d38e73465ca30b0b2f5dc789d3",
+            },
         },
     },
 }
