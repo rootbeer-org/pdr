@@ -1,0 +1,70 @@
+name: Rebuild coverage gaps
+on:
+  # Daily only: a package that keeps failing then retries once a day instead of looping.
+  schedule:
+    - cron: "41 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: coverage-gaps
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    name: Rebuild missing and stale platforms
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Read current approved recipes
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-engine
+        with:
+          runner: ubuntu-24.04
+          revision-file: package-engine-revision
+      - name: Read published metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh auth setup-git
+          git clone --depth=1 --branch gh-pages "https://github.com/$GITHUB_REPOSITORY.git" site
+      - name: Find declared platforms the PDR lacks or serves stale
+        id: gaps
+        env:
+          PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
+        run: |
+          status=0
+          engine-bin/rootbeer-forge --catalog packages coverage \
+            --site site/public/v3 --public-key "$PDR_PUBLIC_KEY" > coverage.txt || status=$?
+          cat coverage.txt
+          packages=$(awk '$1 == "missing:" || $1 == "stale:" { print $2 }' coverage.txt | sort -u | xargs)
+          if [ "$status" -ne 0 ] && [ -z "$packages" ]; then
+            echo 'Coverage failed without naming a package.' >&2
+            exit 1
+          fi
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+      # Platforms already current reuse their published builds, so only the gaps rebuild.
+      - name: Rebuild them
+        if: steps.gaps.outputs.packages != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGES: ${{ steps.gaps.outputs.packages }}
+        run: |
+          for workflow in package-builds.yml publish.yml; do
+            active=$(gh run list --workflow "$workflow" --branch main --limit 50 --json status \
+              --jq '[.[] | select(.status != "completed")] | length')
+            if [ "$active" -gt 0 ]; then
+              echo "::notice::$workflow is running on main; the next run retries: $PACKAGES"
+              exit 0
+            fi
+          done
+          gh workflow run package-builds.yml --ref main -f packages="$PACKAGES"
+          printf 'Rebuilding: %s\n' "$PACKAGES" >> "$GITHUB_STEP_SUMMARY"
