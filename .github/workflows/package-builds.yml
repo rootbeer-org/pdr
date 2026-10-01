@@ -168,6 +168,38 @@ jobs:
           echo 'The PDR changed concurrently; retry this metadata job.' >&2
           exit 1
 
+  coverage:
+    name: Check PDR coverage
+    needs: discovery
+    if: always() && needs.discovery.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Read current approved recipes
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: ./.github/actions/setup-engine
+        with:
+          runner: ubuntu-24.04
+          revision-file: package-engine-revision
+      - name: Read published metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh auth setup-git
+          git clone --depth=1 --branch gh-pages "https://github.com/$GITHUB_REPOSITORY.git" site
+      # A failed rebuild keeps serving the previous record, so only this check makes it visible.
+      - name: Require every declared platform to be published and current
+        env:
+          PDR_PUBLIC_KEY: ${{ vars.PDR_PUBLIC_KEY }}
+        run: |
+          engine-bin/rootbeer-forge --catalog packages coverage \
+            --site site/public/v3 --public-key "$PDR_PUBLIC_KEY"
+
   deploy:
     name: Deploy the PDR site
     needs: discovery
