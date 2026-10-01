@@ -103,13 +103,14 @@ return {
                 ["aarch64-macos"] = "c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33",
                 ["x86_64-linux"] = "c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33",
             },
-            revision = 2,
+            revision = 3,
             source = {
                 url = "https://download.samba.org/pub/rsync/src/rsync-{version}.tar.gz",
                 archive = "tar.gz",
                 strip_prefix = "rsync-{version}",
                 patches = {
                     "--- a/testsuite/chmod-setid_test.py\010+++ b/testsuite/chmod-setid_test.py\010@@ -8,6 +8,9 @@\010 from rsyncfns import SCRATCHDIR, run_rsync, test_fail\010 \010 base = SCRATCHDIR / 'chmod_setid'\010+base.mkdir(parents=True, exist_ok=True)\010+# macOS clears setgid when the inherited directory group is not ours.\010+os.chown(base, -1, os.getgid())\010 src = base / 'src'\010 dst = base / 'dst'\010 src.mkdir(parents=True, exist_ok=True)\010",
+                    "--- a/testsuite/protected-regular_test.py\010+++ b/testsuite/protected-regular_test.py\010@@ -49,11 +49,17 @@\010     if not os.environ.get('RSYNC_UNSHARED'):\010         unshare = shutil.which('unshare')\010         if unshare is not None:\010-            probe = subprocess.run(\010-                [unshare, '--user', '--map-root-user',\010-                 '--map-users', '5001:100000:1', 'true'],\010-                capture_output=True,\010-            )\010+            try:\010+                probe = subprocess.run(\010+                    [unshare, '--user', '--map-root-user',\010+                     '--map-users', '5001:100000:1', 'true'],\010+                    stdin=subprocess.DEVNULL,\010+                    stdout=subprocess.DEVNULL,\010+                    stderr=subprocess.DEVNULL,\010+                    timeout=5,\010+                )\010+            except subprocess.TimeoutExpired:\010+                test_skipped(\"Can't chown (unshare probe timed out)\")\010             if probe.returncode == 0:\010                 print(\"Re-running under unshare with UID mapping...\")\010                 env = os.environ.copy()\010",
                 },
             },
         },
