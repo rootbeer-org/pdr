@@ -12,7 +12,7 @@ return {
     platforms = {
         ["aarch64-linux"] = {
             target = "arm64",
-            default_version = "0.49.1",
+            default_version = "0.49.2",
             prebuilt = {
                 github = "kovidgoyal/kitty",
                 tag = "v{version}",
@@ -30,7 +30,7 @@ return {
             },
         },
         ["aarch64-macos"] = {
-            default_version = "0.49.1",
+            default_version = "0.49.2",
             prebuilt = {
                 github = "kovidgoyal/kitty",
                 tag = "v{version}",
@@ -53,7 +53,7 @@ return {
         },
         ["x86_64-linux"] = {
             target = "x86_64",
-            default_version = "0.49.1",
+            default_version = "0.49.2",
             prebuilt = {
                 github = "kovidgoyal/kitty",
                 tag = "v{version}",
@@ -84,6 +84,13 @@ return {
                 ["aarch64-linux"] = "828fcfe3e165c84d830f82545b6d568655b2620d77b7d5a4360e082bd9ba744b",
                 ["aarch64-macos"] = "d258b6dcab1866a9bc456c55b3754c6cdf6a7a6a93d038475275675bb9f2053a",
                 ["x86_64-linux"] = "8cfd68ed484d9a32e4e389abffe1a0ec6e0fbd7be5c9ea1c4fa41b9ead4af791",
+            },
+        },
+        ["0.49.2"] = {
+            digests = {
+                ["aarch64-linux"] = "0c81a995614426cccf0fecaf7d104d47cd63bbccf173d14976e9f92e3d60fce6",
+                ["aarch64-macos"] = "e524b894145d89cb76b584e3a9691196ae56bfa31d51384a44aa774252b7cef7",
+                ["x86_64-linux"] = "d573618b911e9c461bd421b96c13c74c7f1cb2f1ac9c327818d4ff84366cf5c6",
             },
         },
     },

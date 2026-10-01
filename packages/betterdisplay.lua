@@ -6,6 +6,7 @@ return {
     default_license = "LicenseRef-Proprietary",
     upstream = {
         github = "waydabber/BetterDisplay",
+        repository_id = 420628737,
         tag = "v{version}",
     },
     prebuilt = {
@@ -20,13 +21,18 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "5.0.5",
+            default_version = "5.0.6",
         },
     },
     versions = {
         ["5.0.5"] = {
             digests = {
                 ["aarch64-macos"] = "5685565b3f07952c697b6d7884ff5c410a7070ea30b2eb282a93f831fe773752",
+            },
+        },
+        ["5.0.6"] = {
+            digests = {
+                ["aarch64-macos"] = "a266c9f88244edb4895d98e0c75900cd57a0d47088f962a3d9bf5c14c5197d50",
             },
         },
     },
