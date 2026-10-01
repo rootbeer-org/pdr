@@ -14,7 +14,7 @@ exec docker run --rm --network host \
     --volume /tmp:/tmp \
     --volume /opt/hostedtoolcache:/opt/hostedtoolcache \
     --workdir "$PWD" \
-    --env-file <(env | grep -E '^(GITHUB_|RUNNER_TEMP=|GH_TOKEN=|PACKAGE=|PACKAGES=|REUSE_RUN=|CARGO_|RUSTUP_|GO[A-Z]*=)') \
+    --env-file <(env | grep -E '^(GITHUB_|RUNNER_TEMP=|GH_TOKEN=|PACKAGE=|PACKAGES=|REUSE_RUN=|CARGO_|RUSTUP_)') \
     --env HOME="$HOME" \
     --env PATH="$PATH" \
     "$image" "$@"
