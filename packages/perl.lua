@@ -23,7 +23,7 @@ return {
                     "/bin/sh",
                     "./Configure",
                     "-des",
-                    "-Dprefix=/",
+                    "-Dprefix={prefix}",
                     "-Duserelocatableinc",
                     "-Dlibswanted=m dl pthread util c",
                     "-Dman1dir=none",
@@ -37,7 +37,7 @@ return {
                 { "/usr/bin/env", "TEST_JOBS={jobs}", "make", "test_harness" },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },
@@ -60,6 +60,41 @@ return {
         },
         ["aarch64-macos"] = {
             default_version = "5.44.0",
+            build = {
+                backend = "custom",
+                -- The test suite talks over loopback sockets and SysV IPC, and checks /tmp.
+                allow = { "local-network", "ipc", "tmp" },
+                steps = {
+                    configure = {
+                        {
+                            "/bin/sh",
+                            "./Configure",
+                            "-des",
+                            "-Dprefix={prefix}",
+                            "-Duserelocatableinc",
+                            "-Dlibswanted=m dl pthread util c",
+                            "-Dman1dir=none",
+                            "-Dman3dir=none",
+                        },
+                    },
+                    build = {
+                        { "make", "-j{jobs}" },
+                    },
+                    check = {
+                        -- SysV semaphores fail on macOS 27 hosts, sandboxed or not.
+                        {
+                            "/usr/bin/env",
+                            "TEST_JOBS={jobs}",
+                            "TEST_ARGS=-nre=^io/sem -nre=IPC-SysV/t/ipcsysv -nre=IPC-SysV/t/sem",
+                            "make",
+                            "test_harness",
+                        },
+                    },
+                    install = {
+                        { "make", "install" },
+                    },
+                },
+            },
         },
         ["x86_64-linux"] = {
             default_version = "5.44.0",

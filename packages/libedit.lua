@@ -31,7 +31,7 @@ return {
                     "--disable-examples",
                     -- Our ncurses installs its headers under include/ncurses, and libedit's configure
                     -- ignores pkg-config.
-                    "CPPFLAGS=-I{dependencies}/include/ncurses",
+                    "CPPFLAGS=-I{dependencies.ncurses}/include/ncurses",
                 },
             },
             build = {

@@ -44,7 +44,6 @@ return {
                     -- Absolute: GNUInstallDirs maps prefix / to /usr for FULL install paths.
                     "-DCMAKE_INSTALL_LIBDIR=/lib",
                     "-DCMAKE_INSTALL_INCLUDEDIR=/include",
-                    "-DCMAKE_PREFIX_PATH={dependencies}",
                     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
                     "-DBUILD_SHARED_LIBS=OFF",
                     "-DWITH_EXAMPLES=OFF",

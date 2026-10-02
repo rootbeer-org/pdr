@@ -64,7 +64,6 @@ return {
                     "-DYKPIV_INSTALL_BIN_DIR=/bin",
                     "-DYKPIV_INSTALL_MAN_DIR=/share/man",
                     "-DYKPIV_INSTALL_PKGCONFIG_DIR=/lib/pkgconfig",
-                    "-DCMAKE_PREFIX_PATH={dependencies}",
                     "-DBACKEND=macscard",
                     "-DBUILD_STATIC_LIB=OFF",
                     -- Regenerating the man page needs help2man; the shipped page still installs.

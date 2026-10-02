@@ -22,7 +22,7 @@ return {
         libraries = { "lib/libz.a", "lib/libz.{shared_extension}" },
         steps = {
             configure = {
-                { "/bin/sh", "./configure", "--prefix=/" },
+                { "/bin/sh", "./configure", "--prefix={prefix}" },
             },
             build = {
                 { "make", "-j{jobs}" },
@@ -31,7 +31,7 @@ return {
                 { "make", "test" },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },

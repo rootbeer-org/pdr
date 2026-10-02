@@ -52,8 +52,7 @@ return {
                     "-DBUILD_TESTING=ON",
                     "-DENABLE_OPENSSL=ON",
                     "-DOPENSSL_USE_STATIC_LIBS=ON",
-                    "-DOPENSSL_ROOT_DIR={dependencies}",
-                    "-DCMAKE_PREFIX_PATH={dependencies}",
+                    "-DOPENSSL_ROOT_DIR={dependencies.openssl}",
                 },
             },
             build = {

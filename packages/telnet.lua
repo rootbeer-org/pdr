@@ -23,7 +23,7 @@ return {
             "--disable-rpath",
             "--without-idn",
             "--without-libreadline-prefix",
-            "--with-ncurses-include-dir={dependencies}/include",
+            "--with-ncurses-include-dir={dependencies.ncurses}/include",
         },
         dependencies = {
             {

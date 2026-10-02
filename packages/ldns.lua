@@ -29,7 +29,7 @@ return {
                     "sh",
                     "./configure",
                     "--prefix=/",
-                    "--with-ssl={dependencies}",
+                    "--with-ssl={dependencies.openssl}",
                     "--with-drill",
                     "--with-examples",
                     "--enable-shared",
