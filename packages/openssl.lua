@@ -16,6 +16,8 @@ return {
     },
     build = {
         backend = "custom",
+        -- TLS, QUIC, and HTTP tests run servers on loopback.
+        allow = { "local-network" },
         dependencies = {
             {
                 package = "perl",

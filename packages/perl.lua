@@ -17,6 +17,8 @@ return {
     },
     build = {
         backend = "custom",
+        -- The test suite talks over loopback sockets and SysV IPC, and checks /tmp.
+        allow = { "local-network", "ipc", "tmp" },
         steps = {
             configure = {
                 {

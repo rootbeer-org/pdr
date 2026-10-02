@@ -16,6 +16,8 @@ return {
     },
     build = {
         backend = "custom",
+        -- The debugger tests bind Unix sockets in the build directory.
+        allow = { "local-network" },
         dependencies = {
             {
                 package = "openssl",
@@ -73,51 +75,6 @@ return {
         },
         ["aarch64-macos"] = {
             default_version = "4.4.3",
-            build = {
-                backend = "custom",
-                -- The debugger tests bind Unix sockets in the build directory.
-                allow = { "local-network" },
-                dependencies = {
-                    {
-                        package = "openssl",
-                        version = "4.0.2",
-                        kind = "all",
-                    },
-                },
-                steps = {
-                    configure = {
-                        {
-                            "/bin/sh",
-                            "./bootstrap",
-                            "--prefix={prefix}",
-                            "--parallel={jobs}",
-                            "--",
-                            "-DCMAKE_BUILD_TYPE=Release",
-                            "-DBUILD_TESTING=ON",
-                            "-DBUILD_CursesDialog=OFF",
-                            "-DOPENSSL_ROOT_DIR={dependencies.openssl}",
-                            "-DOPENSSL_USE_STATIC_LIBS=ON",
-                        },
-                    },
-                    build = {
-                        { "make", "-j{jobs}" },
-                    },
-                    check = {
-                        {
-                            "./bin/ctest",
-                            "--output-on-failure",
-                            "--no-tests=error",
-                            "--parallel",
-                            "{jobs}",
-                            "-R",
-                            "^CMakeLib[.]",
-                        },
-                    },
-                    install = {
-                        { "make", "install" },
-                    },
-                },
-            },
         },
         ["x86_64-linux"] = {
             default_version = "4.4.3",
