@@ -1,0 +1,48 @@
+name: Build a package with rb
+description: Build one package after importing this run's earlier levels, then upload its runtime closure.
+inputs:
+  platform:
+    description: The rb platform, such as x86_64-linux
+    required: true
+  package:
+    description: The package as name@version
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: ./.github/actions/setup-rb
+    - name: Prepare the store
+      shell: bash
+      run: |
+        if [[ $RUNNER_OS == Linux ]]; then
+          # bubblewrap in the builder is unprivileged as far as the host knows
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          echo "RB=$GITHUB_WORKSPACE/.github/builder/rb" >> "$GITHUB_ENV"
+        else
+          sudo "$(command -v rb-helper)" setup admin
+          echo 'RB=rb' >> "$GITHUB_ENV"
+        fi
+    - name: Download earlier levels from this run
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+      with:
+        pattern: rb-${{ inputs.platform }}-*
+        path: imports
+        merge-multiple: true
+    - name: Import, build, check, and export
+      shell: bash
+      env:
+        PACKAGE: ${{ inputs.package }}
+        RB_REGISTRY_USER: ${{ github.actor }}
+        RB_REGISTRY_TOKEN: ${{ github.token }}
+      run: |
+        if [[ -d imports ]]; then
+          "$RB" drv import imports
+        fi
+        "$RB" drv build "$PACKAGE" --registry "$REGISTRY" --from "$STORE"
+        "$RB" drv export "$PACKAGE" out
+    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      with:
+        name: rb-${{ inputs.platform }}-${{ inputs.package }}
+        path: out/
+        retention-days: 7
+        if-no-files-found: error

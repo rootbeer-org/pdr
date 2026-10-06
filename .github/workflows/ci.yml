@@ -1,0 +1,108 @@
+name: Packages (rb)
+# The new pipeline. It lives on the CI branch (RB_CI_BRANCH, sandbox by default)
+# until cutover, so every job is gated on that branch. PRs build and check.
+# Pushes, which only a merge or an admin can make, build again and publish
+# what they built to the store.
+on:
+  push:
+  pull_request:
+
+permissions: {}
+
+concurrency:
+  group: rb-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  PACKAGES: zstd bat delta
+
+jobs:
+  eval:
+    name: Plan
+    if: >-
+      (github.event_name == 'push' && github.ref == format('refs/heads/{0}', vars.RB_CI_BRANCH || 'sandbox')) ||
+      (github.event_name == 'pull_request' && github.base_ref == (vars.RB_CI_BRANCH || 'sandbox'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: read
+    outputs:
+      x86_64-linux: ${{ steps.plan.outputs.x86_64-linux }}
+      aarch64-linux: ${{ steps.plan.outputs.aarch64-linux }}
+      aarch64-macos: ${{ steps.plan.outputs.aarch64-macos }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-rb
+      - name: Plan what the store doesn't have
+        id: plan
+        env:
+          RB_REGISTRY_USER: ${{ github.actor }}
+          RB_REGISTRY_TOKEN: ${{ github.token }}
+        run: |
+          for platform in x86_64-linux aarch64-linux aarch64-macos; do
+            # shellcheck disable=SC2086
+            plan=$(rb drv plan $PACKAGES --platform "$platform" --registry "$REGISTRY" --from "$STORE")
+            if ! jq --exit-status '.levels | length <= 6' <<< "$plan" > /dev/null; then
+              echo "$platform needs more than build.yml's six levels" >&2
+              exit 1
+            fi
+            echo "$platform=$plan" >> "$GITHUB_OUTPUT"
+          done
+
+  build:
+    name: Build (${{ matrix.platform }})
+    needs: eval
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: x86_64-linux
+            runner: ubuntu-24.04
+          - platform: aarch64-linux
+            runner: ubuntu-24.04-arm
+          - platform: aarch64-macos
+            runner: macos-15
+    uses: ./.github/workflows/build.yml
+    permissions:
+      contents: read
+      packages: read
+    with:
+      platform: ${{ matrix.platform }}
+      runner: ${{ matrix.runner }}
+      plan: ${{ needs.eval.outputs[matrix.platform] }}
+
+  # The workflow token can write the store from any branch's workflow, so the
+  # store is only as safe as push access to this repository. Whatever built is
+  # published, and a failed package holds back only what depends on it.
+  publish:
+    name: Publish
+    needs: [eval, build]
+    if: ${{ !cancelled() && needs.eval.result == 'success' && github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-rb
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          pattern: rb-*
+          path: outputs
+          merge-multiple: true
+      - name: Publish this run's outputs to the store
+        env:
+          RB_REGISTRY_USER: ${{ github.actor }}
+          RB_REGISTRY_TOKEN: ${{ github.token }}
+        run: |
+          if [[ ! -d outputs ]]; then
+            echo 'Nothing was built, so nothing is published.'
+            exit 0
+          fi
+          rb drv publish outputs --registry "$REGISTRY" --namespace "$STORE"

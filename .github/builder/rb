@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Runs rb as root in the pinned Linux builder, which linux-v1 builds need.
+# bubblewrap needs to create namespaces and mount its own /proc. The image
+# can't contain its own hash, so the sandbox learns it from RB_HOST_SYSTEM.
+set -euo pipefail
+
+builder=$(dirname "$0")
+image=$(docker build --quiet "$builder")
+hash=$(sha256sum < "$builder/Dockerfile")
+store="$RUNNER_TEMP/rb-store"
+mkdir -p "$store"
+
+exec docker run --rm --init --network host \
+    --env "RB_HOST_SYSTEM=builder-sha256:${hash%% *}" \
+    --env RB_REGISTRY_USER --env RB_REGISTRY_TOKEN \
+    --security-opt seccomp=unconfined \
+    --security-opt apparmor=unconfined \
+    --security-opt systempaths=unconfined \
+    --volume "$store:/opt/rb" \
+    --volume "$(command -v rb):/usr/local/bin/rb:ro" \
+    --volume "$PWD:$PWD" \
+    --workdir "$PWD" \
+    "$image" rb "$@"

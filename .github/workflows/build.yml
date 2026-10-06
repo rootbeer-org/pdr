@@ -1,0 +1,100 @@
+name: Build packages
+# One platform's plan, a fixed six levels deep and chained so each level can
+# import the ones below it.
+on:
+  workflow_call:
+    inputs:
+      platform:
+        description: The rb platform, such as x86_64-linux
+        type: string
+        required: true
+      runner:
+        type: string
+        required: true
+      plan:
+        description: The platform's `rb drv plan` output
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  level-0:
+    name: Level 0 (${{ matrix.package }})
+    if: fromJSON(inputs.plan).levels[0] != null
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(inputs.plan).levels[0] }}
+    steps: &level-steps
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/build-package
+        with:
+          platform: ${{ inputs.platform }}
+          package: ${{ matrix.package }}
+
+  level-1:
+    name: Level 1 (${{ matrix.package }})
+    needs: level-0
+    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[1] != null }}
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(inputs.plan).levels[1] }}
+    steps: *level-steps
+
+  level-2:
+    name: Level 2 (${{ matrix.package }})
+    needs: level-1
+    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[2] != null }}
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(inputs.plan).levels[2] }}
+    steps: *level-steps
+
+  level-3:
+    name: Level 3 (${{ matrix.package }})
+    needs: level-2
+    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[3] != null }}
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(inputs.plan).levels[3] }}
+    steps: *level-steps
+
+  level-4:
+    name: Level 4 (${{ matrix.package }})
+    needs: level-3
+    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[4] != null }}
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(inputs.plan).levels[4] }}
+    steps: *level-steps
+
+  level-5:
+    name: Level 5 (${{ matrix.package }})
+    needs: level-4
+    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[5] != null }}
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(inputs.plan).levels[5] }}
+    steps: *level-steps
