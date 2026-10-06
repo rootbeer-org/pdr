@@ -19,6 +19,8 @@ runs:
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           echo "RB=$GITHUB_WORKSPACE/.github/builder/rb" >> "$GITHUB_ENV"
         else
+          # The toolchain host.lua names for aarch64-macos, which every macOS key includes
+          sudo xcode-select --switch /Applications/Xcode_16.4.app
           sudo "$(command -v rb-helper)" setup admin
           echo 'RB=rb' >> "$GITHUB_ENV"
         fi
