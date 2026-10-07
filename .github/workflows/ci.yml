@@ -15,6 +15,8 @@ concurrency:
 
 env:
   PACKAGES: zstd bat delta fd
+  REGISTRY: https://ghcr.io
+  STORE: rootbeer-org/store
 
 jobs:
   eval:
@@ -35,7 +37,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-rb
+      - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
       - name: Plan what the store doesn't have
         id: plan
         env:
@@ -90,7 +92,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-rb
+      - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           pattern: rb-*
@@ -106,3 +108,40 @@ jobs:
             exit 0
           fi
           rb drv publish outputs --registry "$REGISTRY" --namespace "$STORE"
+
+  # The index repository holds the online key and signs, so the key never
+  # reaches a repository that runs package builds
+  index:
+    name: Index
+    needs: publish
+    if: ${{ !cancelled() && needs.publish.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
+      - name: Write an index entry for each published package
+        run: rb drv index "$RUNNER_TEMP/entries" --registry "$REGISTRY" --namespace "$STORE"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: rb-index-entries
+          path: ${{ runner.temp }}/entries
+          retention-days: 7
+          if-no-files-found: error
+      - name: Mint a token to dispatch the index's signing
+        id: app
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1
+        with:
+          client-id: ${{ vars.ROOTBEER_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.ROOTBEER_BOT_PRIVATE_KEY }}
+          owner: rootbeer-org
+          repositories: index
+          permission-actions: write
+      - name: Ask the index repository to sign them
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: gh workflow run sign.yml --repo rootbeer-org/index --field run-id="$GITHUB_RUN_ID"

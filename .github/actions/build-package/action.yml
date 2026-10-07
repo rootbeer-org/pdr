@@ -10,7 +10,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: ./.github/actions/setup-rb
+    - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
     - name: Prepare the store
       shell: bash
       run: |

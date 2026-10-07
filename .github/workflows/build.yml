@@ -20,6 +20,10 @@ permissions:
   contents: read
   packages: read
 
+env:
+  REGISTRY: https://ghcr.io
+  STORE: rootbeer-org/store
+
 jobs:
   level-0:
     name: Level 0 (${{ matrix.package }})
