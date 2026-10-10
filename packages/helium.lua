@@ -8,7 +8,7 @@ return {
     platforms = {
         ["aarch64-linux"] = {
             target = "arm64",
-            default_version = "0.18.2.1",
+            default_version = "0.19.2.1",
             upstream = {
                 github = "imputnet/helium-linux",
                 repository_id = 1043354934,
@@ -27,7 +27,7 @@ return {
             },
         },
         ["aarch64-macos"] = {
-            default_version = "0.18.2.1",
+            default_version = "0.19.2.1",
             upstream = {
                 github = "imputnet/helium-macos",
                 repository_id = 933200785,
@@ -46,7 +46,7 @@ return {
         },
         ["x86_64-linux"] = {
             target = "x86_64",
-            default_version = "0.18.2.1",
+            default_version = "0.19.2.1",
             upstream = {
                 github = "imputnet/helium-linux",
                 repository_id = 1043354934,
@@ -85,6 +85,13 @@ return {
                 ["aarch64-linux"] = "03e6094d329f9d6aad8ad0cc0e4397abb65b3c634829ff49173d50891ce64669",
                 ["aarch64-macos"] = "86982d8df340d5a1bf1a0c76ada33d7d26797c6c3424a44afa676159b6a3e3eb",
                 ["x86_64-linux"] = "aa6ec4400dd3413f5dd5e633a51408e07cd3f3de0626501cd4e55cdd1364de21",
+            },
+        },
+        ["0.19.2.1"] = {
+            digests = {
+                ["aarch64-linux"] = "d57e678d896a42b101eefec153ffc2960a0748d368a6afbc53d6c4de16cc6034",
+                ["aarch64-macos"] = "c07dab9c1571cf68cf856b35c6d0bf21c2cf53f77c43245163018e788094ebf1",
+                ["x86_64-linux"] = "a04550a3c7c70bdad3acd3a4430eda8d2afc0bf7173a9c58a403feab9517087f",
             },
         },
     },
