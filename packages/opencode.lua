@@ -23,15 +23,15 @@ return {
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-arm64.tar.gz",
-            default_version = "1.18.34",
+            default_version = "1.18.35",
         },
         ["aarch64-macos"] = {
             target = "darwin-arm64.zip",
-            default_version = "1.18.34",
+            default_version = "1.18.35",
         },
         ["x86_64-linux"] = {
             target = "linux-x64-baseline.tar.gz",
-            default_version = "1.18.34",
+            default_version = "1.18.35",
         },
     },
     versions = {
@@ -62,6 +62,13 @@ return {
                 ["aarch64-linux"] = "bbdb3f00c2c51e42e315525233151309724226a8776da8e9145e3b0fa3d5310f",
                 ["aarch64-macos"] = "8522b70f545184b3a8d97c5ca4f814093b2476d72aebfda8c48bcd072ec31d1b",
                 ["x86_64-linux"] = "24b0d458d21ef548b2752166303defcf7f4945b049fb4876ab78dfaf86d81b27",
+            },
+        },
+        ["1.18.35"] = {
+            digests = {
+                ["aarch64-linux"] = "f7f2ba59ee8aa94d388f9696575a32d20e71c2ee48def9f80fc693a60fec6c72",
+                ["aarch64-macos"] = "80b05124357a77cd57945bfde36082a028e829c198d222d5e146617f49a2c4b7",
+                ["x86_64-linux"] = "90c97d4a24d36437bce36f27195c9cd2e0b70ed037a04d1c6a6740eb246c2a73",
             },
         },
     },

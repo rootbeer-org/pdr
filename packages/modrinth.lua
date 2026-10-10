@@ -21,7 +21,7 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "0.21.6",
+            default_version = "0.21.9",
         },
     },
     versions = {
@@ -33,6 +33,11 @@ return {
         ["0.21.6"] = {
             digests = {
                 ["aarch64-macos"] = "9ef151eed55aafc3e15afe19d4a5eaa376b8f6fd539131dcb04e00db63e68ac7",
+            },
+        },
+        ["0.21.9"] = {
+            digests = {
+                ["aarch64-macos"] = "10650ed5ebb46b7d9045dea7cec85cc2a3bdd65c48691f195bc9bb1f4ba5337e",
             },
         },
     },
