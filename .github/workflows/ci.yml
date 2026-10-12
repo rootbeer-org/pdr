@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
-  PACKAGES: zstd bat delta fd
+  PACKAGES: zstd bat delta fd rootbeer
   REGISTRY: https://ghcr.io
   STORE: rootbeer-org/store
 

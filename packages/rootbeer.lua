@@ -16,6 +16,9 @@ return {
     },
     build = {
         backend = "rust",
+        dependencies = {
+            { package = "rust", version = "1.98.1", kind = "build" },
+        },
         rust = {
             packages = { "rootbeer-cli", "rootbeer-forge", "rootbeer-store" },
             environment = {
@@ -36,13 +39,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.1.0-main+a33533f159d7",
+            default_version = "0.1.0-main+50ba587384e7",
         },
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+a33533f159d7",
+            default_version = "0.1.0-main+50ba587384e7",
         },
         ["x86_64-linux"] = {
-            default_version = "0.1.0-main+a33533f159d7",
+            default_version = "0.1.0-main+50ba587384e7",
         },
     },
     versions = {
@@ -71,6 +74,9 @@ return {
             },
             build = {
                 backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
                 rust = {
                     packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
@@ -106,6 +112,9 @@ return {
             },
             build = {
                 backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
                 rust = {
                     packages = { "rootbeer-cli", "rootbeer-forge" },
                     environment = {
@@ -157,6 +166,9 @@ return {
             },
             build = {
                 backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
                 rust = {
                     packages = { "rootbeer-cli", "rootbeer-forge", "rootbeer-store" },
                     environment = {
@@ -192,6 +204,9 @@ return {
             },
             build = {
                 backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
                 rust = {
                     packages = { "rootbeer-cli", "rootbeer-forge", "rootbeer-store" },
                     environment = {
@@ -218,6 +233,36 @@ return {
             },
             commit = "4fa02918d4e36694e625c60c582a2c588015b362",
         },
+        ["0.1.0-main+50ba587384e7"] = {
+            digests = {
+                ["aarch64-linux"] = "af7220f314fe1a7bed28038d6bc4bbe83da0d56275aa14f2c4743e992a2a8a8a",
+                ["aarch64-macos"] = "af7220f314fe1a7bed28038d6bc4bbe83da0d56275aa14f2c4743e992a2a8a8a",
+                ["x86_64-linux"] = "af7220f314fe1a7bed28038d6bc4bbe83da0d56275aa14f2c4743e992a2a8a8a",
+            },
+            commit = "50ba587384e72182b5a0b7c067defac59d504a75",
+            build = {
+                backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
+                rust = {
+                    packages = { "rootbeer-cli", "rootbeer-helper" },
+                    environment = {
+                        RB_SERIAL = "20261012073206",
+                        RB_SOURCE_REVISION = "{commit}",
+                        ROOTBEER_PDR_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
+                        ROOTBEER_PDR_URL = "https://pdr.rbpkg.com/v3/current.json",
+                    },
+                },
+            },
+            outputs = {
+                bins = { "rb", "rb-helper" },
+                checks = {
+                    { "rb", "--version" },
+                    { "rb", "--help" },
+                },
+            },
+        },
         ["0.1.0-main+54e26834aae0"] = {
             digests = {
                 ["aarch64-linux"] = "e8185a7c4b0623ca2023b87344ffeea30c33c21c3efc4cf2e61c3d46814da23a",
@@ -235,6 +280,9 @@ return {
             },
             build = {
                 backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
                 rust = {
                     packages = { "rootbeer-cli", "rootbeer-forge", "rootbeer-store" },
                     environment = {
@@ -262,6 +310,9 @@ return {
             },
             build = {
                 backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
                 rust = {
                     packages = { "rootbeer-cli", "rootbeer-forge", "rootbeer-store" },
                     environment = {
@@ -289,6 +340,9 @@ return {
             },
             build = {
                 backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
                 rust = {
                     packages = { "rootbeer-cli", "rootbeer-forge", "rootbeer-store" },
                     environment = {
@@ -380,6 +434,9 @@ return {
             },
             build = {
                 backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
                 rust = {
                     packages = { "rootbeer-cli", "rootbeer-forge", "rootbeer-store" },
                     environment = {
