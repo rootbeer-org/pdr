@@ -21,6 +21,17 @@ local linux = {
     },
 }
 
+-- rust-lld and rust-objcopy look for libLLVM in rustlib's lib, upstream too.
+local macos = {
+    backend = "custom",
+    steps = {
+        install = {
+            install,
+            { "ln", "-s", "../../../libLLVM.dylib", "{prefix}/lib/rustlib/{target}/lib/libLLVM.dylib" },
+        },
+    },
+}
+
 return {
     name = "rust",
     description = "Build Rust programs with rustc and cargo",
@@ -54,6 +65,7 @@ return {
         ["aarch64-macos"] = {
             target = "aarch64-apple-darwin",
             default_version = "1.98.1",
+            build = macos,
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-gnu",
