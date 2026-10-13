@@ -47,8 +47,8 @@ jobs:
           for platform in x86_64-linux aarch64-linux aarch64-macos; do
             # shellcheck disable=SC2086
             plan=$(rb drv plan $PACKAGES --platform "$platform" --registry "$REGISTRY" --from "$STORE")
-            if ! jq --exit-status '.levels | length <= 6' <<< "$plan" > /dev/null; then
-              echo "$platform needs more than build.yml's six levels" >&2
+            if ! jq --exit-status '.levels | length <= 8' <<< "$plan" > /dev/null; then
+              echo "$platform needs more than build.yml's eight levels" >&2
               exit 1
             fi
             echo "$platform=$plan" >> "$GITHUB_OUTPUT"

@@ -40,7 +40,7 @@ runs:
         if [[ -d imports ]]; then
           "$RB" drv import imports
         fi
-        "$RB" drv build "$PACKAGE" --registry "$REGISTRY" --from "$STORE"
+        "$RB" drv build "$PACKAGE" --require-dependencies --registry "$REGISTRY" --from "$STORE"
         "$RB" drv export "$PACKAGE" out
     - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
       with:

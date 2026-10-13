@@ -1,6 +1,7 @@
 name: Build packages
-# One platform's plan, a fixed six levels deep and chained so each level can
-# import the ones below it.
+# One platform's plan, a fixed eight levels deep and chained so each level can
+# import the ones below it. A level runs after failures, and a package whose
+# dependencies didn't build fails fast, so a failure costs only its dependents.
 on:
   workflow_call:
     inputs:
@@ -46,7 +47,7 @@ jobs:
   level-1:
     name: Level 1 (${{ matrix.package }})
     needs: level-0
-    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[1] != null }}
+    if: ${{ !cancelled() && fromJSON(inputs.plan).levels[1] != null }}
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 180
     strategy:
@@ -58,7 +59,7 @@ jobs:
   level-2:
     name: Level 2 (${{ matrix.package }})
     needs: level-1
-    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[2] != null }}
+    if: ${{ !cancelled() && fromJSON(inputs.plan).levels[2] != null }}
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 180
     strategy:
@@ -70,7 +71,7 @@ jobs:
   level-3:
     name: Level 3 (${{ matrix.package }})
     needs: level-2
-    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[3] != null }}
+    if: ${{ !cancelled() && fromJSON(inputs.plan).levels[3] != null }}
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 180
     strategy:
@@ -82,7 +83,7 @@ jobs:
   level-4:
     name: Level 4 (${{ matrix.package }})
     needs: level-3
-    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[4] != null }}
+    if: ${{ !cancelled() && fromJSON(inputs.plan).levels[4] != null }}
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 180
     strategy:
@@ -94,11 +95,35 @@ jobs:
   level-5:
     name: Level 5 (${{ matrix.package }})
     needs: level-4
-    if: ${{ !cancelled() && !failure() && fromJSON(inputs.plan).levels[5] != null }}
+    if: ${{ !cancelled() && fromJSON(inputs.plan).levels[5] != null }}
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 180
     strategy:
       fail-fast: false
       matrix:
         package: ${{ fromJSON(inputs.plan).levels[5] }}
+    steps: *level-steps
+
+  level-6:
+    name: Level 6 (${{ matrix.package }})
+    needs: level-5
+    if: ${{ !cancelled() && fromJSON(inputs.plan).levels[6] != null }}
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(inputs.plan).levels[6] }}
+    steps: *level-steps
+
+  level-7:
+    name: Level 7 (${{ matrix.package }})
+    needs: level-6
+    if: ${{ !cancelled() && fromJSON(inputs.plan).levels[7] != null }}
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(inputs.plan).levels[7] }}
     steps: *level-steps
