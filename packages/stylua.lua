@@ -13,6 +13,9 @@ return {
         github = "JohnnyMorganz/StyLua",
         tag = "v{version}",
         asset = "stylua-{target}.zip",
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
     },
     outputs = {
         bins = { "stylua" },

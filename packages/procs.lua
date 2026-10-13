@@ -13,6 +13,9 @@ return {
         github = "dalance/procs",
         tag = "v{version}",
         asset = "procs-{tag}-{target}.zip",
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
     },
     outputs = {
         bins = { "procs" },

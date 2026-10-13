@@ -13,6 +13,9 @@ return {
         github = "sxyazi/yazi",
         tag = "v{version}",
         asset = "yazi-{target}.zip",
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
     },
     outputs = {
         bins = { "yazi", "ya" },

@@ -28,6 +28,14 @@ return {
         ["aarch64-macos"] = {
             target = "darwin-arm64.zip",
             default_version = "1.18.34",
+            prebuilt = {
+                github = "anomalyco/opencode",
+                tag = "v{version}",
+                asset = "opencode-{target}",
+                dependencies = {
+                    { package = "7zip", version = "26.04", kind = "build" },
+                },
+            },
         },
         ["x86_64-linux"] = {
             target = "linux-x64-baseline.tar.gz",

@@ -16,18 +16,14 @@ return {
                 strip_prefix = "go",
             },
         },
-        remove = {
-            "lib/time/update.bash",
-            "src/*.bash",
-            "src/*.rc",
-            "src/cmd/vendor/golang.org/x/sys/windows/*.bash",
-            "src/cmd/vendor/golang.org/x/tools/internal/diff/lcs/git.sh",
-            "src/crypto/internal/boring/*.sh",
-            "src/debug/elf/testdata/libtiffxx.so_",
-            "src/go/doc/comment/mkstd.sh",
-            "src/regexp/syntax/make_perl_groups.pl",
-            "src/runtime/race/mkcgo.sh",
-            "src/simd/archsimd/_gen/simdgen/etetest.sh",
+        steps = {
+            install = {
+                {
+                    "sh",
+                    "-c",
+                    "rm -rf lib/time/update.bash src/*.bash src/*.rc src/cmd/vendor/golang.org/x/sys/windows/*.bash src/cmd/vendor/golang.org/x/tools/internal/diff/lcs/git.sh src/crypto/internal/boring/*.sh src/debug/elf/testdata/libtiffxx.so_ src/go/doc/comment/mkstd.sh src/regexp/syntax/make_perl_groups.pl src/runtime/race/mkcgo.sh src/simd/archsimd/_gen/simdgen/etetest.sh",
+                },
+            },
         },
     },
     outputs = {

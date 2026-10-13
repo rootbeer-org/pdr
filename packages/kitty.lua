@@ -35,7 +35,9 @@ return {
                 github = "kovidgoyal/kitty",
                 tag = "v{version}",
                 asset = "kitty-{version}.dmg",
-                allow = { "disk-images" },
+                dependencies = {
+                    { package = "7zip", version = "26.04", kind = "build" },
+                },
                 mirror = true,
             },
             outputs = {

@@ -12,7 +12,9 @@ return {
     prebuilt = {
         url = "https://launcher-files.modrinth.com/versions/{version}/macos/Modrinth%20App_{version}_universal.dmg",
         install = "Dmg",
-        allow = { "disk-images" },
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
         mirror = true,
     },
     outputs = {

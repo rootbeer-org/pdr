@@ -11,7 +11,9 @@ return {
     prebuilt = {
         url = "https://github.com/utmapp/UTM/releases/download/v{version}/UTM.dmg",
         install = "Dmg",
-        allow = { "disk-images" },
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
         mirror = true,
     },
     outputs = {

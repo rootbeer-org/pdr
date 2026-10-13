@@ -8,7 +8,9 @@ return {
     prebuilt = {
         url = "https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg",
         install = "Dmg",
-        allow = { "disk-images" },
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
         mirror = true,
     },
     outputs = {

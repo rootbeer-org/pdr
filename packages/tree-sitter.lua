@@ -14,6 +14,9 @@ return {
         github = "tree-sitter/tree-sitter",
         tag = "v{version}",
         asset = "tree-sitter-cli-{target}.zip",
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
     },
     outputs = {
         bins = { "tree-sitter" },

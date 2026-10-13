@@ -12,7 +12,9 @@ return {
     prebuilt = {
         url = "https://github.com/abue-ammar/tinycast/releases/download/v{version}/Tinycast-{version}.dmg",
         install = "Dmg",
-        allow = { "disk-images" },
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
         mirror = true,
     },
     outputs = {

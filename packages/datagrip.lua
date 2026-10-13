@@ -7,7 +7,9 @@ return {
     prebuilt = {
         url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.5-aarch64.dmg",
         install = "Dmg",
-        allow = { "disk-images" },
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
         mirror = true,
     },
     outputs = {

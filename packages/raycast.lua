@@ -7,7 +7,9 @@ return {
     prebuilt = {
         url = "https://x.raycast-releases.com/download?platform=macos&architecture=arm64&version={version}",
         install = "Dmg",
-        allow = { "disk-images" },
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
         mirror = true,
     },
     outputs = {

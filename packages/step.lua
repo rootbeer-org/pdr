@@ -10,9 +10,8 @@ return {
         tag = "v{version}",
     },
     source = {
-        url = "https://codeload.github.com/smallstep/cli/tar.gz/refs/tags/{tag}",
+        url = "https://github.com/smallstep/cli/releases/download/{tag}/step_{version}.tar.gz",
         archive = "tar.gz",
-        strip_prefix = "cli-{version}",
     },
     build = {
         backend = "go",
@@ -53,9 +52,9 @@ return {
     versions = {
         ["0.31.0"] = {
             digests = {
-                ["aarch64-linux"] = "7eb9ba3d1d8edc07fe6e3bae0ee5a3b6fc7a60bbd850d334ccc74d02b5e4f0fe",
-                ["aarch64-macos"] = "7eb9ba3d1d8edc07fe6e3bae0ee5a3b6fc7a60bbd850d334ccc74d02b5e4f0fe",
-                ["x86_64-linux"] = "7eb9ba3d1d8edc07fe6e3bae0ee5a3b6fc7a60bbd850d334ccc74d02b5e4f0fe",
+                ["aarch64-linux"] = "28b8f239e4813566c68e92a7c00547dec0f3706da0c434e22a8048d012cb9246",
+                ["aarch64-macos"] = "28b8f239e4813566c68e92a7c00547dec0f3706da0c434e22a8048d012cb9246",
+                ["x86_64-linux"] = "28b8f239e4813566c68e92a7c00547dec0f3706da0c434e22a8048d012cb9246",
             },
             revision = 2,
         },

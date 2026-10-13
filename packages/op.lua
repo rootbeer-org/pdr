@@ -12,6 +12,9 @@ return {
                 strip_prefix = nil,
             },
         },
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
     },
     outputs = {
         bins = { "op" },

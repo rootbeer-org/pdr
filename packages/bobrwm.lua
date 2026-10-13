@@ -8,6 +8,9 @@ return {
         github = "bobrwm/bobrwm",
         tag = "tip",
         asset = "bobrwm-tip-34830670144-1-aarch64-macos.zip",
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
         mirror = true,
     },
     outputs = {

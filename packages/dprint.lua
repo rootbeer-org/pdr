@@ -13,6 +13,9 @@ return {
         github = "dprint/dprint",
         tag = "{version}",
         asset = "dprint-{target}.zip",
+        dependencies = {
+            { package = "7zip", version = "26.04", kind = "build" },
+        },
     },
     outputs = {
         bins = { "dprint" },
