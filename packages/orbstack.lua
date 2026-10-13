@@ -12,6 +12,7 @@ return {
     prebuilt = {
         url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v2.2.3_20963_arm64.dmg",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {

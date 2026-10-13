@@ -1,6 +1,6 @@
 -- Host toolchain stand-ins until toolchains are catalog packages (REDESIGN phase 6).
 -- Changing `system` rekeys every source build on that platform.
-local linux = "builder-sha256:d6d343632516b9700159808c0fd57756858fff61a4e637d68b173cdcf7fba32a" -- .github/builder/Dockerfile
+local linux = "builder-sha256:5004a58ca6f123b9dd58e1ff00ca6044eac2cac7e5be08bef6411d00d8f134c2" -- .github/builder/Dockerfile
 
 return {
     ["aarch64-linux"] = { system = linux },

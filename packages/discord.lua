@@ -7,6 +7,7 @@ return {
     prebuilt = {
         url = "https://dl.discordapp.net/apps/osx/{version}/Discord.dmg",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {

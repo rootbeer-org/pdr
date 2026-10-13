@@ -7,6 +7,7 @@ return {
     prebuilt = {
         url = "https://storage.googleapis.com/copilot-mac-releases/images/Copilot-6.4.4-332-80a7fa78.dmg",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {

@@ -11,6 +11,7 @@ return {
     prebuilt = {
         url = "https://apphousekitchen.com/aldente/AlDente{version}.dmg",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {

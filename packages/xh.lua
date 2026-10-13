@@ -18,7 +18,7 @@ return {
         bins = { "xh" },
         checks = {
             { "xh", "--version" },
-            { "xh", "--offline", "GET", "https://example.com" },
+            { "xh", "--offline", "--verify=no", "GET", "https://example.com" },
         },
     },
     platforms = {

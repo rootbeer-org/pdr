@@ -7,6 +7,7 @@ return {
     prebuilt = {
         url = "https://cdn.cloudflare.steamstatic.com/client/installer/steam.dmg",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {

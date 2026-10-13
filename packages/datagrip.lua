@@ -7,6 +7,7 @@ return {
     prebuilt = {
         url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.5-aarch64.dmg",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {

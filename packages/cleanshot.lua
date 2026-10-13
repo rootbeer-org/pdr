@@ -7,6 +7,7 @@ return {
     prebuilt = {
         url = "https://updates.getcleanshot.com/v3/CleanShot-X-{version}.dmg",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {

@@ -11,6 +11,7 @@ return {
     prebuilt = {
         url = "https://release.files.ghostty.org/{version}/Ghostty.dmg",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {

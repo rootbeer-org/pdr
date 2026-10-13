@@ -36,6 +36,7 @@ return {
                 github = "imputnet/helium-macos",
                 tag = "{version}",
                 asset = "helium_{version}_arm64-macos.dmg",
+                allow = { "disk-images" },
                 mirror = true,
             },
             outputs = {

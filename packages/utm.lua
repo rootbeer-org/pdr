@@ -11,6 +11,7 @@ return {
     prebuilt = {
         url = "https://github.com/utmapp/UTM/releases/download/v{version}/UTM.dmg",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {

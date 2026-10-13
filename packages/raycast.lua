@@ -7,6 +7,7 @@ return {
     prebuilt = {
         url = "https://x.raycast-releases.com/download?platform=macos&architecture=arm64&version={version}",
         install = "Dmg",
+        allow = { "disk-images" },
         mirror = true,
     },
     outputs = {
