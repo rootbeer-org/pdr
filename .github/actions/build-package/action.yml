@@ -27,7 +27,7 @@ runs:
     - name: Download earlier levels from this run
       uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
       with:
-        pattern: rb-${{ inputs.platform }}-*
+        pattern: build-${{ inputs.platform }}-*
         path: imports
         merge-multiple: true
     - name: Import, build, check, and export
@@ -44,7 +44,7 @@ runs:
         "$RB" drv export "$PACKAGE" out
     - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
       with:
-        name: rb-${{ inputs.platform }}-${{ inputs.package }}
+        name: build-${{ inputs.platform }}-${{ inputs.package }}
         path: out/
         retention-days: 7
         if-no-files-found: error

@@ -108,7 +108,7 @@ jobs:
       - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
-          pattern: rb-*
+          pattern: build-*
           path: outputs
           merge-multiple: true
       - name: Publish this run's outputs to the store
