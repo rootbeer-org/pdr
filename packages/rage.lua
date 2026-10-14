@@ -13,6 +13,11 @@ return {
         github = "str4d/rage",
         tag = "v{version}",
         asset = "rage-{tag}-{target}.tar.gz",
+        steps = {
+            install = {
+                { "rm", "-f", "rage/rage-mount" },
+            },
+        },
     },
     outputs = {
         bins = { "rage", "rage-keygen" },
