@@ -67,9 +67,39 @@ jobs:
             echo "$platform=$plan" >> "$GITHUB_OUTPUT"
           done
 
+  builder:
+    name: Builder (${{ matrix.runner }})
+    if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', vars.RB_CI_BRANCH || 'sandbox')
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Publish the builder image unless ghcr has it
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin <<< "$GH_TOKEN"
+          hash=$(sha256sum < .github/builder/Dockerfile)
+          image="ghcr.io/rootbeer-org/builder:${hash%% *}-$(uname -m)"
+          if docker manifest inspect "$image" > /dev/null 2>&1; then
+            echo "$image is already published"
+            exit 0
+          fi
+          docker build --tag "$image" .github/builder
+          docker push "$image"
+
   build:
     name: Build (${{ matrix.platform }})
-    needs: eval
+    needs: [eval, builder]
+    if: ${{ !cancelled() && needs.eval.result == 'success' }}
     strategy:
       fail-fast: false
       matrix:
