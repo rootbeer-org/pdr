@@ -32,11 +32,9 @@ return {
                     "-B",
                     "build",
                     "-DCMAKE_BUILD_TYPE=Release",
-                    "-DCMAKE_INSTALL_PREFIX=/",
-                    -- GNUInstallDirs maps prefix / to /usr for the FULL paths cmocka installs to,
-                    -- so the directories are absolute.
-                    "-DCMAKE_INSTALL_LIBDIR=/lib",
-                    "-DCMAKE_INSTALL_INCLUDEDIR=/include",
+                    "-DCMAKE_INSTALL_PREFIX={prefix}",
+                    "-DCMAKE_INSTALL_LIBDIR=lib",
+                    "-DCMAKE_INSTALL_INCLUDEDIR=include",
                     "-DBUILD_SHARED_LIBS=OFF",
                     "-DWITH_EXAMPLES=OFF",
                     "-DUNIT_TESTING=ON",
@@ -57,7 +55,7 @@ return {
                 },
             },
             install = {
-                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+                { "cmake", "--install", "build" },
             },
         },
     },

@@ -28,7 +28,7 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--with-ssl={dependencies.openssl}",
                     "--with-drill",
                     "--with-examples",
@@ -51,7 +51,7 @@ return {
                 },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },

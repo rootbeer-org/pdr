@@ -71,6 +71,17 @@ return {
                 version = "2.3.8",
                 kind = "link_runtime",
             },
+            -- pkg-config --static lists libidn2's and libpsl's own libraries too.
+            {
+                package = "libiconv",
+                version = "1.19",
+                kind = "link_runtime",
+            },
+            {
+                package = "libunistring",
+                version = "1.4.2",
+                kind = "link_runtime",
+            },
             {
                 package = "libpsl",
                 version = "0.23.3",
@@ -92,7 +103,7 @@ return {
                     "-B",
                     "build",
                     "-DCMAKE_BUILD_TYPE=Release",
-                    "-DCMAKE_INSTALL_PREFIX=/",
+                    "-DCMAKE_INSTALL_PREFIX={prefix}",
                     "-DCMAKE_POLICY_DEFAULT_CMP0193=NEW",
                     "-DCMAKE_INSTALL_LIBDIR=lib",
                     "-DCMAKE_INSTALL_INCLUDEDIR=include",
@@ -143,7 +154,7 @@ return {
                 },
             },
             install = {
-                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+                { "cmake", "--install", "build" },
             },
         },
     },

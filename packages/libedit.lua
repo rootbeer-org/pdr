@@ -25,7 +25,7 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--disable-shared",
                     "--enable-static",
                     "--disable-examples",
@@ -41,7 +41,7 @@ return {
                 { "make", "check" },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },

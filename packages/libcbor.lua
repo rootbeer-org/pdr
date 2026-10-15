@@ -40,10 +40,9 @@ return {
                     -- case-insensitive macOS.
                     "output",
                     "-DCMAKE_BUILD_TYPE=Release",
-                    "-DCMAKE_INSTALL_PREFIX=/",
-                    -- Absolute: GNUInstallDirs maps prefix / to /usr for FULL install paths.
-                    "-DCMAKE_INSTALL_LIBDIR=/lib",
-                    "-DCMAKE_INSTALL_INCLUDEDIR=/include",
+                    "-DCMAKE_INSTALL_PREFIX={prefix}",
+                    "-DCMAKE_INSTALL_LIBDIR=lib",
+                    "-DCMAKE_INSTALL_INCLUDEDIR=include",
                     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
                     "-DBUILD_SHARED_LIBS=OFF",
                     "-DWITH_EXAMPLES=OFF",
@@ -68,7 +67,7 @@ return {
                 },
             },
             install = {
-                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "output" },
+                { "cmake", "--install", "output" },
             },
         },
     },

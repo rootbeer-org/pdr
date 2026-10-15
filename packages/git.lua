@@ -40,6 +40,52 @@ return {
                 version = "1.3.2",
                 kind = "link_runtime",
             },
+            -- libcurl is static, so git links everything curl does.
+            {
+                package = "brotli",
+                version = "1.2.0",
+                kind = "link",
+            },
+            {
+                package = "zstd",
+                version = "1.5.7",
+                kind = "link_runtime",
+            },
+            {
+                package = "nghttp2",
+                version = "1.70.0",
+                kind = "link",
+            },
+            {
+                package = "nghttp3",
+                version = "1.18.0",
+                kind = "link",
+            },
+            {
+                package = "ngtcp2",
+                version = "1.25.0",
+                kind = "link",
+            },
+            {
+                package = "libidn2",
+                version = "2.3.8",
+                kind = "link_runtime",
+            },
+            {
+                package = "libunistring",
+                version = "1.4.2",
+                kind = "link_runtime",
+            },
+            {
+                package = "libpsl",
+                version = "0.23.3",
+                kind = "link_runtime",
+            },
+            {
+                package = "libssh2",
+                version = "1.11.1",
+                kind = "link",
+            },
             {
                 package = "libiconv",
                 version = "1.19",
@@ -58,7 +104,7 @@ return {
                     "-ec",
                     "printf '%s' \"$1\" > config.mak; printf \"CURL_LDFLAGS = %s\\nCURL_CFLAGS = %s\\n\" \"$(pkg-config --static --libs libcurl)\" \"$(pkg-config --cflags libcurl)\" >> config.mak; printf \"LDFLAGS += %s\\n\" \"${LDFLAGS-}\" >> config.mak",
                     "rootbeer-git",
-                    "prefix = /\010RUNTIME_PREFIX = YesPlease\010INSTALL_SYMLINKS = YesPlease\010NO_GETTEXT = YesPlease\010NEEDS_LIBICONV = YesPlease\010NO_RUST = YesPlease\010NO_TCLTK = YesPlease\010PERL_PATH = /usr/bin/perl\010PYTHON_PATH = /usr/bin/python3\010USE_LIBPCRE =\010",
+                    "prefix = {prefix}\010RUNTIME_PREFIX = YesPlease\010INSTALL_SYMLINKS = YesPlease\010NO_GETTEXT = YesPlease\010NEEDS_LIBICONV = YesPlease\010NO_RUST = YesPlease\010NO_TCLTK = YesPlease\010PERL_PATH = /usr/bin/perl\010PYTHON_PATH = /usr/bin/python3\010USE_LIBPCRE =\010",
                 },
             },
             build = {
@@ -74,12 +120,14 @@ return {
                 },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },
     outputs = {
         bins = { "git", "git-receive-pack", "git-upload-pack", "git-upload-archive" },
+        -- The perl and Python commands run the host's interpreters, as PERL_PATH and PYTHON_PATH say.
+        host = { "/usr/bin/perl", "/usr/bin/python3" },
         checks = {
             { "git", "--version" },
             {

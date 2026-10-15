@@ -27,22 +27,6 @@ return {
         steps = {
             configure = {
                 {
-                    "curl",
-                    "--fail",
-                    "--location",
-                    "--retry",
-                    "3",
-                    "--output",
-                    "testdata.txz",
-                    "https://github.com/google/brotli/releases/download/v1.2.0/testdata.txz",
-                },
-                {
-                    "/bin/sh",
-                    "-ec",
-                    "printf '%s  %s\\n' e8624d888f13067e7635353397cf42956bf4ca1382da67f9cec8d43e800deecb testdata.txz | shasum -a 256 -c -",
-                },
-                { "tar", "-xJf", "testdata.txz" },
-                {
                     "cmake",
                     "-S",
                     ".",
@@ -51,10 +35,10 @@ return {
                     "-DCMAKE_BUILD_TYPE=Release",
                     "-DBUILD_SHARED_LIBS=OFF",
                     "-DBROTLI_DISABLE_TESTS=OFF",
-                    "-DCMAKE_INSTALL_PREFIX=/",
-                    "-DCMAKE_INSTALL_BINDIR=/bin",
-                    "-DCMAKE_INSTALL_LIBDIR=/lib",
-                    "-DCMAKE_INSTALL_INCLUDEDIR=/include",
+                    "-DCMAKE_INSTALL_PREFIX={prefix}",
+                    "-DCMAKE_INSTALL_BINDIR=bin",
+                    "-DCMAKE_INSTALL_LIBDIR=lib",
+                    "-DCMAKE_INSTALL_INCLUDEDIR=include",
                 },
             },
             build = {
@@ -72,7 +56,7 @@ return {
                 },
             },
             install = {
-                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+                { "cmake", "--install", "build" },
             },
         },
     },

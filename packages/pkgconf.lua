@@ -22,7 +22,7 @@ return {
                 {
                     "/bin/sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--disable-shared",
                     "--enable-static",
                     "--with-pkg-config-dir=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig",
@@ -45,7 +45,7 @@ return {
                 },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
                 { "/bin/ln", "-s", "pkgconf", "{prefix}/bin/pkg-config" },
             },
         },

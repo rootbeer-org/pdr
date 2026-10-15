@@ -60,7 +60,7 @@ return {
                             "-B",
                             "output",
                             "-DCMAKE_BUILD_TYPE=Release",
-                            "-DCMAKE_INSTALL_PREFIX=/",
+                            "-DCMAKE_INSTALL_PREFIX={prefix}",
                             -- Upstream's tests fetch GoogleTest at configure time, which builds can't.
                             "-DBUILD_TESTING=OFF",
                             -- Pinned off so the output never depends on a host lowdown; the man page is
@@ -76,7 +76,7 @@ return {
                         { "output/btop", "--default-config" },
                     },
                     install = {
-                        { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "output" },
+                        { "cmake", "--install", "output" },
                     },
                 },
             },

@@ -16,10 +16,13 @@ return {
         patches = {
             "--- a/testsuite/chmod-setid_test.py\010+++ b/testsuite/chmod-setid_test.py\010@@ -8,6 +8,9 @@\010 from rsyncfns import SCRATCHDIR, run_rsync, test_fail\010 \010 base = SCRATCHDIR / 'chmod_setid'\010+base.mkdir(parents=True, exist_ok=True)\010+# macOS clears setgid when the inherited directory group is not ours.\010+os.chown(base, -1, os.getgid())\010 src = base / 'src'\010 dst = base / 'dst'\010 src.mkdir(parents=True, exist_ok=True)\010",
             "--- a/testsuite/install-strip_test.py\010+++ b/testsuite/install-strip_test.py\010@@ -91,7 +91,8 @@\010         test_fail(f'install-strip did not install {installed}')\010     if not strip_log.is_file():\010         test_fail(f'install-strip did not call {strip_name}')\010-    if strip_log.read_text().splitlines() != [str(installed)]:\010+    # A prefix of / makes the Makefile pass //bin/rsync, the same file.\010+    if [os.path.normpath(line) for line in strip_log.read_text().splitlines()] != [str(installed)]:\010         test_fail(f'{strip_name} was not called with {installed}')\010     if not filecmp.cmp(source_rsync, installed, shallow=False):\010         test_fail(f'{strip_name} unexpectedly changed the installed test binary')\010",
+            "--- a/testsuite/protected-regular_test.py\010+++ b/testsuite/protected-regular_test.py\010@@ -39,7 +39,8 @@\010     try:\010         os.chown(path, 5001, -1)\010         return True\010-    except PermissionError:\010+    # A user namespace without uid 5001 mapped refuses it with EINVAL.\010+    except OSError:\010         return False\010 \010 \010",
         },
     },
     build = {
         backend = "custom",
+        -- The daemon tests talk over loopback socket pairs, and the suite locks a file in /tmp.
+        allow = { "local-network", "tmp" },
         dependencies = {
             {
                 package = "openssl",
@@ -57,10 +60,9 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--disable-debug",
                     "--disable-md2man",
-                    "LIBS=-lunistring -liconv",
                 },
             },
             build = {
@@ -75,7 +77,7 @@ return {
                 },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },

@@ -28,8 +28,7 @@ return {
             install = {
                 {
                     "make",
-                    "PREFIX=/",
-                    "DESTDIR={prefix}",
+                    "PREFIX={prefix}",
                     "install_libxxhash.a",
                     "install_libxxhash.includes",
                     "install_libxxhash.pc",

@@ -19,7 +19,7 @@ return {
         backend = "custom",
         steps = {
             configure = {
-                { "sh", "./configure", "--prefix=/" },
+                { "sh", "./configure", "--prefix={prefix}" },
             },
             build = {
                 { "make", "-C", "gl", "-j{jobs}" },
@@ -29,7 +29,7 @@ return {
                 { "make", "-C", "tests", "check" },
             },
             install = {
-                { "make", "-C", "src", "DESTDIR={prefix}", "install" },
+                { "make", "-C", "src", "install" },
             },
         },
     },

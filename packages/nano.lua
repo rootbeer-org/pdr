@@ -32,7 +32,7 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--sysconfdir=/etc",
                     "--enable-utf8",
                     "--disable-nls",
@@ -49,7 +49,7 @@ return {
                 { "src/nano", "--version" },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },

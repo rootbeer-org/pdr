@@ -16,6 +16,8 @@ return {
     },
     build = {
         backend = "custom",
+        -- The tests run sshd and the agent on loopback and Unix sockets.
+        allow = { "local-network" },
         dependencies = {
             {
                 package = "pkgconf",
@@ -68,7 +70,7 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--sysconfdir=/etc/ssh",
                     "--with-mantype=doc",
                     "--with-ssl-dir={dependencies.openssl}",
@@ -103,18 +105,19 @@ return {
                 {
                     "make",
                     "t-exec",
-                    -- The agent test binds a socket under the build directory, which must stay within
-                    -- the 104-byte macOS limit.
-                    "LTESTS=connect connect-privsep keytype cert-userkey sftp scp agent",
+                    -- The agent test forwards a socket under the home directory sshd reads from passwd,
+                    -- which builds don't have.
+                    "LTESTS=connect connect-privsep keytype cert-userkey sftp scp",
                 },
                 {
                     "/bin/sh",
                     "-ec",
-                    "make DESTDIR=\"$PWD/stage\" \"$@\" install-nokeys\010root=\"$PWD/stage\"\010work=$(mktemp -d)\010trap 'kill \"$pid\" 2>/dev/null || true; rm -rf \"$work\"' EXIT\010unset SSH_SK_HELPER SSH_PKCS11_HELPER SSH_ASKPASS\010PATH=\"$root/bin:$root/sbin:$root/libexec:$PATH\"\010\010ssh -V\010if ssh-keygen -q -t ed25519-sk -N '' -f \"$work/sk\" >\"$work/sk.log\" 2>&1; then\010    echo \"security key enrollment unexpectedly succeeded\" >&2\010    exit 1\010fi\010cat \"$work/sk.log\"\010grep -q 'device not found' \"$work/sk.log\"\010\010ssh-keygen -q -t ed25519 -N '' -f \"$work/host\"\010ssh-keygen -q -t ed25519 -N '' -f \"$work/user\"\010cp \"$work/user.pub\" \"$work/authorized_keys\"\010port=$((20000 + $$ % 20000))\010cat >\"$work/sshd_config\" <<CONFIG\010Port $port\010ListenAddress 127.0.0.1\010HostKey $work/host\010AuthorizedKeysFile $work/authorized_keys\010PidFile $work/sshd.pid\010StrictModes no\010SshdSessionPath $root/libexec/sshd-session\010SshdAuthPath $root/libexec/sshd-auth\010Subsystem sftp $root/libexec/sftp-server\010CONFIG\010sshd -t -f \"$work/sshd_config\"\010\"$root/sbin/sshd\" -D -e -f \"$work/sshd_config\" 2>\"$work/sshd.log\" &\010pid=$!\010for i in 1 2 3 4 5 6 7 8 9 10; do\010    ssh-keyscan -p \"$port\" 127.0.0.1 >\"$work/keyscan\" 2>/dev/null && break\010    sleep 1\010done\010grep -q ssh-ed25519 \"$work/keyscan\" || { cat \"$work/sshd.log\"; exit 1; }\010set -- -F /dev/null -i \"$work/user\" -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=\"$work/known_hosts\"\010ssh \"$@\" -p \"$port\" 127.0.0.1 echo ok | grep -qx ok || { cat \"$work/sshd.log\"; exit 1; }\010echo put \"$work/user.pub\" \"$work/copied\" | sftp -b - \"$@\" -P \"$port\" 127.0.0.1\010cmp \"$work/user.pub\" \"$work/copied\"\010scp \"$@\" -P \"$port\" \"$work/user.pub\" \"127.0.0.1:$work/scp-copied\"\010cmp \"$work/user.pub\" \"$work/scp-copied\"\010",
+                    "make DESTDIR=\"$PWD/stage\" \"$@\" install-nokeys\010root=\"$PWD/stage{prefix}\"\010work=$(mktemp -d)\010trap 'kill \"$pid\" 2>/dev/null || true; rm -rf \"$work\"' EXIT\010unset SSH_SK_HELPER SSH_PKCS11_HELPER SSH_ASKPASS\010PATH=\"$root/bin:$root/sbin:$root/libexec:$PATH\"\010\010ssh -V\010if ssh-keygen -q -t ed25519-sk -N '' -f \"$work/sk\" >\"$work/sk.log\" 2>&1; then\010    echo \"security key enrollment unexpectedly succeeded\" >&2\010    exit 1\010fi\010cat \"$work/sk.log\"\010grep -q 'device not found' \"$work/sk.log\"\010\010ssh-keygen -q -t ed25519 -N '' -f \"$work/host\"\010ssh-keygen -q -t ed25519 -N '' -f \"$work/user\"\010cp \"$work/user.pub\" \"$work/authorized_keys\"\010port=$((20000 + $$ % 20000))\010cat >\"$work/sshd_config\" <<CONFIG\010Port $port\010ListenAddress 127.0.0.1\010HostKey $work/host\010AuthorizedKeysFile $work/authorized_keys\010PidFile $work/sshd.pid\010StrictModes no\010SshdSessionPath $root/libexec/sshd-session\010SshdAuthPath $root/libexec/sshd-auth\010Subsystem sftp $root/libexec/sftp-server -d $work\010CONFIG\010sshd -t -f \"$work/sshd_config\"\010\"$root/sbin/sshd\" -D -e -f \"$work/sshd_config\" 2>\"$work/sshd.log\" &\010pid=$!\010for i in 1 2 3 4 5 6 7 8 9 10; do\010    ssh-keyscan -p \"$port\" 127.0.0.1 >\"$work/keyscan\" 2>/dev/null && break\010    sleep 1\010done\010grep -q ssh-ed25519 \"$work/keyscan\" || { cat \"$work/sshd.log\"; exit 1; }\010set -- -F /dev/null -i \"$work/user\" -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=\"$work/known_hosts\"\010ssh \"$@\" -p \"$port\" 127.0.0.1 echo ok | grep -qx ok || { cat \"$work/sshd.log\"; exit 1; }\010echo put \"$work/user.pub\" \"$work/copied\" | sftp -b - \"$@\" -P \"$port\" 127.0.0.1\010cmp \"$work/user.pub\" \"$work/copied\"\010scp \"$@\" -P \"$port\" \"$work/user.pub\" \"127.0.0.1:$work/scp-copied\"\010cmp \"$work/user.pub\" \"$work/scp-copied\"\010",
                 },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install-nokeys" },
+                -- The compiled-in /etc/ssh and /run/sshd stay, and the sample files go in the store.
+                { "make", "install-nokeys", "sysconfdir={prefix}/etc/ssh", "PRIVSEP_PATH={prefix}/run/sshd" },
                 -- ssh-keysign needs setuid and a compiled-in path, which a user store cannot give it.
                 { "rm", "{prefix}/libexec/ssh-keysign", "{prefix}/share/man/man8/ssh-keysign.8" },
             },
@@ -149,6 +152,8 @@ return {
             default_version = "10.5p1",
             build = {
                 backend = "custom",
+                -- The tests run sshd and the agent on loopback and Unix sockets.
+                allow = { "local-network" },
                 dependencies = {
                     {
                         package = "pkgconf",
@@ -191,7 +196,7 @@ return {
                         {
                             "sh",
                             "./configure",
-                            "--prefix=/",
+                            "--prefix={prefix}",
                             "--sysconfdir=/etc/ssh",
                             "--with-mantype=doc",
                             "--with-ssl-dir={dependencies.openssl}",
@@ -225,18 +230,20 @@ return {
                         {
                             "make",
                             "t-exec",
-                            -- The agent test binds a socket under the build directory, which must stay within
-                            -- the 104-byte macOS limit.
-                            "LTESTS=connect connect-privsep keytype cert-userkey sftp scp agent",
+                            -- The agent test forwards a socket under the home directory sshd reads from passwd,
+                            -- which builds don't have.
+                            "LTESTS=connect connect-privsep keytype cert-userkey sftp scp",
+                            -- The store's build directory is group writable, with the sticky bit.
+                            "TEST_SSH_UNSAFE_PERMISSIONS=1",
                         },
                         {
                             "/bin/sh",
                             "-ec",
-                            "make DESTDIR=\"$PWD/stage\" \"$@\" install-nokeys\010root=\"$PWD/stage\"\010work=$(mktemp -d)\010trap 'kill \"$pid\" 2>/dev/null || true; rm -rf \"$work\"' EXIT\010unset SSH_SK_HELPER SSH_PKCS11_HELPER SSH_ASKPASS\010PATH=\"$root/bin:$root/sbin:$root/libexec:$PATH\"\010\010ssh -V\010if ssh-keygen -q -t ed25519-sk -N '' -f \"$work/sk\" >\"$work/sk.log\" 2>&1; then\010    echo \"security key enrollment unexpectedly succeeded\" >&2\010    exit 1\010fi\010cat \"$work/sk.log\"\010grep -q 'device not found' \"$work/sk.log\"\010\010ssh-keygen -q -t ed25519 -N '' -f \"$work/host\"\010ssh-keygen -q -t ed25519 -N '' -f \"$work/user\"\010cp \"$work/user.pub\" \"$work/authorized_keys\"\010port=$((20000 + $$ % 20000))\010cat >\"$work/sshd_config\" <<CONFIG\010Port $port\010ListenAddress 127.0.0.1\010HostKey $work/host\010AuthorizedKeysFile $work/authorized_keys\010PidFile $work/sshd.pid\010StrictModes no\010SshdSessionPath $root/libexec/sshd-session\010SshdAuthPath $root/libexec/sshd-auth\010Subsystem sftp $root/libexec/sftp-server\010CONFIG\010sshd -t -f \"$work/sshd_config\"\010\"$root/sbin/sshd\" -D -e -f \"$work/sshd_config\" 2>\"$work/sshd.log\" &\010pid=$!\010for i in 1 2 3 4 5 6 7 8 9 10; do\010    ssh-keyscan -p \"$port\" 127.0.0.1 >\"$work/keyscan\" 2>/dev/null && break\010    sleep 1\010done\010grep -q ssh-ed25519 \"$work/keyscan\" || { cat \"$work/sshd.log\"; exit 1; }\010set -- -F /dev/null -i \"$work/user\" -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=\"$work/known_hosts\"\010ssh \"$@\" -p \"$port\" 127.0.0.1 echo ok | grep -qx ok || { cat \"$work/sshd.log\"; exit 1; }\010echo put \"$work/user.pub\" \"$work/copied\" | sftp -b - \"$@\" -P \"$port\" 127.0.0.1\010cmp \"$work/user.pub\" \"$work/copied\"\010scp \"$@\" -P \"$port\" \"$work/user.pub\" \"127.0.0.1:$work/scp-copied\"\010cmp \"$work/user.pub\" \"$work/scp-copied\"\010",
+                            "make DESTDIR=\"$PWD/stage\" \"$@\" install-nokeys\010root=\"$PWD/stage{prefix}\"\010work=$(mktemp -d)\010trap 'kill \"$pid\" 2>/dev/null || true; rm -rf \"$work\"' EXIT\010unset SSH_SK_HELPER SSH_PKCS11_HELPER SSH_ASKPASS\010PATH=\"$root/bin:$root/sbin:$root/libexec:$PATH\"\010\010ssh -V\010if ssh-keygen -q -t ed25519-sk -N '' -f \"$work/sk\" >\"$work/sk.log\" 2>&1; then\010    echo \"security key enrollment unexpectedly succeeded\" >&2\010    exit 1\010fi\010cat \"$work/sk.log\"\010grep -q 'device not found' \"$work/sk.log\"\010\010ssh-keygen -q -t ed25519 -N '' -f \"$work/host\"\010ssh-keygen -q -t ed25519 -N '' -f \"$work/user\"\010cp \"$work/user.pub\" \"$work/authorized_keys\"\010port=$((20000 + $$ % 20000))\010cat >\"$work/sshd_config\" <<CONFIG\010Port $port\010ListenAddress 127.0.0.1\010HostKey $work/host\010AuthorizedKeysFile $work/authorized_keys\010PidFile $work/sshd.pid\010StrictModes no\010SshdSessionPath $root/libexec/sshd-session\010SshdAuthPath $root/libexec/sshd-auth\010Subsystem sftp $root/libexec/sftp-server -d $work\010CONFIG\010sshd -t -f \"$work/sshd_config\"\010\"$root/sbin/sshd\" -D -e -f \"$work/sshd_config\" 2>\"$work/sshd.log\" &\010pid=$!\010for i in 1 2 3 4 5 6 7 8 9 10; do\010    ssh-keyscan -p \"$port\" 127.0.0.1 >\"$work/keyscan\" 2>/dev/null && break\010    sleep 1\010done\010grep -q ssh-ed25519 \"$work/keyscan\" || { cat \"$work/sshd.log\"; exit 1; }\010set -- -F /dev/null -i \"$work/user\" -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=\"$work/known_hosts\"\010ssh \"$@\" -p \"$port\" 127.0.0.1 echo ok | grep -qx ok || { cat \"$work/sshd.log\"; exit 1; }\010echo put \"$work/user.pub\" \"$work/copied\" | sftp -b - \"$@\" -P \"$port\" 127.0.0.1\010cmp \"$work/user.pub\" \"$work/copied\"\010scp \"$@\" -P \"$port\" \"$work/user.pub\" \"127.0.0.1:$work/scp-copied\"\010cmp \"$work/user.pub\" \"$work/scp-copied\"\010",
                         },
                     },
                     install = {
-                        { "make", "DESTDIR={prefix}", "install-nokeys" },
+                        { "make", "install-nokeys", "sysconfdir={prefix}/etc/ssh", "PRIVSEP_PATH={prefix}/var/empty" },
                         {
                             "rm",
                             -- ssh-keysign needs setuid and a compiled-in path, which a user store cannot give it.

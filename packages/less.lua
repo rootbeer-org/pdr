@@ -27,14 +27,12 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--with-regex=posix",
                     "--with-editor=vi",
-                    -- less runs lessecho and less-osc8-open from a compiled-in libexec path that
-                    -- doesn't exist in the store; installing them as commands and dropping the
-                    -- path makes less find them on PATH.
-                    "--libexecdir=/bin",
-                    "CPPFLAGS=-ULIBEXECDIR",
+                    -- less runs lessecho and less-osc8-open from its libexec path, and they're
+                    -- commands too.
+                    "--libexecdir={prefix}/bin",
                 },
             },
             build = {
@@ -50,7 +48,7 @@ return {
                 },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },

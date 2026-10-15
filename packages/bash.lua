@@ -28,7 +28,7 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--disable-nls",
                     -- Readline's terminal handling links the catalog ncurses rather than whichever
                     -- termcap library the host offers first.
@@ -42,7 +42,7 @@ return {
                 { "make", "check" },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
                 -- The example loadable builtins carry bare install names that fail the runtime
                 -- audit, and enable -f wouldn't find them in the store anyway.
                 { "rm", "-rf", "{prefix}/lib/bash" },

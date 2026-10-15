@@ -26,7 +26,7 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--without-shared",
                     "--with-normal",
                     "--without-debug",
@@ -35,7 +35,7 @@ return {
                     "--enable-widec",
                     "--without-manpages",
                     "--enable-pc-files",
-                    "--with-pkg-config-libdir=/lib/pkgconfig",
+                    "--with-pkg-config-libdir={prefix}/lib/pkgconfig",
                     "--with-terminfo-dirs=/etc/terminfo:/lib/terminfo:/usr/share/terminfo",
                 },
             },
@@ -49,7 +49,7 @@ return {
                 { "progs/infocmp", "-A", "test-terminfo", "xterm-256color" },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
                 -- Wide only, as Arch builds it: libncursesw is a superset of the narrow library,
                 -- so the narrow names alias it and existing dependents link it unchanged.
                 {

@@ -21,23 +21,24 @@ return {
                 {
                     "make",
                     "-j{jobs}",
-                    "PREFIX=/",
+                    "PREFIX={prefix}",
                     -- Optional at runtime: the host's hwdata names USB vendors when it exists.
                     "USB_IDS_PATH=/usr/share/hwdata/usb.ids",
                     "libudev.a",
                     "libudev.pc",
                 },
             },
-            -- Upstream has no test suite, so the check links and runs an enumeration.
+            -- Upstream has no test suite, so the check links and sets up an enumeration. Scanning reads
+            -- /sys, which builds don't see.
             check = {
                 {
                     "/bin/sh",
                     "-ec",
-                    "printf '#include \"udev.h\"\\nint main(void) { struct udev *u = udev_new(); struct udev_enumerate *e = udev_enumerate_new(u); int r = udev_enumerate_add_match_subsystem(e, \"hidraw\") || udev_enumerate_scan_devices(e); udev_enumerate_unref(e); udev_unref(u); return r; }\\n' > check.c; ${CC:-cc} -o check check.c libudev.a -pthread; ./check",
+                    "printf '#include \"udev.h\"\\nint main(void) { struct udev *u = udev_new(); struct udev_enumerate *e = udev_enumerate_new(u); int r = udev_enumerate_add_match_subsystem(e, \"hidraw\"); udev_enumerate_unref(e); udev_unref(u); return r; }\\n' > check.c; ${CC:-cc} -o check check.c libudev.a -pthread; ./check",
                 },
             },
             install = {
-                { "make", "PREFIX=/", "DESTDIR={prefix}", "install-static" },
+                { "make", "PREFIX={prefix}", "install-static" },
             },
         },
     },

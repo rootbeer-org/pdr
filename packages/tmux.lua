@@ -13,6 +13,8 @@ return {
     },
     build = {
         backend = "custom",
+        -- The check runs a tmux server on a Unix socket, and its panes on ptys.
+        allow = { "local-network", "pty" },
         dependencies = {
             {
                 package = "pkgconf",
@@ -45,7 +47,7 @@ return {
                     -- library; its static archive satisfies configure's first check instead.
                     "case $(uname -s) in Linux) set -- \"$@\" LIBS=-l:libresolv.a ;; esac; exec ./configure \"$@\"",
                     "sh",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     -- macOS would prefer utf8proc for character widths; it falls back to the
                     -- system wcwidth until the catalog packages utf8proc.
                     "--disable-utf8proc",
@@ -58,17 +60,16 @@ return {
                 { "make", "-j{jobs}" },
             },
             -- Upstream's regress suite needs a TTY and a running server, so the check starts a
-            -- detached server on a private socket instead, under /tmp because the build
-            -- directory's path exceeds the socket path limit.
+            -- detached server on a private socket instead.
             check = {
                 {
                     "sh",
                     "-ec",
-                    "d=$(mktemp -d /tmp/tmux-check.XXXXXX); s=\"$d/s\"; ./tmux -S \"$s\" -f /dev/null new-session -d -x 80 -y 24 'printf \"\\342\\234\\223 ok\"; sleep 5'; sleep 1; ./tmux -S \"$s\" capture-pane -p | grep -q ok; ./tmux -S \"$s\" kill-server; rm -rf \"$d\"",
+                    "d=$(mktemp -d \"$TMPDIR/tmux-check.XXXXXX\"); s=\"$d/s\"; ./tmux -S \"$s\" -f /dev/null new-session -d -x 80 -y 24 'printf \"\\342\\234\\223 ok\"; sleep 5'; sleep 1; ./tmux -S \"$s\" capture-pane -p | grep -q ok; ./tmux -S \"$s\" kill-server; rm -rf \"$d\"",
                 },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },

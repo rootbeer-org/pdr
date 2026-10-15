@@ -65,7 +65,7 @@ return {
                 {
                     "sh",
                     "src/configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--sysconfdir=/etc",
                     "--localstatedir=/var",
                     "--disable-rpath",
@@ -98,7 +98,7 @@ return {
                 { "make", "check", "PYTHON=true" },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },

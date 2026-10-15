@@ -15,6 +15,9 @@ return {
     },
     build = {
         backend = "custom",
+        -- The test harness keeps its scratch files under TMPPREFIX, which defaults to /tmp, and
+        -- the line editor and completion tests drive zsh through zpty.
+        allow = { "tmp", "pty" },
         dependencies = {
             {
                 package = "ncurses",
@@ -27,7 +30,7 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--sysconfdir=/etc",
                     "--enable-etcdir=/etc",
                     "--enable-multibyte",
@@ -53,7 +56,7 @@ return {
                 { "make", "check" },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install.bin", "install.fns", "install.man" },
+                { "make", "install.bin", "install.fns", "install.man" },
             },
         },
     },
@@ -62,6 +65,8 @@ return {
     -- relative to its binary.
     outputs = {
         bins = { "zsh" },
+        -- Upstream's autoload functions keep their shebangs, but zsh sources them.
+        host = { "/bin/zsh", "/usr/local/bin/zsh" },
         checks = {
             { "zsh", "--version" },
             {

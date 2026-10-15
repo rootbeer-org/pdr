@@ -36,7 +36,7 @@ return {
                     "-B",
                     "build",
                     "-DCMAKE_BUILD_TYPE=Release",
-                    "-DCMAKE_INSTALL_PREFIX=/",
+                    "-DCMAKE_INSTALL_PREFIX={prefix}",
                     "-DCMAKE_POLICY_DEFAULT_CMP0193=NEW",
                     "-DCMAKE_INSTALL_LIBDIR=lib",
                     "-DCMAKE_INSTALL_INCLUDEDIR=include",
@@ -63,7 +63,7 @@ return {
                 },
             },
             install = {
-                { "/usr/bin/env", "DESTDIR={prefix}", "cmake", "--install", "build" },
+                { "cmake", "--install", "build" },
             },
         },
     },

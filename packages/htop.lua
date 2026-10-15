@@ -32,7 +32,7 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--enable-unicode",
                     "--with-curses=ncursesw",
                     -- Linux extras need libcap, libnl, libsensors, or hwloc, none of which the
@@ -52,7 +52,7 @@ return {
                 { "./htop", "--version" },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },

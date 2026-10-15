@@ -15,6 +15,8 @@ return {
     },
     build = {
         backend = "autotools",
+        -- gnulib's lock tests use POSIX named semaphores.
+        allow = { "ipc" },
         configure = {
             "--enable-shared",
             "--enable-static",

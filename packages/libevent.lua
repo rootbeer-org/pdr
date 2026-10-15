@@ -16,6 +16,9 @@ return {
     },
     build = {
         backend = "custom",
+        -- The regression tests run DNS, HTTP, and listener servers on loopback, and put their
+        -- files in /tmp.
+        allow = { "local-network", "tmp" },
         libraries = {
             "lib/libevent.a",
             "lib/libevent_core.a",
@@ -27,7 +30,7 @@ return {
                 {
                     "sh",
                     "./configure",
-                    "--prefix=/",
+                    "--prefix={prefix}",
                     "--disable-shared",
                     "--enable-static",
                     -- Its TLS bufferevents are unused by current dependents; enabling them would
@@ -45,14 +48,15 @@ return {
                     -- These race the scheduler rather than test libevent: an HTTP write past the
                     -- limit against the reset (macOS poll), a paired bufferevent's release
                     -- (Linux epoll), a timer precision assertion that trips under load, and a
-                    -- getaddrinfo cancellation stress test that depends on resolver timing.
-                    "REGRESS_ARGS=:http/data_length_constraints :bufferevent/bufferevent_pair_release_lock :util/monotonic_prc_fallback :dns/getaddrinfo_cancel_stress",
+                    -- getaddrinfo cancellation stress test that depends on resolver timing. The
+                    -- nameserver test reads the host's resolv.conf, which builds don't see.
+                    "REGRESS_ARGS=:http/data_length_constraints :bufferevent/bufferevent_pair_release_lock :util/monotonic_prc_fallback :dns/getaddrinfo_cancel_stress :dns/initialize_nameservers",
                     "make",
                     "check",
                 },
             },
             install = {
-                { "make", "DESTDIR={prefix}", "install" },
+                { "make", "install" },
             },
         },
     },
