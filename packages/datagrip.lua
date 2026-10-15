@@ -20,6 +20,9 @@ return {
     platforms = {
         ["aarch64-macos"] = {
             default_version = "2026.2.5+262.10315.132",
+            outputs = {
+                host = { "@rpath/libjvm.dylib" },
+            },
         },
     },
     versions = {

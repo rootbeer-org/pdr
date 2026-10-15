@@ -39,6 +39,16 @@ return {
         },
         ["aarch64-macos"] = {
             default_version = "0.9.146",
+            build = {
+                backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
+                rust = {
+                    packages = { "cargo-nextest" },
+                    no_default_features = true,
+                },
+            },
         },
         ["x86_64-linux"] = {
             default_version = "0.9.146",

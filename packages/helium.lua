@@ -45,6 +45,7 @@ return {
                 apps = {
                     ["Helium.app"] = "Helium.app",
                 },
+                host = { "/bin/bash" },
             },
         },
         ["x86_64-linux"] = {

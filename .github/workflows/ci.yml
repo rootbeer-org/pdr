@@ -15,19 +15,20 @@ concurrency:
 
 env:
   PACKAGES: >-
-    7zip act actionlint age agg air aldente argc argocd asciinema atuin bandwhich bat
-    betterdisplay bobrwm bottom buf caddy chezmoi choose cilium-cli cleanshot cloudflared
-    copilot-money cosign crane croc dasel delta delve devspace direnv discord dive
-    docker-compose doggo dprint duf dust fastfetch fd flux fx fzf gdu gh ghostty git-cliff
-    git-lfs gitleaks gitui glow gmx go gofumpt golangci-lint goose goreleaser gping grex
-    gron grpcurl grype gum helix helm helmfile hexyl hubble hyperfine intermodal jq just
-    k3d k9s kind ko kompose krew kubeconform kubectl kubectx kubeseal lazydocker lazygit
-    lefthook lsd mc migrate minikube miniserve mise mkcert mockery modrinth nats neovim
-    oha op opencode oras orbstack ouch pastel procs prtui rage raspberry-pi-imager raycast
-    rclone restic ripgrep rootbeer rustic sd shellcheck shfmt skaffold sops sqlc starship
-    staticcheck steam step stern stylua syft tailscale talosctl task tealdeer tflint tilt
-    tinycast topgrade tree-sitter trivy typst utm uv velero vivid watchexec xh yazi yq
-    zellij zig zmx zoxide zstd
+    7zip act actionlint age agg air aldente argc argocd asciinema atuin bacon bandwhich bat
+    betterdisplay bobrwm bottom broot buf caddy cargo-nextest chezmoi choose cilium-cli
+    cleanshot cloudflared copilot-money cosign crane croc dasel datagrip delta delve
+    devspace difftastic direnv discord dive docker-compose doggo dprint duf dufs dust eza
+    fastfetch fd flux fnm fx fzf gdu gh ghostty git-cliff git-lfs gitleaks gitui glow gmx go
+    gofumpt golangci-lint google-chrome goose goreleaser gping grex gron grpcurl grype gum
+    helium helix helm helmfile hexyl hubble hyperfine intermodal jj jless jq just k3d k9s
+    kind kitty ko kompose krew kubeconform kubectl kubectx kubeseal lazydocker lazygit
+    lefthook lsd mc mdbook migrate minikube miniserve mise mkcert mockery modrinth nats navi
+    neovim nushell oha op opencode oras orbstack ouch pastel procs prtui rage
+    raspberry-pi-imager raycast rclone restic ripgrep rootbeer ruff rust-analyzer rustic sd
+    shellcheck shfmt skaffold sops sqlc starship staticcheck steam step stern stylua syft
+    tailscale talosctl taplo task tealdeer tflint tilt tinycast tokei topgrade tree-sitter
+    trivy typos typst utm uv velero vivid watchexec xh yazi yq zellij zig zmx zoxide zstd
   REGISTRY: https://ghcr.io
   STORE: rootbeer-org/store
 

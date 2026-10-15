@@ -23,6 +23,22 @@ return {
                     kitten = "bin/kitten",
                     kitty = "bin/kitty",
                 },
+                host = {
+                    "libX11-xcb.so.1",
+                    "libX11.so.6",
+                    "libXcursor.so.1",
+                    "libbrotlicommon.so.1",
+                    "libdbus-1.so.3",
+                    "libfontconfig.so.1",
+                    "libiconv.so.2",
+                    "libpanelw.so.6",
+                    "libpcre2-8.so.0",
+                    "libsqlite3.so",
+                    "libuuid.so.1",
+                    "libwayland-client.so.0",
+                    "libxcb-xkb.so.1",
+                    "libxcb.so.1",
+                },
                 checks = {
                     { "kitty", "--version" },
                     { "kitten", "--version" },
@@ -48,6 +64,11 @@ return {
                 apps = {
                     ["kitty.app"] = "kitty.app",
                 },
+                host = {
+                    "@executable_path/../Frameworks/libexpat.1.dylib",
+                    "@executable_path/../Frameworks/liblzma.5.dylib",
+                    "@executable_path/../Frameworks/libsqlite3.dylib",
+                },
                 checks = {
                     { "kitty", "--version" },
                     { "kitten", "--version" },
@@ -66,6 +87,22 @@ return {
                 bins = {
                     kitten = "bin/kitten",
                     kitty = "bin/kitty",
+                },
+                host = {
+                    "libX11-xcb.so.1",
+                    "libX11.so.6",
+                    "libXcursor.so.1",
+                    "libbrotlicommon.so.1",
+                    "libdbus-1.so.3",
+                    "libfontconfig.so.1",
+                    "libiconv.so.2",
+                    "libpanelw.so.6",
+                    "libpcre2-8.so.0",
+                    "libsqlite3.so",
+                    "libuuid.so.1",
+                    "libwayland-client.so.0",
+                    "libxcb-xkb.so.1",
+                    "libxcb.so.1",
                 },
                 checks = {
                     { "kitty", "--version" },
