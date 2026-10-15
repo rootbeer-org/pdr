@@ -25,10 +25,11 @@ env:
     kind kitty ko kompose krew kubeconform kubectl kubectx kubeseal lazydocker lazygit
     lefthook lsd mc mdbook migrate minikube miniserve mise mkcert mockery modrinth nats navi
     neovim nushell oha op opencode oras orbstack ouch pastel procs prtui rage
-    raspberry-pi-imager raycast rclone restic ripgrep rootbeer ruff rust-analyzer rustic sd
-    shellcheck shfmt skaffold sops sqlc starship staticcheck steam step stern stylua syft
-    tailscale talosctl taplo task tealdeer tflint tilt tinycast tokei topgrade tree-sitter
-    trivy typos typst utm uv velero vivid watchexec xh yazi yq zellij zig zmx zoxide zstd
+    raspberry-pi-imager raycast rclone restic ripgrep rootbeer ruff rush rust-analyzer
+    rustic sd shellcheck shfmt skaffold sops sqlc starship staticcheck steam step stern
+    stylua syft tailscale talosctl taplo task tealdeer tflint tilt tinycast tokei topgrade
+    tree-sitter trivy typos typst utm uv velero vivid watchexec xh yazi yq zellij zig zmx
+    zoxide zstd
   REGISTRY: https://ghcr.io
   STORE: rootbeer-org/store
 
