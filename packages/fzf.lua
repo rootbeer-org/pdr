@@ -41,13 +41,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.74.4",
+            default_version = "0.74.5",
         },
         ["aarch64-macos"] = {
-            default_version = "0.74.4",
+            default_version = "0.74.5",
         },
         ["x86_64-linux"] = {
-            default_version = "0.74.4",
+            default_version = "0.74.5",
         },
     },
     versions = {
@@ -58,6 +58,13 @@ return {
                 ["x86_64-linux"] = "1046857c337f5bd05f6fa482446b5a42a011615105743efbe4efee0970b24bb7",
             },
             revision = 4,
+        },
+        ["0.74.5"] = {
+            digests = {
+                ["aarch64-linux"] = "5529d08897b85ae773695787c811ff9c9eeee32419c8a297fa1dbe586ed0a27e",
+                ["aarch64-macos"] = "5529d08897b85ae773695787c811ff9c9eeee32419c8a297fa1dbe586ed0a27e",
+                ["x86_64-linux"] = "5529d08897b85ae773695787c811ff9c9eeee32419c8a297fa1dbe586ed0a27e",
+            },
         },
     },
 }

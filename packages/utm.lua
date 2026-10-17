@@ -6,6 +6,7 @@ return {
     default_license = "Apache-2.0",
     upstream = {
         github = "utmapp/UTM",
+        repository_id = 181042062,
         tag = "v{version}",
     },
     prebuilt = {
@@ -20,13 +21,18 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "4.7.5",
+            default_version = "5.0.8",
         },
     },
     versions = {
         ["4.7.5"] = {
             digests = {
                 ["aarch64-macos"] = "a8435c93cfb5f8bbfeea4b134cfad1ac66b67632b75e438c63b1a8ae043bef0e",
+            },
+        },
+        ["5.0.8"] = {
+            digests = {
+                ["aarch64-macos"] = "7b2d7b2e2a02b3de1757ef19a8f36573e6d9cceae8c8cca0abcbcaa4a852019a",
             },
         },
     },
