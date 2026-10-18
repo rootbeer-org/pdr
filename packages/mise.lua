@@ -23,15 +23,15 @@ return {
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-arm64-musl",
-            default_version = "2026.10.0",
+            default_version = "2026.10.13",
         },
         ["aarch64-macos"] = {
             target = "macos-arm64",
-            default_version = "2026.10.0",
+            default_version = "2026.10.13",
         },
         ["x86_64-linux"] = {
             target = "linux-x64-musl",
-            default_version = "2026.10.0",
+            default_version = "2026.10.13",
         },
     },
     versions = {
@@ -40,6 +40,13 @@ return {
                 ["aarch64-linux"] = "7e0a2bcfc44fad4dd19654bd1261915802e2334becdc985ffa8becfe9de9cb01",
                 ["aarch64-macos"] = "e6a966e44f871403df905d50019ca6f7b84624ddfe1d5c095f5bc3f18709259e",
                 ["x86_64-linux"] = "df32ce8cb98e801ad48ed523e30ff6bcfe7311c45567a8b0dbb2c5181f09d436",
+            },
+        },
+        ["2026.10.13"] = {
+            digests = {
+                ["aarch64-linux"] = "c8b6cce02b08da85b7e6ac67adb1f1813b5ce095ab56533ade6fa083877f209f",
+                ["aarch64-macos"] = "b91f1b30bd9e7e6899899f0ff5ac5625a90c86daa652524f7b8922db3287ff60",
+                ["x86_64-linux"] = "2ece198f8bebffa06e1027ea5dc5fc26d14b2bc03c9c285658317f13da8ce3dd",
             },
         },
         ["2026.9.11"] = {
