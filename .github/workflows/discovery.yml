@@ -1,19 +1,8 @@
 name: Upstream discovery
 on:
-  push:
-    branches: [main]
-    paths: ["rootbeer-update"]
   workflow_dispatch:
-    inputs:
-      rootbeer_only:
-        description: Only update Rootbeer from successful main CI
-        type: boolean
-        default: false
-  repository_dispatch:
-    types: [rootbeer-update]
   schedule:
     - cron: "13 7 * * *"
-    - cron: "*/15 * * * *"
 
 permissions:
   contents: read
@@ -38,28 +27,12 @@ jobs:
         with:
           runner: ubuntu-24.04
           revision-file: package-engine-revision
-      - name: Check for a new CI-verified Rootbeer commit
-        id: rootbeer
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: engine-bin/rootbeer-forge ci engine --probe
       - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: >-
-          github.event_name != 'repository_dispatch' && github.event.head_commit.message != 'ci(rootbeer): request update' && github.event.schedule != '*/15 * * * *' && inputs.rootbeer_only != true
         with:
           path: .upstream-metadata
           key: upstream-metadata-v1-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: upstream-metadata-v1-
-      - name: Prepare Rootbeer-only scan
-        if: >-
-          github.event_name == 'repository_dispatch' || github.event.head_commit.message == 'ci(rootbeer): request update' || github.event.schedule == '*/15 * * * *' || inputs.rootbeer_only == true
-        run: |
-          mkdir -p candidates
-          printf '%s\n' '{"updated":[],"rules_changed":[],"errors":{},"untracked":[]}' > candidates/report.json
-          printf '%s\n' '# Rootbeer update' > candidates/summary.md
       - name: Discover updates
-        if: >-
-          github.event_name != 'repository_dispatch' && github.event.head_commit.message != 'ci(rootbeer): request update' && github.event.schedule != '*/15 * * * *' && inputs.rootbeer_only != true
         id: discovery
         continue-on-error: true
         env:
@@ -67,11 +40,6 @@ jobs:
         run: |
           engine-bin/rootbeer-forge --catalog packages updates \
             --cache .upstream-metadata --output candidates
-      - name: Discover CI-verified Rootbeer source
-        if: steps.rootbeer.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: engine-bin/rootbeer-forge ci engine
       - name: Select changed package inputs
         id: select
         env:
