@@ -39,13 +39,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.1.0-main+cba0dac696eb",
+            default_version = "0.1.0-main+683e232418ef",
         },
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+cba0dac696eb",
+            default_version = "0.1.0-main+683e232418ef",
         },
         ["x86_64-linux"] = {
-            default_version = "0.1.0-main+cba0dac696eb",
+            default_version = "0.1.0-main+683e232418ef",
         },
     },
     versions = {
@@ -384,6 +384,36 @@ return {
                 ["x86_64-linux"] = "840a0b0e99b4f501f7cad15cafb6d15b8476616480123aa7405cd4e12e4572af",
             },
             commit = "5feb04139f85922ffa7db2231585706aebf2e48b",
+        },
+        ["0.1.0-main+683e232418ef"] = {
+            digests = {
+                ["aarch64-linux"] = "50df9c9839bc611aac999b1cdbff2b6bebe610d8429b4d0839e5d1424c472be2",
+                ["aarch64-macos"] = "50df9c9839bc611aac999b1cdbff2b6bebe610d8429b4d0839e5d1424c472be2",
+                ["x86_64-linux"] = "50df9c9839bc611aac999b1cdbff2b6bebe610d8429b4d0839e5d1424c472be2",
+            },
+            commit = "683e232418ef13f02f63cfd702c64a49aa55f3a3",
+            build = {
+                backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
+                rust = {
+                    packages = { "rootbeer-cli", "rootbeer-helper" },
+                    environment = {
+                        RB_SERIAL = "20261018194804",
+                        RB_SOURCE_REVISION = "{commit}",
+                        ROOTBEER_PDR_PUBLIC_KEY = "028c5b185fb63ea61128a0bf6fb0decc8b700020561db08d82a998c7d0493bc0",
+                        ROOTBEER_PDR_URL = "https://pdr.rbpkg.com/v3/current.json",
+                    },
+                },
+            },
+            outputs = {
+                bins = { "rb", "rb-helper" },
+                checks = {
+                    { "rb", "--version" },
+                    { "rb", "--help" },
+                },
+            },
         },
         ["0.1.0-main+6a14f4aaaa6d"] = {
             digests = {
