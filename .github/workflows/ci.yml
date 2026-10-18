@@ -1,11 +1,11 @@
-name: Packages (rb)
-# The new pipeline. It lives on the CI branch (RB_CI_BRANCH, sandbox by default)
-# until cutover, so every job is gated on that branch. PRs build and check.
-# Pushes, which only a merge or an admin can make, build again and publish
-# what they built to the store.
+name: Packages
+# PRs build and check. Pushes, which only a merge or an admin can make, build
+# again and publish what they built to the store.
 on:
   push:
+    branches: [main]
   pull_request:
+    branches: [main]
 
 permissions: {}
 
@@ -40,9 +40,6 @@ env:
 jobs:
   eval:
     name: Plan
-    if: >-
-      (github.event_name == 'push' && github.ref == format('refs/heads/{0}', vars.RB_CI_BRANCH || 'sandbox')) ||
-      (github.event_name == 'pull_request' && github.base_ref == (vars.RB_CI_BRANCH || 'sandbox'))
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
@@ -75,7 +72,7 @@ jobs:
 
   builder:
     name: Builder (${{ matrix.runner }})
-    if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', vars.RB_CI_BRANCH || 'sandbox')
+    if: github.event_name == 'push'
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     strategy:
@@ -124,6 +121,22 @@ jobs:
       platform: ${{ matrix.platform }}
       runner: ${{ matrix.runner }}
       plan: ${{ needs.eval.outputs[matrix.platform] }}
+
+  # The one check the default branch's ruleset requires
+  checks:
+    name: Package checks
+    needs: [eval, build]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require the plan and every platform's build
+        env:
+          EVAL: ${{ needs.eval.result }}
+          BUILD: ${{ needs.build.result }}
+        run: |
+          echo "plan $EVAL, build $BUILD"
+          [[ $EVAL == success && $BUILD == success ]]
 
   # The workflow token can write the store from any branch's workflow, so the
   # store is only as safe as push access to this repository. Whatever built is

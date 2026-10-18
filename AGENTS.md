@@ -1,38 +1,26 @@
 # Rootbeer index
 
-This repository owns package recipes, discovery, verification, and publication.
-Recipes live in `packages/*.lua`; engine code and its tests live in `rootbeer`.
+This repository owns package recipes and the CI that builds and publishes them.
+Recipes live in `packages/*.lua`, and engine code and its tests live in `rootbeer`.
 Changes target main. Commit or push only when the user asks.
 
-Adding packages should require one verification pass per supported platform.
-Finish recipe edits and run `rootbeer-forge --catalog packages check` before CI.
-Inspect existing runs, cached results, and artifact promotion eligibility before
-starting another build. Build only new or affected inputs, reuse unaffected results,
-and publish the verified PR artifacts after merge. Do not warm caches with baseline
-builds, duplicate CI with a full local export, or rebuild successful jobs to retry
-failures. Full requalification is for scheduled or explicitly requested rechecks.
-If reuse fails, diagnose the cause rather than routinely starting over. Preserve
-integrity and provenance checks. While waiting, check CI at meaningful intervals;
-read failed-job logs when actionable instead of repeatedly fetching unchanged output.
+`ci.yml` plans every default target against `ghcr.io/rootbeer-org/store` with the
+`rb` pinned in `.github/rb-engine-revision`, and builds only what the store lacks.
+PRs build and check. Pushes to main publish and ask `rootbeer-org/index` to sign.
+Move the pin only to a pushed, CI-green rootbeer commit.
 
-Use schema 2 recipes with canonical lowercase names and exact upstream versions.
-Keep discovery in `upstream`, downloads and verified hashes in `inputs`, build settings
-in `build`, and exports and checks in `outputs`. Each source version owns its hash
-at `versions[version].inputs.source.sha256`. Never edit generated indexes. Increment
-revisions for changed recipes; shared-field edits must account for retained versions
-through overrides or revision bumps. Compare expanded `rootbeer-forge --catalog
-packages index` output to confirm the scope of recipe changes.
+Verify recipe changes locally before CI.
 
-Choose the newest supported upstream release for each platform, using
-`default_versions` when they differ. Retain older versions for existing locks.
-Declare only platforms CI can verify. Source-capable recipes publish our compiled
-outputs; upstream prebuilts do not replace declared source builds. Verify Git-source
-build steps against repository archives before declaring `inputs.source.git`.
+- macOS: `rb drv build <pkg> --host host.local.lua`, where `host.local.lua` names
+  this machine's toolchain and is excluded from git.
+- Linux arm64: `RB_CATALOG=<this checkout> scripts/linux.sh build <pkg>` from
+  rootbeer.
+- After edits, `RB_CATALOG=<this checkout>/packages cargo test -p rootbeer-eval
+  --test corpus -- --ignored` from rootbeer evaluates every target.
 
-Keep `package-engine-revision` pinned to a full commit SHA. Change it only when required by
-engine-dependent recipes or workflows, coordinating schema changes with the engine.
-Unrelated engine changes should not force catalog-wide rebuilds; fix overly broad
-invalidation when necessary. Never expose publication credentials to build or PR
-jobs. Publication needs a usable source recipe or verified artifact for every
-version and platform; binary-only recipes need complete artifacts. Preserve retained
-snapshots, receipts, and OCI manifests required by existing lockfiles.
+Use canonical lowercase names and exact upstream versions. Retain older versions,
+since locks pin them. Shared fields apply to every retained version and rekey it,
+so give a build change to one version as an override on that version. Changing
+`host.lua`'s `system` rekeys every source build on that platform. Declare only
+platforms CI can verify. Fix scan failures in the recipe, or acknowledge a host
+reference in `outputs.host` with a why comment.
