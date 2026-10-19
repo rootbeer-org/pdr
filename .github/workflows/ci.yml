@@ -136,7 +136,8 @@ jobs:
           BUILD: ${{ needs.build.result }}
         run: |
           echo "plan $EVAL, build $BUILD"
-          [[ $EVAL == success && $BUILD == success ]]
+          # Every level skips when the store already has everything planned.
+          [[ $EVAL == success && ($BUILD == success || $BUILD == skipped) ]]
 
   # The workflow token can write the store from any branch's workflow, so the
   # store is only as safe as push access to this repository. Whatever built is
