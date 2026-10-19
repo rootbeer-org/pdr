@@ -14,26 +14,6 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
-  PACKAGES: >-
-    7zip act actionlint age agg air aldente argc argocd asciinema atuin bacon bandwhich bash
-    bat betterdisplay bobrwm bottom broot brotli btop buf byacc caddy cargo-nextest check
-    chezmoi choose cilium-cli cleanshot cloudflared cmake cmocka copilot-money cosign crane
-    croc curl dasel datagrip delta delve devspace difftastic direnv discord dive
-    docker-compose doggo dprint duf dufs dust expat eza fastfetch fd flux fnm fx fzf gdu
-    gengetopt gh ghostty git git-cliff git-lfs gitleaks gitui glow gmx go gofumpt
-    golangci-lint google-chrome goose goreleaser gping grex gron grpcurl grype gum helium
-    helix helm helmfile hexyl htop hubble hyperfine intermodal jj jless jq just k3d k9s
-    keyutils kind kitty ko kompose krb5 krew kubeconform kubectl kubectx kubeseal lazydocker
-    lazygit ldns lefthook less libcbor libedit libevent libfido2 libiconv libidn2 libpsl
-    libssh2 libudev-zero libunistring libxcrypt lsd lua luajit lz4 make mc mdbook migrate
-    minikube miniserve mise mkcert mockery modrinth nano nats navi ncurses neovim nghttp2
-    nghttp3 ngtcp2 nushell oha op opencode openssh openssl oras orbstack ouch pastel perl
-    pkgconf procs prtui rage raspberry-pi-imager raycast rclone restic ripgrep rootbeer
-    rsync ruff rush rust rust-analyzer rustic sd shellcheck shfmt skaffold sops sqlc sqlite
-    starship staticcheck steam step stern stylua syft tailscale talosctl taplo task tealdeer
-    telnet tflint tilt tinycast tmux tokei topgrade tree tree-sitter trivy typos typst utm
-    uv velero vivid watchexec wget xh xxhash xz yazi yq yubico-piv-tool zellij zig zlib zmx
-    zoxide zsh zstd
   REGISTRY: https://ghcr.io
   STORE: rootbeer-org/store
 
@@ -61,8 +41,7 @@ jobs:
           RB_REGISTRY_TOKEN: ${{ github.token }}
         run: |
           for platform in x86_64-linux aarch64-linux aarch64-macos; do
-            # shellcheck disable=SC2086
-            plan=$(rb drv plan $PACKAGES --platform "$platform" --registry "$REGISTRY" --from "$STORE")
+            plan=$(rb drv plan --platform "$platform" --registry "$REGISTRY" --from "$STORE")
             if ! jq --exit-status '.levels | length <= 8' <<< "$plan" > /dev/null; then
               echo "$platform needs more than build.yml's eight levels" >&2
               exit 1

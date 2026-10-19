@@ -55,7 +55,7 @@ rb drv build jq
 
 ## CI and publication
 
-[Packages](.github/workflows/ci.yml) plans every default target against
+[Packages](.github/workflows/ci.yml) plans every declared version against
 `ghcr.io/rootbeer-org/store` and builds only what the store lacks, level by level
 on each platform. A failed package holds back only what depends on it.
 

@@ -4,7 +4,7 @@ This repository owns package recipes and the CI that builds and publishes them.
 Recipes live in `packages/*.lua`, and engine code and its tests live in `rootbeer`.
 Changes target main. Commit or push only when the user asks.
 
-`ci.yml` plans every default target against `ghcr.io/rootbeer-org/store` with the
+`ci.yml` plans every declared version against `ghcr.io/rootbeer-org/store` with the
 `rb` pinned in `.github/rb-engine-revision`, and builds only what the store lacks.
 PRs build and check. Pushes to main publish and ask `rootbeer-org/index` to sign.
 Move the pin only to a pushed, CI-green rootbeer commit.
