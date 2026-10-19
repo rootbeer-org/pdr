@@ -39,13 +39,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.1.0-main+683e232418ef",
+            default_version = "0.1.0-main+890f984cb804",
         },
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+683e232418ef",
+            default_version = "0.1.0-main+890f984cb804",
         },
         ["x86_64-linux"] = {
-            default_version = "0.1.0-main+683e232418ef",
+            default_version = "0.1.0-main+890f984cb804",
         },
     },
     versions = {
@@ -438,6 +438,34 @@ return {
                 ["x86_64-linux"] = "221ca19ee0e68fe31f2c526d290778a0ea4cc6c9e6f0931465c36220a0f8aa4f",
             },
             commit = "8653321af42bdfd58012109afcadd840c14d0b4a",
+        },
+        ["0.1.0-main+890f984cb804"] = {
+            digests = {
+                ["aarch64-linux"] = "ba7af4723aafe98f44479ccf16b308132f19344a1bf1c1cc7d5c02bda8d8ea75",
+                ["aarch64-macos"] = "ba7af4723aafe98f44479ccf16b308132f19344a1bf1c1cc7d5c02bda8d8ea75",
+                ["x86_64-linux"] = "ba7af4723aafe98f44479ccf16b308132f19344a1bf1c1cc7d5c02bda8d8ea75",
+            },
+            commit = "890f984cb8045e3dbb1808eeddc6f8a0af13ffb2",
+            build = {
+                backend = "rust",
+                dependencies = {
+                    { package = "rust", version = "1.98.1", kind = "build" },
+                },
+                rust = {
+                    packages = { "rootbeer-cli", "rootbeer-helper" },
+                    environment = {
+                        RB_SERIAL = "20261019032056",
+                        RB_SOURCE_REVISION = "{commit}",
+                    },
+                },
+            },
+            outputs = {
+                bins = { "rb", "rb-helper" },
+                checks = {
+                    { "rb", "--version" },
+                    { "rb", "--help" },
+                },
+            },
         },
         ["0.1.0-main+9a8f58eeb987"] = {
             digests = {
