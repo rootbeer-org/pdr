@@ -8,7 +8,7 @@ return {
     platforms = {
         ["aarch64-linux"] = {
             target = "arm64",
-            default_version = "0.18.2.1",
+            default_version = "0.19.4.1",
             upstream = {
                 github = "imputnet/helium-linux",
                 repository_id = 1043354934,
@@ -27,7 +27,7 @@ return {
             },
         },
         ["aarch64-macos"] = {
-            default_version = "0.18.2.1",
+            default_version = "0.19.4.1",
             upstream = {
                 github = "imputnet/helium-macos",
                 repository_id = 933200785,
@@ -50,7 +50,7 @@ return {
         },
         ["x86_64-linux"] = {
             target = "x86_64",
-            default_version = "0.18.2.1",
+            default_version = "0.19.4.1",
             upstream = {
                 github = "imputnet/helium-linux",
                 repository_id = 1043354934,
@@ -70,25 +70,18 @@ return {
         },
     },
     versions = {
-        ["0.17.2.1"] = {
-            digests = {
-                ["aarch64-linux"] = "167a3f7698179b9cd2e5218c3aad16ec9c13d4159b1a31dc1d4b2791785f3028",
-                ["aarch64-macos"] = "f1a3fecde3c08254f1b1eec30e36ecd25f98cf3799644427fbcefd6e6beafacf",
-                ["x86_64-linux"] = "0c5caa2ba9eb8d986c7353a876eaae2444de07256779683a075f326c861693b4",
-            },
-        },
-        ["0.18.1.1"] = {
-            digests = {
-                ["aarch64-linux"] = "df929552ab1ba4486a027b366fe3ed9b3a90291c2227779b44041476eedecad7",
-                ["aarch64-macos"] = "418e7339807161cbdac42dba70520679970576d50f5aa4f30a3f0862feb4a1d9",
-                ["x86_64-linux"] = "d1e1b993dfbfee06e9f90e8a29cd58e87a475197b04fc0487506227c338569cb",
-            },
-        },
         ["0.18.2.1"] = {
             digests = {
                 ["aarch64-linux"] = "03e6094d329f9d6aad8ad0cc0e4397abb65b3c634829ff49173d50891ce64669",
                 ["aarch64-macos"] = "86982d8df340d5a1bf1a0c76ada33d7d26797c6c3424a44afa676159b6a3e3eb",
                 ["x86_64-linux"] = "aa6ec4400dd3413f5dd5e633a51408e07cd3f3de0626501cd4e55cdd1364de21",
+            },
+        },
+        ["0.19.4.1"] = {
+            digests = {
+                ["aarch64-linux"] = "fda0f9e0833d7f1b26297c648a8be14ea9e46604be57a47d4d94e178809c1acb",
+                ["aarch64-macos"] = "130e431008f25ded9d52210bdfa866b0ace59d04cdaaff07c77931fbd7f93321",
+                ["x86_64-linux"] = "5b2db392b3ed87f24aa844936059d68aca98bc20548eaaa0decfa3c280a2a0a7",
             },
         },
     },
