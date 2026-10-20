@@ -36,13 +36,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.1.0-main+37309db196dd",
+            default_version = "0.1.0-main+962f344e5612",
         },
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+37309db196dd",
+            default_version = "0.1.0-main+962f344e5612",
         },
         ["x86_64-linux"] = {
-            default_version = "0.1.0-main+37309db196dd",
+            default_version = "0.1.0-main+962f344e5612",
         },
     },
     versions = {
@@ -55,14 +55,14 @@ return {
             commit = "37309db196dd31f9d70f360361fa18191f9b92ec",
             serial = 20261020064828,
         },
-        ["0.1.0-main+b820fd9d86aa"] = {
+        ["0.1.0-main+962f344e5612"] = {
             digests = {
-                ["aarch64-linux"] = "2318adfbb486b0eaa9e8bbed56fa23ee9811377959f0710ea56cbc549de108d3",
-                ["aarch64-macos"] = "2318adfbb486b0eaa9e8bbed56fa23ee9811377959f0710ea56cbc549de108d3",
-                ["x86_64-linux"] = "2318adfbb486b0eaa9e8bbed56fa23ee9811377959f0710ea56cbc549de108d3",
+                ["aarch64-linux"] = "e774dbfc6dcf39ca96aa56237ae12ee9b6211fa5e13ba9e89cc78a235f933124",
+                ["aarch64-macos"] = "e774dbfc6dcf39ca96aa56237ae12ee9b6211fa5e13ba9e89cc78a235f933124",
+                ["x86_64-linux"] = "e774dbfc6dcf39ca96aa56237ae12ee9b6211fa5e13ba9e89cc78a235f933124",
             },
-            commit = "b820fd9d86aa7f1c8d0c9676c28b14964672372b",
-            serial = 20261019171758,
+            commit = "962f344e5612786141466fffc9360ef280920423",
+            serial = 20261020184635,
         },
         ["0.1.0-main+c123f04de849"] = {
             digests = {
