@@ -63,6 +63,11 @@ PRs build and check. Pushes to main build again and publish to the store, then t
 [index repository](https://github.com/rootbeer-org/index) signs the new entries
 with a key this repository never sees.
 
+[Rootbeer](.github/workflows/rootbeer.yml) packages each commit rootbeer's CI
+publishes. It adds the version as the default, moves the engine pin, keeps the
+newest three versions, and merges once its checks pass. The index keeps every
+version it signed, so trimming loses nothing.
+
 ## Report a problem
 
 For a missing tool, broken package, or outdated version, [open an issue here](https://github.com/rootbeer-org/rootbeer-index/issues).

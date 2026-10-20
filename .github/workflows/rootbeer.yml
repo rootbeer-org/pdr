@@ -1,0 +1,152 @@
+name: Rootbeer
+# Proposes rootbeer's newest CI-green main commit as the recipe's default and
+# the engine pin, in a PR that merges itself once its checks pass. rootbeer's
+# CI dispatches this after publishing, and the hourly run catches a missed one.
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: The rootbeer commit to propose, or empty for main's newest green build
+        type: string
+        default: ""
+  schedule:
+    - cron: "41 * * * *"
+
+permissions: {}
+
+concurrency:
+  group: rootbeer-update
+  cancel-in-progress: false
+
+jobs:
+  propose:
+    name: Propose
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Find a newer green rootbeer commit
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ inputs.sha }}
+        run: |
+          if [[ -z $SHA ]]; then
+            SHA=$(gh run list --repo rootbeer-org/rootbeer --workflow build.yml --branch main \
+              --event push --status success --limit 1 --json headSha --jq '.[0].headSha')
+          fi
+
+          # A late run for an older commit must not replace a newer proposal.
+          if git fetch --quiet --depth 1 origin updates/rootbeer 2> /dev/null; then
+            proposed=$(git show FETCH_HEAD:.github/rb-engine-revision)
+            if [[ $(gh api "repos/rootbeer-org/rootbeer/compare/$SHA...$proposed" --jq .status) == ahead ]]; then
+              SHA=$proposed
+            fi
+          fi
+
+          # A commit on another branch or a fork can share history with the pin.
+          main=$(gh api "repos/rootbeer-org/rootbeer/compare/$SHA...main" --jq .status)
+          if [[ $main != ahead && $main != identical ]]; then
+            echo "::error::rootbeer $SHA isn't on main"
+            exit 1
+          fi
+
+          # The pin must name a commit whose binaries main's CI published, and
+          # only pushes to main publish them.
+          token=$(curl --fail --silent "https://ghcr.io/token?scope=repository:rootbeer-org/rb:pull" | jq -r .token)
+          for target in x86_64-unknown-linux-gnu aarch64-unknown-linux-gnu aarch64-apple-darwin; do
+            if ! curl --fail --silent --output /dev/null --header "Authorization: Bearer $token" \
+              --header 'Accept: application/vnd.oci.image.manifest.v1+json' \
+              "https://ghcr.io/v2/rootbeer-org/rb/manifests/$SHA-$target"; then
+              echo "::error::rootbeer $SHA has no published rb for $target"
+              exit 1
+            fi
+          done
+
+          pinned=$(cat .github/rb-engine-revision)
+          status=$(gh api "repos/rootbeer-org/rootbeer/compare/$pinned...$SHA" --jq .status)
+          case $status in
+            ahead) echo "sha=$SHA" >> "$GITHUB_OUTPUT" ;;
+            identical | behind) echo "pdr already pins rootbeer $pinned" ;;
+            *)
+              echo "::error::rootbeer $SHA has $status from the pinned $pinned"
+              exit 1
+              ;;
+          esac
+
+      - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
+        if: steps.commit.outputs.sha != ''
+
+      - name: Add it to the recipe and move the pin
+        if: steps.commit.outputs.sha != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.commit.outputs.sha }}
+        run: |
+          source="https://raw.githubusercontent.com/rootbeer-org/rootbeer/$SHA"
+          version=$(curl --fail --silent "$source/crates/rootbeer-cli/Cargo.toml" | sed -n 's/^version = "\(.*\)"$/\1/p' | head -n 1)
+          rust=$(curl --fail --silent "$source/rust-toolchain.toml" | sed -n 's/^channel = "\(.*\)"$/\1/p')
+
+          # Every kept version builds with the recipe's one toolchain, so moving
+          # it is a deliberate recipe change.
+          if ! grep --quiet "package = \"rust\", version = \"$rust\"" packages/rootbeer.lua; then
+            echo "::error::rootbeer $SHA pins rust $rust, which packages/rootbeer.lua doesn't build with"
+            exit 1
+          fi
+
+          committed=$(gh api "repos/rootbeer-org/rootbeer/commits/$SHA" --jq .commit.committer.date)
+          serial=$(date --utc --date "$committed" +%Y%m%d%H%M%S)
+          rb drv bump rootbeer "$version-main+${SHA:0:12}" --commit "$SHA" --serial "$serial" --keep 3
+          echo "$SHA" > .github/rb-engine-revision
+
+      - name: Mint a token to open the PR
+        if: steps.commit.outputs.sha != ''
+        id: app
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1
+        with:
+          client-id: ${{ vars.ROOTBEER_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.ROOTBEER_BOT_PRIVATE_KEY }}
+          owner: rootbeer-org
+          repositories: pdr
+          permission-contents: write
+          permission-pull-requests: write
+
+      # A token from the app, unlike the workflow's, starts the PR's checks.
+      - name: Open the PR and merge it once its checks pass
+        if: steps.commit.outputs.sha != ''
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          SHA: ${{ steps.commit.outputs.sha }}
+        run: |
+          branch=updates/rootbeer
+          title="feat(rootbeer): update to ${SHA:0:7}"
+          git config user.name 'rootbeer-bot[bot]'
+          git config user.email '333483126+rootbeer-bot[bot]@users.noreply.github.com'
+          git switch --create "$branch"
+          if git diff --quiet; then
+            echo "pdr already has rootbeer $SHA"
+            exit 0
+          fi
+          git commit --all --quiet --message "$title"
+
+          # Pushing an unchanged proposal again would only restart its checks.
+          remote="https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          if git fetch --quiet --depth 1 "$remote" "$branch" 2> /dev/null && git diff --quiet FETCH_HEAD HEAD; then
+            echo "$branch already proposes rootbeer $SHA"
+          else
+            git push --force "$remote" "$branch"
+          fi
+
+          body="Built from [rootbeer ${SHA:0:12}](https://github.com/rootbeer-org/rootbeer/commit/$SHA), which also becomes the engine pin."
+          if [[ -z $(gh pr list --head "$branch" --json number --jq '.[].number') ]]; then
+            gh pr create --head "$branch" --title "$title" --body "$body"
+          else
+            gh pr edit "$branch" --title "$title" --body "$body"
+          fi
+
+          gh pr merge "$branch" --auto --squash

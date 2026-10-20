@@ -7,7 +7,8 @@ Changes target main. Commit or push only when the user asks.
 `ci.yml` plans every declared version against `ghcr.io/rootbeer-org/store` with the
 `rb` pinned in `.github/rb-engine-revision`, and builds only what the store lacks.
 PRs build and check. Pushes to main publish and ask `rootbeer-org/index` to sign.
-Move the pin only to a pushed, CI-green rootbeer commit.
+`rootbeer.yml` moves the pin and the rootbeer recipe together to each commit
+rootbeer's CI publishes. By hand, pin only a pushed, CI-green rootbeer commit.
 
 Verify recipe changes locally before CI.
 
