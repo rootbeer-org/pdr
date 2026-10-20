@@ -86,7 +86,7 @@ jobs:
               continue
             fi
 
-            existing=$(gh pr list --head "updates/$name" --json number --jq '.[].number')
+            existing=$(gh pr list --head "updates/$name" --json number --jq '.[].number') || existing=""
             if [[ -z $existing ]] && (( opened >= LIMIT )); then
               continue
             fi
@@ -121,17 +121,27 @@ jobs:
 
             # Pushing an unchanged proposal again would only restart its checks.
             if git fetch --quiet --depth 1 "$remote" "$branch" 2> /dev/null && git diff --quiet FETCH_HEAD HEAD; then
-              echo "- $name: unchanged in $branch" >> "$GITHUB_STEP_SUMMARY"
-              continue
+              if [[ -n $existing ]]; then
+                echo "- $name: unchanged in #$existing" >> "$GITHUB_STEP_SUMMARY"
+                continue
+              fi
+            else
+              git push --quiet --force "$remote" "$branch"
             fi
 
-            git push --quiet --force "$remote" "$branch"
+            # A branch can lack its PR when a run failed after pushing it.
             body="Found by \`rb drv updates\` and written by \`rb drv bump\`, keeping two versions. The index keeps every version it signed."
-            if [[ -z $existing ]]; then
-              gh pr create --head "$branch" --title "$title" --body "$body"
+            if [[ -n $existing ]]; then
+              gh pr edit "$branch" --title "$title" --body "$body" > /dev/null \
+                || echo "- $name: couldn't edit #$existing" >> "$GITHUB_STEP_SUMMARY"
+            elif gh pr create --head "$branch" --title "$title" --body "$body"; then
               opened=$((opened + 1))
+
+              # GitHub limits how fast content is created.
+              sleep 5
             else
-              gh pr edit "$branch" --title "$title" --body "$body"
+              echo "- $name: couldn't open its PR, so the next run tries again" >> "$GITHUB_STEP_SUMMARY"
+              continue
             fi
 
             echo "- $name: $title" >> "$GITHUB_STEP_SUMMARY"
