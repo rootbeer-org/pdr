@@ -41,37 +41,28 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "2.102.0",
+            default_version = "2.102.1",
         },
         ["aarch64-macos"] = {
-            default_version = "2.102.0",
+            default_version = "2.102.1",
         },
         ["x86_64-linux"] = {
-            default_version = "2.102.0",
+            default_version = "2.102.1",
         },
     },
     versions = {
-        ["2.100.0"] = {
-            digests = {
-                ["aarch64-linux"] = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
-                ["aarch64-macos"] = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
-                ["x86_64-linux"] = "39d5123f08a553a6fa69e46de86c22d04d97a217e03d0e6584b66d0fea50f1fe",
-            },
-            revision = 4,
-        },
-        ["2.101.0"] = {
-            digests = {
-                ["aarch64-linux"] = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
-                ["aarch64-macos"] = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
-                ["x86_64-linux"] = "a266fe8575c0e061b987920c1831a15f71bf0036a8729a5ebb93c2fb0164899c",
-            },
-            revision = 3,
-        },
         ["2.102.0"] = {
             digests = {
                 ["aarch64-linux"] = "08bf0ef8b4409893889175e0f5279d30d6edd96465816042c0d7c72eac598158",
                 ["aarch64-macos"] = "08bf0ef8b4409893889175e0f5279d30d6edd96465816042c0d7c72eac598158",
                 ["x86_64-linux"] = "08bf0ef8b4409893889175e0f5279d30d6edd96465816042c0d7c72eac598158",
+            },
+        },
+        ["2.102.1"] = {
+            digests = {
+                ["aarch64-linux"] = "6a6959d4da3302d95812d8ba1a96ffb3e21874badb0dc25f2819184c372157fd",
+                ["aarch64-macos"] = "6a6959d4da3302d95812d8ba1a96ffb3e21874badb0dc25f2819184c372157fd",
+                ["x86_64-linux"] = "6a6959d4da3302d95812d8ba1a96ffb3e21874badb0dc25f2819184c372157fd",
             },
         },
     },
