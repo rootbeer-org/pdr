@@ -19,9 +19,11 @@ Verify recipe changes locally before CI.
 - After edits, `RB_CATALOG=<this checkout>/packages cargo test -p rootbeer-eval
   --test corpus -- --ignored` from rootbeer evaluates every target.
 
-Use canonical lowercase names and exact upstream versions. Retain older versions,
-since locks pin them. Shared fields apply to every retained version and rekey it,
-so give a build change to one version as an override on that version. Changing
+Use canonical lowercase names and exact upstream versions. Add versions with
+`rb drv bump <name> <version> --keep 2`, which `updates.yml` runs daily. The index
+keeps every version it signed, so a recipe keeps only what CI should still build.
+Shared fields apply to every retained version and rekey it, so give a build change
+to one version as an override on that version. Changing
 `host.lua`'s `system` rekeys every source build on that platform. Declare only
 platforms CI can verify. Fix scan failures in the recipe, or acknowledge a host
 reference in `outputs.host` with a why comment.

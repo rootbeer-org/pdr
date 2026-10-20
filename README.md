@@ -42,8 +42,10 @@ existing recipe such as [`jq.lua`](packages/jq.lua).
 
 - Use the canonical lowercase name and exact upstream versions.
 - Each version lists its source or asset digest per platform under `digests`.
-- Keep older versions, since locks pin them. Shared fields apply to every retained
-  version, so give a build change to one version as an override on that version.
+- Add a version with `rb drv bump <name> <version> --keep 2`. The index keeps every
+  version it signed, so a recipe keeps only what CI should still build. Shared fields
+  apply to every retained version, so give a build change to one version as an
+  override on that version.
 - Declare only platforms you can verify, with checks that exercise the tool.
 
 Build and check a package locally, with an `rb` from rootbeer at
@@ -67,6 +69,11 @@ with a key this repository never sees.
 publishes. It adds the version as the default, moves the engine pin, keeps the
 newest three versions, and merges once its checks pass. The index keeps every
 version it signed, so trimming loses nothing.
+
+[Updates](.github/workflows/updates.yml) runs `rb drv updates` daily and opens a PR
+per package with a newer stable upstream version, written by `rb drv bump` and
+keeping two versions. Those PRs wait for review. Recipes without an `upstream`, and
+Sparkle ones, are updated by hand.
 
 ## Report a problem
 

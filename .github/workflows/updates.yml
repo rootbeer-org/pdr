@@ -1,0 +1,138 @@
+name: Updates
+# Finds newer upstream versions with `rb drv updates`, and proposes each
+# package's in its own PR for review. A PR is refreshed only when its change
+# differs, and a package someone else's open PR touches is left alone.
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: Space-separated packages to check, or empty for every package
+        type: string
+        default: ""
+  schedule:
+    - cron: "23 7 * * *"
+
+permissions: {}
+
+concurrency:
+  group: updates
+  cancel-in-progress: false
+
+env:
+  LIMIT: 20
+
+jobs:
+  propose:
+    name: Propose
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
+
+      - name: Find newer upstream versions
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PACKAGES: ${{ inputs.packages }}
+        run: |
+          # shellcheck disable=SC2086
+          rb drv updates $PACKAGES > "$RUNNER_TEMP/updates.jsonl"
+
+          {
+            echo "## Upstream updates"
+            jq -r 'select(.version) | "- \(.name) \(.version) on \(.platforms | join(", "))"' "$RUNNER_TEMP/updates.jsonl"
+            echo "## Errors"
+            jq -r 'select(.error) | "- \(.name): \(.error)"' "$RUNNER_TEMP/updates.jsonl"
+            echo "## Skipped"
+            jq -r 'select(.skipped) | "- \(.name): \(.skipped)"' "$RUNNER_TEMP/updates.jsonl"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Mint a token to open the PRs
+        id: app
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1
+        with:
+          client-id: ${{ vars.ROOTBEER_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.ROOTBEER_BOT_PRIVATE_KEY }}
+          owner: rootbeer-org
+          repositories: pdr
+          permission-contents: write
+          permission-pull-requests: write
+
+      # A token from the app, unlike the workflow's, starts the PRs' checks.
+      - name: Open a PR per package
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name 'rootbeer-bot[bot]'
+          git config user.email '333483126+rootbeer-bot[bot]@users.noreply.github.com'
+          remote="https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          updates="$RUNNER_TEMP/updates.jsonl"
+          busy=$(gh pr list --state open --limit 200 --json headRefName,files \
+            --jq '.[] | select(.headRefName | startswith("updates/") | not) | .files[].path')
+
+          # Only new PRs count toward the limit, so open ones keep refreshing
+          # and later packages still get their turn as earlier PRs merge.
+          opened=0
+          echo "## Proposed" >> "$GITHUB_STEP_SUMMARY"
+          for name in $(jq -r 'select(.version) | .name' "$updates" | sort -u); do
+            if grep --quiet --line-regexp "packages/$name.lua" <<< "$busy"; then
+              echo "- $name: an open PR already changes its recipe" >> "$GITHUB_STEP_SUMMARY"
+              continue
+            fi
+
+            existing=$(gh pr list --head "updates/$name" --json number --jq '.[].number')
+            if [[ -z $existing ]] && (( opened >= LIMIT )); then
+              continue
+            fi
+
+            branch="updates/$name"
+            git switch --quiet --force-create "$branch" "$GITHUB_SHA"
+            versions=()
+            failed=""
+            while read -r update; do
+              version=$(jq -r .version <<< "$update")
+              mapfile -t arguments < <(jq -r '(.platforms[] | "--platform", .), (.commit // empty | "--commit", .)' <<< "$update")
+              if ! rb drv bump "$name" "$version" "${arguments[@]}" --keep 2 > /dev/null 2> "$RUNNER_TEMP/bump.log"; then
+                failed=$(tail -n 1 "$RUNNER_TEMP/bump.log")
+                break
+              fi
+              versions+=("$version")
+            done < <(jq -c --arg name "$name" 'select(.name == $name and .version)' "$updates")
+
+            if [[ -n $failed ]]; then
+              echo "- $name: $failed" >> "$GITHUB_STEP_SUMMARY"
+              git reset --quiet --hard
+              continue
+            fi
+
+            if git diff --quiet; then
+              continue
+            fi
+
+            list=$(printf ', %s' "${versions[@]}")
+            title="feat($name): update to ${list:2}"
+            git commit --all --quiet --message "$title"
+
+            # Pushing an unchanged proposal again would only restart its checks.
+            if git fetch --quiet --depth 1 "$remote" "$branch" 2> /dev/null && git diff --quiet FETCH_HEAD HEAD; then
+              echo "- $name: unchanged in $branch" >> "$GITHUB_STEP_SUMMARY"
+              continue
+            fi
+
+            git push --quiet --force "$remote" "$branch"
+            body="Found by \`rb drv updates\` and written by \`rb drv bump\`, keeping two versions. The index keeps every version it signed."
+            if [[ -z $existing ]]; then
+              gh pr create --head "$branch" --title "$title" --body "$body"
+              opened=$((opened + 1))
+            else
+              gh pr edit "$branch" --title "$title" --body "$body"
+            fi
+
+            echo "- $name: $title" >> "$GITHUB_STEP_SUMMARY"
+          done
