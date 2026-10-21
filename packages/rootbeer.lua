@@ -36,13 +36,13 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.1.0-main+962f344e5612",
+            default_version = "0.1.0-main+4cea6f999605",
         },
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+962f344e5612",
+            default_version = "0.1.0-main+4cea6f999605",
         },
         ["x86_64-linux"] = {
-            default_version = "0.1.0-main+962f344e5612",
+            default_version = "0.1.0-main+4cea6f999605",
         },
     },
     versions = {
@@ -55,6 +55,15 @@ return {
             commit = "37309db196dd31f9d70f360361fa18191f9b92ec",
             serial = 20261020064828,
         },
+        ["0.1.0-main+4cea6f999605"] = {
+            digests = {
+                ["aarch64-linux"] = "1d699a51a29c59f02631ebfc71da7f7ce6c728ed3d61af245d7fc3ecff700a6c",
+                ["aarch64-macos"] = "1d699a51a29c59f02631ebfc71da7f7ce6c728ed3d61af245d7fc3ecff700a6c",
+                ["x86_64-linux"] = "1d699a51a29c59f02631ebfc71da7f7ce6c728ed3d61af245d7fc3ecff700a6c",
+            },
+            commit = "4cea6f99960557c4b3b0cd20697c385faf02b9d2",
+            serial = 20261021150837,
+        },
         ["0.1.0-main+962f344e5612"] = {
             digests = {
                 ["aarch64-linux"] = "e774dbfc6dcf39ca96aa56237ae12ee9b6211fa5e13ba9e89cc78a235f933124",
@@ -63,15 +72,6 @@ return {
             },
             commit = "962f344e5612786141466fffc9360ef280920423",
             serial = 20261020184635,
-        },
-        ["0.1.0-main+c123f04de849"] = {
-            digests = {
-                ["aarch64-linux"] = "7ea9256e8599499e28b4218992886d71273e7d690857a0b259de5e3ed68bf454",
-                ["aarch64-macos"] = "7ea9256e8599499e28b4218992886d71273e7d690857a0b259de5e3ed68bf454",
-                ["x86_64-linux"] = "7ea9256e8599499e28b4218992886d71273e7d690857a0b259de5e3ed68bf454",
-            },
-            commit = "c123f04de849e3a996d9a0cfad46c1e09e217a7c",
-            serial = 20261020000720,
         },
     },
 }
