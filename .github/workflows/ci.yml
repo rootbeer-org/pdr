@@ -34,14 +34,41 @@ jobs:
         with:
           persist-credentials: false
       - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
+      # A PR builds only the targets it adds or rekeys, and what they need
+      # that the store lacks. Otherwise every open PR would also build what
+      # main has merged but not yet published.
+      - name: Find what this PR changes
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --quiet --depth 1 origin "$BASE"
+          git worktree add --quiet --detach "$RUNNER_TEMP/base" "$BASE"
+          rb drv keys > "$RUNNER_TEMP/head.jsonl"
+          (cd "$RUNNER_TEMP/base" && rb drv keys) > "$RUNNER_TEMP/base.jsonl"
+          rb drv diff "$RUNNER_TEMP/base.jsonl" "$RUNNER_TEMP/head.jsonl" \
+            | awk '$1 == "added" || $1 == "changed" { print $2, $3 }' > "$RUNNER_TEMP/changed"
+          echo "Changed targets:"
+          cat "$RUNNER_TEMP/changed"
+
       - name: Plan what the store doesn't have
         id: plan
         env:
           RB_REGISTRY_USER: ${{ github.actor }}
           RB_REGISTRY_TOKEN: ${{ github.token }}
+          IS_PR: ${{ github.event_name == 'pull_request' }}
         run: |
           for platform in x86_64-linux aarch64-linux aarch64-macos; do
-            plan=$(rb drv plan --platform "$platform" --registry "$REGISTRY" --from "$STORE")
+            targets=()
+            if [[ $IS_PR == true ]]; then
+              mapfile -t targets < <(awk -v platform="$platform" '$2 == platform { print $1 }' "$RUNNER_TEMP/changed")
+              if (( ${#targets[@]} == 0 )); then
+                echo "$platform={\"platform\":\"$platform\",\"levels\":[]}" >> "$GITHUB_OUTPUT"
+                continue
+              fi
+            fi
+
+            plan=$(rb drv plan "${targets[@]}" --platform "$platform" --registry "$REGISTRY" --from "$STORE")
             if ! jq --exit-status '.levels | length <= 8' <<< "$plan" > /dev/null; then
               echo "$platform needs more than build.yml's eight levels" >&2
               exit 1
