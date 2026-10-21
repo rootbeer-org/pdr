@@ -26,7 +26,6 @@ return {
         dependencies = {
             {
                 package = "libiconv",
-                version = "1.19",
                 kind = "link_runtime",
             },
         },

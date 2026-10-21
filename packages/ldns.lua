@@ -18,7 +18,6 @@ return {
         dependencies = {
             {
                 package = "openssl",
-                version = "4.0.2",
                 kind = "link_runtime",
             },
         },

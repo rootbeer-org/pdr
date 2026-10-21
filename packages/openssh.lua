@@ -21,47 +21,38 @@ return {
         dependencies = {
             {
                 package = "pkgconf",
-                version = "3.0.7",
                 kind = "build",
             },
             {
                 package = "openssl",
-                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
                 package = "zlib",
-                version = "1.3.2",
                 kind = "link_runtime",
             },
             {
                 package = "libfido2",
-                version = "1.17.0",
                 kind = "link_runtime",
             },
             {
                 package = "ldns",
-                version = "1.9.2",
                 kind = "link_runtime",
             },
             {
                 package = "libedit",
-                version = "20260512-3.1",
                 kind = "link",
             },
             {
                 package = "ncurses",
-                version = "6.6",
                 kind = "link",
             },
             {
                 package = "krb5",
-                version = "1.22.2",
                 kind = "link_runtime",
             },
             {
                 package = "libxcrypt",
-                version = "4.5.2",
                 kind = "link",
             },
         },
@@ -157,37 +148,30 @@ return {
                 dependencies = {
                     {
                         package = "pkgconf",
-                        version = "3.0.7",
                         kind = "build",
                     },
                     {
                         package = "openssl",
-                        version = "4.0.2",
                         kind = "link_runtime",
                     },
                     {
                         package = "zlib",
-                        version = "1.3.2",
                         kind = "link_runtime",
                     },
                     {
                         package = "libfido2",
-                        version = "1.17.0",
                         kind = "link_runtime",
                     },
                     {
                         package = "ldns",
-                        version = "1.9.2",
                         kind = "link_runtime",
                     },
                     {
                         package = "libedit",
-                        version = "20260512-3.1",
                         kind = "link",
                     },
                     {
                         package = "ncurses",
-                        version = "6.6",
                         kind = "link",
                     },
                 },

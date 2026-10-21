@@ -27,32 +27,26 @@ return {
         dependencies = {
             {
                 package = "openssl",
-                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
                 package = "xxhash",
-                version = "0.8.3",
                 kind = "all",
             },
             {
                 package = "zstd",
-                version = "1.5.7",
                 kind = "link_runtime",
             },
             {
                 package = "lz4",
-                version = "1.10.0",
                 kind = "link_runtime",
             },
             {
                 package = "zlib",
-                version = "1.3.2",
                 kind = "link_runtime",
             },
             {
                 package = "libidn2",
-                version = "2.3.8",
                 kind = "link_runtime",
             },
         },

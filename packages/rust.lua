@@ -10,7 +10,7 @@ local install = {
 local linux = {
     backend = "custom",
     dependencies = {
-        { package = "zlib", version = "1.3.2", kind = "link_runtime" },
+        { package = "zlib", kind = "link_runtime" },
     },
     steps = {
         install = {

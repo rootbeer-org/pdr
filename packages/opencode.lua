@@ -33,7 +33,7 @@ return {
                 tag = "v{version}",
                 asset = "opencode-{target}",
                 dependencies = {
-                    { package = "7zip", version = "26.04", kind = "build" },
+                    { package = "7zip", kind = "build" },
                 },
             },
         },

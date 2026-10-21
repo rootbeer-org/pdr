@@ -19,7 +19,6 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                version = "4.4.3",
                 kind = "all",
             },
         },

@@ -18,23 +18,19 @@ return {
         dependencies = {
             {
                 package = "pkgconf",
-                version = "3.0.7",
                 kind = "build",
             },
             {
                 -- Configure requires yacc even though the release ships the generated parser.
                 package = "byacc",
-                version = "20260126",
                 kind = "build",
             },
             {
                 package = "libevent",
-                version = "2.1.13",
                 kind = "link",
             },
             {
                 package = "ncurses",
-                version = "6.6",
                 kind = "link",
             },
         },

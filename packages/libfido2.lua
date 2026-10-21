@@ -17,33 +17,27 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                version = "4.4.3",
                 kind = "build",
             },
             {
                 package = "pkgconf",
-                version = "3.0.7",
                 kind = "build",
             },
             {
                 package = "libcbor",
-                version = "0.14.0",
                 kind = "link",
             },
             {
                 package = "openssl",
-                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
                 package = "zlib",
-                version = "1.3.2",
                 kind = "link_runtime",
             },
             {
                 -- libudev-zero enumerates hidraw devices without udevd or systemd.
                 package = "libudev-zero",
-                version = "1.0.5",
                 kind = "link",
             },
         },
@@ -111,27 +105,22 @@ return {
                 dependencies = {
                     {
                         package = "cmake",
-                        version = "4.4.3",
                         kind = "build",
                     },
                     {
                         package = "pkgconf",
-                        version = "3.0.7",
                         kind = "build",
                     },
                     {
                         package = "libcbor",
-                        version = "0.14.0",
                         kind = "link",
                     },
                     {
                         package = "openssl",
-                        version = "4.0.2",
                         kind = "link_runtime",
                     },
                     {
                         package = "zlib",
-                        version = "1.3.2",
                         kind = "link_runtime",
                     },
                 },

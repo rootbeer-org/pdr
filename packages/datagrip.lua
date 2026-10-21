@@ -8,7 +8,7 @@ return {
         url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.5-aarch64.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", version = "26.04", kind = "build" },
+            { package = "7zip", kind = "build" },
         },
         mirror = true,
     },

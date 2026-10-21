@@ -17,7 +17,7 @@ return {
     build = {
         backend = "rust",
         dependencies = {
-            { package = "rust", version = "1.98.1", kind = "build" },
+            { package = "rust", kind = "build" },
         },
         rust = {
             packages = { "fnm" },

@@ -18,12 +18,10 @@ return {
         dependencies = {
             {
                 package = "pkgconf",
-                version = "3.0.7",
                 kind = "build",
             },
             {
                 package = "ncurses",
-                version = "6.6",
                 kind = "link",
             },
         },

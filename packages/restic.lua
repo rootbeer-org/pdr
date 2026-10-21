@@ -24,7 +24,6 @@ return {
         dependencies = {
             {
                 package = "go",
-                version = "1.27.1",
                 kind = "build",
             },
         },

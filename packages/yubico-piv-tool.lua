@@ -19,32 +19,26 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                version = "4.4.3",
                 kind = "build",
             },
             {
                 package = "pkgconf",
-                version = "3.0.7",
                 kind = "build",
             },
             {
                 package = "gengetopt",
-                version = "2.23.1",
                 kind = "build",
             },
             {
                 package = "check",
-                version = "0.15.2",
                 kind = "link",
             },
             {
                 package = "openssl",
-                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
                 package = "zlib",
-                version = "1.3.2",
                 kind = "link_runtime",
             },
         },

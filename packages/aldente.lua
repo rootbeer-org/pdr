@@ -12,7 +12,7 @@ return {
         url = "https://apphousekitchen.com/aldente/AlDente{version}.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", version = "26.04", kind = "build" },
+            { package = "7zip", kind = "build" },
         },
         mirror = true,
     },

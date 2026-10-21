@@ -27,12 +27,10 @@ return {
         dependencies = {
             {
                 package = "libiconv",
-                version = "1.19",
                 kind = "link_runtime",
             },
             {
                 package = "libunistring",
-                version = "1.4.2",
                 kind = "link_runtime",
             },
         },

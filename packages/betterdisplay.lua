@@ -13,7 +13,7 @@ return {
         url = "https://github.com/waydabber/BetterDisplay/releases/download/v{version}/BetterDisplay-v{version}.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", version = "26.04", kind = "build" },
+            { package = "7zip", kind = "build" },
         },
         mirror = true,
     },
