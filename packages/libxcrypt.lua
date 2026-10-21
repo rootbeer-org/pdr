@@ -27,7 +27,6 @@ return {
         dependencies = {
             {
                 package = "perl",
-                version = "5.44.0",
                 kind = "build",
             },
         },

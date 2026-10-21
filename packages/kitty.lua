@@ -52,7 +52,7 @@ return {
                 tag = "v{version}",
                 asset = "kitty-{version}.dmg",
                 dependencies = {
-                    { package = "7zip", version = "26.04", kind = "build" },
+                    { package = "7zip", kind = "build" },
                 },
                 mirror = true,
             },

@@ -32,22 +32,18 @@ return {
         dependencies = {
             {
                 package = "libiconv",
-                version = "1.19",
                 kind = "link_runtime",
             },
             {
                 package = "libidn2",
-                version = "2.3.8",
                 kind = "link_runtime",
             },
             {
                 package = "libunistring",
-                version = "1.4.2",
                 kind = "link_runtime",
             },
             {
                 package = "pkgconf",
-                version = "3.0.7",
                 kind = "all",
             },
         },

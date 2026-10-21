@@ -22,78 +22,63 @@ return {
         dependencies = {
             {
                 package = "curl",
-                version = "8.22.0",
                 kind = "all",
             },
             {
                 package = "expat",
-                version = "2.8.4",
                 kind = "all",
             },
             {
                 package = "openssl",
-                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
                 package = "zlib",
-                version = "1.3.2",
                 kind = "link_runtime",
             },
             -- libcurl is static, so git links everything curl does.
             {
                 package = "brotli",
-                version = "1.2.0",
                 kind = "link",
             },
             {
                 package = "zstd",
-                version = "1.5.7",
                 kind = "link_runtime",
             },
             {
                 package = "nghttp2",
-                version = "1.70.0",
                 kind = "link",
             },
             {
                 package = "nghttp3",
-                version = "1.18.0",
                 kind = "link",
             },
             {
                 package = "ngtcp2",
-                version = "1.25.0",
                 kind = "link",
             },
             {
                 package = "libidn2",
-                version = "2.3.8",
                 kind = "link_runtime",
             },
             {
                 package = "libunistring",
-                version = "1.4.2",
                 kind = "link_runtime",
             },
             {
                 package = "libpsl",
-                version = "0.23.3",
                 kind = "link_runtime",
             },
             {
                 package = "libssh2",
-                version = "1.11.1",
                 kind = "link",
             },
             {
                 package = "libiconv",
-                version = "1.19",
                 kind = "link_runtime",
             },
             {
                 package = "pkgconf",
-                version = "3.0.7",
                 kind = "all",
             },
         },

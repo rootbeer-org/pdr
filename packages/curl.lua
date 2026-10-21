@@ -23,73 +23,59 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                version = "4.4.3",
                 kind = "all",
             },
             {
                 package = "pkgconf",
-                version = "3.0.7",
                 kind = "all",
             },
             {
                 package = "openssl",
-                version = "4.0.2",
                 kind = "link_runtime",
             },
             {
                 package = "zlib",
-                version = "1.3.2",
                 kind = "link_runtime",
             },
             {
                 package = "brotli",
-                version = "1.2.0",
                 kind = "all",
             },
             {
                 package = "zstd",
-                version = "1.5.7",
                 kind = "link_runtime",
             },
             {
                 package = "nghttp2",
-                version = "1.70.0",
                 kind = "all",
             },
             {
                 package = "nghttp3",
-                version = "1.18.0",
                 kind = "all",
             },
             {
                 package = "ngtcp2",
-                version = "1.25.0",
                 kind = "all",
             },
             {
                 package = "libidn2",
-                version = "2.3.8",
                 kind = "link_runtime",
             },
             -- pkg-config --static lists libidn2's and libpsl's own libraries too.
             {
                 package = "libiconv",
-                version = "1.19",
                 kind = "link_runtime",
             },
             {
                 package = "libunistring",
-                version = "1.4.2",
                 kind = "link_runtime",
             },
             {
                 package = "libpsl",
-                version = "0.23.3",
                 kind = "link_runtime",
             },
             {
                 package = "libssh2",
-                version = "1.11.1",
                 kind = "all",
             },
         },

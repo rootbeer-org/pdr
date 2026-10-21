@@ -37,7 +37,7 @@ return {
                 tag = "{version}",
                 asset = "helium_{version}_arm64-macos.dmg",
                 dependencies = {
-                    { package = "7zip", version = "26.04", kind = "build" },
+                    { package = "7zip", kind = "build" },
                 },
                 mirror = true,
             },

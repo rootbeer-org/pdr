@@ -9,7 +9,7 @@ return {
         tag = "tip",
         asset = "bobrwm-tip-34830670144-1-aarch64-macos.zip",
         dependencies = {
-            { package = "7zip", version = "26.04", kind = "build" },
+            { package = "7zip", kind = "build" },
         },
         mirror = true,
     },

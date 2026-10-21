@@ -28,7 +28,6 @@ return {
         dependencies = {
             {
                 package = "ncurses",
-                version = "6.6",
                 kind = "all",
             },
         },

@@ -21,22 +21,18 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                version = "4.4.3",
                 kind = "all",
             },
             {
                 package = "lz4",
-                version = "1.10.0",
                 kind = "link_runtime",
             },
             {
                 package = "xz",
-                version = "5.8.3",
                 kind = "all",
             },
             {
                 package = "zlib",
-                version = "1.3.2",
                 kind = "link_runtime",
             },
         },

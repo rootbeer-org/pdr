@@ -23,7 +23,10 @@ Use canonical lowercase names and exact upstream versions. Add versions with
 `rb drv bump <name> <version> --keep 2`, which `updates.yml` runs daily. The index
 keeps every version it signed, so a recipe keeps only what CI should still build.
 Shared fields apply to every retained version and rekey it, so give a build change
-to one version as an override on that version. Changing
+to one version as an override on that version. Dependencies name no version, so
+they follow the dependency's default and an update to it rebuilds everything that
+uses it. Pin a `version` only when a recipe needs that exact one, like rootbeer's
+rust, which matches its `rust-toolchain.toml`. Changing
 `host.lua`'s `system` rekeys every source build on that platform. Declare only
 platforms CI can verify. Fix scan failures in the recipe, or acknowledge a host
 reference in `outputs.host` with a why comment.

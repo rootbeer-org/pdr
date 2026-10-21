@@ -22,12 +22,10 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                version = "4.4.3",
                 kind = "build",
             },
             {
                 package = "openssl",
-                version = "4.0.2",
                 kind = "link",
             },
         },

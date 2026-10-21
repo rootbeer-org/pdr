@@ -13,7 +13,7 @@ return {
             },
         },
         dependencies = {
-            { package = "7zip", version = "26.04", kind = "build" },
+            { package = "7zip", kind = "build" },
         },
     },
     outputs = {

@@ -46,6 +46,9 @@ existing recipe such as [`jq.lua`](packages/jq.lua).
   version it signed, so a recipe keeps only what CI should still build. Shared fields
   apply to every retained version, so give a build change to one version as an
   override on that version.
+- Dependencies name no version, so they follow the dependency's default and an
+  update to it rebuilds what uses it, such as a go or openssl fix. Pin a `version`
+  only when a recipe needs that exact one.
 - Declare only platforms you can verify, with checks that exercise the tool.
 
 Build and check a package locally, with an `rb` from rootbeer at
