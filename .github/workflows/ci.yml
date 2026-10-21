@@ -46,8 +46,10 @@ jobs:
           git worktree add --quiet --detach "$RUNNER_TEMP/base" "$BASE"
           rb drv keys > "$RUNNER_TEMP/head.jsonl"
           (cd "$RUNNER_TEMP/base" && rb drv keys) > "$RUNNER_TEMP/base.jsonl"
-          rb drv diff "$RUNNER_TEMP/base.jsonl" "$RUNNER_TEMP/head.jsonl" \
-            | awk '$1 == "added" || $1 == "changed" { print $2, $3 }' > "$RUNNER_TEMP/changed"
+          jq -rn --slurpfile base "$RUNNER_TEMP/base.jsonl" --slurpfile head "$RUNNER_TEMP/head.jsonl" '
+            ($base | map({("\(.name)@\(.version) \(.platform)"): .key}) | add // {}) as $old
+            | $head[] | select($old["\(.name)@\(.version) \(.platform)"] != .key)
+            | "\(.name)@\(.version) \(.platform)"' > "$RUNNER_TEMP/changed"
           echo "Changed targets:"
           cat "$RUNNER_TEMP/changed"
 
