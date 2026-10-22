@@ -21,8 +21,10 @@ jobs:
   eval:
     name: Plan
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    # A PR may wait out a long publish on main before it plans.
+    timeout-minutes: 300
     permissions:
+      actions: read
       contents: read
       packages: read
     outputs:
@@ -34,6 +36,21 @@ jobs:
         with:
           persist-credentials: false
       - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
+
+      # Main is the only run that publishes. A PR planned while main's run is
+      # still filling the store would rebuild everything main merged, so it
+      # waits and plans against the store main leaves behind.
+      - name: Wait for main to publish
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          while gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch main --event push \
+            --limit 10 --json status --jq '.[].status' | grep --quiet --invert-match --line-regexp completed; do
+            echo "main is still publishing"
+            sleep 60
+          done
+
       - name: Plan what the store doesn't have
         id: plan
         env:
