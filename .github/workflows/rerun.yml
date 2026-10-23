@@ -1,0 +1,47 @@
+name: Rerun deferred PRs
+# A PR's plan defers while main publishes. Once main's run finishes, this runs
+# each PR's latest deferred run again, so nobody has to.
+on:
+  workflow_run:
+    workflows: [Packages]
+    types: [completed]
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: rerun-deferred
+  cancel-in-progress: false
+
+jobs:
+  rerun:
+    name: Rerun
+    if: github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions: {}
+    steps:
+      - name: Mint a token to rerun checks
+        id: app
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1
+        with:
+          client-id: ${{ vars.ROOTBEER_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.ROOTBEER_BOT_PRIVATE_KEY }}
+          owner: rootbeer-org
+          repositories: pdr
+          permission-actions: write
+      - name: Rerun each PR's latest deferred run
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          runs=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --event pull_request --limit 200 \
+            --json databaseId,headBranch,conclusion \
+            --jq 'unique_by(.headBranch)[] | select(.conclusion == "failure") | .databaseId')
+          for run in $runs; do
+            deferred=$(gh run view "$run" --repo "$GITHUB_REPOSITORY" --json jobs \
+              --jq '.jobs[] | select(.name == "Plan") | .steps[] | select(.name == "Defer while main publishes") | .conclusion')
+            if [[ $deferred == failure ]]; then
+              gh run rerun "$run" --repo "$GITHUB_REPOSITORY"
+              echo "reran $run"
+            fi
+          done
