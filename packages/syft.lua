@@ -39,37 +39,28 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "1.54.0",
+            default_version = "1.55.0",
         },
         ["aarch64-macos"] = {
-            default_version = "1.54.0",
+            default_version = "1.55.0",
         },
         ["x86_64-linux"] = {
-            default_version = "1.54.0",
+            default_version = "1.55.0",
         },
     },
     versions = {
-        ["1.51.1"] = {
-            digests = {
-                ["aarch64-linux"] = "da8d83cdca78f2c553e08a5ecb9734016a05adb904168531f582bebfbb9bb2cf",
-                ["aarch64-macos"] = "da8d83cdca78f2c553e08a5ecb9734016a05adb904168531f582bebfbb9bb2cf",
-                ["x86_64-linux"] = "da8d83cdca78f2c553e08a5ecb9734016a05adb904168531f582bebfbb9bb2cf",
-            },
-            revision = 4,
-        },
-        ["1.52.0"] = {
-            digests = {
-                ["aarch64-linux"] = "8b999a1b8bd08b12512176cdec5d063db9cfe209c65cc5de9c4eb2ab7bdc7b3c",
-                ["aarch64-macos"] = "8b999a1b8bd08b12512176cdec5d063db9cfe209c65cc5de9c4eb2ab7bdc7b3c",
-                ["x86_64-linux"] = "8b999a1b8bd08b12512176cdec5d063db9cfe209c65cc5de9c4eb2ab7bdc7b3c",
-            },
-            revision = 3,
-        },
         ["1.54.0"] = {
             digests = {
                 ["aarch64-linux"] = "bcc7ef841cf0671c46b9c10cb13466a833a5a1dc010c68cc5e3658151c758c2d",
                 ["aarch64-macos"] = "bcc7ef841cf0671c46b9c10cb13466a833a5a1dc010c68cc5e3658151c758c2d",
                 ["x86_64-linux"] = "bcc7ef841cf0671c46b9c10cb13466a833a5a1dc010c68cc5e3658151c758c2d",
+            },
+        },
+        ["1.55.0"] = {
+            digests = {
+                ["aarch64-linux"] = "d402b3988cdaea74bc01763830a6e45b4a3f1ada40f8fcad7edb5b230c18f1eb",
+                ["aarch64-macos"] = "d402b3988cdaea74bc01763830a6e45b4a3f1ada40f8fcad7edb5b230c18f1eb",
+                ["x86_64-linux"] = "d402b3988cdaea74bc01763830a6e45b4a3f1ada40f8fcad7edb5b230c18f1eb",
             },
         },
     },
