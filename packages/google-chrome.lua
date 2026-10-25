@@ -20,16 +20,16 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "155.0.8059.80",
+            default_version = "156.0.8078.48",
             outputs = {
                 host = { "/bin/bash" },
             },
         },
     },
     versions = {
-        ["155.0.8059.80"] = {
+        ["156.0.8078.48"] = {
             digests = {
-                ["aarch64-macos"] = "3262c73156ebc81efe44b68aab35cef8363d34e27e18750a63fc18b5de52f738",
+                ["aarch64-macos"] = "15d9d8a33eeb858667946f1e9d29d2a82619214c89d1bb16ab113cb63ec11355",
             },
         },
     },
