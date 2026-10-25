@@ -30,6 +30,7 @@ jobs:
       x86_64-linux: ${{ steps.plan.outputs.x86_64-linux }}
       aarch64-linux: ${{ steps.plan.outputs.aarch64-linux }}
       aarch64-macos: ${{ steps.plan.outputs.aarch64-macos }}
+      deferred: ${{ steps.defer.outputs.deferred }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -38,21 +39,23 @@ jobs:
 
       # Main is the only run that publishes. A PR planned while main's run is
       # still filling the store would rebuild everything main merged, and
-      # waiting would hold a runner main needs. So it stops, and rerun.yml
-      # runs it again once main finishes.
+      # waiting would hold a runner main needs. So it skips the plan, Package
+      # checks cancels the run, and rerun.yml runs it again once main finishes.
       - name: Defer while main publishes
+        id: defer
         if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           if gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch main --event push \
             --limit 10 --json status --jq '.[].status' | grep --quiet --invert-match --line-regexp completed; then
-            echo "::error::Main is publishing, so this PR's checks run again once it finishes"
-            exit 1
+            echo "::notice::Main is publishing, so this PR's checks run again once it finishes"
+            echo "deferred=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Plan what the store doesn't have
         id: plan
+        if: steps.defer.outputs.deferred != 'true'
         env:
           RB_REGISTRY_USER: ${{ github.actor }}
           RB_REGISTRY_TOKEN: ${{ github.token }}
@@ -98,7 +101,7 @@ jobs:
   build:
     name: Build (${{ matrix.platform }})
     needs: [eval, builder]
-    if: ${{ !cancelled() && needs.eval.result == 'success' }}
+    if: ${{ !cancelled() && needs.eval.result == 'success' && needs.eval.outputs.deferred != 'true' }}
     strategy:
       fail-fast: false
       matrix:
@@ -125,7 +128,20 @@ jobs:
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    permissions:
+      actions: write
     steps:
+      # A cancelled check blocks the merge without reading as a failure. A
+      # skipped one would pass, so this job cancels the run from inside it.
+      - name: Wait for main to publish
+        if: needs.eval.outputs.deferred == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run cancel "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY"
+          sleep 240
+          exit 1
+
       - name: Require the plan and every platform's build
         env:
           EVAL: ${{ needs.eval.result }}
