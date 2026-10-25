@@ -20,6 +20,9 @@ return {
         apps = {
             ["UTM.app"] = "UTM.app",
         },
+        -- D3DMetal loads Apple's Metal shader converter from the Game Porting
+        -- Toolkit when it's installed, and works without it.
+        host = { "@rpath/libmetalirconverter.dylib", "@rpath/libdxccontainer.dylib" },
     },
     platforms = {
         ["aarch64-macos"] = {
