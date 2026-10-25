@@ -24,7 +24,7 @@ return {
         -- built-in themes still work.
         ["aarch64-linux"] = {
             target = "aarch64-unknown-linux-musl",
-            default_version = "1.4.7",
+            default_version = "1.4.8",
             prebuilt = {
                 github = "aristocratos/btop",
                 asset = "btop-{target}.tar.gz",
@@ -36,7 +36,7 @@ return {
             },
         },
         ["aarch64-macos"] = {
-            default_version = "1.4.7",
+            default_version = "1.4.8",
             source = {
                 url = "https://github.com/aristocratos/btop/archive/refs/tags/{tag}.tar.gz",
                 archive = "tar.gz",
@@ -82,7 +82,7 @@ return {
         },
         ["x86_64-linux"] = {
             target = "x86_64-unknown-linux-musl",
-            default_version = "1.4.7",
+            default_version = "1.4.8",
             prebuilt = {
                 github = "aristocratos/btop",
                 asset = "btop-{target}.tar.gz",
@@ -100,6 +100,13 @@ return {
                 ["aarch64-linux"] = "6270de0ef4c84cf0eea61cb148b3ad9ae91a11e9c3309867ffc6b3751024c252",
                 ["aarch64-macos"] = "933de2e4d1b2211a638be463eb6e8616891bfba73aef5d38060bd8319baeefc6",
                 ["x86_64-linux"] = "5099054dd6a101bd12eb6ff3702a9a6a3f57aaa27923a0da478ae5b517faf335",
+            },
+        },
+        ["1.4.8"] = {
+            digests = {
+                ["aarch64-linux"] = "95328e26ab08f42033af26628e2d169206a5a420f35669ce17459ef85114c14c",
+                ["aarch64-macos"] = "67e07c21b770a6d884c5e50ba1d2cfc90732ea57459367d8732ec7ecbeb3be5f",
+                ["x86_64-linux"] = "af589cf82cc9ea9c29ce050b9239a13bef2d1492256d476156e1054a42ce89ad",
             },
         },
     },
