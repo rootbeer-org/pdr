@@ -58,10 +58,10 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "5.44.0",
+            default_version = "5.45.4",
         },
         ["aarch64-macos"] = {
-            default_version = "5.44.0",
+            default_version = "5.45.4",
             build = {
                 backend = "custom",
                 -- The test suite talks over loopback sockets and SysV IPC, and checks /tmp.
@@ -99,7 +99,7 @@ return {
             },
         },
         ["x86_64-linux"] = {
-            default_version = "5.44.0",
+            default_version = "5.45.4",
         },
     },
     versions = {
@@ -108,6 +108,13 @@ return {
                 ["aarch64-linux"] = "3b855066b92491cb40e86affb1ca57d1a388aa43e51b91c7806a32c2f65f96c3",
                 ["aarch64-macos"] = "3b855066b92491cb40e86affb1ca57d1a388aa43e51b91c7806a32c2f65f96c3",
                 ["x86_64-linux"] = "3b855066b92491cb40e86affb1ca57d1a388aa43e51b91c7806a32c2f65f96c3",
+            },
+        },
+        ["5.45.4"] = {
+            digests = {
+                ["aarch64-linux"] = "9ad6ff5750dd512437af86f260365186d925a4fcd5002a1d88b8385df5938ea4",
+                ["aarch64-macos"] = "9ad6ff5750dd512437af86f260365186d925a4fcd5002a1d88b8385df5938ea4",
+                ["x86_64-linux"] = "9ad6ff5750dd512437af86f260365186d925a4fcd5002a1d88b8385df5938ea4",
             },
         },
     },
