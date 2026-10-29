@@ -24,25 +24,24 @@ return {
     platforms = {
         ["aarch64-linux"] = {
             target = "linux_arm64",
-            default_version = "2.9.6",
+            default_version = "2.10.0",
         },
         ["aarch64-macos"] = {
             target = "darwin_arm64",
-            default_version = "2.9.6",
+            default_version = "2.10.0",
         },
         ["x86_64-linux"] = {
             target = "linux_amd64",
-            default_version = "2.9.6",
+            default_version = "2.10.0",
         },
     },
     versions = {
-        ["2.9.5"] = {
+        ["2.10.0"] = {
             digests = {
-                ["aarch64-linux"] = "f3e159af616ec0b9bd0a405c2185cf09d06b74652c1de3c7f377e8166826651a",
-                ["aarch64-macos"] = "2869ef7151a6f1b27e6b5d2a6804f3ef23c7bdaa06a74e00d3fe5bfc646547fd",
-                ["x86_64-linux"] = "b853df82adfd7736f580692f9f734473d571606307139f8fd20c2a80dd1ff473",
+                ["aarch64-linux"] = "c3c435052e5e18156858bc73f26bcadb62821a6e30951b4b302beb4e65a532c2",
+                ["aarch64-macos"] = "339c5dba218e2b0a04a0841d1dace6c00d65736dc3286038463fa86754ff6c53",
+                ["x86_64-linux"] = "208dd7012c04fedeed5b2d0b6e63df3b15b1c34a381527811685c098bc9f8659",
             },
-            revision = 2,
         },
         ["2.9.6"] = {
             digests = {
