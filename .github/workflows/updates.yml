@@ -97,7 +97,7 @@ jobs:
             failed=""
             while read -r update; do
               version=$(jq -r .version <<< "$update")
-              mapfile -t arguments < <(jq -r '(.platforms[] | "--platform", .), (.commit // empty | "--commit", .)' <<< "$update")
+              mapfile -t arguments < <(jq -r '(.platforms[] | "--platform", .), (.commit // empty | "--commit", .), (.serial // empty | "--serial", tostring)' <<< "$update")
               if ! rb drv bump "$name" "$version" "${arguments[@]}" --keep 2 > /dev/null 2> "$RUNNER_TEMP/bump.log"; then
                 failed=$(tail -n 1 "$RUNNER_TEMP/bump.log")
                 break
@@ -142,6 +142,12 @@ jobs:
             else
               echo "- $name: couldn't open its PR, so the next run tries again" >> "$GITHUB_STEP_SUMMARY"
               continue
+            fi
+
+            # A recipe can opt in to merging its updates once their checks pass.
+            if jq -e --arg name "$name" 'select(.name == $name and .automerge)' "$updates" > /dev/null; then
+              gh pr merge "$branch" --auto --squash \
+                || echo "- $name: couldn't enable auto-merge" >> "$GITHUB_STEP_SUMMARY"
             fi
 
             echo "- $name: $title" >> "$GITHUB_STEP_SUMMARY"
