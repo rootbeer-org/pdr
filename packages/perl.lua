@@ -8,7 +8,8 @@ return {
         github = "Perl/perl5",
         repository_id = 8183570,
         tag = "v{version}",
-        exclude_tags = { "v5.45.0", "v5.45.1", "v5.45.2", "v5.45.3" },
+        -- Odd minors are development releases, which Configure refuses to build.
+        exclude_tags = { "v5.?[13579].*" },
     },
     source = {
         url = "https://www.cpan.org/src/5.0/perl-{version}.tar.gz",
