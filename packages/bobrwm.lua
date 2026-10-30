@@ -4,10 +4,16 @@ return {
     homepage = "https://github.com/bobrwm/bobrwm",
     recipe_maintainers = { "tale" },
     default_license = "MIT",
+    upstream = {
+        github = "bobrwm/bobrwm",
+        repository_id = 999844138,
+        rolling = { tag = "tip", version = "0.1.0-main" },
+        automerge = true,
+    },
     prebuilt = {
         github = "bobrwm/bobrwm",
         tag = "tip",
-        asset = "bobrwm-tip-34830670144-1-aarch64-macos.zip",
+        asset = "bobrwm-tip-{commit}-aarch64-macos.zip",
         dependencies = {
             { package = "7zip", kind = "build" },
         },
@@ -27,15 +33,16 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+572265d",
+            default_version = "0.1.0-main+875d6324799d",
         },
     },
     versions = {
-        ["0.1.0-main+572265d"] = {
+        ["0.1.0-main+875d6324799d"] = {
             digests = {
-                ["aarch64-macos"] = "6694c250d7ad887b26013abf1ddbfdaff9d99143a310f9111c97f3493ad396ac",
+                ["aarch64-macos"] = "8e27c51997ba7892f13e109790a46c66d20ce2bc00a1f5ddb63907bb7de90c22",
             },
-            revision = 2,
+            commit = "875d6324799d9dfc9513d2bf8349838eb9729802",
+            serial = 20261030155917,
         },
     },
 }
