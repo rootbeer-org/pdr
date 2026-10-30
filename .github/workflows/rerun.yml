@@ -36,11 +36,12 @@ jobs:
         run: |
           runs=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --event pull_request --limit 200 \
             --json databaseId,headBranch,conclusion \
-            --jq 'unique_by(.headBranch)[] | select(.conclusion == "cancelled") | .databaseId')
+            --jq 'unique_by(.headBranch)[] | select(.conclusion == "cancelled" or .conclusion == "failure") | .databaseId')
           for run in $runs; do
             deferred=$(gh run view "$run" --repo "$GITHUB_REPOSITORY" --json jobs \
               --jq '.jobs[] | select(.name == "Package checks") | .steps[] | select(.name == "Wait for main to publish") | .conclusion')
-            if [[ $deferred == cancelled ]]; then
+            # The step only runs when deferring, and fails if its cancel lands late.
+            if [[ $deferred == cancelled || $deferred == failure ]]; then
               gh run rerun "$run" --repo "$GITHUB_REPOSITORY"
               echo "reran $run"
             fi
