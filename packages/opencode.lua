@@ -23,11 +23,11 @@ return {
     platforms = {
         ["aarch64-linux"] = {
             target = "linux-arm64.tar.gz",
-            default_version = "2.2.6",
+            default_version = "2.2.7",
         },
         ["aarch64-macos"] = {
             target = "darwin-arm64.zip",
-            default_version = "2.2.6",
+            default_version = "2.2.7",
             prebuilt = {
                 github = "anomalyco/opencode",
                 tag = "v{version}",
@@ -39,22 +39,22 @@ return {
         },
         ["x86_64-linux"] = {
             target = "linux-x64-baseline.tar.gz",
-            default_version = "2.2.6",
+            default_version = "2.2.7",
         },
     },
     versions = {
-        ["2.2.1"] = {
-            digests = {
-                ["aarch64-linux"] = "c354d8a2dc4152308bf286b5ec7f20b3b3cfc71f9476e64f6aa274142505b2f8",
-                ["aarch64-macos"] = "9df6ca3d031565c61080c717374ba846d238ec5b1c411eebe6b1b85835998ffe",
-                ["x86_64-linux"] = "3179551ddf69877ca24a960b0175e94405cf3f52147f1eec705094374bef49f2",
-            },
-        },
         ["2.2.6"] = {
             digests = {
                 ["aarch64-linux"] = "f2d27600c367e45057d6a16f6a5c2aa8d77b41a9b10d4bc3d849c2f88870e944",
                 ["aarch64-macos"] = "15491608f6b0bc4debe5eac35eab629a2b07ea9a1fbac68ad53bcea59fcc4b45",
                 ["x86_64-linux"] = "08bb21d6326ce740d91cce7ebe88a6536933f6e1e30353b91a06b01f25da306c",
+            },
+        },
+        ["2.2.7"] = {
+            digests = {
+                ["aarch64-linux"] = "c1682057f0815cb2abdd6e00305f1146ebaf1c167f0335cdb74ddc80008120e7",
+                ["aarch64-macos"] = "811c42be9cad489ea8c411ead49e06f691deee4957ba9a0a56a159a7d6c1abdc",
+                ["x86_64-linux"] = "89a6cee227b54bc011179c528a5e63176032462b1a5e21723b616801cddc2ca7",
             },
         },
     },
