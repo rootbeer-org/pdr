@@ -25,10 +25,8 @@ return {
                     "sed",
                     "-i.bak",
                     "-e",
-                    "s/ffm = self.cvinfo.file_frame_map\\[i\\]/ffm = os.path.basename(self.cvinfo.file_frame_map[i])/",
-                    "-e",
                     "s/if start != 0 and end != 0:/if end != 0:/",
-                    "tests/test-lz4-list.py",
+                    "tests/cli/test-lz4-list.py",
                 },
             },
             build = {
@@ -70,6 +68,34 @@ return {
                 ["x86_64-linux"] = "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b",
             },
             revision = 3,
+            build = {
+                backend = "custom",
+                -- The tests pipe into diff, which buffers stdin in /tmp.
+                allow = { "tmp" },
+                libraries = { "lib/liblz4.a", "lib/liblz4.{shared_extension}" },
+                steps = {
+                    configure = {
+                        {
+                            "sed",
+                            "-i.bak",
+                            "-e",
+                            "s/ffm = self.cvinfo.file_frame_map\\[i\\]/ffm = os.path.basename(self.cvinfo.file_frame_map[i])/",
+                            "-e",
+                            "s/if start != 0 and end != 0:/if end != 0:/",
+                            "tests/test-lz4-list.py",
+                        },
+                    },
+                    build = {
+                        { "make", "-j{jobs}", "PREFIX={prefix}" },
+                    },
+                    check = {
+                        { "make", "PREFIX={prefix}", "test" },
+                    },
+                    install = {
+                        { "make", "PREFIX={prefix}", "install" },
+                    },
+                },
+            },
         },
         ["1.11.0"] = {
             digests = {
