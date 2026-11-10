@@ -39,6 +39,14 @@ return {
         libraries = { "lib/libzstd.a", "lib/libzstd.{shared_extension}" },
         steps = {
             configure = {
+                -- lz4 1.11 drops the unprefixed frame enum aliases.
+                {
+                    "sed",
+                    "-i.bak",
+                    "-e",
+                    "s/(contentChecksum_t)/(LZ4F_contentChecksum_t)/",
+                    "programs/fileio.c",
+                },
                 {
                     "cmake",
                     "-S",
