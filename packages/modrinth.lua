@@ -24,18 +24,18 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "0.22.0",
+            default_version = "0.23.1",
         },
     },
     versions = {
-        ["0.21.10"] = {
-            digests = {
-                ["aarch64-macos"] = "328384b8a6391b0d5e55305a7a23c8dfadd6c0172cb6575cfb09d177ffabaeae",
-            },
-        },
         ["0.22.0"] = {
             digests = {
                 ["aarch64-macos"] = "b39f9c228f770d4afd3a8ade20378dbf2bef9f2debf9e5cde983e9628bbd063b",
+            },
+        },
+        ["0.23.1"] = {
+            digests = {
+                ["aarch64-macos"] = "fc8519262c8899af56810f9f0a7c50ba28b1e1cacf2fc048e1a8f44bc8da68d4",
             },
         },
     },
