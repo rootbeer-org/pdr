@@ -1,7 +1,8 @@
 name: Updates
 # Finds newer upstream versions with `rb drv updates`, and proposes each
-# package's in its own PR for review. A PR is refreshed only when its change
-# differs, and a package someone else's open PR touches is left alone.
+# package's in its own PR, which merges itself once its checks pass. A PR is
+# refreshed only when its change differs, and a package someone else's open PR
+# or commit touches is left alone.
 on:
   workflow_dispatch:
     inputs:
@@ -69,8 +70,9 @@ jobs:
           GH_TOKEN: ${{ steps.app.outputs.token }}
           GITHUB_TOKEN: ${{ github.token }}
         run: |
+          email='333483126+rootbeer-bot[bot]@users.noreply.github.com'
           git config user.name 'rootbeer-bot[bot]'
-          git config user.email '333483126+rootbeer-bot[bot]@users.noreply.github.com'
+          git config user.email "$email"
           remote="https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git"
           updates="$RUNNER_TEMP/updates.jsonl"
           busy=$(gh pr list --state open --limit 200 --json headRefName,files \
@@ -89,6 +91,21 @@ jobs:
             existing=$(gh pr list --head "updates/$name" --json number --jq '.[].number') || existing=""
             if [[ -z $existing ]] && (( opened >= LIMIT )); then
               continue
+            fi
+
+            # A refresh force-pushes, which would drop someone's fix to the PR.
+            # Merge commits are skipped, since updating the branch makes those.
+            if [[ -n $existing ]]; then
+              if ! others=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$existing/commits" \
+                --jq ".[] | select((.parents | length) == 1 and .commit.author.email != \"$email\") | .sha"); then
+                echo "- $name: couldn't read #$existing's commits" >> "$GITHUB_STEP_SUMMARY"
+                continue
+              fi
+
+              if [[ -n $others ]]; then
+                echo "- $name: #$existing has someone else's commits, so it is left alone" >> "$GITHUB_STEP_SUMMARY"
+                continue
+              fi
             fi
 
             branch="updates/$name"
@@ -144,11 +161,9 @@ jobs:
               continue
             fi
 
-            # A recipe can opt in to merging its updates once their checks pass.
-            if jq -e --arg name "$name" 'select(.name == $name and .automerge)' "$updates" > /dev/null; then
-              gh pr merge "$branch" --auto --squash \
-                || echo "- $name: couldn't enable auto-merge" >> "$GITHUB_STEP_SUMMARY"
-            fi
+            # The ruleset holds the merge until the package checks pass.
+            gh pr merge "$branch" --auto --squash \
+              || echo "- $name: couldn't enable auto-merge" >> "$GITHUB_STEP_SUMMARY"
 
             echo "- $name: $title" >> "$GITHUB_STEP_SUMMARY"
           done
