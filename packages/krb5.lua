@@ -115,10 +115,10 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "1.22.2",
+            default_version = "1.22.3",
         },
         ["x86_64-linux"] = {
-            default_version = "1.22.2",
+            default_version = "1.22.3",
         },
     },
     versions = {
@@ -157,6 +157,12 @@ return {
                     "diff --git a/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c b/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c\010index 525e8d0277..251da025bd 100644\010--- a/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c\010+++ b/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c\010@@ -628,20 +628,24 @@ krb5_encode_histkey(osa_princ_ent_rec *princ_ent)\010 static krb5_error_code\010 tl_data2berval (krb5_tl_data *in, struct berval **out)\010 {\010-    *out = (struct berval *) malloc (sizeof (struct berval));\010-    if (*out == NULL)\010-        return ENOMEM;\010+    struct berval *bv;\010 \010-    (*out)->bv_len = in->tl_data_length + 2;\010-    (*out)->bv_val =  (char *) malloc ((*out)->bv_len);\010-    if ((*out)->bv_val == NULL) {\010-        free (*out);\010+    *out = NULL;\010+\010+    bv = malloc(sizeof(*bv));\010+    if (bv == NULL)\010+        return ENOMEM;\010+    bv->bv_len = in->tl_data_length + 2;\010+    bv->bv_val = malloc(bv->bv_len);\010+    if (bv->bv_val == NULL) {\010+        free(bv);\010         return ENOMEM;\010     }\010 \010-    STORE16_INT((*out)->bv_val, in->tl_data_type);\010-    memcpy ((*out)->bv_val + 2, in->tl_data_contents, in->tl_data_length);\010+    STORE16_INT(bv->bv_val, in->tl_data_type);\010+    memcpy(bv->bv_val + 2, in->tl_data_contents, in->tl_data_length);\010 \010+    *out = bv;\010     return 0;\010 }\010 \010",
                     "diff --git a/src/lib/krb5/krb/preauth_otp.c b/src/lib/krb5/krb/preauth_otp.c\010index 07ffc15c22..abc171f5b2 100644\010--- a/src/lib/krb5/krb/preauth_otp.c\010+++ b/src/lib/krb5/krb/preauth_otp.c\010@@ -989,7 +989,7 @@ otp_client_prep_questions(krb5_context context, krb5_clpreauth_moddata moddata,\010                           krb5_data *encoded_previous_request,\010                           krb5_pa_data *pa_data)\010 {\010-    krb5_pa_otp_challenge *chl;\010+    krb5_pa_otp_challenge *chl, **chp = (krb5_pa_otp_challenge **)modreq;\010     krb5_error_code retval;\010     krb5_data tmp;\010     char *json;\010@@ -997,13 +997,17 @@ otp_client_prep_questions(krb5_context context, krb5_clpreauth_moddata moddata,\010     if (modreq == NULL)\010         return ENOMEM;\010 \010+    /* We shouldn't normally be called twice during the same initial\010+     * credentials request, but if we are, free the previous challenge. */\010+    k5_free_pa_otp_challenge(context, *chp);\010+    *chp = NULL;\010+\010     /* Decode the challenge. */\010     tmp = make_data(pa_data->contents, pa_data->length);\010-    retval = decode_krb5_pa_otp_challenge(&tmp,\010-                                          (krb5_pa_otp_challenge **)modreq);\010+    retval = decode_krb5_pa_otp_challenge(&tmp, chp);\010     if (retval != 0)\010         return retval;\010-    chl = *(krb5_pa_otp_challenge **)modreq;\010+    chl = *chp;\010 \010     /* Remove unsupported tokeninfos. */\010     retval = filter_supported_tokeninfos(context, chl->tokeninfo);\010",
                 },
+            },
+        },
+        ["1.22.3"] = {
+            digests = {
+                ["aarch64-linux"] = "fe90af8441ad9fa9b064b8e53077cefb782a96f8a68276b031dc54af1789ff0b",
+                ["x86_64-linux"] = "fe90af8441ad9fa9b064b8e53077cefb782a96f8a68276b031dc54af1789ff0b",
             },
         },
     },
