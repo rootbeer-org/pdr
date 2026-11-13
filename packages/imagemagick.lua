@@ -98,6 +98,10 @@ return {
                 kind = "link_runtime",
             },
             {
+                package = "kvazaar",
+                kind = "link_runtime",
+            },
+            {
                 package = "imath",
                 kind = "link_runtime",
             },
@@ -199,10 +203,11 @@ return {
         },
         checks = {
             { "magick", "-version" },
+            -- kvazaar only encodes 8-bit, and the Q16 build reads the PNG as 16-bit.
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && magick -size 32x32 gradient:red-blue $d/a.png && magick $d/a.png -resize 16x16 $d/b.jpg && magick $d/b.jpg $d/c.webp && magick $d/c.webp $d/d.tiff && magick identify $d/d.tiff | grep -q 16x16 && magick $d/d.tiff $d/e.jxl && magick $d/e.jxl $d/f.avif && magick $d/f.avif $d/g.exr && magick identify $d/g.exr | grep -q 16x16 && echo ok",
+                "d=$(mktemp -d) && magick -size 32x32 gradient:red-blue $d/a.png && magick $d/a.png -resize 16x16 $d/b.jpg && magick $d/b.jpg $d/c.webp && magick $d/c.webp $d/d.tiff && magick identify $d/d.tiff | grep -q 16x16 && magick $d/d.tiff $d/e.jxl && magick $d/e.jxl $d/f.avif && magick $d/f.avif $d/g.exr && magick identify $d/g.exr | grep -q 16x16 && magick $d/a.png -depth 8 $d/h.heic && magick identify $d/h.heic | grep -q 32x32 && echo ok",
             },
         },
     },
