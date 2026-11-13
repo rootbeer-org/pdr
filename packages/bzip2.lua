@@ -52,21 +52,22 @@ return {
                     [[
 case "$(uname -s)" in
 Darwin)
-    cc -dynamiclib -install_name "$1/lib/libbz2.1.dylib" -compatibility_version 1.0 -current_version 1.0.8 \
-        -o libbz2.1.0.8.dylib blocksort.o huffman.o crctable.o randtable.o compress.o decompress.o bzlib.o
-    cp libbz2.1.0.8.dylib "$1/lib/"
-    cd "$1/lib" && ln -sf libbz2.1.0.8.dylib libbz2.1.dylib && ln -sf libbz2.1.dylib libbz2.dylib
+    cc -dynamiclib -install_name "$1/lib/libbz2.1.dylib" -compatibility_version 1.0 -current_version "$2" \
+        -o libbz2."$2".dylib blocksort.o huffman.o crctable.o randtable.o compress.o decompress.o bzlib.o
+    cp libbz2."$2".dylib "$1/lib/"
+    cd "$1/lib" && ln -sf libbz2."$2".dylib libbz2.1.dylib && ln -sf libbz2.1.dylib libbz2.dylib
     ;;
 *)
     # Upstream's Makefile-libbz2_so makes the soname-versioned Linux library.
     make -f Makefile-libbz2_so
-    cp libbz2.so.1.0.8 "$1/lib/"
-    cd "$1/lib" && ln -sf libbz2.so.1.0.8 libbz2.so.1.0 && ln -sf libbz2.so.1.0 libbz2.so
+    cp libbz2.so."$2" "$1/lib/"
+    cd "$1/lib" && ln -sf libbz2.so."$2" libbz2.so.1.0 && ln -sf libbz2.so.1.0 libbz2.so
     ;;
 esac
 ]],
                     "sh",
                     "{prefix}",
+                    "{version}",
                 },
             },
         },
