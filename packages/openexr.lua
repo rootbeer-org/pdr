@@ -29,6 +29,10 @@ return {
                 package = "libdeflate",
                 kind = "link_runtime",
             },
+            {
+                package = "zstd",
+                kind = "link_runtime",
+            },
         },
         libraries = {
             "lib/libOpenEXR.{shared_extension}",
@@ -61,6 +65,14 @@ return {
                     "-DOPENEXR_INSTALL_PKG_CONFIG=ON",
                     "-DOPENEXR_FORCE_INTERNAL_IMATH=OFF",
                     "-DOPENEXR_FORCE_INTERNAL_DEFLATE=OFF",
+                    "-DOPENEXR_FORCE_INTERNAL_ZSTD=OFF",
+                    "-Dzstd_DIR={dependencies.zstd}/lib/cmake/zstd",
+                },
+                -- OpenEXR silently falls back to vendored zstd when find_package fails.
+                {
+                    "sh",
+                    "-c",
+                    'grep -rq "undef OPENEXR_USE_INTERNAL_ZSTD" build --include=OpenEXRConfigInternal.h || { echo "openexr: vendored zstd in use" >&2; exit 1; }',
                 },
             },
             build = {
