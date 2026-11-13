@@ -46,8 +46,8 @@ return {
                 kind = "link_runtime",
             },
             {
-                package = "expat",
-                kind = "link",
+                package = "libxml2",
+                kind = "link_runtime",
             },
         },
         libraries = {
@@ -66,7 +66,8 @@ return {
                     "--disable-docs",
                     "--disable-nls",
                     "--disable-cache-build",
-                    "--with-expat={dependencies.expat}",
+                    -- The catalog's expat is static and not position-independent, so it can't go in a shared library.
+                    "--enable-libxml2",
                     "--sysconfdir={prefix}/etc",
                     "--localstatedir={prefix}/var",
                     "--with-default-fonts=/usr/share/fonts",

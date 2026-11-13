@@ -10,7 +10,7 @@ return {
         separator = "-",
     },
     source = {
-        url = "https://download.savannah.gnu.org/releases/freetype/freetype-{version}.tar.xz",
+        url = "https://downloads.sourceforge.net/project/freetype/freetype2/{version}/freetype-{version}.tar.xz",
         archive = "tar.xz",
         strip_prefix = "freetype-{version}",
     },
