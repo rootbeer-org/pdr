@@ -20,7 +20,7 @@ return {
             },
         },
         dependencies = {
-            { package = "node", kind = "all" },
+            { package = "node", kind = "runtime" },
         },
         steps = {
             install = {

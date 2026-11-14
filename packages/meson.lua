@@ -21,7 +21,7 @@ return {
             },
         },
         dependencies = {
-            { package = "python", kind = "all" },
+            { package = "python", kind = "runtime" },
         },
         steps = {
             install = {
