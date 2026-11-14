@@ -6,6 +6,9 @@ return {
     default_license = "PSF-2.0",
     -- Releases are tagged by build date, not by version, so the updater cannot
     -- follow them. Bump by hand: rb drv bump python <version> --serial <date>
+    upstream = {
+        lines = { by = "minor", keep = 2 },
+    },
     prebuilt = {
         url = "https://github.com/astral-sh/python-build-standalone/releases/download/{serial}/cpython-{version}+{serial}-{target}-install_only_stripped.tar.gz",
         install = {
@@ -28,7 +31,7 @@ return {
     outputs = {
         bins = { "python3", "pip3", "python", "pip" },
         -- The stable-ABI stub's DT_NEEDED is a literal $ORIGIN path the scan cannot follow.
-        host = { "$ORIGIN/../lib/libpython3.15.so.1.0" },
+        host = { "$ORIGIN/../lib/libpython{major}.{minor}.so.1.0" },
         checks = {
             { "python3", "--version" },
             {
@@ -54,6 +57,14 @@ return {
         },
     },
     versions = {
+        ["3.14.10"] = {
+            digests = {
+                ["aarch64-linux"] = "38fd50f07170adc29d481913d1c30b17ecb538fbe290315fe1f83d84fdd5b694",
+                ["aarch64-macos"] = "f15ec3d15460dd66c2eb88639b152cd9040e7d1ece11e38bf89e8f53f0171e02",
+                ["x86_64-linux"] = "c2ff2e97422f5d3896a16e0317fd212ba977bbf2688d93a6f7a03d817506bd30",
+            },
+            serial = 20261110,
+        },
         ["3.15.2"] = {
             serial = 20261110,
             digests = {
