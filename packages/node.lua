@@ -10,6 +10,7 @@ return {
         tag = "v{version}",
         -- Odd majors are short-lived releases, not LTS lines.
         exclude_tags = { "v[13579].*", "v[1-9][13579].*" },
+        lines = { by = "major", keep = 2 },
     },
     prebuilt = {
         url = "https://nodejs.org/dist/v{version}/node-v{version}-{target}.tar.xz",
@@ -51,6 +52,13 @@ return {
         },
     },
     versions = {
+        ["24.22.3"] = {
+            digests = {
+                ["aarch64-linux"] = "6e51a2ada00f0011cc266f65d98922b403d7ad88f809ca2aa615a5fe1ce6e86c",
+                ["aarch64-macos"] = "1d64136c8a43d648d1b3bad10797a4c995b1ca032d2bde8799de43b37f058fe5",
+                ["x86_64-linux"] = "4f2b175a6d53a5c617a80dba2676238a0688cef28c6da4eba35c7d844e66fcfb",
+            },
+        },
         ["26.13.1"] = {
             digests = {
                 ["aarch64-linux"] = "89e1853138db51e8b82d3e98ba9c0d3f2956a28e5e55ea1b7e12d25aae92d5dd",
