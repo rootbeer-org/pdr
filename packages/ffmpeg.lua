@@ -3,7 +3,7 @@ return {
     description = "Audio and video converter and processing tools",
     homepage = "https://ffmpeg.org/",
     recipe_maintainers = { "tale" },
-    default_license = "LGPL-3.0-or-later",
+    default_license = "GPL-3.0-or-later",
     upstream = {
         github = "FFmpeg/FFmpeg",
         repository_id = 1614410,
@@ -42,12 +42,59 @@ return {
                 package = "bzip2",
                 kind = "link_runtime",
             },
+            {
+                package = "aom",
+                kind = "link_runtime",
+            },
+            {
+                package = "dav1d",
+                kind = "link_runtime",
+            },
+            {
+                package = "lame",
+                kind = "link_runtime",
+            },
+            {
+                package = "libogg",
+                kind = "link_runtime",
+            },
+            {
+                package = "libvorbis",
+                kind = "link_runtime",
+            },
+            {
+                package = "libvpx",
+                kind = "link",
+            },
+            {
+                package = "libwebp",
+                kind = "link_runtime",
+            },
+            {
+                package = "opus",
+                kind = "link_runtime",
+            },
+            {
+                package = "svt-av1",
+                kind = "link_runtime",
+            },
+            {
+                package = "x264",
+                kind = "link_runtime",
+            },
+            {
+                package = "x265",
+                kind = "link_runtime",
+            },
         },
         steps = {
             configure = {
+                -- macOS also gets its hardware codecs, which are system frameworks.
                 {
                     "/bin/sh",
-                    "./configure",
+                    "-c",
+                    'case "$(uname -s)" in Darwin) set -- "$@" --enable-videotoolbox --enable-audiotoolbox ;; esac; exec /bin/sh ./configure "$@"',
+                    "sh",
                     "--prefix={prefix}",
                     -- Autodetection would pick up host frameworks and libraries, so every
                     -- external library is named explicitly.
@@ -62,7 +109,19 @@ return {
                     "--enable-lzma",
                     "--enable-bzlib",
                     "--enable-openssl",
+                    -- x264 and x265 are GPL, which makes the whole build GPL.
+                    "--enable-gpl",
                     "--enable-version3",
+                    "--enable-libaom",
+                    "--enable-libdav1d",
+                    "--enable-libmp3lame",
+                    "--enable-libopus",
+                    "--enable-libsvtav1",
+                    "--enable-libvorbis",
+                    "--enable-libvpx",
+                    "--enable-libwebp",
+                    "--enable-libx264",
+                    "--enable-libx265",
                     "--enable-pic",
                     "--enable-static",
                     "--disable-shared",
@@ -97,6 +156,27 @@ return {
                 "-f",
                 "null",
                 "-",
+            },
+            -- Each external encoder writes a file that ffprobe then reads back.
+            {
+                "/bin/sh",
+                "-c",
+                [[
+set -e
+d=$(mktemp -d)
+video="-f lavfi -i testsrc=duration=1:size=64x64:rate=5 -pix_fmt yuv420p"
+audio="-f lavfi -i sine=frequency=440:duration=1"
+for pair in libx264:mp4 libx265:mp4 libvpx-vp9:webm libaom-av1:mkv libsvtav1:mkv libwebp:webp; do
+    ffmpeg -hide_banner -loglevel error $video -c:v "${pair%%:*}" "$d/v-${pair%%:*}.${pair##*:}"
+    ffprobe -v error "$d/v-${pair%%:*}.${pair##*:}"
+done
+for pair in libopus:opus libmp3lame:mp3 libvorbis:ogg; do
+    ffmpeg -hide_banner -loglevel error $audio -c:a "${pair%%:*}" "$d/a-${pair%%:*}.${pair##*:}"
+    ffprobe -v error "$d/a-${pair%%:*}.${pair##*:}"
+done
+# dav1d decodes what an AV1 encoder wrote.
+ffmpeg -hide_banner -loglevel error -c:v libdav1d -i "$d/v-libsvtav1.mkv" -f null -
+]],
             },
         },
     },
