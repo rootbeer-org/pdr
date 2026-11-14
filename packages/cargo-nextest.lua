@@ -35,10 +35,10 @@ return {
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "0.9.151",
+            default_version = "0.9.152",
         },
         ["aarch64-macos"] = {
-            default_version = "0.9.151",
+            default_version = "0.9.152",
             build = {
                 backend = "rust",
                 dependencies = {
@@ -51,22 +51,22 @@ return {
             },
         },
         ["x86_64-linux"] = {
-            default_version = "0.9.151",
+            default_version = "0.9.152",
         },
     },
     versions = {
-        ["0.9.150"] = {
-            digests = {
-                ["aarch64-linux"] = "52daf837e45bf08815f1fa92202adb28d835c04b3e8f1fc9a2d1b47e2b6537c6",
-                ["aarch64-macos"] = "52daf837e45bf08815f1fa92202adb28d835c04b3e8f1fc9a2d1b47e2b6537c6",
-                ["x86_64-linux"] = "52daf837e45bf08815f1fa92202adb28d835c04b3e8f1fc9a2d1b47e2b6537c6",
-            },
-        },
         ["0.9.151"] = {
             digests = {
                 ["aarch64-linux"] = "613c8855e6a5b9f9d12920bf74a0c191af3f8b5f86ff4cf27446f0f7adfc44ec",
                 ["aarch64-macos"] = "613c8855e6a5b9f9d12920bf74a0c191af3f8b5f86ff4cf27446f0f7adfc44ec",
                 ["x86_64-linux"] = "613c8855e6a5b9f9d12920bf74a0c191af3f8b5f86ff4cf27446f0f7adfc44ec",
+            },
+        },
+        ["0.9.152"] = {
+            digests = {
+                ["aarch64-linux"] = "b93dfdf2c5d187f0154e71ee86bcfc40e8ea39abfe7bf20f95f1fa05c12afb2f",
+                ["aarch64-macos"] = "b93dfdf2c5d187f0154e71ee86bcfc40e8ea39abfe7bf20f95f1fa05c12afb2f",
+                ["x86_64-linux"] = "b93dfdf2c5d187f0154e71ee86bcfc40e8ea39abfe7bf20f95f1fa05c12afb2f",
             },
         },
     },
