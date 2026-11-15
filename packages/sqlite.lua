@@ -17,14 +17,14 @@ return {
                 kind = "link",
             },
         },
-        libraries = { "lib/libsqlite3.a" },
+        libraries = { "lib/libsqlite3.a", "lib/libsqlite3.{shared_extension}" },
         steps = {
             configure = {
                 {
                     "sh",
                     "./configure",
                     "--prefix={prefix}",
-                    "--disable-shared",
+                    "--enable-shared",
                     "--enable-static",
                     "--fts4",
                     "--fts5",
