@@ -14,7 +14,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "sh-{version}",
         patches = {
-            "--- a/cmd/shfmt/main.go\010+++ b/cmd/shfmt/main.go\010@@ -66,6 +66,8 @@\010 }\010 \010 var (\010+\009version = \"(unknown)\"\010+\010 \009// Generic flags.\010 \009versionFlag = flagVal(\"\", \"version\", false, flag.BoolVar)\010 \009list        = flagVal(\"l\", \"list\", \"false\", boolStringVar)\010@@ -156,8 +158,7 @@\010 \009flag.Parse()\010 \010 \009if versionFlag.val {\010-\009\009version := \"(unknown)\"\010-\009\009if info, ok := debug.ReadBuildInfo(); ok {\010+\009\009if info, ok := debug.ReadBuildInfo(); version == \"(unknown)\" && ok {\010 \009\009\009mod := &info.Main\010 \009\009\009if mod.Replace != nil {\010 \009\009\009\009mod = mod.Replace\010",
+            "version-variable.patch",
         },
     },
     build = {

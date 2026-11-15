@@ -1,0 +1,27 @@
+diff --git a/src/config/pre.in b/src/config/pre.in
+index 1197c1ffd6b..2b0ec470627 100644
+--- a/src/config/pre.in
++++ b/src/config/pre.in
+@@ -413,6 +413,9 @@ TLS_IMPL_LIBS	= @TLS_IMPL_LIBS@
+ # SPAKE preauth back-end libraries
+ SPAKE_OPENSSL_LIBS = @SPAKE_OPENSSL_LIBS@
+ 
++# simple audit plugin module dependencies
++AUDIT_IMPL_LIBS = @AUDIT_IMPL_LIBS@
++
+ # Whether we have the SASL header file for the LDAP KDB module
+ HAVE_SASL = @HAVE_SASL@
+ 
+diff --git a/src/plugins/audit/simple/Makefile.in b/src/plugins/audit/simple/Makefile.in
+index 158ea75b1a2..dec4993eabe 100644
+--- a/src/plugins/audit/simple/Makefile.in
++++ b/src/plugins/audit/simple/Makefile.in
+@@ -8,7 +8,7 @@ RELDIR=../plugins/audit/simple
+ 
+ #Depends on libkrb5 and libkrb5support.
+ SHLIB_EXPDEPS= $(KRB5_BASE_DEPLIBS)
+-SHLIB_EXPLIBS= $(KRB5_BASE_LIBS)
++SHLIB_EXPLIBS= $(KRB5_BASE_LIBS) $(AUDIT_IMPL_LIBS)
+ 
+ STOBJLISTS= OBJS.ST ../OBJS.ST
+ STLIBOBJS= au_simple_main.o

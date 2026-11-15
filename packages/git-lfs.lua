@@ -15,7 +15,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "git-lfs-{version}",
         patches = {
-            "--- a/git-lfs.go\010+++ b/git-lfs.go\010@@ -11,7 +11,7 @@\010 )\010 \010 func main() {\010-\009c := make(chan os.Signal)\010+\009c := make(chan os.Signal, 1)\010 \009signal.Notify(c, os.Interrupt, os.Kill)\010 \010 \009go func() {\010",
+            "buffered-signal-channel.patch",
         },
     },
     build = {

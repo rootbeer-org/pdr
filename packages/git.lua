@@ -14,7 +14,7 @@ return {
         archive = "tar.xz",
         strip_prefix = "git-{version}",
         patches = {
-            "--- a/exec-cmd.c\010+++ b/exec-cmd.c\010@@ -143,7 +143,8 @@\010 \009\009trace_printf(\010 \009\009\009\"trace: resolved executable path from Darwin stack: %s\\n\",\010 \009\009\009path);\010-\009\009strbuf_addstr(buf, path);\010+\009\009if (!strbuf_realpath(buf, path, 0))\010+\009\009\009return -1;\010 \009\009return 0;\010 \009}\010 \009return -1;\010",
+            "darwin-executable-realpath.patch",
         },
     },
     build = {
@@ -87,7 +87,7 @@ return {
                 {
                     "/bin/sh",
                     "-ec",
-                    "printf '%s' \"$1\" > config.mak; printf \"CURL_LDFLAGS = %s\\nCURL_CFLAGS = %s\\n\" \"$(pkg-config --static --libs libcurl)\" \"$(pkg-config --cflags libcurl)\" >> config.mak; printf \"LDFLAGS += %s\\n\" \"${LDFLAGS-}\" >> config.mak",
+                    'printf \'%s\' "$1" > config.mak; printf "CURL_LDFLAGS = %s\\nCURL_CFLAGS = %s\\n" "$(pkg-config --static --libs libcurl)" "$(pkg-config --cflags libcurl)" >> config.mak; printf "LDFLAGS += %s\\n" "${LDFLAGS-}" >> config.mak',
                     "rootbeer-git",
                     "prefix = {prefix}\010RUNTIME_PREFIX = YesPlease\010INSTALL_SYMLINKS = YesPlease\010NO_GETTEXT = YesPlease\010NEEDS_LIBICONV = YesPlease\010NO_RUST = YesPlease\010NO_TCLTK = YesPlease\010PERL_PATH = /usr/bin/perl\010PYTHON_PATH = /usr/bin/python3\010USE_LIBPCRE =\010",
                 },
@@ -118,7 +118,7 @@ return {
             {
                 "git",
                 "-c",
-                "alias.rootbeer-check=!set -eu; directory=$(mktemp -d); trap 'rm -rf \"$directory\"' EXIT; git init -q \"$directory/repository\"; git -C \"$directory/repository\" -c user.name=Rootbeer -c user.email=rootbeer@example.invalid commit -qm initial --allow-empty; git clone -q \"$directory/repository\" \"$directory/clone\"; git -C \"$directory/clone\" fsck --strict; test -x \"$(git --exec-path)/git-remote-https\"",
+                'alias.rootbeer-check=!set -eu; directory=$(mktemp -d); trap \'rm -rf "$directory"\' EXIT; git init -q "$directory/repository"; git -C "$directory/repository" -c user.name=Rootbeer -c user.email=rootbeer@example.invalid commit -qm initial --allow-empty; git clone -q "$directory/repository" "$directory/clone"; git -C "$directory/clone" fsck --strict; test -x "$(git --exec-path)/git-remote-https"',
                 "rootbeer-check",
             },
         },

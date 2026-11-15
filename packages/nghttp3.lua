@@ -14,7 +14,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "nghttp3-{version}",
         patches = {
-            "--- a/CMakeLists.txt\010+++ b/CMakeLists.txt\010@@ -178,2 +178,2 @@\010-set(libdir          \"${CMAKE_INSTALL_FULL_LIBDIR}\")\010-set(includedir      \"${CMAKE_INSTALL_FULL_INCLUDEDIR}\")\010+set(libdir          \"\\${prefix}/${CMAKE_INSTALL_LIBDIR}\")\010+set(includedir      \"\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}\")\010",
+            "pkgconfig-prefix-relative-dirs.patch",
         },
     },
     build = {

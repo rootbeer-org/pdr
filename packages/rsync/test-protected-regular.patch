@@ -1,0 +1,12 @@
+--- a/testsuite/protected-regular_test.py
++++ b/testsuite/protected-regular_test.py
+@@ -39,7 +39,8 @@
+     try:
+         os.chown(path, 5001, -1)
+         return True
+-    except PermissionError:
++    # A user namespace without uid 5001 mapped refuses it with EINVAL.
++    except OSError:
+         return False
+ 
+ 

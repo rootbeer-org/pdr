@@ -1,0 +1,11 @@
+--- a/unix/unix.c
++++ b/unix/unix.c
+@@ -1705,7 +1705,7 @@
+ #endif /* Sun */
+ #endif /* SGI */
+ 
+-#ifdef __DATE__
++#if 0
+       " on ", __DATE__
+ #else
+       "", ""

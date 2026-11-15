@@ -1,0 +1,24 @@
+--- a/src/check_msg.c
++++ b/src/check_msg.c
+@@ -280,6 +280,10 @@
+ 
+     int fd = -1;
+     const char *tmp_dir = getenv ("TEMP");
++    if (tmp_dir == NULL)
++    {
++        tmp_dir = getenv ("TMPDIR");
++    }
+ #ifdef P_tmpdir
+     if (tmp_dir == NULL)
+     {
+@@ -288,10 +292,6 @@
+ #endif /*P_tmpdir*/
+     if (tmp_dir == NULL)
+     {
+-        tmp_dir = getenv ("TMPDIR");
+-    }
+-    if (tmp_dir == NULL)
+-    {
+         tmp_dir = ".";
+     }
+ 

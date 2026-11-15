@@ -1,0 +1,10 @@
+--- a/unix/zipgrep
++++ b/unix/zipgrep
+@@ -44,6 +44,7 @@
+   opt="-$opt"
+ fi
+ 
++sts=0
+ status_grep_global=1
+ IFS='
+ '

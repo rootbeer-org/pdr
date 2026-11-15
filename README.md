@@ -49,6 +49,8 @@ existing recipe such as [`jq.lua`](packages/jq.lua).
 - Dependencies name no version, so they follow the dependency's default and an
   update to it rebuilds what uses it, such as a go or openssl fix. Pin a `version`
   only when a recipe needs that exact one.
+- Keep patches as `.patch` files in a directory named after the recipe, such as
+  `packages/krb5/`, and list their file names in order under `source.patches`.
 - Declare only platforms you can verify, with checks that exercise the tool.
 
 Build and check a package locally, with an `rb` from rootbeer at

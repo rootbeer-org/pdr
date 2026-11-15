@@ -14,7 +14,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "trivy-{version}",
         patches = {
-            "--- a/pkg/x/json/json.go\010+++ b/pkg/x/json/json.go\010@@ -2,6 +2,7 @@\010 \010 import (\010 \009\"bytes\"\010+\009\"errors\"\010 \009\"encoding/json/jsontext\"\010 \009\"encoding/json/v2\"\010 \009\"io\"\010@@ -106,7 +107,7 @@\010 \010 \009\009// Check visited set to avoid infinity loops\010 \009\009if visited.Contains(start) {\010-\009\009\009return json.SkipFunc\010+\009\009\009return errors.ErrUnsupported\010 \009\009}\010 \009\009visited.Append(start)\010 \010--- a/pkg/iac/scanners/cloudformation/parser/parameter.go\010+++ b/pkg/iac/scanners/cloudformation/parser/parameter.go\010@@ -54,7 +54,7 @@\010 \009\009}\010 \009\009return nil\010 \009}\010-\009return json.SkipFunc\010+\009return errors.ErrUnsupported\010 }\010 \010 func (p *Parameter) Type() cftypes.CfType {\010--- a/go.mod\010+++ b/go.mod\010@@ -1,6 +1,6 @@\010 module github.com/aquasecurity/trivy\010 \010-go 1.26.3\010+go 1.27.0\010 \010 require (\010 \009github.com/Azure/azure-sdk-for-go/sdk/azcore v1.22.0\010",
+            "json-err-unsupported.patch",
         },
     },
     build = {

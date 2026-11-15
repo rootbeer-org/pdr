@@ -1,0 +1,18 @@
+--- a/tests/Test-ftp-iri.px
++++ b/tests/Test-ftp-iri.px
+@@ -2,6 +2,15 @@
+ 
+ use strict;
+ use warnings;
++
++# APFS cannot represent the byte-oriented filenames used by this test.
++my $probe_name = "wget-filename-$$-\xE7";
++open my $probe, '>', $probe_name or do {
++    exit 77 if $!{EILSEQ};
++    die "Cannot probe filename support: $!";
++};
++close $probe;
++unlink $probe_name;
+ 
+ use WgetFeature qw(iri);
+ use FTPTest;

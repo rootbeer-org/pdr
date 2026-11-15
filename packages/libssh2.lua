@@ -14,7 +14,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "libssh2-{version}",
         patches = {
-            "--- a/CMakeLists.txt\010+++ b/CMakeLists.txt\010@@ -339 +339 @@\010-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\010+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\010@@ -368 +368 @@\010-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\010+      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\010--- a/src/CMakeLists.txt\010+++ b/src/CMakeLists.txt\010@@ -66 +66 @@\010-  list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})\010+  list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)\010",
+            "cmake-zlib-target.patch",
         },
     },
     build = {

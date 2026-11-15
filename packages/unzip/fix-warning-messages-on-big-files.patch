@@ -1,0 +1,10 @@
+--- a/fileio.c
++++ b/fileio.c
+@@ -2477,6 +2477,7 @@
+      */
+     return (((zusz_t)sig[7]) << 56)
+         + (((zusz_t)sig[6]) << 48)
++        + (((zusz_t)sig[5]) << 40)
+         + (((zusz_t)sig[4]) << 32)
+         + (zusz_t)((((ulg)sig[3]) << 24)
+                  + (((ulg)sig[2]) << 16)
