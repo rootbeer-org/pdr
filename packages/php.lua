@@ -41,7 +41,7 @@ return {
             },
             {
                 package = "sqlite",
-                kind = "link",
+                kind = "link_runtime",
             },
             {
                 package = "libiconv",
