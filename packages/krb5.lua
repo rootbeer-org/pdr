@@ -11,6 +11,7 @@ return {
     -- Built from the top level so upstream commits apply as published.
     source = {
         url = "https://kerberos.org/dist/krb5/{major}.{minor}/krb5-{version}.tar.gz",
+        mirrors = { "https://web.mit.edu/kerberos/dist/krb5/{major}.{minor}/krb5-{version}.tar.gz" },
         archive = "tar.gz",
         strip_prefix = "krb5-{version}",
     },
@@ -129,6 +130,9 @@ return {
             },
             source = {
                 url = "https://kerberos.org/dist/krb5/{major}.{minor}/krb5-{version}.tar.gz",
+                mirrors = {
+                    "https://web.mit.edu/kerberos/dist/krb5/{major}.{minor}/krb5-{version}.tar.gz",
+                },
                 archive = "tar.gz",
                 strip_prefix = "krb5-{version}",
                 -- Unreleased fixes from the krb5-1.22 branch, applied in order, leaving out
