@@ -19,7 +19,7 @@ return {
         dependencies = {
             {
                 package = "ncurses",
-                kind = "link",
+                kind = "link_runtime",
             },
         },
         libraries = {
@@ -41,15 +41,7 @@ return {
                 },
             },
             build = {
-                -- A dylib can't leave termcap symbols undefined, so macOS links curses in. Linux leaves
-                -- them to whatever links readline, since the static ncurses isn't position-independent.
-                {
-                    "/bin/sh",
-                    "-c",
-                    'case "$(uname -s)" in Darwin) libs=-lncursesw ;; *) libs= ;; esac; make -j"$1" SHLIB_LIBS="$libs"',
-                    "sh",
-                    "{jobs}",
-                },
+                { "make", "-j{jobs}", "SHLIB_LIBS=-lncursesw" },
             },
             install = {
                 { "make", "install" },

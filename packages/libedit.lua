@@ -15,7 +15,7 @@ return {
         dependencies = {
             {
                 package = "ncurses",
-                kind = "link",
+                kind = "link_runtime",
             },
         },
         libraries = { "lib/libedit.a" },

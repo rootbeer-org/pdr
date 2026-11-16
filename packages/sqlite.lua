@@ -14,7 +14,7 @@ return {
             },
             {
                 package = "ncurses",
-                kind = "link",
+                kind = "link_runtime",
             },
         },
         libraries = { "lib/libsqlite3.a", "lib/libsqlite3.{shared_extension}" },

@@ -43,7 +43,7 @@ return {
             -- The catalog's libreadline leaves its termcap symbols to the program that links it.
             {
                 package = "ncurses",
-                kind = "link",
+                kind = "link_runtime",
             },
             {
                 package = "openssl",
