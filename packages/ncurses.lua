@@ -20,6 +20,14 @@ return {
             "lib/libform.a",
             "lib/libmenu.a",
             "lib/libpanel.a",
+            "lib/libncursesw.{shared_extension}",
+            "lib/libformw.{shared_extension}",
+            "lib/libmenuw.{shared_extension}",
+            "lib/libpanelw.{shared_extension}",
+            "lib/libncurses.{shared_extension}",
+            "lib/libform.{shared_extension}",
+            "lib/libmenu.{shared_extension}",
+            "lib/libpanel.{shared_extension}",
         },
         steps = {
             configure = {
@@ -27,7 +35,7 @@ return {
                     "sh",
                     "./configure",
                     "--prefix={prefix}",
-                    "--without-shared",
+                    "--with-shared",
                     "--with-normal",
                     "--without-debug",
                     "--without-ada",
@@ -45,8 +53,26 @@ return {
             check = {
                 { "make", "-C", "include", "check" },
                 { "make", "-C", "test", "check" },
-                { "progs/tic", "-x", "-o", "test-terminfo", "misc/terminfo.src" },
-                { "progs/infocmp", "-A", "test-terminfo", "xterm-256color" },
+                -- Not installed yet, so point the loader at the build tree's libraries.
+                {
+                    "env",
+                    "DYLD_LIBRARY_PATH=lib",
+                    "LD_LIBRARY_PATH=lib",
+                    "progs/tic",
+                    "-x",
+                    "-o",
+                    "test-terminfo",
+                    "misc/terminfo.src",
+                },
+                {
+                    "env",
+                    "DYLD_LIBRARY_PATH=lib",
+                    "LD_LIBRARY_PATH=lib",
+                    "progs/infocmp",
+                    "-A",
+                    "test-terminfo",
+                    "xterm-256color",
+                },
             },
             install = {
                 { "make", "install" },
@@ -55,7 +81,19 @@ return {
                 {
                     "sh",
                     "-ec",
-                    "cd \"$1\"; for lib in ncurses form menu panel; do ln -s lib${lib}w.a lib/lib${lib}.a; ln -s ${lib}w.pc lib/pkgconfig/${lib}.pc; done; mkdir include/ncurses; for header in include/ncursesw/*; do ln -s ../ncursesw/${header##*/} include/ncurses/; done",
+                    [[
+cd "$1"
+for lib in ncurses form menu panel; do
+    for f in lib/lib${lib}w.*; do
+        ln -s "${f##*/}" "lib/lib${lib}${f#lib/lib${lib}w}"
+    done
+    ln -s ${lib}w.pc lib/pkgconfig/${lib}.pc
+done
+mkdir include/ncurses
+for header in include/ncursesw/*; do
+    ln -s ../ncursesw/${header##*/} include/ncurses/
+done
+]],
                     "sh",
                     "{prefix}",
                 },

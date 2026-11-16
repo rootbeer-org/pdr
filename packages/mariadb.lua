@@ -24,7 +24,7 @@ local build = {
         },
         {
             package = "ncurses",
-            kind = "link",
+            kind = "link_runtime",
         },
         {
             -- The macOS SDK editline header lacks the readline API the client uses.

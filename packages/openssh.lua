@@ -45,7 +45,7 @@ return {
             },
             {
                 package = "ncurses",
-                kind = "link",
+                kind = "link_runtime",
             },
             {
                 package = "krb5",
@@ -172,7 +172,7 @@ return {
                     },
                     {
                         package = "ncurses",
-                        kind = "link",
+                        kind = "link_runtime",
                     },
                 },
                 steps = {

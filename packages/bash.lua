@@ -19,7 +19,7 @@ return {
         dependencies = {
             {
                 package = "ncurses",
-                kind = "link",
+                kind = "link_runtime",
             },
         },
         steps = {

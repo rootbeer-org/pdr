@@ -28,7 +28,7 @@ return {
         dependencies = {
             {
                 package = "ncurses",
-                kind = "all",
+                kind = "link_runtime",
             },
         },
     },
