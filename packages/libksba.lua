@@ -1,0 +1,72 @@
+return {
+    name = "libksba",
+    description = "X.509 and CMS library used by GnuPG",
+    homepage = "https://gnupg.org/software/libksba/",
+    recipe_maintainers = { "tale" },
+    default_license = "LGPL-3.0-or-later OR GPL-2.0-or-later",
+    upstream = {
+        listing = "https://www.gnupg.org/ftp/gcrypt/libksba/",
+        tag = "libksba-{version}.tar.bz2",
+    },
+    source = {
+        url = "https://www.gnupg.org/ftp/gcrypt/libksba/{tag}",
+        archive = "tar.bz2",
+        strip_prefix = "libksba-{version}",
+    },
+    build = {
+        backend = "custom",
+        dependencies = {
+            {
+                package = "7zip",
+                kind = "build",
+            },
+            {
+                package = "libgpg-error",
+                kind = "link_runtime",
+            },
+        },
+        libraries = { "lib/libksba.{shared_extension}" },
+        steps = {
+            configure = {
+                {
+                    "/bin/sh",
+                    "./configure",
+                    "--prefix={prefix}",
+                    "--disable-doc",
+                    -- gpgrt-config is not on PATH while building.
+                    "GPGRT_CONFIG={dependencies.libgpg-error}/bin/gpgrt-config",
+                },
+            },
+            build = {
+                { "make", "-j{jobs}" },
+            },
+            check = {
+                { "make", "check" },
+            },
+            install = {
+                { "make", "install" },
+            },
+        },
+    },
+    outputs = {},
+    platforms = {
+        ["aarch64-linux"] = {
+            default_version = "1.8.1",
+        },
+        ["aarch64-macos"] = {
+            default_version = "1.8.1",
+        },
+        ["x86_64-linux"] = {
+            default_version = "1.8.1",
+        },
+    },
+    versions = {
+        ["1.8.1"] = {
+            digests = {
+                ["aarch64-linux"] = "c2f84393011827219ae117131dba8e7684c2bed0961eed11b0642c2acba440b5",
+                ["aarch64-macos"] = "c2f84393011827219ae117131dba8e7684c2bed0961eed11b0642c2acba440b5",
+                ["x86_64-linux"] = "c2f84393011827219ae117131dba8e7684c2bed0961eed11b0642c2acba440b5",
+            },
+        },
+    },
+}
