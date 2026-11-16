@@ -1,0 +1,7 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -380,2 +380,2 @@
+-set(libdir          "${CMAKE_INSTALL_FULL_LIBDIR}")
+-set(includedir      "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
++set(libdir          "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
++set(includedir      "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")

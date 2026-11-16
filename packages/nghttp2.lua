@@ -14,7 +14,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "nghttp2-{version}",
         patches = {
-            "--- a/CMakeLists.txt\010+++ b/CMakeLists.txt\010@@ -445,8 +445,8 @@\010 # libnghttp2.pc (pkg-config file)\010 set(prefix          \"${CMAKE_INSTALL_PREFIX}\")\010 set(exec_prefix     \"${CMAKE_INSTALL_PREFIX}\")\010-set(libdir          \"${CMAKE_INSTALL_FULL_LIBDIR}\")\010-set(includedir      \"${CMAKE_INSTALL_FULL_INCLUDEDIR}\")\010+set(libdir          \"\\${prefix}/${CMAKE_INSTALL_LIBDIR}\")\010+set(includedir      \"\\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}\")\010 set(VERSION         \"${PACKAGE_VERSION}\")\010 # For init scripts and systemd service file (in contrib/)\010 set(bindir          \"${CMAKE_INSTALL_FULL_BINDIR}\")\010",
+            "pkgconfig-prefix-relative-dirs.patch",
         },
     },
     build = {

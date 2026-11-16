@@ -1,0 +1,13 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -339 +339 @@
+-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})
++      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)
+@@ -368 +368 @@
+-      list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})
++      list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -66 +66 @@
+-  list(APPEND LIBSSH2_LIBS ${ZLIB_LIBRARIES})
++  list(APPEND LIBSSH2_LIBS ZLIB::ZLIB)

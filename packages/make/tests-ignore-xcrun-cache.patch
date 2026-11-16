@@ -1,0 +1,12 @@
+--- a/tests/test_driver.pl
++++ b/tests/test_driver.pl
+@@ -982,7 +982,8 @@
+ 
+   my @tf = ();
+   foreach my $file (glob(File::Spec->catfile($temppath, "*"))) {
+-    if (!exists $old_tempfiles{$file}) {
++    # xcrun caches its lookups in TMPDIR the first time a test runs cc.
++    if (!exists $old_tempfiles{$file} && $file !~ m{/xcrun_db}) {
+       push @tf, $file;
+       $old_tempfiles{$file} = 1;
+     }

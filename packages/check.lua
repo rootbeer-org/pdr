@@ -14,7 +14,7 @@ return {
         strip_prefix = "check-{version}",
         -- Prefer TMPDIR to P_tmpdir, which is /var/tmp on macOS, outside the build sandbox.
         patches = {
-            "--- a/src/check_msg.c\010+++ b/src/check_msg.c\010@@ -280,6 +280,10 @@\010 \010     int fd = -1;\010     const char *tmp_dir = getenv (\"TEMP\");\010+    if (tmp_dir == NULL)\010+    {\010+        tmp_dir = getenv (\"TMPDIR\");\010+    }\010 #ifdef P_tmpdir\010     if (tmp_dir == NULL)\010     {\010@@ -288,10 +292,6 @@\010 #endif /*P_tmpdir*/\010     if (tmp_dir == NULL)\010     {\010-        tmp_dir = getenv (\"TMPDIR\");\010-    }\010-    if (tmp_dir == NULL)\010-    {\010         tmp_dir = \".\";\010     }\010 \010",
+            "tmpdir-fallback.patch",
         },
     },
     build = {

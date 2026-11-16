@@ -13,11 +13,11 @@ return {
         archive = "tar.gz",
         strip_prefix = "wget-{version}",
         patches = {
-            "--- a/src/openssl.c\010+++ b/src/openssl.c\010@@ -226,7 +226,7 @@\010       break;\010 \010     case secure_protocol_sslv3:\010-#ifndef OPENSSL_NO_SSL3_METHOD\010+#if !defined(OPENSSL_NO_SSL3_METHOD) && OPENSSL_VERSION_NUMBER < 0x40000000L\010       meth = SSLv3_client_method ();\010 #endif\010       break;\010",
-            "--- a/tests/Test-ftp-iri.px\010+++ b/tests/Test-ftp-iri.px\010@@ -2,6 +2,15 @@\010 \010 use strict;\010 use warnings;\010+\010+# APFS cannot represent the byte-oriented filenames used by this test.\010+my $probe_name = \"wget-filename-$$-\\xE7\";\010+open my $probe, '>', $probe_name or do {\010+    exit 77 if $!{EILSEQ};\010+    die \"Cannot probe filename support: $!\";\010+};\010+close $probe;\010+unlink $probe_name;\010 \010 use WgetFeature qw(iri);\010 use FTPTest;\010",
-            "--- a/tests/Test-ftp-iri-fallback.px\010+++ b/tests/Test-ftp-iri-fallback.px\010@@ -2,6 +2,15 @@\010 \010 use strict;\010 use warnings;\010+\010+# APFS cannot represent the byte-oriented filenames used by this test.\010+my $probe_name = \"wget-filename-$$-\\xE7\";\010+open my $probe, '>', $probe_name or do {\010+    exit 77 if $!{EILSEQ};\010+    die \"Cannot probe filename support: $!\";\010+};\010+close $probe;\010+unlink $probe_name;\010 \010 use WgetFeature qw(iri);\010 use FTPTest;\010",
-            "--- a/tests/Test-ftp-iri-recursive.px\010+++ b/tests/Test-ftp-iri-recursive.px\010@@ -2,6 +2,15 @@\010 \010 use strict;\010 use warnings;\010+\010+# APFS cannot represent the byte-oriented filenames used by this test.\010+my $probe_name = \"wget-filename-$$-\\xE7\";\010+open my $probe, '>', $probe_name or do {\010+    exit 77 if $!{EILSEQ};\010+    die \"Cannot probe filename support: $!\";\010+};\010+close $probe;\010+unlink $probe_name;\010 \010 use WgetFeature qw(iri);\010 use FTPTest;\010",
-            "--- a/tests/Test-ftp-iri-disabled.px\010+++ b/tests/Test-ftp-iri-disabled.px\010@@ -2,6 +2,15 @@\010 \010 use strict;\010 use warnings;\010+\010+# APFS cannot represent the byte-oriented filenames used by this test.\010+my $probe_name = \"wget-filename-$$-\\xE7\";\010+open my $probe, '>', $probe_name or do {\010+    exit 77 if $!{EILSEQ};\010+    die \"Cannot probe filename support: $!\";\010+};\010+close $probe;\010+unlink $probe_name;\010 \010 use WgetFeature qw(iri);\010 use FTPTest;\010",
+            "openssl-ssl3-method.patch",
+            "test-ftp-iri.patch",
+            "test-ftp-iri-fallback.patch",
+            "test-ftp-iri-recursive.patch",
+            "test-ftp-iri-disabled.patch",
         },
     },
     build = {
@@ -59,7 +59,7 @@ return {
                 {
                     "/bin/sh",
                     "-ec",
-                    "LIBPSL_LIBS=\"$(pkg-config --static --libs libpsl)\" LIBIDN2_LIBS=\"$(pkg-config --static --libs libidn2)\" ./configure --prefix={prefix} --with-ssl=openssl --disable-nls --disable-rpath --disable-pcre --disable-pcre2 --without-libiconv-prefix --without-libunistring-prefix",
+                    'LIBPSL_LIBS="$(pkg-config --static --libs libpsl)" LIBIDN2_LIBS="$(pkg-config --static --libs libidn2)" ./configure --prefix={prefix} --with-ssl=openssl --disable-nls --disable-rpath --disable-pcre --disable-pcre2 --without-libiconv-prefix --without-libunistring-prefix',
                 },
             },
             build = {

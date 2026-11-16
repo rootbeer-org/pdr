@@ -1,0 +1,12 @@
+--- a/testsuite/chmod-setid_test.py
++++ b/testsuite/chmod-setid_test.py
+@@ -8,6 +8,9 @@
+ from rsyncfns import SCRATCHDIR, run_rsync, test_fail
+ 
+ base = SCRATCHDIR / 'chmod_setid'
++base.mkdir(parents=True, exist_ok=True)
++# macOS clears setgid when the inherited directory group is not ours.
++os.chown(base, -1, os.getgid())
+ src = base / 'src'
+ dst = base / 'dst'
+ src.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,11 @@
+--- a/unix/configure
++++ b/unix/configure
+@@ -18,7 +18,7 @@
+ 
+ CC=${1-cc}
+ CFLAGS=${2-"-I. -DUNIX"}
+-LFLAGS1=''
++LFLAGS1=${LDFLAGS}
+ LFLAGS2=''
+ LN="ln -s"
+ 
