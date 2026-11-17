@@ -1,11 +1,11 @@
-name: Build a package with rb
-description: Build one package after importing this run's earlier levels, then upload its runtime closure.
+name: Build packages with rb
+description: Build a group of one level's packages after importing this run's earlier levels, then upload their runtime closures.
 inputs:
   platform:
     description: The rb platform, such as x86_64-linux
     required: true
-  package:
-    description: The package as name@version
+  packages:
+    description: Space-separated packages as name@version, none depending on another
     required: true
 runs:
   using: composite
@@ -34,20 +34,43 @@ runs:
         path: imports
         merge-multiple: true
     - name: Import, build, check, and export
+      id: build
       shell: bash
       env:
-        PACKAGE: ${{ inputs.package }}
+        PACKAGES: ${{ inputs.packages }}
         RB_REGISTRY_USER: ${{ github.actor }}
         RB_REGISTRY_TOKEN: ${{ github.token }}
       run: |
         if [[ -d imports ]]; then
           "$RB" drv import imports
         fi
-        "$RB" drv build "$PACKAGE" --verbose --require-dependencies --registry "$REGISTRY" --from "$STORE"
-        "$RB" drv export "$PACKAGE" out
+
+        # Nothing in a group depends on the rest of it, so a failure doesn't stop the others
+        failed=()
+        for package in $PACKAGES; do
+          echo "::group::$package"
+          if ! "$RB" drv build "$package" --verbose --require-dependencies --registry "$REGISTRY" --from "$STORE" \
+            || ! "$RB" drv export "$package" out; then
+            echo "::error::$package failed"
+            failed+=("$package")
+          fi
+          echo "::endgroup::"
+        done
+
+        echo "name=${PACKAGES%% *}" >> "$GITHUB_OUTPUT"
+        echo "failed=${failed[*]}" >> "$GITHUB_OUTPUT"
     - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      if: hashFiles('out/**') != ''
       with:
-        name: build-${{ inputs.platform }}-${{ inputs.package }}
+        name: build-${{ inputs.platform }}-${{ steps.build.outputs.name }}
         path: out/
         retention-days: 7
         if-no-files-found: error
+    - name: Fail for the packages that didn't build
+      if: steps.build.outputs.failed != ''
+      shell: bash
+      env:
+        FAILED: ${{ steps.build.outputs.failed }}
+      run: |
+        echo "::error::Failed: $FAILED"
+        exit 1
