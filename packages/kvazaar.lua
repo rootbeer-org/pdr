@@ -66,7 +66,12 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && head -c 98304 /dev/zero > $d/in.yuv && kvazaar -i $d/in.yuv --input-res 64x64 -n 2 -o $d/out.hevc >/dev/null 2>&1 && test -s $d/out.hevc && echo ok",
+                [[set -e
+d=$(mktemp -d)
+head -c 98304 /dev/zero > $d/in.yuv
+kvazaar -i $d/in.yuv --input-res 64x64 -n 2 -o $d/out.hevc >/dev/null 2>&1
+test -s $d/out.hevc
+echo ok]],
             },
         },
     },

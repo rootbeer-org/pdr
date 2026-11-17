@@ -7,7 +7,6 @@ return {
     upstream = {
         git = "https://git.savannah.gnu.org/git/readline.git",
         tag = "readline-{version}",
-        exclude_tags = { "*-alpha*", "*-beta*", "*-rc*" },
     },
     source = {
         url = "https://ftp.gnu.org/gnu/readline/readline-{version}.tar.gz",

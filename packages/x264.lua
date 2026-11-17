@@ -61,7 +61,11 @@ return {
             {
                 "/bin/sh",
                 "-c",
-                'd=$(mktemp -d) && head -c 12288 /dev/zero > "$d/in.yuv" && x264 --input-res 64x64 --fps 30 -o "$d/out.264" "$d/in.yuv" && test -s "$d/out.264"',
+                [[set -e
+d=$(mktemp -d)
+head -c 12288 /dev/zero > "$d/in.yuv"
+x264 --input-res 64x64 --fps 30 -o "$d/out.264" "$d/in.yuv"
+test -s "$d/out.264"]],
             },
         },
     },

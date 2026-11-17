@@ -7,7 +7,6 @@ return {
     upstream = {
         git = "https://gitlab.com/libtiff/libtiff.git",
         tag = "v{version}",
-        exclude_tags = { "v*rc*" },
     },
     source = {
         url = "https://download.osgeo.org/libtiff/tiff-{version}.tar.xz",
@@ -81,7 +80,19 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && printf 'SUkqAAgAAAAKAAABAwABAAAAAgAAAAEBAwABAAAAAgAAAAIBAwADAAAAhgAAAAMBAwABAAAAAQAAAAYBAwABAAAAAgAAABEBBAABAAAAjAAAABUBAwABAAAAAwAAABYBAwABAAAAAgAAABcBBAABAAAADAAAABwBAwABAAAAAQAAAAAAAAAIAAgACAD/AAAA/wAAAP////8=' | base64 -d > $d/in.tif && for c in none lzw zstd lzma; do tiffcp -c $c $d/in.tif $d/out.tif && tiffcmp $d/in.tif $d/out.tif && tiffinfo $d/out.tif >/dev/null || exit 1; done && tiffcp -c webp $d/in.tif $d/webp.tif && tiffinfo $d/webp.tif | grep -qi webp && tiff2pdf -o $d/out.pdf $d/in.tif && test -s $d/out.pdf && echo ok",
+                [[set -e
+d=$(mktemp -d)
+printf 'SUkqAAgAAAAKAAABAwABAAAAAgAAAAEBAwABAAAAAgAAAAIBAwADAAAAhgAAAAMBAwABAAAAAQAAAAYBAwABAAAAAgAAABEBBAABAAAAjAAAABUBAwABAAAAAwAAABYBAwABAAAAAgAAABcBBAABAAAADAAAABwBAwABAAAAAQAAAAAAAAAIAAgACAD/AAAA/wAAAP////8=' | base64 -d > $d/in.tif
+for c in none lzw zstd lzma; do
+    tiffcp -c $c $d/in.tif $d/out.tif
+    tiffcmp $d/in.tif $d/out.tif
+    tiffinfo $d/out.tif >/dev/null
+done
+tiffcp -c webp $d/in.tif $d/webp.tif
+tiffinfo $d/webp.tif | grep -qi webp
+tiff2pdf -o $d/out.pdf $d/in.tif
+test -s $d/out.pdf
+echo ok]],
             },
         },
     },

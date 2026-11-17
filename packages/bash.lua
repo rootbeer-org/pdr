@@ -55,7 +55,12 @@ return {
             {
                 "bash",
                 "-c",
-                "declare -A m=([a]=1 [b]=2); s=0; for k in \"${!m[@]}\"; do (( s += m[$k] )); done; [[ $s == 3 && ${BASH_VERSINFO[0]} -ge 5 ]] && printf '%s\\n' ok",
+                [=[declare -A m=([a]=1 [b]=2)
+s=0
+for k in "${!m[@]}"; do
+    (( s += m[$k] ))
+done
+[[ $s == 3 && ${BASH_VERSINFO[0]} -ge 5 ]] && printf '%s\n' ok]=],
             },
         },
     },

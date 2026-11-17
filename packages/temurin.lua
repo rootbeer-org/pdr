@@ -74,7 +74,18 @@ return {
             {
                 "sh",
                 "-c",
-                'set -e; d=$(mktemp -d); cd "$d"; printf "%s\\n" "public class Hello { public static void main(String[] args) { System.out.println(\\"hello from temurin\\"); } }" > Hello.java; javac Hello.java; java -cp . Hello | grep -q "hello from temurin"',
+                [[set -e
+d=$(mktemp -d)
+cd "$d"
+cat > Hello.java <<'EOF'
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("hello from temurin");
+    }
+}
+EOF
+javac Hello.java
+java -cp . Hello | grep -q "hello from temurin"]],
             },
         },
     },

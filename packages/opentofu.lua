@@ -43,7 +43,9 @@ return {
             {
                 "sh",
                 "-c",
-                "printf 'variable \"x\" {default=1}\\n' | tofu fmt - | grep -q 'default = 1' && printf '%s\\n' ok",
+                [[set -e
+printf 'variable "x" {default=1}\n' | tofu fmt - | grep -q 'default = 1'
+printf '%s\n' ok]],
             },
         },
     },

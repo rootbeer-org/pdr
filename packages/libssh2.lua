@@ -26,11 +26,11 @@ return {
             },
             {
                 package = "openssl",
-                kind = "all",
+                kind = "link_runtime",
             },
             {
                 package = "zlib",
-                kind = "all",
+                kind = "link_runtime",
             },
         },
         libraries = { "lib/libssh2.a" },

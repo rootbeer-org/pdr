@@ -7,7 +7,6 @@ return {
     upstream = {
         git = "https://aomedia.googlesource.com/aom",
         tag = "v{version}",
-        exclude_tags = { "v*rc*" },
     },
     source = {
         url = "https://storage.googleapis.com/aom-releases/libaom-{version}.tar.gz",

@@ -35,7 +35,8 @@ return {
             {
                 "sh",
                 "-c",
-                [[test "$(printf 'define(`greet'"'"', `hello $1'"'"')dnl\ngreet(rootbeer)\n' | m4)" = "hello rootbeer"]],
+                [[out=$(printf 'define(`greet'"'"', `hello $1'"'"')dnl\ngreet(rootbeer)\n' | m4)
+test "$out" = "hello rootbeer"]],
             },
         },
     },

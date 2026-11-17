@@ -46,7 +46,7 @@ return {
                 {
                     "/bin/sh",
                     "-ec",
-                    "printf 'example.com. 3600 IN SOA ns.example.com. admin.example.com. 1 7200 3600 1209600 3600\\nexample.com. 3600 IN NS ns.example.com.\\nns.example.com. 3600 IN A 192.0.2.1\\n' > check.zone; key=$(examples/ldns-keygen -a ED25519 example.com); examples/ldns-signzone check.zone \"$key\"; examples/ldns-verify-zone -k \"$key.ds\" check.zone.signed 2>/dev/null || examples/ldns-verify-zone check.zone.signed; examples/ldns-read-zone check.zone.signed | grep -q RRSIG; drill/drill -v",
+                    'printf \'example.com. 3600 IN SOA ns.example.com. admin.example.com. 1 7200 3600 1209600 3600\\nexample.com. 3600 IN NS ns.example.com.\\nns.example.com. 3600 IN A 192.0.2.1\\n\' > check.zone; key=$(examples/ldns-keygen -a ED25519 example.com); examples/ldns-signzone check.zone "$key"; examples/ldns-verify-zone -k "$key.ds" check.zone.signed 2>/dev/null || examples/ldns-verify-zone check.zone.signed; examples/ldns-read-zone check.zone.signed | grep -q RRSIG; drill/drill -v',
                 },
             },
             install = {

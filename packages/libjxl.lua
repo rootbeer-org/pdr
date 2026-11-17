@@ -8,7 +8,6 @@ return {
         github = "libjxl/libjxl",
         repository_id = 340219494,
         tag = "v{version}",
-        exclude_tags = { "v*snapshot*" },
     },
     source = {
         url = "https://github.com/libjxl/libjxl/archive/refs/tags/v{version}.tar.gz",
@@ -105,7 +104,14 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && printf 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==' | base64 -d > $d/in.png && cjxl $d/in.png $d/out.jxl >/dev/null 2>&1 && jxlinfo $d/out.jxl >/dev/null 2>&1 && djxl $d/out.jxl $d/back.png >/dev/null 2>&1 && test -s $d/back.png && echo ok",
+                [[set -e
+d=$(mktemp -d)
+printf 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==' | base64 -d > $d/in.png
+cjxl $d/in.png $d/out.jxl >/dev/null 2>&1
+jxlinfo $d/out.jxl >/dev/null 2>&1
+djxl $d/out.jxl $d/back.png >/dev/null 2>&1
+test -s $d/back.png
+echo ok]],
             },
         },
     },

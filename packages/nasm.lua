@@ -8,7 +8,6 @@ return {
         github = "netwide-assembler/nasm",
         repository_id = 130599566,
         tag = "nasm-{version}",
-        exclude_tags = { "nasm-*rc*" },
     },
     source = {
         url = "https://www.nasm.us/pub/nasm/releasebuilds/{version}/nasm-{version}.tar.xz",

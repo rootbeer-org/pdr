@@ -37,8 +37,6 @@ return {
                     "sh",
                     "--prefix={prefix}",
                     "--disable-doc",
-                    -- gpgrt-config is not on PATH while building.
-                    "GPGRT_CONFIG={dependencies.libgpg-error}/bin/gpgrt-config",
                 },
             },
             build = {
@@ -60,7 +58,8 @@ return {
             {
                 "sh",
                 "-c",
-                [[printf abc | hmac256 key | grep -q 9c196e32dc0175f86f4b1cb89289d6619de6bee699e4c378e68309ed97a1a6ab]],
+                [[expected=9c196e32dc0175f86f4b1cb89289d6619de6bee699e4c378e68309ed97a1a6ab
+printf abc | hmac256 key | grep -q "$expected"]],
             },
             -- mpicalc prints hexadecimal, so 6 * 7 is 2A.
             { "sh", "-c", [[echo '6 7 * p' | mpicalc | grep -qx 2A]] },

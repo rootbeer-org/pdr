@@ -8,7 +8,6 @@ return {
         github = "pnggroup/libpng",
         repository_id = 3768025,
         tag = "v{version}",
-        exclude_tags = { "v*beta*", "v*rc*" },
     },
     source = {
         url = "https://download.sourceforge.net/libpng/libpng-{version}.tar.xz",
@@ -36,7 +35,11 @@ return {
             {
                 "sh",
                 "-c",
-                'png=$(mktemp) && printf %s \'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==\' | base64 -d > "$png" && pngfix --quiet "$png"; status=$?; rm -f "$png"; exit $status',
+                [[set -e
+png=$(mktemp)
+trap 'rm -f "$png"' EXIT
+printf %s 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==' | base64 -d > "$png"
+pngfix --quiet "$png"]],
             },
             { "png-fix-itxt", "--help" },
         },

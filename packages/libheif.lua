@@ -105,7 +105,18 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && printf 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABlklEQVR4nBXRURVEIQhFUSMYgQhGMAIRiGCEE8EIRiACEYhABCLMG7/ZrMt1jMEcyGAN9kAHNjgDBnfwBj6IQQ5q0IMxJnMikzXZE53Y5EyY3Mmb+CQmOalJzw8IUxBhCVtQwYQjIFzhCS6EkEIJLR9YzIUs1mIvdGGLs2BxF2/hi1jkoha9PrCZG9mszd7oxjZnw+Zu3sY3sclNbXp/QJmKKEvZiiqmHAXlKk9xJZRUSmn9gDENMZaxDTXMOAbGNZ7hRhhplNH2gcM8yGEd9kEPdjgHDvfwDn6IQx7q0OcD/wK/Sr4jv9hfkG/1N/x/Fx44BCQU9Pc94zIvclmXfdGLXc79j9/Lu/glLnmpS98PPOZDHuuxH/qwx3n/5ffxHv6IRz7q0e8DznTEWc521DHn+D/KdZ7jTjjplNP+gWAGEqxgBxpYcOIf/AYv8CCCDCro+EAyE0lWshNNLDn5P/MmL/Ekkkwq6fxAMQspVrELLaw49S/lFq/wIoosquj6QDMbaVazG22sOf2v8Dav8SaabKrp5geIAnAQEbP2+wAAAABJRU5ErkJggg==' | base64 -d > $d/in.png && heif-enc --avif -o $d/out.avif $d/in.png >/dev/null 2>&1 && heif-info $d/out.avif >/dev/null 2>&1 && heif-dec -o $d/back.png $d/out.avif >/dev/null 2>&1 && test -s $d/back.png && heif-enc -o $d/out.heic $d/in.png >/dev/null 2>&1 && heif-info $d/out.heic >/dev/null 2>&1 && heif-dec -o $d/heic-back.png $d/out.heic >/dev/null 2>&1 && test -s $d/heic-back.png && echo ok",
+                [[set -e
+d=$(mktemp -d)
+printf 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABlklEQVR4nBXRURVEIQhFUSMYgQhGMAIRiGCEE8EIRiACEYhABCLMG7/ZrMt1jMEcyGAN9kAHNjgDBnfwBj6IQQ5q0IMxJnMikzXZE53Y5EyY3Mmb+CQmOalJzw8IUxBhCVtQwYQjIFzhCS6EkEIJLR9YzIUs1mIvdGGLs2BxF2/hi1jkoha9PrCZG9mszd7oxjZnw+Zu3sY3sclNbXp/QJmKKEvZiiqmHAXlKk9xJZRUSmn9gDENMZaxDTXMOAbGNZ7hRhhplNH2gcM8yGEd9kEPdjgHDvfwDn6IQx7q0OcD/wK/Sr4jv9hfkG/1N/x/Fx44BCQU9Pc94zIvclmXfdGLXc79j9/Lu/glLnmpS98PPOZDHuuxH/qwx3n/5ffxHv6IRz7q0e8DznTEWc521DHn+D/KdZ7jTjjplNP+gWAGEqxgBxpYcOIf/AYv8CCCDCro+EAyE0lWshNNLDn5P/MmL/Ekkkwq6fxAMQspVrELLaw49S/lFq/wIoosquj6QDMbaVazG22sOf2v8Dav8SaabKrp5geIAnAQEbP2+wAAAABJRU5ErkJggg==' | base64 -d > $d/in.png
+heif-enc --avif -o $d/out.avif $d/in.png >/dev/null 2>&1
+heif-info $d/out.avif >/dev/null 2>&1
+heif-dec -o $d/back.png $d/out.avif >/dev/null 2>&1
+test -s $d/back.png
+heif-enc -o $d/out.heic $d/in.png >/dev/null 2>&1
+heif-info $d/out.heic >/dev/null 2>&1
+heif-dec -o $d/heic-back.png $d/out.heic >/dev/null 2>&1
+test -s $d/heic-back.png
+echo ok]],
             },
         },
     },

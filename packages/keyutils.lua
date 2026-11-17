@@ -29,7 +29,7 @@ return {
                     "CFLAGS=-g -O2 -Wall -fPIC",
                     -- Replaces the build date upstream embeds with a fixed one, and builds only the
                     -- library and keyctl: key.dns_resolver would link the host's libresolv.
-                    "VCPPFLAGS=-DPKGBUILD=\\\"1970-01-01\\\" -DPKGVERSION=\\\"keyutils-{version}\\\" -DAPIVERSION=\\\"libkeyutils-1.10\\\"",
+                    'VCPPFLAGS=-DPKGBUILD=\\"1970-01-01\\" -DPKGVERSION=\\"keyutils-{version}\\" -DAPIVERSION=\\"libkeyutils-1.10\\"',
                     "libkeyutils.a",
                     "keyctl",
                 },

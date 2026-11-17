@@ -26,7 +26,7 @@ return {
             },
             {
                 package = "openssl",
-                kind = "link",
+                kind = "link_runtime",
             },
         },
         libraries = { "lib/libngtcp2.a", "lib/libngtcp2_crypto_ossl.a" },

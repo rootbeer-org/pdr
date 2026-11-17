@@ -8,7 +8,6 @@ return {
         github = "FFmpeg/FFmpeg",
         repository_id = 1614410,
         tag = "n{version}",
-        exclude_tags = { "n*-dev*" },
     },
     source = {
         url = "https://ffmpeg.org/releases/ffmpeg-{version}.tar.xz",

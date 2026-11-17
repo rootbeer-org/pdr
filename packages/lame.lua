@@ -50,7 +50,12 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && head -c 176400 /dev/zero > $d/in.raw && lame -r -s 44.1 --bitwidth 16 $d/in.raw $d/out.mp3 >/dev/null 2>&1 && test -s $d/out.mp3 && echo ok",
+                [[set -e
+d=$(mktemp -d)
+head -c 176400 /dev/zero > $d/in.raw
+lame -r -s 44.1 --bitwidth 16 $d/in.raw $d/out.mp3 >/dev/null 2>&1
+test -s $d/out.mp3
+echo ok]],
             },
         },
     },

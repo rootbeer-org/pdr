@@ -8,7 +8,6 @@ return {
         github = "xiph/opus",
         repository_id = 23097173,
         tag = "v{version}",
-        exclude_tags = { "v*-*" },
     },
     source = {
         url = "https://downloads.xiph.org/releases/opus/opus-{version}.tar.gz",

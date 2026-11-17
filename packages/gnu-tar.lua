@@ -36,7 +36,11 @@ return {
             {
                 "sh",
                 "-c",
-                'd=$(mktemp -d) && echo hello > "$d/file.txt" && tar -C "$d" -cf "$d/archive.tar" file.txt && tar -tf "$d/archive.tar" | grep -qx file.txt',
+                [[set -e
+d=$(mktemp -d)
+echo hello > "$d/file.txt"
+tar -C "$d" -cf "$d/archive.tar" file.txt
+tar -tf "$d/archive.tar" | grep -qx file.txt]],
             },
         },
     },

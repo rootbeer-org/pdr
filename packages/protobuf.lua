@@ -60,7 +60,14 @@ return {
             {
                 "sh",
                 "-c",
-                'd=$(mktemp -d) && printf \'syntax = "proto3";\\nmessage M { int32 x = 1; }\\n\' > "$d/m.proto" && protoc -I "$d" --cpp_out="$d" "$d/m.proto" && test -s "$d/m.pb.cc" && test -s "$d/m.pb.h" && rm -rf "$d" && printf \'%s\\n\' ok',
+                [[set -e
+d=$(mktemp -d)
+printf 'syntax = "proto3";\nmessage M { int32 x = 1; }\n' > "$d/m.proto"
+protoc -I "$d" --cpp_out="$d" "$d/m.proto"
+test -s "$d/m.pb.cc"
+test -s "$d/m.pb.h"
+rm -rf "$d"
+printf '%s\n' ok]],
             },
         },
     },

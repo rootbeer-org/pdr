@@ -50,7 +50,12 @@ return {
             {
                 "sh",
                 "-c",
-                'd=$(mktemp -d) && touch "$d/x.txt" && find "$d" -name \'*.txt\' | grep -q x.txt && rm -rf "$d" && printf \'%s\\n\' ok',
+                [[set -e
+d=$(mktemp -d)
+touch "$d/x.txt"
+find "$d" -name '*.txt' | grep -q x.txt
+rm -rf "$d"
+printf '%s\n' ok]],
             },
         },
     },

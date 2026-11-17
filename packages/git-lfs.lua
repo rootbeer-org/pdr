@@ -8,7 +8,6 @@ return {
         github = "git-lfs/git-lfs",
         repository_id = 13021798,
         tag = "v{version}",
-        exclude_tags = { "v0.5.4-homebrew" },
     },
     source = {
         url = "https://codeload.github.com/git-lfs/git-lfs/tar.gz/refs/tags/{tag}",

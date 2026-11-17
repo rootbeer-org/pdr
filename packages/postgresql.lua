@@ -10,7 +10,6 @@ return {
         repository_id = 927442,
         tag = "REL_{version}",
         separator = "_",
-        exclude_tags = { "*ALPHA*", "*BETA*", "*RC*" },
         lines = { by = "major", keep = 2 },
     },
     source = {

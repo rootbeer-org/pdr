@@ -8,7 +8,6 @@ return {
         github = "xiph/vorbis",
         repository_id = 35348574,
         tag = "v{version}",
-        exclude_tags = { "v*rc*" },
     },
     source = {
         url = "https://downloads.xiph.org/releases/vorbis/libvorbis-{version}.tar.xz",

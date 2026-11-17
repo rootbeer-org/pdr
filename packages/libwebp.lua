@@ -8,7 +8,6 @@ return {
         github = "webmproject/libwebp",
         repository_id = 23368445,
         tag = "v{version}",
-        exclude_tags = { "v*rc*" },
     },
     source = {
         url = "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-{version}.tar.gz",
@@ -62,7 +61,14 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && printf 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==' | base64 -d > $d/in.png && cwebp -q 80 $d/in.png -o $d/out.webp >/dev/null 2>&1 && webpinfo $d/out.webp >/dev/null 2>&1 && dwebp $d/out.webp -o $d/back.png >/dev/null 2>&1 && test -s $d/back.png && echo ok",
+                [[set -e
+d=$(mktemp -d)
+printf 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==' | base64 -d > $d/in.png
+cwebp -q 80 $d/in.png -o $d/out.webp >/dev/null 2>&1
+webpinfo $d/out.webp >/dev/null 2>&1
+dwebp $d/out.webp -o $d/back.png >/dev/null 2>&1
+test -s $d/back.png
+echo ok]],
             },
         },
     },

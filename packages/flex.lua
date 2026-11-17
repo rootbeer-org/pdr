@@ -49,7 +49,12 @@ return {
             {
                 "sh",
                 "-c",
-                [[d=$(mktemp -d "$TMPDIR/flex-check.XXXXXX") && cd "$d" && printf '%%%%\nhello  printf("rootbeer\\n");\n%%%%\nint main(void) { return yylex(); }\n' > check.l && flex check.l && test -s lex.yy.c]],
+                [[set -e
+d=$(mktemp -d "$TMPDIR/flex-check.XXXXXX")
+cd "$d"
+printf '%%%%\nhello  printf("rootbeer\\n");\n%%%%\nint main(void) { return yylex(); }\n' > check.l
+flex check.l
+test -s lex.yy.c]],
             },
         },
     },

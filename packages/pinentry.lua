@@ -53,10 +53,6 @@ return {
                     "--disable-pinentry-efl",
                     "--disable-pinentry-emacs",
                     "--disable-libsecret",
-                    -- gpgrt-config is not on PATH while building, and finds libassuan's .pc file only
-                    -- through PKG_CONFIG_PATH.
-                    "GPGRT_CONFIG={dependencies.libgpg-error}/bin/gpgrt-config",
-                    "PKG_CONFIG_PATH={dependencies.libassuan}/lib/pkgconfig",
                     -- The wide-character headers sit in a subdirectory, and the system ones win otherwise.
                     "--with-ncurses-include-dir={dependencies.ncurses}/include/ncursesw",
                     -- Not every curses object gets the include directory above, and ncurses hides its

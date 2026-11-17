@@ -62,7 +62,15 @@ return {
             {
                 "sh",
                 "-c",
-                'd=$(mktemp -d) && printf "P5\\n64 64\\n255\\n" > $d/in.pgm && head -c 4096 /dev/zero >> $d/in.pgm && opj_compress -i $d/in.pgm -o $d/out.j2k >/dev/null 2>&1 && opj_decompress -i $d/out.j2k -o $d/back.pgm >/dev/null 2>&1 && opj_dump -i $d/out.j2k >/dev/null 2>&1 && test -s $d/back.pgm && echo ok',
+                [[set -e
+d=$(mktemp -d)
+printf "P5\n64 64\n255\n" > $d/in.pgm
+head -c 4096 /dev/zero >> $d/in.pgm
+opj_compress -i $d/in.pgm -o $d/out.j2k >/dev/null 2>&1
+opj_decompress -i $d/out.j2k -o $d/back.pgm >/dev/null 2>&1
+opj_dump -i $d/out.j2k >/dev/null 2>&1
+test -s $d/back.pgm
+echo ok]],
             },
         },
     },

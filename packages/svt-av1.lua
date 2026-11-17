@@ -7,7 +7,6 @@ return {
     upstream = {
         git = "https://gitlab.com/AOMediaCodec/SVT-AV1.git",
         tag = "v{version}",
-        exclude_tags = { "*-rc*", "*-cqp-extended" },
     },
     source = {
         url = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v{version}/SVT-AV1-v{version}.tar.gz",
@@ -87,7 +86,12 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && head -c 12288 /dev/zero > $d/in.yuv && SvtAv1EncApp -i $d/in.yuv -w 64 -h 64 --fps-num 25 --fps-denom 1 -n 2 -b $d/out.ivf >/dev/null 2>&1 && test -s $d/out.ivf && echo ok",
+                [[set -e
+d=$(mktemp -d)
+head -c 12288 /dev/zero > $d/in.yuv
+SvtAv1EncApp -i $d/in.yuv -w 64 -h 64 --fps-num 25 --fps-denom 1 -n 2 -b $d/out.ivf >/dev/null 2>&1
+test -s $d/out.ivf
+echo ok]],
             },
         },
     },

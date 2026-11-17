@@ -8,7 +8,6 @@ return {
         github = "php/php-src",
         repository_id = 1903522,
         tag = "php-{version}",
-        exclude_tags = { "php-*alpha*", "php-*beta*", "php-*RC*" },
         lines = { by = "minor", keep = 2 },
     },
     source = {

@@ -8,7 +8,6 @@ return {
         github = "LibRaw/LibRaw",
         repository_id = 979192,
         tag = "{version}",
-        exclude_tags = { "*Beta*", "*RC*", "*Release", "*b" },
     },
     source = {
         url = "https://www.libraw.org/data/LibRaw-{version}.tar.gz",

@@ -8,7 +8,6 @@ return {
         github = "denoland/deno",
         repository_id = 133442384,
         tag = "v{version}",
-        exclude_tags = { "v*-*" },
     },
     prebuilt = {
         github = "denoland/deno",
