@@ -27,7 +27,12 @@ local macos = {
     steps = {
         install = {
             install,
-            { "ln", "-s", "../../../libLLVM.dylib", "{prefix}/lib/rustlib/{target}/lib/libLLVM.dylib" },
+            {
+                "ln",
+                "-s",
+                "../../../libLLVM.dylib",
+                "{prefix}/lib/rustlib/{target}/lib/libLLVM.dylib",
+            },
         },
     },
 }

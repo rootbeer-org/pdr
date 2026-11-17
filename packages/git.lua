@@ -81,6 +81,19 @@ return {
                 package = "pkgconf",
                 kind = "all",
             },
+            {
+                -- The test suite lints with perl, and the installed commands run it.
+                package = "perl",
+                kind = "build",
+            },
+            {
+                package = "perl",
+                kind = "runtime",
+            },
+            {
+                package = "python",
+                kind = "runtime",
+            },
         },
         steps = {
             configure = {
@@ -89,7 +102,7 @@ return {
                     "-ec",
                     'printf \'%s\' "$1" > config.mak; printf "CURL_LDFLAGS = %s\\nCURL_CFLAGS = %s\\n" "$(pkg-config --static --libs libcurl)" "$(pkg-config --cflags libcurl)" >> config.mak; printf "LDFLAGS += %s\\n" "${LDFLAGS-}" >> config.mak',
                     "rootbeer-git",
-                    "prefix = {prefix}\010RUNTIME_PREFIX = YesPlease\010INSTALL_SYMLINKS = YesPlease\010NO_GETTEXT = YesPlease\010NEEDS_LIBICONV = YesPlease\010NO_RUST = YesPlease\010NO_TCLTK = YesPlease\010PERL_PATH = /usr/bin/perl\010PYTHON_PATH = /usr/bin/python3\010USE_LIBPCRE =\010",
+                    "prefix = {prefix}\010RUNTIME_PREFIX = YesPlease\010INSTALL_SYMLINKS = YesPlease\010NO_GETTEXT = YesPlease\010NEEDS_LIBICONV = YesPlease\010NO_RUST = YesPlease\010NO_TCLTK = YesPlease\010PERL_PATH = {dependencies.perl}/bin/perl\010PYTHON_PATH = {dependencies.python}/bin/python3\010USE_LIBPCRE =\010",
                 },
             },
             build = {
@@ -111,8 +124,9 @@ return {
     },
     outputs = {
         bins = { "git", "git-receive-pack", "git-upload-pack", "git-upload-archive" },
-        -- The perl and Python commands run the host's interpreters, as PERL_PATH and PYTHON_PATH say.
-        host = { "/usr/bin/perl", "/usr/bin/python3" },
+        -- The sample fsmonitor hook keeps its /usr/bin/perl shebang; it is inert until copied into a
+        -- repository's hooks.
+        host = { "/usr/bin/perl" },
         checks = {
             { "git", "--version" },
             {

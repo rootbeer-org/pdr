@@ -57,7 +57,14 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && cd \"$d\" && printf 'rootbeer\\n' > a.txt && zip -q a.zip a.txt && zip -T a.zip | grep -q 'test of a.zip OK' && rm -rf \"$d\" && printf '%s\\n' ok",
+                [[set -e
+d=$(mktemp -d)
+cd "$d"
+printf 'rootbeer\n' > a.txt
+zip -q a.zip a.txt
+zip -T a.zip | grep -q 'test of a.zip OK'
+rm -rf "$d"
+printf '%s\n' ok]],
             },
         },
     },

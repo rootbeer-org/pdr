@@ -9,7 +9,6 @@ return {
         github = "unicode-org/icu",
         repository_id = 49244766,
         tag = "release-{version}",
-        exclude_tags = { "*rc*" },
     },
     source = {
         url = "https://github.com/unicode-org/icu/releases/download/{tag}/icu4c-{version}-sources.tgz",
@@ -84,12 +83,18 @@ return {
             {
                 "sh",
                 "-c",
-                "printf 'caf\\303\\251' | uconv -f UTF-8 -t ISO-8859-1 | od -An -tx1 | tr -d ' \\n' | grep -q '^636166e9$' && printf '%s\\n' ok",
+                [[set -e
+printf 'caf\303\251' | uconv -f UTF-8 -t ISO-8859-1 |
+    od -An -tx1 | tr -d ' \n' | grep -q '^636166e9$'
+printf '%s\n' ok]],
             },
             {
                 "sh",
                 "-c",
-                "printf 'caf\\303\\251' | uconv -f UTF-8 -t UTF-16BE | od -An -tx1 | tr -d ' \\n' | grep -q '^00630061006600e9$' && printf '%s\\n' ok",
+                [[set -e
+printf 'caf\303\251' | uconv -f UTF-8 -t UTF-16BE |
+    od -An -tx1 | tr -d ' \n' | grep -q '^00630061006600e9$'
+printf '%s\n' ok]],
             },
         },
     },

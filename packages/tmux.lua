@@ -41,7 +41,7 @@ return {
                     "-c",
                     -- glibc keeps b64_ntop in libresolv, which the runtime audit rejects as a host
                     -- library; its static archive satisfies configure's first check instead.
-                    "case $(uname -s) in Linux) set -- \"$@\" LIBS=-l:libresolv.a ;; esac; exec ./configure \"$@\"",
+                    'case $(uname -s) in Linux) set -- "$@" LIBS=-l:libresolv.a ;; esac; exec ./configure "$@"',
                     "sh",
                     "--prefix={prefix}",
                     -- macOS would prefer utf8proc for character widths; it falls back to the
@@ -61,7 +61,7 @@ return {
                 {
                     "sh",
                     "-ec",
-                    "d=$(mktemp -d \"$TMPDIR/tmux-check.XXXXXX\"); s=\"$d/s\"; ./tmux -S \"$s\" -f /dev/null new-session -d -x 80 -y 24 'printf \"\\342\\234\\223 ok\"; sleep 5'; sleep 1; ./tmux -S \"$s\" capture-pane -p | grep -q ok; ./tmux -S \"$s\" kill-server; rm -rf \"$d\"",
+                    'd=$(mktemp -d "$TMPDIR/tmux-check.XXXXXX"); s="$d/s"; ./tmux -S "$s" -f /dev/null new-session -d -x 80 -y 24 \'printf "\\342\\234\\223 ok"; sleep 5\'; sleep 1; ./tmux -S "$s" capture-pane -p | grep -q ok; ./tmux -S "$s" kill-server; rm -rf "$d"',
                 },
             },
             install = {

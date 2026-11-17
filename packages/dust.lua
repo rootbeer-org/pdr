@@ -9,7 +9,6 @@ return {
         github = "bootandy/dust",
         repository_id = 125563061,
         tag = "v{version}",
-        exclude_tags = { "v0.8.1-alpha.2", "v0.8.1-alpha.1", "untagged-1499119fdec1dec70238" },
     },
     prebuilt = {
         github = "bootandy/dust",

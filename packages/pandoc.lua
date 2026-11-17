@@ -21,7 +21,9 @@ return {
             {
                 "sh",
                 "-c",
-                "printf '# Title\\n\\nhello *world*\\n' | pandoc -f markdown -t html | grep -q '<em>world</em>' && printf '%s\\n' ok",
+                [[set -e
+printf '# Title\n\nhello *world*\n' | pandoc -f markdown -t html | grep -q '<em>world</em>'
+printf '%s\n' ok]],
             },
         },
     },

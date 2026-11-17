@@ -8,7 +8,6 @@ return {
         github = "elixir-lang/elixir",
         repository_id = 1234714,
         tag = "v{version}",
-        exclude_tags = { "*-rc*", "*-dev*", "*-latest" },
     },
     source = {
         url = "https://github.com/elixir-lang/elixir/archive/refs/tags/{tag}.tar.gz",

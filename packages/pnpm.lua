@@ -8,7 +8,6 @@ return {
         github = "pnpm/pnpm",
         repository_id = 50565430,
         tag = "v{version}",
-        exclude_tags = { "v*-*" },
     },
     prebuilt = {
         github = "pnpm/pnpm",

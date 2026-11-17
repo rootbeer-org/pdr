@@ -8,7 +8,6 @@ return {
         github = "erlang/otp",
         repository_id = 374927,
         tag = "OTP-{version}",
-        exclude_tags = { "*-rc*" },
         lines = { by = "major", keep = 2 },
     },
     source = {

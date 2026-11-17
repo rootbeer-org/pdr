@@ -207,7 +207,20 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && magick -size 32x32 gradient:red-blue $d/a.png && magick $d/a.png -resize 16x16 $d/b.jpg && magick $d/b.jpg $d/c.webp && magick $d/c.webp $d/d.tiff && magick identify $d/d.tiff | grep -q 16x16 && magick $d/d.tiff $d/e.jxl && magick $d/e.jxl $d/f.avif && magick $d/f.avif $d/g.exr && magick identify $d/g.exr | grep -q 16x16 && magick $d/a.png -depth 8 $d/h.heic && magick identify $d/h.heic | grep -q 32x32 && echo ok",
+                [[set -e
+d=$(mktemp -d)
+magick -size 32x32 gradient:red-blue $d/a.png
+magick $d/a.png -resize 16x16 $d/b.jpg
+magick $d/b.jpg $d/c.webp
+magick $d/c.webp $d/d.tiff
+magick identify $d/d.tiff | grep -q 16x16
+magick $d/d.tiff $d/e.jxl
+magick $d/e.jxl $d/f.avif
+magick $d/f.avif $d/g.exr
+magick identify $d/g.exr | grep -q 16x16
+magick $d/a.png -depth 8 $d/h.heic
+magick identify $d/h.heic | grep -q 32x32
+echo ok]],
             },
         },
     },

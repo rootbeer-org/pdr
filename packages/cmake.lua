@@ -21,7 +21,7 @@ return {
         dependencies = {
             {
                 package = "openssl",
-                kind = "all",
+                kind = "link_runtime",
             },
         },
         steps = {
@@ -36,7 +36,6 @@ return {
                     "-DBUILD_TESTING=ON",
                     "-DBUILD_CursesDialog=OFF",
                     "-DOPENSSL_ROOT_DIR={dependencies.openssl}",
-                    "-DOPENSSL_USE_STATIC_LIBS=ON",
                 },
             },
             build = {

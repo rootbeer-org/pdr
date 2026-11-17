@@ -8,7 +8,6 @@ return {
         github = "mesonbuild/meson",
         repository_id = 19784232,
         tag = "{version}",
-        exclude_tags = { "*rc*" },
     },
     prebuilt = {
         github = "mesonbuild/meson",

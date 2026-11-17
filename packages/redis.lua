@@ -9,8 +9,6 @@ return {
         github = "redis/redis",
         repository_id = 156018,
         tag = "{version}",
-        -- Release candidates and milestone builds are numbered past the latest stable release.
-        exclude_tags = { "*-rc*", "*-m0*", "*-int" },
     },
     source = {
         url = "https://download.redis.io/releases/redis-{version}.tar.gz",

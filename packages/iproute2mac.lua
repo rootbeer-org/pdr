@@ -8,7 +8,6 @@ return {
         github = "brona/iproute2mac",
         repository_id = 24814763,
         tag = "v{version}",
-        exclude_tags = { "v.1.2.3", "v.1.4.2" },
     },
     source = {
         url = "https://codeload.github.com/brona/iproute2mac/tar.gz/refs/tags/{tag}",

@@ -68,7 +68,14 @@ return {
             {
                 "sh",
                 "-c",
-                'd=$(mktemp -d) && f="$d/x.txt" && printf \'a\\n\' > "$f" && vim -es -u NONE -i NONE -n -c \'call setline(1, "rootbeer")\' -c wq "$f" && grep -qx rootbeer "$f" && rm -rf "$d" && printf \'%s\\n\' ok',
+                [[set -e
+d=$(mktemp -d)
+f="$d/x.txt"
+printf 'a\n' > "$f"
+vim -es -u NONE -i NONE -n -c 'call setline(1, "rootbeer")' -c wq "$f"
+grep -qx rootbeer "$f"
+rm -rf "$d"
+printf '%s\n' ok]],
             },
         },
     },

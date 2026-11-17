@@ -56,7 +56,14 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && yes libdeflate | head -c 65536 > $d/in && libdeflate-gzip -c $d/in > $d/in.gz && libdeflate-gunzip -c $d/in.gz > $d/out && cmp $d/in $d/out && test -s $d/in.gz && echo ok",
+                [[set -e
+d=$(mktemp -d)
+yes libdeflate | head -c 65536 > $d/in
+libdeflate-gzip -c $d/in > $d/in.gz
+libdeflate-gunzip -c $d/in.gz > $d/out
+cmp $d/in $d/out
+test -s $d/in.gz
+echo ok]],
             },
         },
     },

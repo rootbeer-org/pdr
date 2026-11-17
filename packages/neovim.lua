@@ -9,7 +9,6 @@ return {
         github = "neovim/neovim",
         repository_id = 16408992,
         tag = "v{version}",
-        exclude_tags = { "stable" },
     },
     prebuilt = {
         github = "neovim/neovim",

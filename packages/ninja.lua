@@ -51,7 +51,14 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && cd $d && printf 'rule cp\n  command = cp $in $out\nbuild out.txt: cp in.txt\n' > build.ninja && echo hi > in.txt && ninja >/dev/null && test \"$(cat out.txt)\" = hi && echo ok",
+                [[set -e
+d=$(mktemp -d)
+cd $d
+printf 'rule cp\n  command = cp $in $out\nbuild out.txt: cp in.txt\n' > build.ninja
+echo hi > in.txt
+ninja >/dev/null
+test "$(cat out.txt)" = hi
+echo ok]],
             },
         },
     },

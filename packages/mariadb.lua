@@ -12,7 +12,7 @@ local build = {
         },
         {
             package = "openssl",
-            kind = "link",
+            kind = "link_runtime",
         },
         {
             package = "zlib",

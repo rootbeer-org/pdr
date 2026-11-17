@@ -8,7 +8,6 @@ return {
         github = "ruby/ruby",
         repository_id = 538746,
         tag = "v{version}",
-        exclude_tags = { "*preview*", "*rc[0-9]*" },
         lines = { by = "minor", keep = 2 },
     },
     source = {

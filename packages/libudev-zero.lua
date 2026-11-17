@@ -34,7 +34,7 @@ return {
                 {
                     "/bin/sh",
                     "-ec",
-                    "printf '#include \"udev.h\"\\nint main(void) { struct udev *u = udev_new(); struct udev_enumerate *e = udev_enumerate_new(u); int r = udev_enumerate_add_match_subsystem(e, \"hidraw\"); udev_enumerate_unref(e); udev_unref(u); return r; }\\n' > check.c; ${CC:-cc} -o check check.c libudev.a -pthread; ./check",
+                    'printf \'#include "udev.h"\\nint main(void) { struct udev *u = udev_new(); struct udev_enumerate *e = udev_enumerate_new(u); int r = udev_enumerate_add_match_subsystem(e, "hidraw"); udev_enumerate_unref(e); udev_unref(u); return r; }\\n\' > check.c; ${CC:-cc} -o check check.c libudev.a -pthread; ./check',
                 },
             },
             install = {

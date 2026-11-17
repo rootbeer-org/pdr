@@ -7,7 +7,6 @@ return {
     upstream = {
         git = "https://bitbucket.org/multicoreware/x265_git.git",
         tag = "{version}",
-        exclude_tags = { "*_RC*" },
     },
     source = {
         url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_{version}.tar.gz",
@@ -68,7 +67,12 @@ return {
             {
                 "sh",
                 "-c",
-                "d=$(mktemp -d) && head -c 12288 /dev/zero > $d/in.yuv && x265 --input-res 64x64 --fps 25 --input $d/in.yuv -o $d/out.hevc >/dev/null 2>&1 && test -s $d/out.hevc && echo ok",
+                [[set -e
+d=$(mktemp -d)
+head -c 12288 /dev/zero > $d/in.yuv
+x265 --input-res 64x64 --fps 25 --input $d/in.yuv -o $d/out.hevc >/dev/null 2>&1
+test -s $d/out.hevc
+echo ok]],
             },
         },
     },

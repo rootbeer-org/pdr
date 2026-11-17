@@ -8,7 +8,6 @@ return {
         github = "PCRE2Project/pcre2",
         repository_id = 398251321,
         tag = "pcre2-{version}",
-        exclude_tags = { "pcre2-*RC*" },
     },
     source = {
         url = "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-{version}/pcre2-{version}.tar.gz",

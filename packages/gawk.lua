@@ -48,7 +48,9 @@ return {
             {
                 "sh",
                 "-c",
-                "printf 'a 1\\nb 2\\nc 3\\n' | awk '{ s += $2; out = out $1 } END { print out, s }' | grep -qx 'abc 6'",
+                [[printf 'a 1\nb 2\nc 3\n' |
+    awk '{ s += $2; out = out $1 } END { print out, s }' |
+    grep -qx 'abc 6']],
             },
         },
     },

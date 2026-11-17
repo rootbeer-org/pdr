@@ -33,8 +33,6 @@ return {
                     "./configure",
                     "--prefix={prefix}",
                     "--disable-doc",
-                    -- gpgrt-config is not on PATH while building.
-                    "GPGRT_CONFIG={dependencies.libgpg-error}/bin/gpgrt-config",
                 },
             },
             build = {

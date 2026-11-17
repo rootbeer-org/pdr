@@ -90,8 +90,6 @@ return {
                     -- pkg-config cannot resolve gnutls's own dependencies, which are not direct ones.
                     "LIBGNUTLS_CFLAGS=-I{dependencies.gnutls}/include",
                     "LIBGNUTLS_LIBS=-L{dependencies.gnutls}/lib -lgnutls",
-                    -- gpgrt-config is not on PATH while building.
-                    "GPGRT_CONFIG={dependencies.libgpg-error}/bin/gpgrt-config",
                 },
             },
             build = {
@@ -128,7 +126,8 @@ return {
             {
                 "sh",
                 "-c",
-                [[test "$(printf abc | gpg --print-md SHA256)" = "BA7816BF 8F01CFEA 414140DE 5DAE2223 B00361A3 96177A9C B410FF61 F20015AD"]],
+                [[expected="BA7816BF 8F01CFEA 414140DE 5DAE2223 B00361A3 96177A9C B410FF61 F20015AD"
+test "$(printf abc | gpg --print-md SHA256)" = "$expected"]],
             },
             -- Checks cannot bind the agent's unix socket, so verify a signature made ahead of time
             -- with a throwaway key; the build's test suite covers signing and encryption.
