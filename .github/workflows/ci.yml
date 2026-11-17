@@ -35,6 +35,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+          # A PR checks out its merge commit, whose first parent is main
+          fetch-depth: 2
       - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
 
       # Main is the only run that publishes. A PR planned while main's run is
@@ -53,6 +55,20 @@ jobs:
             echo "deferred=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # A PR builds only the keys it changes, and whatever of theirs the store
+      # lacks. The rest is main's to build, so main's backlog doesn't land on
+      # every PR.
+      - name: List the keys this PR changes
+        if: github.event_name == 'pull_request' && steps.defer.outputs.deferred != 'true'
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/base" HEAD^1
+          rb drv keys --catalog "$RUNNER_TEMP/base/packages" --host "$RUNNER_TEMP/base/host.lua" \
+            | jq --raw-output .key > "$RUNNER_TEMP/base.keys"
+          rb drv keys | jq --raw-output '"\(.key) \(.platform) \(.name)@\(.version)"' \
+            | awk 'NR == FNR { base[$1]; next } !($1 in base) { print $2, $3 }' "$RUNNER_TEMP/base.keys" - \
+            > "$RUNNER_TEMP/changed"
+          cat "$RUNNER_TEMP/changed"
+
       - name: Plan what the store doesn't have
         id: plan
         if: steps.defer.outputs.deferred != 'true'
@@ -61,11 +77,33 @@ jobs:
           RB_REGISTRY_TOKEN: ${{ github.token }}
         run: |
           for platform in x86_64-linux aarch64-linux aarch64-macos; do
-            plan=$(rb drv plan --platform "$platform" --registry "$REGISTRY" --from "$STORE")
+            packages=()
+            if [[ $GITHUB_EVENT_NAME == pull_request ]]; then
+              mapfile -t packages < <(awk -v platform="$platform" '$1 == platform { print $2 }' "$RUNNER_TEMP/changed")
+            fi
+
+            # Naming no packages plans every one, which a PR that changes none mustn't
+            if [[ $GITHUB_EVENT_NAME == pull_request && ${#packages[@]} == 0 ]]; then
+              plan="{\"platform\":\"$platform\",\"levels\":[]}"
+            else
+              plan=$(rb drv plan "${packages[@]}" --platform "$platform" --registry "$REGISTRY" --from "$STORE")
+            fi
+
             if ! jq --exit-status '.levels | length <= 8' <<< "$plan" > /dev/null; then
               echo "$platform needs more than build.yml's eight levels" >&2
               exit 1
             fi
+
+            # The org gets five macOS runners at once, so a level's macOS packages
+            # build in two jobs rather than one each, leaving room for other runs.
+            groups=0
+            if [[ $platform == aarch64-macos ]]; then
+              groups=2
+            fi
+            plan=$(jq --compact-output --argjson groups "$groups" '
+              if $groups == 0 then . else
+                .levels |= map([to_entries | group_by(.key % $groups)[] | map(.value) | join(" ")])
+              end' <<< "$plan")
             echo "$platform=$plan" >> "$GITHUB_OUTPUT"
           done
 
