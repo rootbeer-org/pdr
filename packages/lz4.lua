@@ -1,3 +1,24 @@
+local function build(configure)
+    return {
+        backend = "custom",
+        -- The tests pipe into diff, which buffers stdin in /tmp.
+        allow = { "tmp" },
+        libraries = { "lib/liblz4.a", "lib/liblz4.{shared_extension}" },
+        steps = {
+            configure = configure,
+            build = {
+                { "make", "-j{jobs}", "PREFIX={prefix}" },
+            },
+            check = {
+                { "make", "PREFIX={prefix}", "test" },
+            },
+            install = {
+                { "make", "PREFIX={prefix}", "install" },
+            },
+        },
+    }
+end
+
 return {
     name = "lz4",
     description = "Fast compression library and command-line tools",
@@ -14,32 +35,7 @@ return {
         archive = "tar.gz",
         strip_prefix = "lz4-{version}",
     },
-    build = {
-        backend = "custom",
-        -- The tests pipe into diff, which buffers stdin in /tmp.
-        allow = { "tmp" },
-        libraries = { "lib/liblz4.a", "lib/liblz4.{shared_extension}" },
-        steps = {
-            configure = {
-                {
-                    "sed",
-                    "-i.bak",
-                    "-e",
-                    "s/if start != 0 and end != 0:/if end != 0:/",
-                    "tests/cli/test-lz4-list.py",
-                },
-            },
-            build = {
-                { "make", "-j{jobs}", "PREFIX={prefix}" },
-            },
-            check = {
-                { "make", "PREFIX={prefix}", "test" },
-            },
-            install = {
-                { "make", "PREFIX={prefix}", "install" },
-            },
-        },
-    },
+    build = build(),
     outputs = {
         bins = { "lz4", "lz4c", "lz4cat", "unlz4" },
         checks = {
@@ -62,6 +58,16 @@ return {
     },
     versions = {
         ["1.11.0"] = {
+            -- 1.11.1 replaced this Python test with a shell one.
+            build = build({
+                {
+                    "sed",
+                    "-i.bak",
+                    "-e",
+                    "s/if start != 0 and end != 0:/if end != 0:/",
+                    "tests/cli/test-lz4-list.py",
+                },
+            }),
             digests = {
                 ["aarch64-linux"] = "247e5fa64da5f7b75ee3dd3bed484076396c9ebe8254d9ccf693eb62800c5e26",
                 ["aarch64-macos"] = "247e5fa64da5f7b75ee3dd3bed484076396c9ebe8254d9ccf693eb62800c5e26",
