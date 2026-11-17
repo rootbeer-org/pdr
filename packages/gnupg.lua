@@ -87,9 +87,6 @@ return {
                     "--with-zlib={dependencies.zlib}",
                     "--with-bzip2={dependencies.bzip2}",
                     "--with-readline={dependencies.readline}",
-                    -- pkg-config cannot resolve gnutls's own dependencies, which are not direct ones.
-                    "LIBGNUTLS_CFLAGS=-I{dependencies.gnutls}/include",
-                    "LIBGNUTLS_LIBS=-L{dependencies.gnutls}/lib -lgnutls",
                 },
             },
             build = {
