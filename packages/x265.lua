@@ -18,11 +18,11 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                kind = "all",
+                kind = "build",
             },
             {
                 package = "nasm",
-                kind = "all",
+                kind = "build",
             },
         },
         libraries = {

@@ -19,7 +19,11 @@ return {
         dependencies = {
             {
                 package = "m4",
-                kind = "all",
+                kind = "build",
+            },
+            {
+                package = "m4",
+                kind = "runtime",
             },
         },
         libraries = { "lib/liby.a" },

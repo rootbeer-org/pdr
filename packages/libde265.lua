@@ -19,7 +19,7 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                kind = "all",
+                kind = "build",
             },
         },
         libraries = { "lib/libde265.{shared_extension}" },

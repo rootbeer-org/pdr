@@ -51,7 +51,7 @@ return {
             },
             {
                 package = "pkgconf",
-                kind = "all",
+                kind = "build",
             },
         },
         steps = {

@@ -44,7 +44,7 @@ return {
             },
             {
                 package = "pkgconf",
-                kind = "all",
+                kind = "build",
             },
         },
         libraries = { "lib/libpsl.a", "lib/libpsl.{shared_extension}" },

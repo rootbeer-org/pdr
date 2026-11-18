@@ -27,7 +27,11 @@ return {
             },
             {
                 package = "perl",
-                kind = "all",
+                kind = "build",
+            },
+            {
+                package = "perl",
+                kind = "runtime",
             },
         },
         steps = {

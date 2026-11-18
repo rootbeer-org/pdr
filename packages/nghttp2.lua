@@ -22,7 +22,7 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                kind = "all",
+                kind = "build",
             },
         },
         libraries = { "lib/libnghttp2.a" },

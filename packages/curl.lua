@@ -23,11 +23,11 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                kind = "all",
+                kind = "build",
             },
             {
                 package = "pkgconf",
-                kind = "all",
+                kind = "build",
             },
             {
                 package = "openssl",
@@ -39,7 +39,7 @@ return {
             },
             {
                 package = "brotli",
-                kind = "all",
+                kind = "link",
             },
             {
                 package = "zstd",
@@ -47,15 +47,15 @@ return {
             },
             {
                 package = "nghttp2",
-                kind = "all",
+                kind = "link",
             },
             {
                 package = "nghttp3",
-                kind = "all",
+                kind = "link",
             },
             {
                 package = "ngtcp2",
-                kind = "all",
+                kind = "link",
             },
             {
                 package = "libidn2",
@@ -76,7 +76,7 @@ return {
             },
             {
                 package = "libssh2",
-                kind = "all",
+                kind = "link",
             },
         },
         libraries = { "lib/libcurl.a" },

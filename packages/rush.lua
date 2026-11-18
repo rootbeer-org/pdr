@@ -26,7 +26,7 @@ return {
             {
                 package = "zig",
                 version = "0.16.0",
-                kind = "all",
+                kind = "build",
             },
         },
     },
