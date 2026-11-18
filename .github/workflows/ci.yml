@@ -187,6 +187,7 @@ jobs:
           failed=()
           for package in $PACKAGES; do
             echo "::group::$package"
+            exported=$(ls out 2> /dev/null || true)
             if ! "$RB" drv build "$package" --verbose --require-dependencies \
               --registry "$REGISTRY" "${from[@]}" \
               || ! "$RB" drv export "$package" out; then
@@ -196,8 +197,12 @@ jobs:
               continue
             fi
 
-            if [[ $CAN_STAGE == true ]]; then
-              "$RB" drv publish out --registry "$REGISTRY" --namespace "$STAGING"
+            # Only what this export added, since everything before it is staged
+            rm -rf stage
+            mkdir stage
+            comm -13 <(echo "$exported") <(ls out) | xargs -I {} ln -s ../out/{} stage/{}
+            if [[ $CAN_STAGE == true && -n $(ls stage) ]]; then
+              "$RB" drv publish stage --registry "$REGISTRY" --namespace "$STAGING"
             fi
             echo "::endgroup::"
           done
