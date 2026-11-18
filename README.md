@@ -63,12 +63,17 @@ rb drv build jq
 ## CI and publication
 
 [Packages](.github/workflows/ci.yml) plans every declared version against
-`ghcr.io/rootbeer-org/store` and builds only what the store lacks, level by level
-on each platform. A failed package holds back only what depends on it.
+`ghcr.io/rootbeer-org/store` and builds only what the store lacks, one job per
+platform in dependency order. A failed package holds back only what depends on it.
 
-PRs build and check. Pushes to main build again and publish to the store, then the
+PRs build and check the keys they change and stage each output in
+`ghcr.io/rootbeer-org/staging` once it passes. Main installs what staging has
+instead of rebuilding it, publishes to the store, and runs every six hours to
+build whatever is still missing. Then the
 [index repository](https://github.com/rootbeer-org/index) signs the new entries
-with a key this repository never sees.
+with a key this repository never sees. [Rerun](.github/workflows/rerun.yml) runs
+a failed run's jobs again when no package failed, so a lost runner or a registry
+error resumes from what was staged.
 
 [Rootbeer](.github/workflows/rootbeer.yml) packages each commit rootbeer's CI
 publishes. It adds the version as the default, moves the engine pin, keeps the

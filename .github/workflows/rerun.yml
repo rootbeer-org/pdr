@@ -1,24 +1,24 @@
-name: Rerun deferred PRs
-# A PR's plan defers while main publishes. Once main's run finishes, this runs
-# each PR's latest deferred run again, so nobody has to.
+name: Rerun lost builds
+# A Packages run that failed without a package failing lost a runner, timed
+# out, or hit a registry error. What passed is staged, so running its failed
+# jobs again resumes from there. A package that failed waits for a fix.
 on:
   workflow_run:
     workflows: [Packages]
     types: [completed]
-    branches: [main]
 
 permissions: {}
 
-concurrency:
-  group: rerun-deferred
-  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
 
 jobs:
   rerun:
     name: Rerun
-    if: github.event.workflow_run.event == 'push'
+    if: contains(fromJSON('["failure", "timed_out"]'), github.event.workflow_run.conclusion) && github.event.workflow_run.run_attempt < 3
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 10
     permissions: {}
     steps:
       - name: Mint a token to rerun checks
@@ -30,19 +30,21 @@ jobs:
           owner: rootbeer-org
           repositories: pdr
           permission-actions: write
-      - name: Rerun each PR's latest deferred run
+          permission-checks: read
+      - name: Rerun the failed jobs unless a package failed
         env:
           GH_TOKEN: ${{ steps.app.outputs.token }}
+          RUN: ${{ github.event.workflow_run.id }}
         run: |
-          runs=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --event pull_request --limit 200 \
-            --json databaseId,headBranch,conclusion \
-            --jq 'unique_by(.headBranch)[] | select(.conclusion == "cancelled" or .conclusion == "failure") | .databaseId')
-          for run in $runs; do
-            deferred=$(gh run view "$run" --repo "$GITHUB_REPOSITORY" --json jobs \
-              --jq '.jobs[] | select(.name == "Package checks") | .steps[] | select(.name == "Wait for main to publish") | .conclusion')
-            # The step only runs when deferring, and fails if its cancel lands late.
-            if [[ $deferred == cancelled || $deferred == failure ]]; then
-              gh run rerun "$run" --repo "$GITHUB_REPOSITORY"
-              echo "reran $run"
+          jobs=$(gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs/$RUN/jobs?filter=latest" \
+            --jq '.jobs[] | select(.conclusion == "failure" or .conclusion == "timed_out") | .id')
+          for job in $jobs; do
+            titles=$(gh api "repos/$GITHUB_REPOSITORY/check-runs/$job/annotations" --jq '.[].title')
+            if grep --quiet --line-regexp 'Package failed' <<< "$titles"; then
+              echo "A package failed in job $job, so run $RUN is left as is"
+              exit 0
             fi
           done
+
+          gh run rerun "$RUN" --failed --repo "$GITHUB_REPOSITORY"
+          echo "reran $RUN"

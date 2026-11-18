@@ -1,11 +1,16 @@
 name: Packages
-# PRs build and check. Pushes, which only a merge or an admin can make, build
-# again and publish what they built to the store.
+# PRs build and check the keys they change. Main publishes to the store, and its
+# schedule builds whatever the store still lacks. Each build is staged once it
+# passes, so a rerun or a later run resumes from there, and main promotes what a
+# PR built instead of building it again.
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: "41 */6 * * *"
+  workflow_dispatch:
 
 permissions: {}
 
@@ -13,24 +18,28 @@ concurrency:
   group: rb-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+defaults:
+  run:
+    shell: bash
+
 env:
   REGISTRY: https://ghcr.io
   STORE: rootbeer-org/store
+  STAGING: rootbeer-org/staging
+  # A same-repository PR can already change this workflow and write the store,
+  # so staging its builds trusts no one new. A fork's token can't.
+  CAN_STAGE: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
 
 jobs:
-  eval:
+  plan:
     name: Plan
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
-      actions: read
       contents: read
       packages: read
     outputs:
-      x86_64-linux: ${{ steps.plan.outputs.x86_64-linux }}
-      aarch64-linux: ${{ steps.plan.outputs.aarch64-linux }}
-      aarch64-macos: ${{ steps.plan.outputs.aarch64-macos }}
-      deferred: ${{ steps.defer.outputs.deferred }}
+      matrix: ${{ steps.plan.outputs.matrix }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -39,77 +48,67 @@ jobs:
           fetch-depth: 2
       - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
 
-      # Main is the only run that publishes. A PR planned while main's run is
-      # still filling the store would rebuild everything main merged, and
-      # waiting would hold a runner main needs. So it skips the plan, Package
-      # checks cancels the run, and rerun.yml runs it again once main finishes.
-      - name: Defer while main publishes
-        id: defer
-        if: github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch main --event push \
-            --limit 10 --json status --jq '.[].status' | grep --quiet --invert-match --line-regexp completed; then
-            echo "::notice::Main is publishing, so this PR's checks run again once it finishes"
-            echo "deferred=true" >> "$GITHUB_OUTPUT"
-          fi
-
       # A PR builds only the keys it changes, and whatever of theirs the store
-      # lacks. The rest is main's to build, so main's backlog doesn't land on
-      # every PR.
+      # and staging lack. The rest is main's to build.
       - name: List the keys this PR changes
-        if: github.event_name == 'pull_request' && steps.defer.outputs.deferred != 'true'
+        if: github.event_name == 'pull_request'
         run: |
           git worktree add --detach "$RUNNER_TEMP/base" HEAD^1
-          rb drv keys --catalog "$RUNNER_TEMP/base/packages" --host "$RUNNER_TEMP/base/host.lua" \
-            | jq --raw-output .key > "$RUNNER_TEMP/base.keys"
+          if ! rb drv keys --catalog "$RUNNER_TEMP/base/packages" --host "$RUNNER_TEMP/base/host.lua" \
+            | jq --raw-output .key > "$RUNNER_TEMP/base.keys"; then
+            echo "::warning::main doesn't evaluate, so every key counts as changed"
+            : > "$RUNNER_TEMP/base.keys"
+          fi
+
           rb drv keys | jq --raw-output '"\(.key) \(.platform) \(.name)@\(.version)"' \
             | awk 'NR == FNR { base[$1]; next } !($1 in base) { print $2, $3 }' "$RUNNER_TEMP/base.keys" - \
             > "$RUNNER_TEMP/changed"
           cat "$RUNNER_TEMP/changed"
 
-      - name: Plan what the store doesn't have
+      - name: Plan what's missing
         id: plan
-        if: steps.defer.outputs.deferred != 'true'
         env:
           RB_REGISTRY_USER: ${{ github.actor }}
           RB_REGISTRY_TOKEN: ${{ github.token }}
         run: |
-          for platform in x86_64-linux aarch64-linux aarch64-macos; do
+          # A PR resumes from what its earlier runs staged. Main counts only the
+          # store, and its build installs whatever staging already has.
+          from=(--from "$STORE")
+          if [[ $GITHUB_EVENT_NAME == pull_request && $CAN_STAGE == true ]]; then
+            from+=(--from "$STAGING")
+          fi
+
+          matrix='[]'
+          for entry in x86_64-linux:ubuntu-24.04 aarch64-linux:ubuntu-24.04-arm aarch64-macos:macos-15; do
+            platform=${entry%%:*}
+            runner=${entry#*:}
+
+            # Naming no packages plans every one, which a PR that changes none mustn't
             packages=()
             if [[ $GITHUB_EVENT_NAME == pull_request ]]; then
               mapfile -t packages < <(awk -v platform="$platform" '$1 == platform { print $2 }' "$RUNNER_TEMP/changed")
+              if (( ${#packages[@]} == 0 )); then
+                continue
+              fi
             fi
 
-            # Naming no packages plans every one, which a PR that changes none mustn't
-            if [[ $GITHUB_EVENT_NAME == pull_request && ${#packages[@]} == 0 ]]; then
-              plan="{\"platform\":\"$platform\",\"levels\":[]}"
-            else
-              plan=$(rb drv plan "${packages[@]}" --platform "$platform" --registry "$REGISTRY" --from "$STORE")
+            # Levels in order put each package after everything it depends on
+            plan=$(rb drv plan "${packages[@]}" --platform "$platform" --registry "$REGISTRY" "${from[@]}")
+            ordered=$(jq --raw-output '.levels | flatten | join(" ")' <<< "$plan")
+            if [[ -z $ordered ]]; then
+              continue
             fi
 
-            if ! jq --exit-status '.levels | length <= 8' <<< "$plan" > /dev/null; then
-              echo "$platform needs more than build.yml's eight levels" >&2
-              exit 1
-            fi
-
-            # The org gets five macOS runners at once, so a level's macOS packages
-            # build in two jobs rather than one each, leaving room for other runs.
-            groups=0
-            if [[ $platform == aarch64-macos ]]; then
-              groups=2
-            fi
-            plan=$(jq --compact-output --argjson groups "$groups" '
-              if $groups == 0 then . else
-                .levels |= map([to_entries | group_by(.key % $groups)[] | map(.value) | join(" ")])
-              end' <<< "$plan")
-            echo "$platform=$plan" >> "$GITHUB_OUTPUT"
+            matrix=$(jq --compact-output --arg platform "$platform" --arg runner "$runner" --arg packages "$ordered" \
+              '. + [{$platform, $runner, $packages}]' <<< "$matrix")
           done
+
+          jq . <<< "$matrix"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   builder:
     name: Builder (${{ matrix.runner }})
-    if: github.event_name == 'push'
+    if: github.ref == 'refs/heads/main'
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     strategy:
@@ -136,71 +135,124 @@ jobs:
           docker build --tag "$image" .github/builder
           docker push "$image"
 
+  # One job per platform builds its whole plan in order, which keeps macOS to a
+  # single runner per run.
   build:
     name: Build (${{ matrix.platform }})
-    needs: [eval, builder]
-    if: ${{ !cancelled() && needs.eval.result == 'success' && needs.eval.outputs.deferred != 'true' }}
+    needs: [plan, builder]
+    if: ${{ !cancelled() && needs.plan.result == 'success' && needs.plan.outputs.matrix != '[]' }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - platform: x86_64-linux
-            runner: ubuntu-24.04
-          - platform: aarch64-linux
-            runner: ubuntu-24.04-arm
-          - platform: aarch64-macos
-            runner: macos-15
-    uses: ./.github/workflows/build.yml
+        include: ${{ fromJSON(needs.plan.outputs.matrix) }}
     permissions:
       contents: read
-      packages: read
-    with:
-      platform: ${{ matrix.platform }}
-      runner: ${{ matrix.runner }}
-      plan: ${{ needs.eval.outputs[matrix.platform] }}
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
+      - name: Prepare the store
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ $RUNNER_OS == Linux ]]; then
+            docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin <<< "$GH_TOKEN"
+            # bubblewrap in the builder is unprivileged as far as the host knows
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+            echo "RB=$GITHUB_WORKSPACE/.github/builder/rb" >> "$GITHUB_ENV"
+          else
+            # The toolchain host.lua names for aarch64-macos, which every macOS key includes
+            sudo xcode-select --switch /Applications/Xcode_16.4.app
+            sudo "$(command -v rb-helper)" setup admin
+            echo 'RB=rb' >> "$GITHUB_ENV"
+          fi
+
+      - name: Build, check, and stage
+        env:
+          PACKAGES: ${{ matrix.packages }}
+          RB_REGISTRY_USER: ${{ github.actor }}
+          RB_REGISTRY_TOKEN: ${{ github.token }}
+        run: |
+          # A package whose dependency failed fails fast instead of building it.
+          # rerun.yml retries a failed run only when no package failed.
+          from=(--from "$STORE")
+          if [[ $CAN_STAGE == true ]]; then
+            from+=(--from "$STAGING")
+          fi
+
+          failed=()
+          for package in $PACKAGES; do
+            echo "::group::$package"
+            if ! "$RB" drv build "$package" --verbose --require-dependencies \
+              --registry "$REGISTRY" "${from[@]}" \
+              || ! "$RB" drv export "$package" out; then
+              echo "::endgroup::"
+              echo "::error title=Package failed::$package"
+              failed+=("$package")
+              continue
+            fi
+
+            if [[ $CAN_STAGE == true ]]; then
+              "$RB" drv publish out --registry "$REGISTRY" --namespace "$STAGING"
+            fi
+            echo "::endgroup::"
+          done
+
+          (( ${#failed[@]} == 0 ))
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: ${{ !cancelled() && github.ref == 'refs/heads/main' && hashFiles('out/**') != '' }}
+        with:
+          name: build-${{ matrix.platform }}
+          path: out/
+          retention-days: 7
+          if-no-files-found: error
+          # A rerun exports everything again, including what it installed from staging
+          overwrite: true
 
   # The one check the default branch's ruleset requires
   checks:
     name: Package checks
-    needs: [eval, build]
+    needs: [plan, build]
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 5
-    permissions:
-      actions: write
+    permissions: {}
     steps:
-      # A cancelled check blocks the merge without reading as a failure. A
-      # skipped one would pass, so this job cancels the run from inside it.
-      - name: Wait for main to publish
-        if: needs.eval.outputs.deferred == 'true'
+      - name: Require the plan and every planned build
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh run cancel "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY"
-          sleep 240
-          exit 1
-
-      - name: Require the plan and every platform's build
-        env:
-          EVAL: ${{ needs.eval.result }}
+          PLAN: ${{ needs.plan.result }}
           BUILD: ${{ needs.build.result }}
+          MATRIX: ${{ needs.plan.outputs.matrix }}
         run: |
-          echo "plan $EVAL, build $BUILD"
-          # Every level skips when the store already has everything planned.
-          [[ $EVAL == success && ($BUILD == success || $BUILD == skipped) ]]
+          echo "plan $PLAN, build $BUILD"
+          [[ $PLAN == success ]]
+
+          # Only a plan with nothing to build may skip the build
+          if [[ $MATRIX == '[]' ]]; then
+            [[ $BUILD == skipped ]]
+          else
+            [[ $BUILD == success ]]
+          fi
 
   # The workflow token can write the store from any branch's workflow, so the
   # store is only as safe as push access to this repository. Whatever built is
   # published, and a failed package holds back only what depends on it.
   publish:
     name: Publish
-    needs: [eval, build]
-    if: ${{ !cancelled() && needs.eval.result == 'success' && github.event_name == 'push' }}
+    needs: [plan, build]
+    if: ${{ !cancelled() && needs.plan.result == 'success' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
       contents: read
       packages: write
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -212,6 +264,7 @@ jobs:
           path: outputs
           merge-multiple: true
       - name: Publish this run's outputs to the store
+        id: publish
         env:
           RB_REGISTRY_USER: ${{ github.actor }}
           RB_REGISTRY_TOKEN: ${{ github.token }}
@@ -221,13 +274,14 @@ jobs:
             exit 0
           fi
           rb drv publish outputs --registry "$REGISTRY" --namespace "$STORE"
+          echo "published=true" >> "$GITHUB_OUTPUT"
 
   # The index repository holds the online key and signs, so the key never
   # reaches a repository that runs package builds
   index:
     name: Index
     needs: publish
-    if: ${{ !cancelled() && needs.publish.result == 'success' }}
+    if: ${{ !cancelled() && needs.publish.outputs.published == 'true' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
