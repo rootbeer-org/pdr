@@ -140,28 +140,28 @@ CURL_LIBS="$(pkgconf --static --libs libcurl)" LDFLAGS="$LDFLAGS $frameworks" ex
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "8.5.12",
+            default_version = "8.6.0",
         },
         ["aarch64-macos"] = {
-            default_version = "8.5.12",
+            default_version = "8.6.0",
         },
         ["x86_64-linux"] = {
-            default_version = "8.5.12",
+            default_version = "8.6.0",
         },
     },
     versions = {
-        ["8.4.27"] = {
+        ["8.5.13"] = {
             digests = {
-                ["aarch64-linux"] = "dcf93923b0e38e0d5252b25b796520b5a47761a08b3488b6d0b5d1115764d3f0",
-                ["aarch64-macos"] = "dcf93923b0e38e0d5252b25b796520b5a47761a08b3488b6d0b5d1115764d3f0",
-                ["x86_64-linux"] = "dcf93923b0e38e0d5252b25b796520b5a47761a08b3488b6d0b5d1115764d3f0",
+                ["aarch64-linux"] = "607602acaf0c3061818e9916ec44a058e8b3d43959a83862b9cd3ec7bf5b785f",
+                ["aarch64-macos"] = "607602acaf0c3061818e9916ec44a058e8b3d43959a83862b9cd3ec7bf5b785f",
+                ["x86_64-linux"] = "607602acaf0c3061818e9916ec44a058e8b3d43959a83862b9cd3ec7bf5b785f",
             },
         },
-        ["8.5.12"] = {
+        ["8.6.0"] = {
             digests = {
-                ["aarch64-linux"] = "08bc2eba2a588654ade1357174aa646b761556c862dda0678345ee29ed481209",
-                ["aarch64-macos"] = "08bc2eba2a588654ade1357174aa646b761556c862dda0678345ee29ed481209",
-                ["x86_64-linux"] = "08bc2eba2a588654ade1357174aa646b761556c862dda0678345ee29ed481209",
+                ["aarch64-linux"] = "5f84beaa3d763aee1e4feed99bf54ec692c383b322e25626807b589238c3a087",
+                ["aarch64-macos"] = "5f84beaa3d763aee1e4feed99bf54ec692c383b322e25626807b589238c3a087",
+                ["x86_64-linux"] = "5f84beaa3d763aee1e4feed99bf54ec692c383b322e25626807b589238c3a087",
             },
         },
     },
