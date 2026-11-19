@@ -111,13 +111,13 @@ certtool --verify --load-ca-certificate ca.pem --infile ca.pem]],
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "3.8.13",
+            default_version = "3.8.14",
         },
         ["aarch64-macos"] = {
-            default_version = "3.8.13",
+            default_version = "3.8.14",
         },
         ["x86_64-linux"] = {
-            default_version = "3.8.13",
+            default_version = "3.8.14",
         },
     },
     versions = {
@@ -126,6 +126,13 @@ certtool --verify --load-ca-certificate ca.pem --infile ca.pem]],
                 ["aarch64-linux"] = "ffed8ec1bf09c2426d4f14aae377de4753b53e537d685e604e99a8b16ca9c97e",
                 ["aarch64-macos"] = "ffed8ec1bf09c2426d4f14aae377de4753b53e537d685e604e99a8b16ca9c97e",
                 ["x86_64-linux"] = "ffed8ec1bf09c2426d4f14aae377de4753b53e537d685e604e99a8b16ca9c97e",
+            },
+        },
+        ["3.8.14"] = {
+            digests = {
+                ["aarch64-linux"] = "7e2d258071f5db9620aa7ff34259331d004f7beafa3eb18560cfaf60acfbf02a",
+                ["aarch64-macos"] = "7e2d258071f5db9620aa7ff34259331d004f7beafa3eb18560cfaf60acfbf02a",
+                ["x86_64-linux"] = "7e2d258071f5db9620aa7ff34259331d004f7beafa3eb18560cfaf60acfbf02a",
             },
         },
     },
