@@ -19,21 +19,13 @@ jobs:
     if: contains(fromJSON('["failure", "timed_out"]'), github.event.workflow_run.conclusion) && github.event.workflow_run.run_attempt < 3
     runs-on: ubuntu-24.04
     timeout-minutes: 10
-    permissions: {}
+    permissions:
+      actions: write
+      checks: read
     steps:
-      - name: Mint a token to rerun checks
-        id: app
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1
-        with:
-          client-id: ${{ vars.ROOTBEER_BOT_CLIENT_ID }}
-          private-key: ${{ secrets.ROOTBEER_BOT_PRIVATE_KEY }}
-          owner: rootbeer-org
-          repositories: pdr
-          permission-actions: write
-          permission-checks: read
       - name: Rerun the failed jobs unless a package failed
         env:
-          GH_TOKEN: ${{ steps.app.outputs.token }}
+          GH_TOKEN: ${{ github.token }}
           RUN: ${{ github.event.workflow_run.id }}
         run: |
           jobs=$(gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs/$RUN/jobs?filter=latest" \

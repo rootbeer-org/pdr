@@ -202,7 +202,9 @@ jobs:
             mkdir stage
             comm -13 <(echo "$exported") <(ls out) | xargs -I {} ln -s ../out/{} stage/{}
             if [[ $CAN_STAGE == true && -n $(ls stage) ]]; then
-              "$RB" drv publish stage --registry "$REGISTRY" --namespace "$STAGING"
+              # A rerun rebuilds what failed to stage, so this build goes on
+              "$RB" drv publish stage --registry "$REGISTRY" --namespace "$STAGING" \
+                || echo "::warning::$package wasn't staged"
             fi
             echo "::endgroup::"
           done
