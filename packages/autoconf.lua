@@ -18,11 +18,19 @@ return {
         dependencies = {
             {
                 package = "m4",
-                kind = "all",
+                kind = "build",
+            },
+            {
+                package = "m4",
+                kind = "runtime",
             },
             {
                 package = "perl",
-                kind = "all",
+                kind = "build",
+            },
+            {
+                package = "perl",
+                kind = "runtime",
             },
         },
         steps = {

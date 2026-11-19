@@ -22,11 +22,11 @@ return {
         dependencies = {
             {
                 package = "curl",
-                kind = "all",
+                kind = "link",
             },
             {
                 package = "expat",
-                kind = "all",
+                kind = "link",
             },
             {
                 package = "openssl",
@@ -79,7 +79,7 @@ return {
             },
             {
                 package = "pkgconf",
-                kind = "all",
+                kind = "build",
             },
             {
                 -- The test suite lints with perl, and the installed commands run it.

@@ -18,9 +18,13 @@ return {
         backend = "custom",
         dependencies = {
             {
+                package = "m4",
+                kind = "build",
+            },
+            {
                 -- Flex runs m4 when it generates scanners, so the installed flex must find it by path.
                 package = "m4",
-                kind = "all",
+                kind = "runtime",
             },
         },
         libraries = { "lib/libfl.a", "lib/libfl.{shared_extension}" },

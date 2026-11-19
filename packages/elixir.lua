@@ -19,7 +19,11 @@ return {
         dependencies = {
             {
                 package = "erlang",
-                kind = "all",
+                kind = "build",
+            },
+            {
+                package = "erlang",
+                kind = "runtime",
             },
         },
         steps = {

@@ -19,7 +19,7 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                kind = "all",
+                kind = "build",
             },
         },
         libraries = { "lib/libbrotlicommon.a", "lib/libbrotlidec.a", "lib/libbrotlienc.a" },

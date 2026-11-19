@@ -19,7 +19,7 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                kind = "all",
+                kind = "build",
             },
         },
         libraries = { "lib/libopenjp2.a", "lib/libopenjp2.{shared_extension}" },

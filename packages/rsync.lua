@@ -31,7 +31,7 @@ return {
             },
             {
                 package = "xxhash",
-                kind = "all",
+                kind = "link",
             },
             {
                 package = "zstd",

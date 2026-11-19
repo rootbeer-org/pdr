@@ -19,7 +19,7 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                kind = "all",
+                kind = "build",
             },
         },
         libraries = { "lib/libdeflate.a", "lib/libdeflate.{shared_extension}" },

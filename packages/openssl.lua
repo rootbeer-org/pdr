@@ -21,7 +21,7 @@ return {
         dependencies = {
             {
                 package = "perl",
-                kind = "all",
+                kind = "build",
             },
         },
         libraries = {
@@ -73,7 +73,7 @@ return {
                 dependencies = {
                     {
                         package = "perl",
-                        kind = "all",
+                        kind = "build",
                     },
                 },
                 libraries = {

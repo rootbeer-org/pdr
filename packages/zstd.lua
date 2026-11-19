@@ -21,7 +21,7 @@ return {
         dependencies = {
             {
                 package = "cmake",
-                kind = "all",
+                kind = "build",
             },
             {
                 package = "lz4",
@@ -29,7 +29,7 @@ return {
             },
             {
                 package = "xz",
-                kind = "all",
+                kind = "link",
             },
             {
                 package = "zlib",
