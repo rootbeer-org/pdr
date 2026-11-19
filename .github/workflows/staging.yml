@@ -30,6 +30,7 @@ jobs:
           OWNER: ${{ github.repository_owner }}
         run: |
           cutoff=$(date -u -d '14 days ago' +%FT%TZ)
+          seen=0
 
           for recipe in packages/*.lua; do
             name=$(basename "$recipe" .lua)
@@ -39,6 +40,7 @@ jobs:
               cat error
               exit 1
             fi
+            seen=$((seen + 1))
 
             # GitHub won't delete a package's last version, so the newest stays
             ids=$(jq -r --arg cutoff "$cutoff" \
@@ -48,3 +50,8 @@ jobs:
               echo "deleted $name version $id"
             done
           done
+
+          # Each staged package keeps its newest version, so none means this
+          # token can't see staging, which GitHub reports as a 404
+          echo "checked $seen staged packages"
+          (( seen > 0 ))
