@@ -1,0 +1,50 @@
+name: Prune staging
+# Staged outputs only carry a PR's builds to main and let reruns resume, so
+# ones older than a PR usually stays open go. A PR older than that rebuilds.
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  prune:
+    name: Prune
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Delete staged outputs older than 14 days
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          cutoff=$(date -u -d '14 days ago' +%FT%TZ)
+
+          for recipe in packages/*.lua; do
+            name=$(basename "$recipe" .lua)
+            versions="orgs/$OWNER/packages/container/staging%2F$name/versions"
+            if ! listing=$(gh api --paginate --slurp "$versions?per_page=100" 2> error); then
+              grep --quiet 'HTTP 404' error && continue
+              cat error
+              exit 1
+            fi
+
+            # GitHub won't delete a package's last version, so the newest stays
+            ids=$(jq -r --arg cutoff "$cutoff" \
+              'add | sort_by(.updated_at) | .[:-1][] | select(.updated_at < $cutoff) | .id' <<< "$listing")
+            for id in $ids; do
+              gh api --method DELETE "$versions/$id"
+              echo "deleted $name version $id"
+            done
+          done

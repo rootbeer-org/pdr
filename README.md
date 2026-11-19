@@ -73,7 +73,8 @@ build whatever is still missing. Then the
 [index repository](https://github.com/rootbeer-org/index) signs the new entries
 with a key this repository never sees. [Rerun](.github/workflows/rerun.yml) runs
 a failed run's jobs again when no package failed, so a lost runner or a registry
-error resumes from what was staged.
+error resumes from what was staged. [Prune staging](.github/workflows/staging.yml)
+deletes staged outputs after 14 days.
 
 [Rootbeer](.github/workflows/rootbeer.yml) packages each commit rootbeer's CI
 publishes. It adds the version as the default, moves the engine pin, keeps the
