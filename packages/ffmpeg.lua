@@ -181,13 +181,13 @@ ffmpeg -hide_banner -loglevel error -c:v libdav1d -i "$d/v-libsvtav1.mkv" -f nul
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "9.0.2",
+            default_version = "9.1",
         },
         ["aarch64-macos"] = {
-            default_version = "9.0.2",
+            default_version = "9.1",
         },
         ["x86_64-linux"] = {
-            default_version = "9.0.2",
+            default_version = "9.1",
         },
     },
     versions = {
@@ -196,6 +196,13 @@ ffmpeg -hide_banner -loglevel error -c:v libdav1d -i "$d/v-libsvtav1.mkv" -f nul
                 ["aarch64-linux"] = "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
                 ["aarch64-macos"] = "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
                 ["x86_64-linux"] = "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
+            },
+        },
+        ["9.1"] = {
+            digests = {
+                ["aarch64-linux"] = "1a4d394ae63d190a526cd052eb4415c156b5c5e2df37efab41a7de0b8fde2433",
+                ["aarch64-macos"] = "1a4d394ae63d190a526cd052eb4415c156b5c5e2df37efab41a7de0b8fde2433",
+                ["x86_64-linux"] = "1a4d394ae63d190a526cd052eb4415c156b5c5e2df37efab41a7de0b8fde2433",
             },
         },
     },
