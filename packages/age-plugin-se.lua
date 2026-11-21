@@ -18,11 +18,9 @@ return {
             { package = "7zip", kind = "build" },
         },
     },
+    -- Upstream builds for macOS 26 and CI runs macOS 15, so nothing here runs it.
     outputs = {
         bins = { "age-plugin-se" },
-        checks = {
-            { "age-plugin-se", "--version" },
-        },
     },
     platforms = {
         ["aarch64-macos"] = {
