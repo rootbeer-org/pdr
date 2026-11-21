@@ -43,7 +43,7 @@ return {
             },
             outputs = {
                 apps = {
-                    ["Helium.app"] = "Helium.app",
+                    ["Helium.app"] = { path = "Helium.app", updates = "self" },
                 },
                 host = { "/bin/bash" },
             },

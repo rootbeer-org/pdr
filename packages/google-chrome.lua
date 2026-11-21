@@ -15,7 +15,10 @@ return {
     },
     outputs = {
         apps = {
-            ["Google Chrome.app"] = "Google Chrome.app",
+            ["Google Chrome.app"] = {
+                path = "Google Chrome.app",
+                updates = "self",
+            },
         },
     },
     platforms = {
