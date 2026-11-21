@@ -19,7 +19,7 @@ return {
     },
     outputs = {
         apps = {
-            ["BetterDisplay.app"] = "BetterDisplay.app",
+            ["BetterDisplay.app"] = { path = "BetterDisplay.app", updates = "self" },
         },
     },
     platforms = {

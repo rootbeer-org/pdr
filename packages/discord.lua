@@ -5,7 +5,7 @@ return {
     recipe_maintainers = { "tale" },
     default_license = "LicenseRef-Proprietary",
     prebuilt = {
-        url = "https://dl.discordapp.net/apps/osx/{version}/Discord.dmg",
+        url = "https://stable.dl2.discordapp.net/distro/app/stable/osx/universal/{version}/Discord.dmg",
         install = "Dmg",
         dependencies = {
             { package = "7zip", kind = "build" },
@@ -14,18 +14,18 @@ return {
     },
     outputs = {
         apps = {
-            ["Discord.app"] = "Discord.app",
+            ["Discord.app"] = { path = "Discord.app", updates = "self" },
         },
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "0.0.412",
+            default_version = "0.0.423",
         },
     },
     versions = {
-        ["0.0.412"] = {
+        ["0.0.423"] = {
             digests = {
-                ["aarch64-macos"] = "5102d468e5593a5ffd5a3ecd38a10e9f63b349e7a3caa074eee8d6532f573a19",
+                ["aarch64-macos"] = "8edb6957c30e78250909f4f746546077f25e032f9532852c4b1c2f8bfd37beb2",
             },
         },
     },
