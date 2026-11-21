@@ -4,6 +4,7 @@ return {
     homepage = "https://www.spotify.com/",
     recipe_maintainers = { "tale" },
     default_license = "LicenseRef-Proprietary",
+    upstream = { latest = true },
     prebuilt = {
         url = "https://download.scdn.co/SpotifyARM64.dmg",
         install = "Dmg",
