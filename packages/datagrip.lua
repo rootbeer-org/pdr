@@ -14,7 +14,7 @@ return {
     },
     outputs = {
         apps = {
-            ["DataGrip.app"] = "DataGrip.app",
+            ["DataGrip.app"] = { path = "DataGrip.app", updates = "self" },
         },
     },
     platforms = {

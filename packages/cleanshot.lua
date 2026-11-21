@@ -14,7 +14,7 @@ return {
     },
     outputs = {
         apps = {
-            ["CleanShot X.app"] = "CleanShot X.app",
+            ["CleanShot X.app"] = { path = "CleanShot X.app", updates = "self" },
         },
     },
     platforms = {

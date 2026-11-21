@@ -14,7 +14,7 @@ return {
     },
     outputs = {
         apps = {
-            ["Discord.app"] = "Discord.app",
+            ["Discord.app"] = { path = "Discord.app", updates = "self" },
         },
     },
     platforms = {
