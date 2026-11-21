@@ -5,7 +5,7 @@ return {
     recipe_maintainers = { "tale" },
     default_license = "LicenseRef-Proprietary",
     prebuilt = {
-        url = "https://storage.googleapis.com/copilot-mac-releases/images/Copilot-6.4.4-332-80a7fa78.dmg",
+        url = "https://storage.googleapis.com/copilot-mac-releases/images/Copilot-6.8.2-340-69efc0f9.dmg",
         install = "Dmg",
         dependencies = {
             { package = "7zip", kind = "build" },
@@ -14,18 +14,18 @@ return {
     },
     outputs = {
         apps = {
-            ["Copilot.app"] = "Copilot.app",
+            ["Copilot.app"] = { path = "Copilot.app", updates = "self" },
         },
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "6.4.4+332-80a7fa78",
+            default_version = "6.8.2+340-69efc0f9",
         },
     },
     versions = {
-        ["6.4.4+332-80a7fa78"] = {
+        ["6.8.2+340-69efc0f9"] = {
             digests = {
-                ["aarch64-macos"] = "80a7fa78efbb42bcd2db13c040c051146d466dc46df7398712ef2cd914486fe2",
+                ["aarch64-macos"] = "69efc0f91a7e16f4b4c6d468ac39e555b77f74e9e45d1c9116b48cd7bd602ce8",
             },
         },
     },
