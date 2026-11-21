@@ -5,7 +5,7 @@ return {
     recipe_maintainers = { "tale" },
     default_license = "LicenseRef-Proprietary",
     prebuilt = {
-        url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.5-aarch64.dmg",
+        url = "https://download.jetbrains.com/datagrip/datagrip-2026.3-aarch64.dmg",
         install = "Dmg",
         dependencies = {
             { package = "7zip", kind = "build" },
@@ -19,16 +19,16 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "2026.2.5+262.10315.132",
+            default_version = "2026.3+263.7307.216",
             outputs = {
                 host = { "@rpath/libjvm.dylib" },
             },
         },
     },
     versions = {
-        ["2026.2.5+262.10315.132"] = {
+        ["2026.3+263.7307.216"] = {
             digests = {
-                ["aarch64-macos"] = "f4c85cb1a1973764f84184c5fb8e4b86c7fac9aae2731e503f6f331b1217ddc8",
+                ["aarch64-macos"] = "17201e7bf85313612ba5e7644f8b2293c0fc95137e2e442879f94899df8ec735",
             },
         },
     },

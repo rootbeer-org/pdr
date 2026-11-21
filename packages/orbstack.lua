@@ -10,7 +10,7 @@ return {
         channel = "stable",
     },
     prebuilt = {
-        url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v2.2.3_20963_arm64.dmg",
+        url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v2.2.5_21124_arm64.dmg",
         install = "Dmg",
         dependencies = {
             { package = "7zip", kind = "build" },
@@ -24,13 +24,13 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "2.2.3+20963",
+            default_version = "2.2.5+21124",
         },
     },
     versions = {
-        ["2.2.3+20963"] = {
+        ["2.2.5+21124"] = {
             digests = {
-                ["aarch64-macos"] = "7ca77868f3a0d7d9f57b3f98615aad30cc59d23cc84bbff13f78846df0b493d4",
+                ["aarch64-macos"] = "f2b887d26a21e0a12147eb005297782794b26f461f77c6b9cdfb57f576ad5e6d",
             },
         },
     },
