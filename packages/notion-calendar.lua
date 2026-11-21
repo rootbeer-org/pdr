@@ -7,7 +7,7 @@ return {
     prebuilt = {
         url = "https://calendar-desktop-release.notion-static.com/Notion%20Calendar-darwin-arm64-{version}.zip",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

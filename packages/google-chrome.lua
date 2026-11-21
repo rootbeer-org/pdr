@@ -9,7 +9,7 @@ return {
         url = "https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

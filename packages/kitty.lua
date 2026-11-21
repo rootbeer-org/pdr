@@ -52,7 +52,7 @@ return {
                 tag = "v{version}",
                 asset = "kitty-{version}.dmg",
                 dependencies = {
-                    { package = "7zip", kind = "build" },
+                    { package = "rb-unpack", kind = "build" },
                 },
                 mirror = true,
             },

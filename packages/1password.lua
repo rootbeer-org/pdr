@@ -7,7 +7,7 @@ return {
     prebuilt = {
         url = "https://downloads.1password.com/mac/1Password-{version}-aarch64.zip",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

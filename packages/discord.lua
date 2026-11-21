@@ -8,7 +8,7 @@ return {
         url = "https://stable.dl2.discordapp.net/distro/app/stable/osx/universal/{version}/Discord.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

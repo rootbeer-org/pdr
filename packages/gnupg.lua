@@ -20,7 +20,7 @@ return {
         allow = { "local-network", "tmp" },
         dependencies = {
             {
-                package = "7zip",
+                package = "rb-unpack",
                 kind = "build",
             },
             {

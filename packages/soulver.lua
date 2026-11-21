@@ -7,7 +7,7 @@ return {
     prebuilt = {
         url = "https://soulver.app/mac/sparkle/soulver-3.16.3-541.zip",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

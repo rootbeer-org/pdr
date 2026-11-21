@@ -14,7 +14,7 @@ return {
         tag = "{version}",
         asset = "glide.macos-aarch64.dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

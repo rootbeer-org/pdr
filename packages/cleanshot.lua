@@ -8,7 +8,7 @@ return {
         url = "https://updates.getcleanshot.com/v3/CleanShot-X-{version}.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

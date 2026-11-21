@@ -14,7 +14,7 @@ return {
         tag = "{version}",
         asset = "dprint-{target}.zip",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
     },
     outputs = {

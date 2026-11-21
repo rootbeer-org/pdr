@@ -8,7 +8,7 @@ return {
         url = "https://desktop-release.notion-static.com/Notion-{version}-arm64.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

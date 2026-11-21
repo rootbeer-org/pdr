@@ -15,7 +15,7 @@ return {
         tag = "v{version}",
         asset = "age-plugin-se-v{version}-macos.zip",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
     },
     -- Upstream builds for macOS 26 and CI runs macOS 15, so nothing here runs it.

@@ -15,7 +15,7 @@ return {
         tag = "tip",
         asset = "bobrwm-tip-{commit}-aarch64-macos.zip",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

@@ -17,7 +17,7 @@ return {
         backend = "custom",
         dependencies = {
             {
-                package = "7zip",
+                package = "rb-unpack",
                 kind = "build",
             },
             {

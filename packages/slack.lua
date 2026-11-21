@@ -8,7 +8,7 @@ return {
         url = "https://downloads.slack-edge.com/desktop-releases/mac/arm64/{version}/Slack-{version}-macOS.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

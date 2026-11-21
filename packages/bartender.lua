@@ -7,7 +7,7 @@ return {
     prebuilt = {
         url = "https://downloads.macbartender.com/Bartender7/updates/7-2-0/Bartender%207.zip",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },
