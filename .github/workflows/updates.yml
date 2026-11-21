@@ -35,6 +35,10 @@ jobs:
         with:
           persist-credentials: false
       - uses: rootbeer-org/setup-rb@bf50460fdf9e1b17508117150b26b624b840d08c
+      # A recipe whose upstream is its latest download reads the version from
+      # the app inside, which 7zz unpacks.
+      - name: Install 7-Zip
+        run: sudo apt-get install --yes --no-install-recommends 7zip
 
       - name: Find newer upstream versions
         env:

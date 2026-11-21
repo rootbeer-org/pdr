@@ -10,13 +10,6 @@ return {
             { package = "7zip", kind = "build" },
         },
         mirror = true,
-        steps = {
-            -- The zip stores macOS metadata as ._ files, which ditto folds
-            -- back into attributes but 7-Zip writes out, breaking the seal.
-            install = {
-                { "find", ".", "-name", "._*", "-delete" },
-            },
-        },
     },
     outputs = {
         apps = {
