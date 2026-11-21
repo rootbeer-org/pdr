@@ -71,7 +71,9 @@ PRs build and check the keys they change and stage each output in
 instead of rebuilding it, publishes to the store, and runs every six hours to
 build whatever is still missing. Then the
 [index repository](https://github.com/rootbeer-org/index) signs the new entries
-with a key this repository never sees. [Rerun](.github/workflows/rerun.yml) runs
+with a key this repository never sees. Every push to main is indexed, so a
+recipe change that builds nothing, like marking an app as updating itself, still
+reaches the index. [Rerun](.github/workflows/rerun.yml) runs
 a failed run's jobs again when no package failed, so a lost runner or a registry
 error resumes from what was staged. [Prune staging](.github/workflows/staging.yml)
 deletes staged outputs after 14 days.
