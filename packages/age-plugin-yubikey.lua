@@ -29,16 +29,47 @@ return {
             { "age-plugin-yubikey", "--version" },
         },
     },
-    -- Linux needs pcsc-lite, which the store doesn't have yet.
     platforms = {
+        ["aarch64-linux"] = {
+            default_version = "0.5.1",
+            build = {
+                backend = "rust",
+                dependencies = {
+                    { package = "rust", kind = "build" },
+                    { package = "pkgconf", kind = "build" },
+                    -- macOS has PCSC.framework, and Linux talks to the host's pcscd
+                    -- through pcsc-lite.
+                    { package = "pcsc-lite", kind = "link" },
+                },
+                rust = {
+                    packages = { "age-plugin-yubikey" },
+                },
+            },
+        },
         ["aarch64-macos"] = {
             default_version = "0.5.1",
+        },
+        ["x86_64-linux"] = {
+            default_version = "0.5.1",
+            build = {
+                backend = "rust",
+                dependencies = {
+                    { package = "rust", kind = "build" },
+                    { package = "pkgconf", kind = "build" },
+                    { package = "pcsc-lite", kind = "link" },
+                },
+                rust = {
+                    packages = { "age-plugin-yubikey" },
+                },
+            },
         },
     },
     versions = {
         ["0.5.1"] = {
             digests = {
+                ["aarch64-linux"] = "51e4680ad7ad7f56535e4f3018531bd0196815659378709979617d4f17102700",
                 ["aarch64-macos"] = "51e4680ad7ad7f56535e4f3018531bd0196815659378709979617d4f17102700",
+                ["x86_64-linux"] = "51e4680ad7ad7f56535e4f3018531bd0196815659378709979617d4f17102700",
             },
         },
     },
