@@ -18,7 +18,7 @@ return {
     },
     outputs = {
         apps = {
-            ["AlDente.app"] = "AlDente.app",
+            ["AlDente.app"] = { path = "AlDente.app", updates = "self" },
         },
     },
     platforms = {

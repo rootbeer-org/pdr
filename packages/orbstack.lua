@@ -19,7 +19,7 @@ return {
     },
     outputs = {
         apps = {
-            ["OrbStack.app"] = "OrbStack.app",
+            ["OrbStack.app"] = { path = "OrbStack.app", updates = "self" },
         },
     },
     platforms = {
