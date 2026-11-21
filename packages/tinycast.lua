@@ -19,7 +19,7 @@ return {
     },
     outputs = {
         apps = {
-            ["Tinycast.app"] = "Tinycast.app",
+            ["Tinycast.app"] = { path = "Tinycast.app", updates = "self" },
         },
     },
     platforms = {
