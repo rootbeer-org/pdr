@@ -284,11 +284,13 @@ jobs:
           echo "published=true" >> "$GITHUB_OUTPUT"
 
   # The index repository holds the online key and signs, so the key never
-  # reaches a repository that runs package builds
+  # reaches a repository that runs package builds. A push can change a recipe's
+  # metadata, such as how its apps update, without building anything, so every
+  # push indexes too. The schedule only indexes what it published.
   index:
     name: Index
     needs: publish
-    if: ${{ !cancelled() && needs.publish.outputs.published == 'true' }}
+    if: ${{ !cancelled() && needs.publish.result == 'success' && (needs.publish.outputs.published == 'true' || github.event_name == 'push') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
