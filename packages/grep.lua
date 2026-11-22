@@ -1,6 +1,6 @@
 return {
     name = "grep",
-    description = "GNU grep, searches files for lines matching a pattern",
+    description = "GNU grep, print lines that match patterns",
     homepage = "https://www.gnu.org/software/grep/",
     recipe_maintainers = { "tale" },
     default_license = "GPL-3.0-or-later",

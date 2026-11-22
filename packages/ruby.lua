@@ -1,6 +1,6 @@
 return {
     name = "ruby",
-    description = "Dynamic, object-oriented programming language",
+    description = "Ruby interpreter and standard library",
     homepage = "https://www.ruby-lang.org",
     recipe_maintainers = { "tale" },
     default_license = "Ruby OR BSD-2-Clause",

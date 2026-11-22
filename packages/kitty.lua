@@ -1,6 +1,6 @@
 return {
     name = "kitty",
-    description = "Run a GPU-accelerated terminal emulator",
+    description = "GPU-accelerated terminal emulator",
     homepage = "https://sw.kovidgoyal.net/kitty/",
     recipe_maintainers = { "tale" },
     default_license = "GPL-3.0-only",

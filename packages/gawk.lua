@@ -1,6 +1,6 @@
 return {
     name = "gawk",
-    description = "GNU implementation of the AWK programming language",
+    description = "GNU AWK text processing language",
     homepage = "https://www.gnu.org/software/gawk/",
     recipe_maintainers = { "tale" },
     default_license = "GPL-3.0-or-later",

@@ -1,6 +1,6 @@
 return {
     name = "x265",
-    description = "H.265/HEVC video encoder library and CLI",
+    description = "H.265/HEVC video encoder library and command-line tool",
     homepage = "https://www.videolan.org/developers/x265.html",
     recipe_maintainers = { "tale" },
     default_license = "GPL-2.0-or-later",

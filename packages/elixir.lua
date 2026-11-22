@@ -1,6 +1,6 @@
 return {
     name = "elixir",
-    description = "Dynamic, functional language for building scalable applications",
+    description = "Functional language that runs on the Erlang VM",
     homepage = "https://elixir-lang.org/",
     recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",

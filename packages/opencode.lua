@@ -1,6 +1,6 @@
 return {
     name = "opencode",
-    description = "Run an AI coding agent in the terminal",
+    description = "AI coding agent for the terminal",
     homepage = "https://opencode.ai",
     recipe_maintainers = { "tale" },
     default_license = "MIT",

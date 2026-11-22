@@ -1,6 +1,6 @@
 return {
     name = "gnupg",
-    description = "GNU Privacy Guard, a complete implementation of the OpenPGP and S/MIME standards",
+    description = "Encrypt and sign data with OpenPGP",
     homepage = "https://gnupg.org",
     recipe_maintainers = { "tale" },
     default_license = "GPL-3.0-or-later",

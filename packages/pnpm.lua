@@ -1,6 +1,6 @@
 return {
     name = "pnpm",
-    description = "Fast, disk-efficient package manager for Node.js",
+    description = "Node.js package manager with a shared content-addressed store",
     homepage = "https://pnpm.io",
     recipe_maintainers = { "tale" },
     default_license = "MIT",

@@ -1,6 +1,6 @@
 return {
     name = "dav1d",
-    description = "Cross-platform AV1 decoder focused on speed and correctness",
+    description = "AV1 video decoder",
     homepage = "https://code.videolan.org/videolan/dav1d",
     recipe_maintainers = { "tale" },
     default_license = "BSD-2-Clause",

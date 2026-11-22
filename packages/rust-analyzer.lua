@@ -1,6 +1,6 @@
 return {
     name = "rust-analyzer",
-    description = "Serve Rust language intelligence over LSP",
+    description = "Rust language server",
     homepage = "https://rust-analyzer.github.io/",
     recipe_maintainers = { "tale" },
     default_license = "MIT OR Apache-2.0",

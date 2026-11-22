@@ -1,6 +1,6 @@
 return {
     name = "ghostty",
-    description = "Run a GPU-accelerated terminal with native UI",
+    description = "Terminal emulator with a native UI",
     homepage = "https://ghostty.org/",
     recipe_maintainers = { "tale" },
     default_license = "MIT",

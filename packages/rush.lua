@@ -1,6 +1,6 @@
 return {
     name = "rush",
-    description = "Run a POSIX shell with interactive editing and completions",
+    description = "POSIX shell with line editing and completions",
     homepage = "https://rush.horse",
     recipe_maintainers = { "tale" },
     default_license = "MIT",

@@ -1,7 +1,7 @@
 return {
     name = "jj",
     aliases = { "jujutsu" },
-    description = "Manage version control with a Git-compatible VCS",
+    description = "Git-compatible version control system",
     homepage = "https://jj-vcs.github.io/jj/",
     recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",

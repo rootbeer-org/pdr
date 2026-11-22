@@ -1,6 +1,6 @@
 return {
     name = "starship",
-    description = "Render a customizable prompt for any shell",
+    description = "Customizable prompt for any shell",
     homepage = "https://starship.rs",
     recipe_maintainers = { "tale" },
     default_license = "ISC",

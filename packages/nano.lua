@@ -1,6 +1,6 @@
 return {
     name = "nano",
-    description = "Small and friendly text editor",
+    description = "Simple text editor for the terminal",
     homepage = "https://www.nano-editor.org",
     recipe_maintainers = { "tale" },
     default_license = "GPL-3.0-or-later",
