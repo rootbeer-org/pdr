@@ -8,7 +8,7 @@ return {
     platforms = {
         ["aarch64-linux"] = {
             target = "arm64",
-            default_version = "0.22.1.1",
+            default_version = "0.22.2.1",
             upstream = {
                 github = "imputnet/helium-linux",
                 repository_id = 1043354934,
@@ -27,7 +27,7 @@ return {
             },
         },
         ["aarch64-macos"] = {
-            default_version = "0.22.1.1",
+            default_version = "0.22.2.1",
             upstream = {
                 github = "imputnet/helium-macos",
                 repository_id = 933200785,
@@ -50,7 +50,7 @@ return {
         },
         ["x86_64-linux"] = {
             target = "x86_64",
-            default_version = "0.22.1.1",
+            default_version = "0.22.2.1",
             upstream = {
                 github = "imputnet/helium-linux",
                 repository_id = 1043354934,
@@ -70,18 +70,18 @@ return {
         },
     },
     versions = {
-        ["0.21.3.1"] = {
-            digests = {
-                ["aarch64-linux"] = "f7f3ae03f9a9c55f1b2d420688a86391fd7d3432f1e62588a2e6dd780c154404",
-                ["aarch64-macos"] = "3debd0f2f3a3cf0f4bfa5dfbe4d807a3391c17c752178be4449719245ed0610b",
-                ["x86_64-linux"] = "a8540596c93a44631605602f3bc4eeda5bff83eb1a3a8b02e4d04a4c8473e29d",
-            },
-        },
         ["0.22.1.1"] = {
             digests = {
                 ["aarch64-linux"] = "e3e049fdc15f1c3b1853e6b3acebee5c88db0bb867276ab40c58f5ba54794d0b",
                 ["aarch64-macos"] = "8c234480c01223c9dbc9e8dc5bc5be08b8e4341437d62dae9d75942b594fbd51",
                 ["x86_64-linux"] = "af4684e0e351a68534dc33443b369d02bc3ac2633734c97848c8a7439bcbb367",
+            },
+        },
+        ["0.22.2.1"] = {
+            digests = {
+                ["aarch64-linux"] = "0b2c823f524971b11d7db3caaca1567d01896e55b3485e72edaddf34720d7889",
+                ["aarch64-macos"] = "c3353aa936844613210203c947c3d315deb3255c78d09293141c447dd324c388",
+                ["x86_64-linux"] = "f090c811253fd68bc7eb894b982a0be221d1701f77ed4b53f6146499af8bae04",
             },
         },
     },
