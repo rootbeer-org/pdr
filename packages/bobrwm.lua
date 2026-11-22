@@ -33,23 +33,23 @@ return {
     },
     platforms = {
         ["aarch64-macos"] = {
-            default_version = "0.1.0-main+37dff99b3e09",
+            default_version = "0.1.0-main+14960e9e58a0",
         },
     },
     versions = {
+        ["0.1.0-main+14960e9e58a0"] = {
+            digests = {
+                ["aarch64-macos"] = "262571cfd078600acb6a1dc2c87de44019c579a0ce7b7b49ff29ed8d26e2a935",
+            },
+            commit = "14960e9e58a023598896c3dc1dd4eaba50a27650",
+            serial = 20261122131500,
+        },
         ["0.1.0-main+37dff99b3e09"] = {
             digests = {
                 ["aarch64-macos"] = "22fc2198a1c6d91ef84831fb9fe570307a86f0051da1ecae4ad0d96a51d33fbf",
             },
             commit = "37dff99b3e09ccb6bc3048a52ea1117af09a5b72",
             serial = 20261119165332,
-        },
-        ["0.1.0-main+bd1fff8b7cf8"] = {
-            digests = {
-                ["aarch64-macos"] = "d3149096b94910d6c9634029a105cc6852c51f69666a40fb91af1523b3821de3",
-            },
-            commit = "bd1fff8b7cf87fe6ca196a4563aa5d156e6f0ebc",
-            serial = 20261117225526,
         },
     },
 }
