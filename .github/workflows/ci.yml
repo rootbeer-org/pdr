@@ -258,8 +258,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    outputs:
-      published: ${{ steps.publish.outputs.published }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -271,7 +269,6 @@ jobs:
           path: outputs
           merge-multiple: true
       - name: Publish this run's outputs to the store
-        id: publish
         env:
           RB_REGISTRY_USER: ${{ github.actor }}
           RB_REGISTRY_TOKEN: ${{ github.token }}
@@ -281,16 +278,16 @@ jobs:
             exit 0
           fi
           rb drv publish outputs --registry "$REGISTRY" --namespace "$STORE"
-          echo "published=true" >> "$GITHUB_OUTPUT"
 
   # The index repository holds the online key and signs, so the key never
   # reaches a repository that runs package builds. A push can change a recipe's
   # metadata, such as how its apps update, without building anything, so every
-  # push indexes too. The schedule only indexes what it published.
+  # run of main indexes. A scheduled run that queues behind a running one
+  # cancels a pending push, and then it has to index that push's changes.
   index:
     name: Index
     needs: publish
-    if: ${{ !cancelled() && needs.publish.result == 'success' && (needs.publish.outputs.published == 'true' || github.event_name == 'push') }}
+    if: ${{ !cancelled() && needs.publish.result == 'success' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
