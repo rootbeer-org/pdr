@@ -98,13 +98,13 @@ rm -rf "$d"
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "8.10.3",
+            default_version = "8.12.0",
         },
         ["aarch64-macos"] = {
-            default_version = "8.10.3",
+            default_version = "8.12.0",
         },
         ["x86_64-linux"] = {
-            default_version = "8.10.3",
+            default_version = "8.12.0",
         },
     },
     versions = {
@@ -113,6 +113,13 @@ rm -rf "$d"
                 ["aarch64-linux"] = "edde778f6bdee7581e42fc139ca9e07e2822212092f7501f99989656e3629d02",
                 ["aarch64-macos"] = "edde778f6bdee7581e42fc139ca9e07e2822212092f7501f99989656e3629d02",
                 ["x86_64-linux"] = "edde778f6bdee7581e42fc139ca9e07e2822212092f7501f99989656e3629d02",
+            },
+        },
+        ["8.12.0"] = {
+            digests = {
+                ["aarch64-linux"] = "b0100a879b2d45dc97d8fda941127609d648f8913008db1b65a2f72a8ae36c8b",
+                ["aarch64-macos"] = "b0100a879b2d45dc97d8fda941127609d648f8913008db1b65a2f72a8ae36c8b",
+                ["x86_64-linux"] = "b0100a879b2d45dc97d8fda941127609d648f8913008db1b65a2f72a8ae36c8b",
             },
         },
     },
