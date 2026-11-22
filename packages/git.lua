@@ -119,14 +119,18 @@ return {
             },
             install = {
                 { "make", "install" },
+                {
+                    "perl",
+                    "-pi",
+                    "-e",
+                    "s|^#!/usr/bin/perl|#!{dependencies.perl}/bin/perl|",
+                    "{prefix}/share/git-core/templates/hooks/fsmonitor-watchman.sample",
+                },
             },
         },
     },
     outputs = {
         bins = { "git", "git-receive-pack", "git-upload-pack", "git-upload-archive" },
-        -- The sample fsmonitor hook keeps its /usr/bin/perl shebang; it is inert until copied into a
-        -- repository's hooks.
-        host = { "/usr/bin/perl" },
         checks = {
             { "git", "--version" },
             {
