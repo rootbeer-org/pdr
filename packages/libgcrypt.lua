@@ -1,6 +1,6 @@
 return {
     name = "libgcrypt",
-    description = "General purpose cryptography library based on GnuPG's code",
+    description = "Cryptography library from the GnuPG project",
     homepage = "https://gnupg.org/software/libgcrypt/",
     recipe_maintainers = { "tale" },
     default_license = "LGPL-2.1-or-later",

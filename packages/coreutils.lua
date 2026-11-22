@@ -1,6 +1,6 @@
 return {
     name = "coreutils",
-    description = "GNU core utilities: file, shell, and text manipulation",
+    description = "GNU ls, cp, mv, cat, and the other core utilities",
     homepage = "https://www.gnu.org/software/coreutils/",
     recipe_maintainers = { "tale" },
     default_license = "GPL-3.0-or-later",

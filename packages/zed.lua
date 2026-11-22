@@ -1,6 +1,6 @@
 return {
     name = "zed",
-    description = "Edit code in a fast, collaborative editor",
+    description = "Code editor with built-in collaboration",
     homepage = "https://zed.dev/",
     recipe_maintainers = { "tale" },
     default_license = "GPL-3.0-or-later",

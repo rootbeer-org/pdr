@@ -1,6 +1,6 @@
 return {
     name = "zig",
-    description = "Build software with the Zig toolchain",
+    description = "Zig compiler and toolchain",
     homepage = "https://ziglang.org",
     recipe_maintainers = { "tale" },
     default_license = "MIT",

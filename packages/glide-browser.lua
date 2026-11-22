@@ -1,7 +1,7 @@
 return {
     name = "glide-browser",
     aliases = { "glide" },
-    description = "Browse the web with a keyboard-driven, extensible Firefox fork",
+    description = "Keyboard-driven web browser based on Firefox",
     homepage = "https://glide-browser.app/",
     recipe_maintainers = { "tale" },
     default_license = "MPL-2.0",

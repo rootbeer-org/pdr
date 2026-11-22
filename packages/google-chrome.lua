@@ -1,7 +1,7 @@
 return {
     name = "google-chrome",
     aliases = { "chrome" },
-    description = "Browse the web with Google's Chromium-based browser",
+    description = "Google's web browser",
     homepage = "https://www.google.com/chrome/",
     recipe_maintainers = { "tale" },
     default_license = "LicenseRef-Proprietary",

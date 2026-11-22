@@ -1,6 +1,6 @@
 return {
     name = "openexr",
-    description = "OpenEXR high dynamic-range image file format library and tools",
+    description = "HDR image format library and tools",
     homepage = "https://openexr.com/",
     recipe_maintainers = { "tale" },
     default_license = "BSD-3-Clause",

@@ -1,7 +1,7 @@
 return {
     name = "helium",
     aliases = { "helium-browser" },
-    description = "Browse the web with a private Chromium-based browser",
+    description = "Privacy-focused web browser based on Chromium",
     homepage = "https://helium.computer",
     recipe_maintainers = { "tale" },
     default_license = "GPL-3.0-only",

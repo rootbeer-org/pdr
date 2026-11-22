@@ -1,6 +1,6 @@
 return {
     name = "iproute2mac",
-    description = "Inspect and configure macOS networking with ip, bridge, and ss (requires Python 3.10+)",
+    description = "ip, bridge, and ss for macOS networking (uses the system Python 3.10+)",
     homepage = "https://github.com/brona/iproute2mac",
     recipe_maintainers = { "tale" },
     default_license = "MIT",

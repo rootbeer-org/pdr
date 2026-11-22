@@ -1,6 +1,6 @@
 return {
     name = "meson",
-    description = "Fast and user-friendly build system",
+    description = "Build system that generates Ninja files",
     homepage = "https://mesonbuild.com",
     recipe_maintainers = { "tale" },
     default_license = "Apache-2.0",

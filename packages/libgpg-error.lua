@@ -1,6 +1,6 @@
 return {
     name = "libgpg-error",
-    description = "Error codes and common utility functions shared by the GnuPG libraries",
+    description = "Error codes shared by the GnuPG libraries",
     homepage = "https://gnupg.org/software/libgpg-error/",
     recipe_maintainers = { "tale" },
     default_license = "LGPL-2.1-or-later",

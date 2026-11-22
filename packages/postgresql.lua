@@ -1,7 +1,7 @@
 return {
     name = "postgresql",
     aliases = { "postgres" },
-    description = "Object-relational SQL database server, client tools, and libpq",
+    description = "PostgreSQL server, client tools, and libpq",
     homepage = "https://www.postgresql.org/",
     recipe_maintainers = { "tale" },
     default_license = "PostgreSQL",

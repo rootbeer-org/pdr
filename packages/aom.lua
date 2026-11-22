@@ -1,6 +1,6 @@
 return {
     name = "aom",
-    description = "AV1 video codec library (reference encoder and decoder)",
+    description = "AV1 reference encoder and decoder library",
     homepage = "https://aomedia.googlesource.com/aom",
     recipe_maintainers = { "tale" },
     default_license = "BSD-2-Clause",

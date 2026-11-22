@@ -1,6 +1,6 @@
 return {
     name = "libde265",
-    description = "Open H.265/HEVC video decoder library",
+    description = "H.265/HEVC video decoder library",
     homepage = "https://github.com/strukturag/libde265",
     recipe_maintainers = { "tale" },
     default_license = "LGPL-3.0-or-later",

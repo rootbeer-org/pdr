@@ -1,7 +1,7 @@
 return {
     name = "helix",
     aliases = { "hx" },
-    description = "Edit text with a modal terminal editor",
+    description = "Modal text editor for the terminal",
     homepage = "https://helix-editor.com",
     recipe_maintainers = { "tale" },
     default_license = "MPL-2.0",

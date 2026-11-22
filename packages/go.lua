@@ -1,6 +1,6 @@
 return {
     name = "go",
-    description = "Build software with the Go toolchain",
+    description = "Go compiler and toolchain",
     homepage = "https://go.dev",
     recipe_maintainers = { "tale" },
     default_license = "BSD-3-Clause",

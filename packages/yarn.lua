@@ -1,6 +1,6 @@
 return {
     name = "yarn",
-    description = "Fast, reliable JavaScript package manager",
+    description = "Yarn Classic (1.x) package manager for Node.js",
     homepage = "https://classic.yarnpkg.com",
     recipe_maintainers = { "tale" },
     default_license = "BSD-2-Clause",

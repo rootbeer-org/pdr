@@ -1,6 +1,6 @@
 return {
     name = "nushell",
-    description = "Run a structured-data shell",
+    description = "Shell that pipes structured data instead of text",
     homepage = "https://www.nushell.sh/",
     recipe_maintainers = { "tale" },
     default_license = "MIT",

@@ -1,6 +1,6 @@
 return {
     name = "perl",
-    description = "Highly capable, feature-rich programming language",
+    description = "Perl 5 interpreter and standard library",
     homepage = "https://www.perl.org/",
     recipe_maintainers = { "tale" },
     default_license = "Artistic-1.0-Perl OR GPL-1.0-or-later",

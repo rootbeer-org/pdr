@@ -1,6 +1,6 @@
 return {
     name = "fmt",
-    description = "Open-source formatting library for C++",
+    description = "String formatting library for C++",
     homepage = "https://fmt.dev/",
     recipe_maintainers = { "tale" },
     default_license = "MIT",

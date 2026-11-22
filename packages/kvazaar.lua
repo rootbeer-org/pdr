@@ -1,6 +1,6 @@
 return {
     name = "kvazaar",
-    description = "Open-source H.265/HEVC video encoder library",
+    description = "H.265/HEVC video encoder library",
     homepage = "https://github.com/ultravideo/kvazaar",
     recipe_maintainers = { "tale" },
     default_license = "BSD-3-Clause",

@@ -1,6 +1,6 @@
 return {
     name = "vim",
-    description = "Edit text in a modal, extensible editor",
+    description = "Vi IMproved text editor",
     homepage = "https://www.vim.org",
     recipe_maintainers = { "tale" },
     default_license = "Vim",

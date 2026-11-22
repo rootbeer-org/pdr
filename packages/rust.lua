@@ -39,7 +39,7 @@ local macos = {
 
 return {
     name = "rust",
-    description = "Build Rust programs with rustc and cargo",
+    description = "Rust compiler and Cargo",
     homepage = "https://www.rust-lang.org",
     recipe_maintainers = { "tale" },
     default_license = "MIT OR Apache-2.0",

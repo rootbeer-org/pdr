@@ -1,6 +1,6 @@
 return {
     name = "python",
-    description = "High-level, general-purpose programming language",
+    description = "Python interpreter and standard library",
     homepage = "https://www.python.org",
     recipe_maintainers = { "tale" },
     default_license = "PSF-2.0",
