@@ -8,7 +8,7 @@ return {
         url = "https://x.raycast-releases.com/download?platform=macos&architecture=arm64&version={version}",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

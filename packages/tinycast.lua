@@ -13,7 +13,7 @@ return {
         url = "https://github.com/abue-ammar/tinycast/releases/download/v{version}/Tinycast-{version}.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

@@ -8,7 +8,7 @@ return {
         url = "https://cdn.cloudflare.steamstatic.com/client/installer/steam.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

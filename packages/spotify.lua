@@ -9,7 +9,7 @@ return {
         url = "https://download.scdn.co/SpotifyARM64.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

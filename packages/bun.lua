@@ -20,7 +20,7 @@ return {
             },
         },
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         steps = {
             install = {

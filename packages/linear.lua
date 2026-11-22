@@ -8,7 +8,7 @@ return {
         url = "https://releases.linear.app/Linear-{version}-universal.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

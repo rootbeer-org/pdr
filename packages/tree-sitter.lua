@@ -15,7 +15,7 @@ return {
         tag = "v{version}",
         asset = "tree-sitter-cli-{target}.zip",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
     },
     outputs = {

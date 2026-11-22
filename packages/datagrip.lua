@@ -8,7 +8,7 @@ return {
         url = "https://download.jetbrains.com/datagrip/datagrip-2026.3-aarch64.dmg",
         install = "Dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },

@@ -14,7 +14,7 @@ return {
         tag = "v{version}",
         asset = "yazi-{target}.zip",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
     },
     outputs = {

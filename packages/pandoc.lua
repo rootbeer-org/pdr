@@ -40,7 +40,7 @@ printf '%s\n' ok]],
                 tag = "{version}",
                 asset = "pandoc-{version}-{target}",
                 dependencies = {
-                    { package = "7zip", kind = "build" },
+                    { package = "rb-unpack", kind = "build" },
                 },
             },
         },

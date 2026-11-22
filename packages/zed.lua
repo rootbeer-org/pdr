@@ -14,7 +14,7 @@ return {
         tag = "v{version}",
         asset = "Zed-aarch64.dmg",
         dependencies = {
-            { package = "7zip", kind = "build" },
+            { package = "rb-unpack", kind = "build" },
         },
         mirror = true,
     },
