@@ -8,9 +8,6 @@ return {
     prebuilt = {
         url = "https://download.scdn.co/SpotifyARM64.dmg",
         install = "Dmg",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -27,6 +24,9 @@ return {
         ["1.3.10.2586"] = {
             digests = {
                 ["aarch64-macos"] = "8344d3307e53736d803642be4fb37f6c0253850b525b9ee5f8f3e2bbf8c32d93",
+            },
+            trees = {
+                ["aarch64-macos"] = "a8b528af43a2b436f925a7bf1a55805011daf61a6b28600865b2007047d6bd6e",
             },
         },
     },

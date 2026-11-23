@@ -12,9 +12,6 @@ return {
     prebuilt = {
         url = "https://launcher-files.modrinth.com/versions/{version}/macos/Modrinth%20App_{version}_universal.dmg",
         install = "Dmg",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -32,10 +29,16 @@ return {
             digests = {
                 ["aarch64-macos"] = "f30056cb2589db6530f61fdfff15c40bba56ee44aaa8c889072c2ca1a3cdd5ed",
             },
+            trees = {
+                ["aarch64-macos"] = "9a254c031a901fe68a2d183e86a5bc42850567562f1b10d0218a698035bfb340",
+            },
         },
         ["0.23.5"] = {
             digests = {
                 ["aarch64-macos"] = "2897dc8ce8ea734c7b3d883d66db2e9001a526ab14a88d30e57e5acfcc3b21e2",
+            },
+            trees = {
+                ["aarch64-macos"] = "943faf594fbf51ba1b6eac91995779a820afcc0d5dd9fa254c29359d95e80015",
             },
         },
     },

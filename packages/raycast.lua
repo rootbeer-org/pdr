@@ -7,9 +7,6 @@ return {
     prebuilt = {
         url = "https://x.raycast-releases.com/download?platform=macos&architecture=arm64&version={version}",
         install = "Dmg",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -26,6 +23,9 @@ return {
         ["2.4.1.0"] = {
             digests = {
                 ["aarch64-macos"] = "5bb09adafcf8070605264bb29fcf496e4d615da3a6a0ce88eab70653d186a795",
+            },
+            trees = {
+                ["aarch64-macos"] = "7cc61d56f1d7794001ce5158b57bc250acb7319e33803ca4e1f619e91a5331f2",
             },
         },
     },

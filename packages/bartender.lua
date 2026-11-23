@@ -6,9 +6,6 @@ return {
     default_license = "LicenseRef-Proprietary",
     prebuilt = {
         url = "https://downloads.macbartender.com/Bartender7/updates/7-2-0/Bartender%207.zip",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -27,6 +24,9 @@ return {
         ["7.2.0"] = {
             digests = {
                 ["aarch64-macos"] = "567d1548e7867b23bd900b8cdcea9e5a881797d8b417a53ef1592976febdc7b4",
+            },
+            trees = {
+                ["aarch64-macos"] = "6b4ea1671b537624de11b7e9c1956e9d86a306e72e21ae4b251f2c1487351831",
             },
         },
     },

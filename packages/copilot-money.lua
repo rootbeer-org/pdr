@@ -7,9 +7,6 @@ return {
     prebuilt = {
         url = "https://storage.googleapis.com/copilot-mac-releases/images/Copilot-6.8.2-340-69efc0f9.dmg",
         install = "Dmg",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -26,6 +23,9 @@ return {
         ["6.8.2+340-69efc0f9"] = {
             digests = {
                 ["aarch64-macos"] = "69efc0f91a7e16f4b4c6d468ac39e555b77f74e9e45d1c9116b48cd7bd602ce8",
+            },
+            trees = {
+                ["aarch64-macos"] = "e999a0023179ec0ccbab10e13c6c9309825f64b1297a903306eb0625f29b3650",
             },
         },
     },

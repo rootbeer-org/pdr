@@ -13,9 +13,6 @@ return {
         github = "glide-browser/glide",
         tag = "{version}",
         asset = "glide.macos-aarch64.dmg",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -38,6 +35,9 @@ return {
         ["0.1.65a"] = {
             digests = {
                 ["aarch64-macos"] = "c1b8e9ef1c48d260cc59c0421bf785d07d170b0e1f3fb91968756c9782da4cd6",
+            },
+            trees = {
+                ["aarch64-macos"] = "316db54ad565b6b911bf954ed82e83c8d95850e0f90eb301fede071fe1db46e7",
             },
         },
     },

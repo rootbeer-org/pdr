@@ -13,9 +13,6 @@ return {
         github = "dalance/procs",
         tag = "v{version}",
         asset = "procs-{tag}-{target}.zip",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
     },
     outputs = {
         bins = { "procs" },
@@ -44,6 +41,11 @@ return {
                 ["aarch64-linux"] = "74b4f82acc6fe553cbd5af20ba0baac420b42bef9bb0cbb38fef14b8317d9f91",
                 ["aarch64-macos"] = "20c7a33426ed7a43c3e13a48f2d1866ecc979a8ad46733f86ddc78ab7f12d49c",
                 ["x86_64-linux"] = "81964faf9d5cd0e9f399d5d0954fb6fe4d4d9f7d3cbec4507633df5a45b11713",
+            },
+            trees = {
+                ["aarch64-linux"] = "991a3128fc5eaf5a55f9c6bd90cb7a0c1c21484281c7cf049ba4f306747adba8",
+                ["aarch64-macos"] = "9ce720d1a69ce689a1564bdb3a68dae37e669e80ebd8e28abad722757d9ecd27",
+                ["x86_64-linux"] = "f6528efc8c520dc7a703ee3f3e471cf61dcc20a42890a91665d3ae788c6bba7d",
             },
             revision = 2,
         },

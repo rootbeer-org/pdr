@@ -7,9 +7,6 @@ return {
     prebuilt = {
         url = "https://cdn.cloudflare.steamstatic.com/client/installer/steam.dmg",
         install = "Dmg",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -26,6 +23,9 @@ return {
         ["6.0"] = {
             digests = {
                 ["aarch64-macos"] = "e1abfbaaa7be3e0f48a0e0d4c313233e05861b1d26af32830ddc838be88f2691",
+            },
+            trees = {
+                ["aarch64-macos"] = "3e980f8c3cdda9db1f34ffd2669d96dc18b122c3a820903ebbe63e6c98fd9ffb",
             },
         },
     },

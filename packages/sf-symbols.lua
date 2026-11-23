@@ -9,9 +9,6 @@ return {
     prebuilt = {
         url = "https://devimages-cdn.apple.com/design/resources/download/SF-Symbols-{major}.dmg",
         install = "Pkg",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -28,6 +25,9 @@ return {
         ["27.2+150"] = {
             digests = {
                 ["aarch64-macos"] = "bcf900f9efa96f61c3d470fdf7cb6d5a80b49bf645da44919eb9c1835f02046f",
+            },
+            trees = {
+                ["aarch64-macos"] = "4095da1e9efdcb06c4e906a6f7ee2158f4d21273a20523d38aac8135db3af229",
             },
         },
     },
