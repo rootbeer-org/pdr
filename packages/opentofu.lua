@@ -51,16 +51,23 @@ printf '%s\n' ok]],
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "1.13.9",
+            default_version = "1.13.10",
         },
         ["aarch64-macos"] = {
-            default_version = "1.13.9",
+            default_version = "1.13.10",
         },
         ["x86_64-linux"] = {
-            default_version = "1.13.9",
+            default_version = "1.13.10",
         },
     },
     versions = {
+        ["1.13.10"] = {
+            digests = {
+                ["aarch64-linux"] = "2442f6bf9c18810cf3923dcbf7070a0023d2af8203661c24d857f0d156837dd9",
+                ["aarch64-macos"] = "2442f6bf9c18810cf3923dcbf7070a0023d2af8203661c24d857f0d156837dd9",
+                ["x86_64-linux"] = "2442f6bf9c18810cf3923dcbf7070a0023d2af8203661c24d857f0d156837dd9",
+            },
+        },
         ["1.13.9"] = {
             digests = {
                 ["aarch64-linux"] = "acb73b84a4f32150f8a097841fe2c48a2e13d35656ddab4851f46a4d681cdde4",
