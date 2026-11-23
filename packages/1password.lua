@@ -6,9 +6,6 @@ return {
     default_license = "LicenseRef-Proprietary",
     prebuilt = {
         url = "https://downloads.1password.com/mac/1Password-{version}-aarch64.zip",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -25,6 +22,9 @@ return {
         ["8.12.46"] = {
             digests = {
                 ["aarch64-macos"] = "7f44eecae6a52409748ba5ed6b94d6b383949f628e2cccd3d1e4798fa30461fc",
+            },
+            trees = {
+                ["aarch64-macos"] = "42f6e001733a4e4e3ff605ac5fd1de45bfa7fff55eb845efc2bd32ecc030b498",
             },
         },
     },

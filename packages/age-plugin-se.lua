@@ -14,9 +14,6 @@ return {
         github = "remko/age-plugin-se",
         tag = "v{version}",
         asset = "age-plugin-se-v{version}-macos.zip",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
     },
     -- Upstream builds for macOS 26 and CI runs macOS 15, so nothing here runs it.
     outputs = {
@@ -31,6 +28,9 @@ return {
         ["0.2.1"] = {
             digests = {
                 ["aarch64-macos"] = "d88104198f99441ce4b699227eacdb6e72ab67c65b2a31273aa3ccc96ef81f47",
+            },
+            trees = {
+                ["aarch64-macos"] = "c7d40c03089b341892aa110a7d84af364bd087f04a3c6d7b90a66b20d3bb2b8d",
             },
         },
     },

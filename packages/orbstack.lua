@@ -12,9 +12,6 @@ return {
     prebuilt = {
         url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v2.2.5_21124_arm64.dmg",
         install = "Dmg",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
     },
     outputs = {
@@ -31,6 +28,9 @@ return {
         ["2.2.5+21124"] = {
             digests = {
                 ["aarch64-macos"] = "f2b887d26a21e0a12147eb005297782794b26f461f77c6b9cdfb57f576ad5e6d",
+            },
+            trees = {
+                ["aarch64-macos"] = "eb71db14ccf9d7678ce12be7b280d8193002e28b0c31edba042753512d805226",
             },
         },
     },

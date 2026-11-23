@@ -11,9 +11,6 @@ return {
     },
     prebuilt = {
         url = "https://pkgs.tailscale.com/stable/Tailscale-{version}-macos.pkg",
-        dependencies = {
-            { package = "rb-unpack", kind = "build" },
-        },
         mirror = true,
         steps = {
             install = {
@@ -50,6 +47,9 @@ return {
         ["1.104.7"] = {
             digests = {
                 ["aarch64-macos"] = "0ecab60e098d31f9cbd334867474293dc08978154665da75c3f3fe1f8215d6e7",
+            },
+            trees = {
+                ["aarch64-macos"] = "2392c0a5db4cace77a0855c94db28d1de3ed0d95e97fc107bca5eae6cb04bcb3",
             },
         },
     },

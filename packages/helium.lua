@@ -36,9 +36,6 @@ return {
                 github = "imputnet/helium-macos",
                 tag = "{version}",
                 asset = "helium_{version}_arm64-macos.dmg",
-                dependencies = {
-                    { package = "rb-unpack", kind = "build" },
-                },
                 mirror = true,
             },
             outputs = {
@@ -76,12 +73,18 @@ return {
                 ["aarch64-macos"] = "8c234480c01223c9dbc9e8dc5bc5be08b8e4341437d62dae9d75942b594fbd51",
                 ["x86_64-linux"] = "af4684e0e351a68534dc33443b369d02bc3ac2633734c97848c8a7439bcbb367",
             },
+            trees = {
+                ["aarch64-macos"] = "ca3501f9df472eb488e568e5ff2aa8216d62fc4ff70f5b49c41b28ef115c9eb8",
+            },
         },
         ["0.22.2.1"] = {
             digests = {
                 ["aarch64-linux"] = "0b2c823f524971b11d7db3caaca1567d01896e55b3485e72edaddf34720d7889",
                 ["aarch64-macos"] = "c3353aa936844613210203c947c3d315deb3255c78d09293141c447dd324c388",
                 ["x86_64-linux"] = "f090c811253fd68bc7eb894b982a0be221d1701f77ed4b53f6146499af8bae04",
+            },
+            trees = {
+                ["aarch64-macos"] = "21a5c4c71eecc102acbe3b3fc8a51ab03f686cdcd573cd4261af713424fd137d",
             },
         },
     },
