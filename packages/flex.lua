@@ -64,28 +64,28 @@ test -s lex.yy.c]],
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "2.7.3",
+            default_version = "2.7.6",
         },
         ["aarch64-macos"] = {
-            default_version = "2.7.3",
+            default_version = "2.7.6",
         },
         ["x86_64-linux"] = {
-            default_version = "2.7.3",
+            default_version = "2.7.6",
         },
     },
     versions = {
-        ["2.7.2"] = {
-            digests = {
-                ["aarch64-linux"] = "365b86feb4a63f9a1743b789f360a796d82fe7344eae7facc95e065c84d8e284",
-                ["aarch64-macos"] = "365b86feb4a63f9a1743b789f360a796d82fe7344eae7facc95e065c84d8e284",
-                ["x86_64-linux"] = "365b86feb4a63f9a1743b789f360a796d82fe7344eae7facc95e065c84d8e284",
-            },
-        },
         ["2.7.3"] = {
             digests = {
                 ["aarch64-linux"] = "b18bbc3622b2b9ebecd0423f4e110adfad8db51d0c5ada3f26660c7cb7c735ec",
                 ["aarch64-macos"] = "b18bbc3622b2b9ebecd0423f4e110adfad8db51d0c5ada3f26660c7cb7c735ec",
                 ["x86_64-linux"] = "b18bbc3622b2b9ebecd0423f4e110adfad8db51d0c5ada3f26660c7cb7c735ec",
+            },
+        },
+        ["2.7.6"] = {
+            digests = {
+                ["aarch64-linux"] = "d7aedd600702e6a42d221f799bcd10c274254fbfafab49b6fb9c03573e3d92de",
+                ["aarch64-macos"] = "d7aedd600702e6a42d221f799bcd10c274254fbfafab49b6fb9c03573e3d92de",
+                ["x86_64-linux"] = "d7aedd600702e6a42d221f799bcd10c274254fbfafab49b6fb9c03573e3d92de",
             },
         },
     },
