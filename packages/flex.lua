@@ -64,21 +64,21 @@ test -s lex.yy.c]],
     },
     platforms = {
         ["aarch64-linux"] = {
-            default_version = "2.7.9",
+            default_version = "2.7.10",
         },
         ["aarch64-macos"] = {
-            default_version = "2.7.9",
+            default_version = "2.7.10",
         },
         ["x86_64-linux"] = {
-            default_version = "2.7.9",
+            default_version = "2.7.10",
         },
     },
     versions = {
-        ["2.7.8"] = {
+        ["2.7.10"] = {
             digests = {
-                ["aarch64-linux"] = "88d80ba91c8f89251cdbef92b4cac598e87ee782a9467eff47715aeac92d6d86",
-                ["aarch64-macos"] = "88d80ba91c8f89251cdbef92b4cac598e87ee782a9467eff47715aeac92d6d86",
-                ["x86_64-linux"] = "88d80ba91c8f89251cdbef92b4cac598e87ee782a9467eff47715aeac92d6d86",
+                ["aarch64-linux"] = "d303c2956792acd8bf3601effef76cadc85a7876852cb66da411c0d5d2f868f4",
+                ["aarch64-macos"] = "d303c2956792acd8bf3601effef76cadc85a7876852cb66da411c0d5d2f868f4",
+                ["x86_64-linux"] = "d303c2956792acd8bf3601effef76cadc85a7876852cb66da411c0d5d2f868f4",
             },
         },
         ["2.7.9"] = {
